@@ -1,0 +1,3 @@
+var documenterSearchIndex = {"docs":
+[{"location":"","page":"Home","title":"Home","text":"CurrentModule = ERA5Reanalysis","category":"page"},{"location":"#ERA5Reanalysis","page":"Home","title":"ERA5Reanalysis","text":"","category":"section"},{"location":"","page":"Home","title":"Home","text":"Documentation for ERA5Reanalysis.","category":"page"},{"location":"","page":"Home","title":"Home","text":"","category":"page"},{"location":"","page":"Home","title":"Home","text":"Modules = [ERA5Reanalysis]","category":"page"},{"location":"#ERA5Reanalysis.ERA5Dataset","page":"Home","title":"ERA5Reanalysis.ERA5Dataset","text":"ERA5Dataset\n\nAbstract supertype for ERA5 datasets.\n\n\n\n\n\n","category":"type"}]
+}
