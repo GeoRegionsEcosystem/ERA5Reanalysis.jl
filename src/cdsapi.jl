@@ -34,12 +34,12 @@ function retrieve(
 
     @info "$(now()) - CDSAPI - Request is queued"
     while data["state"] == "queued"
-        parserequest!(data)
+        data = parserequest(ckeys,resp_dict,apikey)
     end
 
     @info "$(now()) - CDSAPI - Request is running"
     while data["state"] == "running"
-        parserequest!(data)
+        data = parserequest(ckeys,resp_dict,apikey)
     end
 
     if data["state"] == "completed"
@@ -69,7 +69,7 @@ end
 
 """
     cdskey() -> Dict{Any,Any}
-Retrieves the CDS API ckeys from the .cdsapirc file in the home directory
+Retrieves the CDS API ckeys from the `~/.cdsapirc` file in the home directory
 """
 function cdskey()
 
@@ -88,17 +88,31 @@ function cdskey()
 end
 
 """
-    parserequest(data::AbstractDict) -> Dict{Any,Any}
+    parserequest(
+        ckeys :: AbstractDict,
+        resp  :: AbstractDict,
+        api   :: AbstractString
+    ) -> Dict{Any,Any}
 Get info on HTTP request, and parse the information and update the dictionary
+
+Arguments
+---------
+* `ckeys` : Dictionary that contains the CDSAPI information held in `~/.cdsapirc`
+* `resp` : Dictionary that contains the HTTP response
+* `api`  : String that contains the API used for Climate Data Store authentication
 """
-function parserequest!(data::AbstractDict)
+function parserequest(
+    ckeys :: AbstractDict,
+    resp  :: AbstractDict,
+    api   :: AbstractString
+)
 
     data = HTTP.request(
-        "GET", ckeys["url"] * "/tasks/" * string(resp_dict["request_id"]),
-        ["Authorization" => apikey]
+        "GET", ckeys["url"] * "/tasks/" * string(resp["request_id"]),
+        ["Authorization" => api]
     )
     data = JSON.parse(String(data.body))
 
-    return
+    return data
 
 end
