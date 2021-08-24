@@ -1,24 +1,20 @@
 # SingleVariable
 # List of ERA5 Single-Level Variables (v0.1)
-# (1)ID, (2)era5 (3)Full (4)Units
+# (1)ID, (2)era5, (3)Full, (4)Units
 
-u10,    10m_u_component_of_wind,    Surface u-Wind,             m s^{-1}
-v10,    10m_v_component_of_wind,    Surface v-Wind,             m s^{-1}
-
-t2m,    2m_temperature,             Surface Temperature,        K
-sst,    sea_surface_temperature,    Sea Surface Temperature,    K
-skt,    skin_temperature,           Skin Temperature,           K
-d2m,    2m_dewpoint_temperature,    Surface Dewpoint Temperature,   K
-
-sp,     surface_pressure,           Surface Pressure,           hPa
-msl,    mean_sea_level_pressure,    Sea Level Pressure,         hPa
-z,      geopotential,               Surface Geopotential,       m^2 s^{-2}
-
-tp,     total_precipitation,Total   Precipitation,              m
-cp,     convective_precipitation,   Convective Precipitation,   m
-lsp,    large_scale_precipitation,  Large-Scale Precipitation,  m
-tcw,    total_column_water,         Total Column Water,         kg m^{-2}
-tcwv,   total_column_water_vapour,  Total Column Water Vapour,  kg m^{-2}
-cc,     total_cloud_cover,          Total Cloud Cover,          %%
-
-cape,   convective_available_potential_energy,  CAPE,           J kg^{-1}
+u10,10m_u_component_of_wind,Surface u-Wind,m s^{-1}
+v10,10m_v_component_of_wind,Surface v-Wind,m s^{-1}
+t2m,2m_temperature,Surface Temperature,K
+sst,sea_surface_temperature,Sea Surface Temperature,K
+skt,skin_temperature,Skin Temperature,K
+d2m,2m_dewpoint_temperature,Surface Dewpoint Temperature,K
+sp,surface_pressure,Surface Pressure,hPa
+msl,mean_sea_level_pressure,Sea Level Pressure,hPa
+z,geopotential,Surface Geopotential,m^2 s^{-2}
+tp,total_precipitation,Total Precipitation,m
+cp,convective_precipitation,Convective Precipitation,m
+lsp,large_scale_precipitation,Large-Scale Precipitation,m
+tcw,total_column_water,Total Column Water,kg m^{-2}
+tcwv,total_column_water_vapour,Total Column Water Vapour,kg m^{-2}
+cc,total_cloud_cover,Total Cloud Cover,%%
+cape,convective_available_potential_energy,CAPE,J kg^{-1}

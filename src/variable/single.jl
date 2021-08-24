@@ -19,10 +19,10 @@ function SingleVariable(
     ST = String,
 )
 
-    vlist,flist = listSingles(); ind = findall(varID.==vlist)[1]
+    vlist,flist = listSingles();      ind = findall(varID.==vlist)[1]
     vtype = replace(flist[ind],".txt"=>"")
-    fname = flist[ind]
-    vlist = listera5variables(fname);    ind = findall(varID.==vlist)[1]
+    fname = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis",flist[ind])
+    vlist = listera5variables(fname); ind = findall(varID.==vlist)[1]
 
     IDinfo = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
     varID,lname,vname,units = IDinfo[[1,2,3,4]]
@@ -51,7 +51,7 @@ function listSingles()
     varlist = []
     fidlist = []
 
-    for fname in fidlist
+    for fname in flist
         copyera5variables(fname)
         vvec = listera5variables(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis",fname))
         varlist = vcat(varlist,vvec); fvec = fill(fname,length(vvec))

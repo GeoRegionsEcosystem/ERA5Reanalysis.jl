@@ -46,6 +46,7 @@ include("cdsapi.jl")
 include("variable/common.jl")
 include("variable/single.jl")
 include("variable/pressure.jl")
+include("variable/show.jl")
 
 # include("region.jl")
 

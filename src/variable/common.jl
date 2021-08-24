@@ -52,7 +52,7 @@ function copyera5variables(
 )
 
     jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol);
-    ftem = joinpath(@__DIR__,"..","extra",fname)
+    ftem = joinpath(@__DIR__,"..","..","extra",fname)
     fvar = joinpath(jfol,fname)
 
     if !overwrite
@@ -92,7 +92,11 @@ end
 
 function listera5variables(fname::AbstractString)
 
-    return readdlm(fname,',',comments=true,comment_char='#')[:,1]
+    try
+        return readdlm(fname,',',comments=true,comment_char='#')[:,1]
+    catch
+        return []
+    end
 
 end
 
