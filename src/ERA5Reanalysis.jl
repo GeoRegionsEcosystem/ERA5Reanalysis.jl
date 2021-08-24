@@ -19,8 +19,8 @@ import Base: show, read
 ## Exporting the following functions:
 export
         ERA5Dataset, ERA5Variable,
-        SingleVariable,   SingleCustom,   listSingle,   isSingle,
-        PressureVariable, PressureCustom, listPressure, isPressure,
+        SingleVariable,   SingleCustom,   listSingles,   isSingle,
+        PressureVariable, PressureCustom, listPressures, isPressure,
         resetERA5Variables, addERA5Variables
 
 
@@ -33,10 +33,10 @@ Abstract supertype for ERA5 datasets.
 """
 abstract type ERA5Dataset end
 
-""""
-ERA5Dataset
+"""
+ERA5Variable
 
-Abstract supertype for ERA5 datasets.
+Abstract supertype for ERA5 variables.
 """
 abstract type ERA5Variable end
 

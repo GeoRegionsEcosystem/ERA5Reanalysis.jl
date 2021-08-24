@@ -38,7 +38,7 @@ function PressureVariable(
 end
 
 """
-    listPressureVariables()
+    listPressures()
 
 List all Pressure-Level Variables and the files the data are stored in.
 
@@ -48,7 +48,7 @@ Output
 - `varlist` : List of all the Pressure-Level Variable IDs
 - `fidlist` : List of the files that the Pressure-Level Variable information is stored in
 """
-function listPressureVariables()
+function listPressures()
 
     flist   = ["pressurevariable.txt","pressurecustom.txt"]
     varlist = []
@@ -66,7 +66,7 @@ function listPressureVariables()
 end
 
 """
-    isPressureVariable(
+    isPressure(
         varID :: AbstractString;
         throw :: Bool = true
     ) -> tf :: Bool
@@ -85,7 +85,7 @@ Returns
 
 - `tf` : True / False
 """
-function isPressureVariable(
+function isPressure(
     varID :: AbstractString;
     throw :: Bool=true
 )

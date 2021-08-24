@@ -63,7 +63,7 @@ function listSingles()
 end
 
 """
-isSingle(
+    sSingle(
         varID :: AbstractString;
         throw :: Bool = true
     ) -> tf :: Bool
