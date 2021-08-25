@@ -94,3 +94,22 @@ function isPressure(
     return isera5variable(varID,vlist;throw=throw)
 
 end
+
+"""
+    era5Pressures(
+        varID :: AbstractString;
+        throw :: Bool = true
+    ) -> parray :: Vector{Int}
+
+Returns the a vector containing the 37 pressure levels available in ERA5 in hPa units.
+
+Returns
+=======
+
+- `parray` : vector containing list of pressures in Int format and hPa units
+"""
+era5Pressures() = [
+    1,2,3,5,7,10,20,30,50,70,100,125,150,175,200,
+    225,250,300,350,400,450,500,550,600,650,700,750,
+    775,800,825,850,875,900,925,950,975,1000
+]
