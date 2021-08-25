@@ -2,13 +2,13 @@ function resetERA5Variables(;allfiles=false)
 
     if allfiles
 
-        @info "$(now()) - ERA5Reanalysis.jl - Resetting both the master and custom lists of ERA5 variables back to the default"
+        @info "$(modulelog()) - Resetting both the master and custom lists of ERA5 variables back to the default"
         flist = [
             "singlevariable.txt","singletemplate.txt","singlecustom.txt",
             "pressurevariable.txt","pressurecustom.txt"
         ]
     else
-        @info "$(now()) - ERA5Reanalysis.jl - Resetting the custom lists of ERA5 variables back to the default"
+        @info "$(modulelog()) - Resetting the custom lists of ERA5 variables back to the default"
         flist = ["singletemplate.txt","singlecustom.txt","pressurecustom.txt"]
     end
 
@@ -22,7 +22,7 @@ end
 
 function addERA5Variables(fname::AbstractString)
 
-    @info "$(now()) - ERA5Reanalysis.jl - Importing user-defined GeoRegions from the file $fname directly into the custom lists"
+    @info "$(modulelog()) - Importing user-defined GeoRegions from the file $fname directly into the custom lists"
 
     vvec,vtype = listvariables(fname)
     for var in vvec
@@ -36,7 +36,7 @@ function addERA5Variables(fname::AbstractString)
                 PressureCustom()
             end
         else
-            @warn "$(now()) - ERA5Reanalysis.jl - The ERA5Variable ID $var is already in use. Please use a different ID, or you can remove the ID using rmERA5Variable()."
+            @warn "$(modulelog()) - The ERA5Variable ID $var is already in use. Please use a different ID, or you can remove the ID using rmERA5Variable()."
         end
     end
 
@@ -58,7 +58,7 @@ function copyera5variables(
     if !overwrite
         if !isfile(fvar)
 
-            @debug "$(now()) - ERA5Reanalysis.jl - Unable to find $fvar, copying data from $ftem ..."
+            @debug "$(modulelog()) - Unable to find $fvar, copying data from $ftem ..."
 
             open(fvar,"w") do io
                 open(ftem) do f
@@ -72,7 +72,7 @@ function copyera5variables(
     else
 
         if isfile(fvar)
-            @warn "$(now()) - ERA5Reanalysis.jl - Overwriting $fvar with original file in $ftem ..."
+            @warn "$(modulelog()) - Overwriting $fvar with original file in $ftem ..."
             rm(fvar,force=true)
         end
 
@@ -106,17 +106,17 @@ function isera5variable(
     throw :: Bool=true)
 
 
-    @info "$(now()) - ERA5Reanalysis.jl - Checking to see if the ID $varID is in use"
+    @info "$(modulelog()) - Checking to see if the ID $varID is in use"
 
     if sum(vlist.==varID) == 0
         if throw
-            error("$(now()) - ERA5Reanalysis.jl - $(varID) is not a valid GeoRegion identifier, use either RectRegion() or PolyRegion() to add this GeoRegion to the list.")
+            error("$(modulelog()) - $(varID) is not a valid GeoRegion identifier, use either RectRegion() or PolyRegion() to add this GeoRegion to the list.")
         else
-            @warn "$(now()) - ERA5Reanalysis.jl - $(varID) is not a valid GeoRegion identifier, use either RectRegion() or PolyRegion() to add this GeoRegion to the list."
+            @warn "$(modulelog()) - $(varID) is not a valid GeoRegion identifier, use either RectRegion() or PolyRegion() to add this GeoRegion to the list."
             return false
         end
     else
-        @info "$(now()) - ERA5Reanalysis.jl - The ID $varID is already in use"
+        @info "$(modulelog()) - The ID $varID is already in use"
         return true
     end
 

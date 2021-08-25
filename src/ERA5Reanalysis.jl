@@ -45,6 +45,10 @@ Abstract supertype for ERA5 variables.
 """
 abstract type ERA5Variable end
 
+## ERA5Reanalysis.jl logging preface
+
+modulelog() = "$(now()) - ERA5Reanalysis.jl"
+
 ## Including other files in the module
 
 include("module/module.jl")
