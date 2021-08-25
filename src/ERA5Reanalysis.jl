@@ -10,6 +10,7 @@ using Printf
 using HTTP
 using JSON
 using NCDatasets
+using PrettyTables
 using Statistics
 
 ## Reexporting exported functions within these modules
