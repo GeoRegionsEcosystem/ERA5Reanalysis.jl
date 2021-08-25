@@ -22,7 +22,8 @@ import Base: show, read
 
 ## Exporting the following functions:
 export
-        ERA5Dataset, ERA5Variable, ERA5Hourly, ERA5Monthly,
+        ERA5Dataset, ERA5Variable, ERA5Region,
+        ERA5Hourly, ERA5Monthly, ERA5MonthlyHour,
         SingleVariable,   SingleCustom,   listSingles,   isSingle,
         PressureVariable, PressureCustom, listPressures, isPressure,
         resetERA5Variables, addERA5Variables
