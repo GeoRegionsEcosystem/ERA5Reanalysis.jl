@@ -15,7 +15,7 @@ struct SingleCustom{ST<:AbstractString} <: SingleLevel
 end
 
 function SingleVariable(
-    varID::AbstractString,
+    varID :: AbstractString,
     ST = String,
 )
 

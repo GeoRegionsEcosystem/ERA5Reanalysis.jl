@@ -18,8 +18,8 @@ end
 
 function PressureVariable(
     varID :: AbstractString,
-    plvl  :: Int = 0,
-    ST = String,
+    ST = String;
+    hPa   :: Int = 0,
 )
 
     vlist,flist = listPressures();    ind = findall(varID.==vlist)[1]
@@ -30,9 +30,9 @@ function PressureVariable(
     IDinfo = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
     varID,lname,vname,units = IDinfo[[1,2,3,4]]
 
-    if vtype == "singlevariable"
-          return PressureVariable{ST}(varID,lname,vname,units,plvl)
-    else; return PressureCustom{ST}(varID,lname,vname,units,plvl)
+    if vtype == "pressurevariable"
+          return PressureVariable{ST}(varID,lname,vname,units,hPa)
+    else; return PressureCustom{ST}(varID,lname,vname,units,hPa)
     end
 
 end

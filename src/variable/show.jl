@@ -17,6 +17,6 @@ function show(io::IO, evar::PressureLevel)
 		"    Long Name      (lname) : ", evar.lname, '\n',
 		"    Variable Name  (vname) : ", evar.vname, '\n',
 		"    Variable Units (units) : ", evar.units, '\n',
-		"    Pressure Level (plvl)  : ", evar.plvl,  '\n',
+		"    Pressure Level  (hPa)  : ", evar.plvl,  '\n',
 	)
 end
