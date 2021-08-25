@@ -36,7 +36,7 @@ function addERA5Variables(fname::AbstractString)
                 PressureCustom()
             end
         else
-            @warn "$(modulelog()) - The ERA5Variable ID $var is already in use. Please use a different ID, or you can remove the ID using rmERA5Variable()."
+            @warn "$(modulelog()) - The ERA5Variable ID \"$var\" is already in use. Please use a different ID, or you can remove the ID using rmERA5Variable()."
         end
     end
 
@@ -96,28 +96,6 @@ function listera5variables(fname::AbstractString)
         return readdlm(fname,',',comments=true,comment_char='#')[:,1]
     catch
         return []
-    end
-
-end
-
-function isera5variable(
-    varID :: AbstractString,
-    vlist :: AbstractArray;
-    throw :: Bool=true)
-
-
-    @info "$(modulelog()) - Checking to see if the ID $varID is in use"
-
-    if sum(vlist.==varID) == 0
-        if throw
-            error("$(modulelog()) - $(varID) is not a valid GeoRegion identifier, use either RectRegion() or PolyRegion() to add this GeoRegion to the list.")
-        else
-            @warn "$(modulelog()) - $(varID) is not a valid GeoRegion identifier, use either RectRegion() or PolyRegion() to add this GeoRegion to the list."
-            return false
-        end
-    else
-        @info "$(modulelog()) - The ID $varID is already in use"
-        return true
     end
 
 end

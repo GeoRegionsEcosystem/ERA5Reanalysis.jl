@@ -1,7 +1,7 @@
 function show(io::IO, evar::SingleLevel)
     print(
 		io,
-		"The Single-Level Variable $(evar.varID) has the following properties:\n",
+		"The Single-Level Variable \"$(evar.varID)\" has the following properties:\n",
 		"    Variable ID    (varID) : ", evar.varID, '\n',
 		"    Long Name      (lname) : ", evar.lname, '\n',
 		"    Variable Name  (vname) : ", evar.vname, '\n',
@@ -12,11 +12,11 @@ end
 function show(io::IO, evar::PressureLevel)
     print(
 		io,
-		"The Pressure-Level Variable $(evar.varID) has the following properties:\n",
+		"The Pressure-Level Variable \"$(evar.varID)\" has the following properties:\n",
 		"    Variable ID    (varID) : ", evar.varID, '\n',
 		"    Long Name      (lname) : ", evar.lname, '\n',
 		"    Variable Name  (vname) : ", evar.vname, '\n',
 		"    Variable Units (units) : ", evar.units, '\n',
-		"    Pressure Level  (hPa)  : ", evar.plvl,  '\n',
+		"    Pressure Level  (hPa)  : ", evar.hPa,   '\n',
 	)
 end

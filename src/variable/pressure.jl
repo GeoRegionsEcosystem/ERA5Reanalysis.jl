@@ -5,7 +5,7 @@ struct PressureVariable{ST<:AbstractString} <: PressureLevel
     lname :: ST
     vname :: ST
     units :: ST
-    plvl  :: Int
+    hPa   :: Int
 end
 
 struct PressureCustom{ST<:AbstractString} <: PressureLevel
@@ -13,7 +13,7 @@ struct PressureCustom{ST<:AbstractString} <: PressureLevel
     lname :: ST
     vname :: ST
     units :: ST
-    plvl  :: Int
+    hPa   :: Int
 end
 
 function PressureVariable(
@@ -22,6 +22,9 @@ function PressureVariable(
     hPa   :: Int = 0,
 )
 
+    isPressure(varID)
+
+    @info "$(modulelog()) - Retrieving information for the PressureVariable defined by the ID \"$varID\""
     vlist,flist = listPressures();    ind = findall(varID.==vlist)[1]
     vtype = replace(flist[ind],".txt"=>"")
     fname = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis",flist[ind])
@@ -31,9 +34,27 @@ function PressureVariable(
     varID,lname,vname,units = IDinfo[[1,2,3,4]]
 
     if vtype == "pressurevariable"
-          return PressureVariable{ST}(varID,lname,vname,units,hPa)
-    else; return PressureCustom{ST}(varID,lname,vname,units,hPa)
+        @info "$(modulelog()) - The ERA5Variable defined by \"$varID\" is of the PressureVariable type"
+        return PressureVariable{ST}(varID,lname,vname,units,hPa)
+    else
+        @info "$(modulelog()) - The ERA5Variable defined by \"$varID\" is of the PressureCustom type"
+        return PressureCustom{ST}(varID,lname,vname,units,hPa)
     end
+
+end
+
+function PressureVariable(
+    ST = String;
+    varID :: AbstractString,
+    lname :: AbstractString = "",
+    vname :: AbstractString,
+    units :: AbstractString,
+    hPa   :: Int = 0,
+)
+
+    isPressure(varID)
+
+    return PressureCustom{ST}(varID,lname,vname,units,hPa)
 
 end
 
@@ -87,11 +108,23 @@ Returns
 """
 function isPressure(
     varID :: AbstractString;
-    throw :: Bool=true
+    throw :: Bool = true
 )
 
-    vlist,_ = listPressureVariables()
-    return isera5variable(varID,vlist;throw=throw)
+    @info "$(modulelog()) - Checking to see if the PressureVariable ID \"$varID\" is in use"
+    vlist,_ = listPressures()
+
+    if sum(vlist.==varID) == 0
+        if throw
+            error("$(modulelog()) - \"$(varID)\" is not a valid PressureVariable identifier, use the function PressureCustom() to add this ERA5Variable to the list.")
+        else
+            @warn "$(modulelog()) - \"$(varID)\" is not a valid PressureVariable identifier, use the function PressureCustom() to add this ERA5Variable to the list."
+            return false
+        end
+    else
+        @info "$(modulelog()) - The PressureVariable ID \"$varID\" is already in use"
+        return true
+    end
 
 end
 

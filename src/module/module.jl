@@ -29,6 +29,7 @@ function ERA5Hourly(
     throw :: Bool = true
 )
 
+    @info "$(modulelog()) - Setting up data structure containing information on the ERA5 Hourly data to be downloaded"
     dtbeg = Date(year(dtbeg),month(dtbeg),1)
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
     checkdates(dtbeg,dtend,throw)
@@ -47,17 +48,22 @@ function ERA5Monthly(
     throw :: Bool = true
 )
 
+    @info "$(modulelog()) - Setting up data structure containing information on the ERA5 Monthly data to be downloaded"
     dtbeg = Date(year(dtbeg),1,1)
     dtend = Date(year(dtend),12,31)
     checkdates(dtbeg,dtend,throw)
 
     if isinteger(hours)
         if (hours<0)
-              return ERA5Monthly{ST,DT}("era5mo",dtbeg,dtend,eroot)
-        else; return ERA5MonthlyHour{ST,DT}("era5mh",dtbeg,dtend,[hours],eroot)
+            @info "$(modulelog()) - No hour of day was specified, and therefore retrieving monthly-averaged data"
+            return ERA5Monthly{ST,DT}("era5mo",dtbeg,dtend,eroot)
+        else
+            @info "$(modulelog()) - An hour of day ($(hours):00:00) was specified, and therefore retrieving monthly-averaged hourly data"
+            return ERA5MonthlyHour{ST,DT}("era5mh",dtbeg,dtend,[hours],eroot)
         end
     else
         hours = sort(unique(mod.(hours,24)))
+        @info "$(modulelog()) - Hours of day $(hours) were specified, and therefore retrieving monthly-averaged hourly data for these hours"
         return ERA5MonthlyHour{ST,DT}("era5mh",dtbeg,dtend,hours,eroot)
     end
 

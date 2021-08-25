@@ -1,7 +1,7 @@
 """
-ERA5RegionGrid
+    ERA5Region
 
-Structure that imports relevant GeoRegion and RegionGrid properties used in the handling of the ERA5 dataset.
+Structure that imports relevant GeoRegion properties used in the handling of the gridded ERA5 datasets.
 """
 struct ERA5Region{ST<:AbstractString, FT<:Real}
     geoID :: ST
@@ -20,6 +20,7 @@ function ERA5Region(
     FT = Float64
 )
 
+    @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$geoID\""
     geo = GeoRegion(geoID)
     if iszero(gres); gres = regionstep(geoID,gres) end
     if geoID == "GLB"; isglb = true; else; isglb = false end
@@ -74,7 +75,7 @@ end
 function show(io::IO, geo::ERA5Region)
     print(
 		io,
-		"The ERA5Region for the $(geo.geoID) GeoRegion has the following properties:\n",
+		"The ERA5Region for the \"$(geo.geoID)\" GeoRegion has the following properties:\n",
 		"    Region ID (regID) : ", geo.geoID, '\n',
 		"    Name       (name) : ", geo.name,  '\n',
 		"    Resolution (gres) : ", geo.gres,  '\n',

@@ -19,6 +19,9 @@ function SingleVariable(
     ST = String,
 )
 
+    isSingle(varID)
+
+    @info "$(modulelog()) - Retrieving information for the SingleVariable defined by the ID \"$varID\""
     vlist,flist = listSingles();      ind = findall(varID.==vlist)[1]
     vtype = replace(flist[ind],".txt"=>"")
     fname = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis",flist[ind])
@@ -84,10 +87,22 @@ Returns
 """
 function isSingle(
     varID :: AbstractString;
-    throw :: Bool=true
+    throw :: Bool = true
 )
 
-    vlist,_ = listSingleVariables()
-    return isera5variable(varID,vlist;throw=throw)
+    @info "$(modulelog()) - Checking to see if the SingleVariable ID \"$varID\" is in use"
+    vlist,_ = listSingles()
+
+    if sum(vlist.==varID) == 0
+        if throw
+            error("$(modulelog()) - \"$(varID)\" is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list.")
+        else
+            @warn "$(modulelog()) - \"$(varID)\" is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list."
+            return false
+        end
+    else
+        @info "$(modulelog()) - The SingleVariable ID \"$varID\" is already in use"
+        return true
+    end
 
 end
