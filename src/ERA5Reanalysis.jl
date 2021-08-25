@@ -2,30 +2,33 @@ module ERA5Reanalysis
 
 ## Base Modules Used
 using Base64
-using Dates
 using DelimitedFiles
 using Logging
 using Printf
 
 ## Modules Used
-using GeoRegions
 using HTTP
 using JSON
 using NCDatasets
 using Statistics
 
+## Reexporting exported functions within these modules
+using Reexport
+@reexport using Dates
+@reexport using GeoRegions
+
 import Base: show, read
 
 ## Exporting the following functions:
 export
-        ERA5Dataset, ERA5Variable,
+        ERA5Dataset, ERA5Variable, ERA5Hourly, ERA5Monthly,
         SingleVariable,   SingleCustom,   listSingles,   isSingle,
         PressureVariable, PressureCustom, listPressures, isPressure,
         resetERA5Variables, addERA5Variables
 
 
 
-## Abstract types
+## Abstract SuperTypes
 """
     ERA5Dataset
 
@@ -34,22 +37,25 @@ Abstract supertype for ERA5 datasets.
 abstract type ERA5Dataset end
 
 """
-ERA5Variable
+    ERA5Variable
 
 Abstract supertype for ERA5 variables.
 """
 abstract type ERA5Variable end
 
 ## Including other files in the module
-include("cdsapi.jl")
+
+include("module/module.jl")
+include("module/show.jl")
 
 include("variable/common.jl")
 include("variable/single.jl")
 include("variable/pressure.jl")
 include("variable/show.jl")
 
-# include("region.jl")
+include("region/region.jl")
 
-# include("time.jl")
+include("downloads/cdsapi.jl")
+include("downloads/downloads.jl")
 
 end
