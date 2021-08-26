@@ -4,7 +4,7 @@ function resetERA5Variables(;allfiles=false)
 
         @info "$(modulelog()) - Resetting both the master and custom lists of ERA5 variables back to the default"
         flist = [
-            "singlevariable.txt","singletemplate.txt","singlecustom.txt",
+            "singlevariable.txt","singlecustom.txt",
             "pressurevariable.txt","pressurecustom.txt"
         ]
     else
@@ -13,7 +13,7 @@ function resetERA5Variables(;allfiles=false)
     end
 
     for fname in flist
-        copyERA5Variable(fname,overwrite=true)
+        copyera5variables(fname,overwrite=true)
     end
 
     return
