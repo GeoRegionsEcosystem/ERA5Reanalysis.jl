@@ -52,7 +52,15 @@ function PressureVariable(
     hPa   :: Int = 0,
 )
 
-    isPressure(varID)
+    if isPressure(varID,throw=false)
+        error("$(modulelog()) - The PressureVariable \"$(varID)\" has already been defined,please use another identifier.")
+    else
+        @info "$(modulelog()) - Adding the PressureVariable \"$(varID)\" to the list."
+    end
+
+    open(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","pressurecustom.txt"),"a") do io
+        write(io,"$varID,$lname,$vname,$units\n")
+    end
 
     return PressureCustom{ST}(varID,lname,vname,units,hPa)
 

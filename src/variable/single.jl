@@ -37,6 +37,41 @@ function SingleVariable(
 
 end
 
+function SingleVariable(
+    ST = String;
+    varID :: AbstractString,
+    lname :: AbstractString = "",
+    vname :: AbstractString,
+    units :: AbstractString,
+    iscustom :: Bool = true
+)
+
+    if isSingle(varID,throw=false)
+        error("$(modulelog()) - The SingleVariable \"$(varID)\" has already been defined,please use another identifier.")
+    else
+        @info "$(modulelog()) - Adding the SingleVariable \"$(varID)\" to the list."
+    end
+
+    if iscustom
+
+        open(joinpath(
+            DEPOT_PATH[1],"files","ERA5Reanalysis","singlevariable.txt"
+        ),"a") do io
+            write(io,"$varID,$lname,$vname,$units\n")
+        end
+        return SingleVariable{ST}(varID,lname,vname,units)
+
+    else
+
+        open(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","singlecustom.txt"),"a") do io
+            write(io,"$varID,$lname,$vname,$units\n")
+        end
+        return SingleCustom{ST}(varID,lname,vname,units)
+
+    end
+
+end
+
 """
     listSingles()
 
@@ -66,7 +101,7 @@ function listSingles()
 end
 
 """
-    sSingle(
+    isSingle(
         varID :: AbstractString;
         throw :: Bool = true
     ) -> tf :: Bool
