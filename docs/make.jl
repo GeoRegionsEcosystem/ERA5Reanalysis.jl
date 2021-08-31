@@ -14,7 +14,18 @@ makedocs(;
     authors  = "Nathanael Wong <natgeo.wong@outlook.com>",
     sitename = "ERA5Reanalysis.jl",
     pages    = [
-        "Home"                        => "index.md",
+        "Home" => "index.md",
+        "ERA5Reanalysis Basics" => [
+            "Components"     => "index.md",
+            "ERA5 Modules"   => "modules.md",
+            "ERA5 Variables" => "variables.md",
+            "ERA5 Regions"   => "regions.md"
+        ],
+        "Downloading ERA5 Data" => [
+            "The CDSAPI"              => "cdsapi.md"
+            "Downloading with Julia"  => "downloadjulia.md"
+            "Downloading with Python" => "downloadpython.md"
+        ]
     ],
 )
 
