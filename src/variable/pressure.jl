@@ -136,6 +136,31 @@ function isPressure(
 
 end
 
+function rmPressure(varID::AbstractString)
+
+    if isPressure(varID,throw=false)
+        evar = PressureVariable(varID)
+    end
+
+    rmERA5Variable(evar)
+
+    return nothing
+
+end
+
+function resetPressures()
+
+    @info "$(modulelog()) - Resetting the custom list of ERA5 PressureVariables back to the default"
+    flist = ["pressurecustom.txt"]
+
+    for fname in flist
+        copyera5variables(fname,overwrite=true)
+    end
+
+    return
+
+end
+
 """
     era5Pressures(
         varID :: AbstractString;

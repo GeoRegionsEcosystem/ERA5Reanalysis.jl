@@ -9,7 +9,7 @@ function resetERA5Variables(;allfiles=false)
         ]
     else
         @info "$(modulelog()) - Resetting the custom lists of ERA5 variables back to the default"
-        flist = ["singletemplate.txt","singlecustom.txt","pressurecustom.txt"]
+        flist = ["singlevariable.txt","singlecustom.txt","pressurecustom.txt"]
     end
 
     for fname in flist
@@ -24,21 +24,81 @@ function addERA5Variables(fname::AbstractString)
 
     @info "$(modulelog()) - Importing user-defined GeoRegions from the file $fname directly into the custom lists"
 
-    vvec,vtype = listvariables(fname)
-    for var in vvec
-        if !isERA5Variable(var,throw=false)
-            v = getgeoregion(var,fname,vtype)
-            if vtype == "SingleLevel"
-                SingleLevel()
-            elseif vtype == "SingleCustom"
-                SingleCustom()
+    vtype  = evarfiletype(fname)
+    varray = listera5variables(fname)
+    vlist  = varray[:,1]; nvar = length(vlist)
+    if vtype == "SingleLevel"
+        for ivar in 1 : nvar
+            if isSingle(vlist[ivar],throw=false)
+                @warn "$(modulelog()) - The SingleVariable ID \"$varID\" is already in use and thus cannot be added to singlevariable.txt, please use another ID"
             else
-                PressureCustom()
+                SingleVariable(
+                    varID = varray[ivar,1], lname = varray[ivar,2],
+                    vname = varray[ivar,3], units = varray[ivar,4],
+                    iscustom = false
+                )
             end
-        else
-            @warn "$(modulelog()) - The ERA5Variable ID \"$var\" is already in use. Please use a different ID, or you can remove the ID using rmERA5Variable()."
+        end
+    elseif vtype == "SingleCustom"
+        for ivar in 1 : nvar
+            if isSingle(vlist[ivar],throw=false)
+                @warn "$(modulelog()) - The SingleVariable ID \"$varID\" is already in use and thus cannot be added to singlecustom.txt, please use another ID"
+            else
+                SingleVariable(
+                    varID = varray[ivar,1], lname = varray[ivar,2],
+                    vname = varray[ivar,3], units = varray[ivar,4]
+                )
+            end
+        end
+    elseif vtype == "PressureCustom"
+        for ivar in 1 : nvar
+            if isPressure(vlist[ivar],throw=false)
+                @warn "$(modulelog()) - The PressureVariable ID \"$varID\" is already in use and thus cannot be added to pressurecustom.txt, please use another ID"
+            else
+                PressureVariable(
+                    varID = varray[ivar,1], lname = varray[ivar,2],
+                    vname = varray[ivar,3], units = varray[ivar,4],
+                )
+            end
+        end
+    elseif vtype == "PressureLevel"
+        error("$(modulelog()) - All the downloadable pressure variables from the ERA5 Climate Data Store have been listed in ERA5Reanalysis.jl")
+    else
+        error("$(modulelog()) - Unable to identify ERA5 Variable type, please go back and check the file header again")
+    end
+
+    return nothing
+
+end
+
+function rmERA5Variable(
+    evar :: ERA5Variable
+)
+
+    if typeof(evar) <: PressureVariable
+        error("$(modulelog()) - Variables of the type PressureVariable cannot be removed")
+    end
+
+    if typeof(evar) <: SingleVariable
+        fid = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","singlevariable.txt")
+    elseif typeof(evar) <: SingleCustom
+        fid = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","singlecustom.txt")
+    elseif typeof(evar) <: PressureCustom
+        fid = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","pressurecustom.txt")
+    end
+
+    flines = readlines(fid)
+    nlines = length(flines)
+
+    open("tmp.txt","w") do io
+        for iline = 1 : nlines
+            if !occursin("$(evar.varID),",flines[iline])
+                write(io,"$(flines[iline])\n")
+            end
         end
     end
+
+    mv("tmp.txt",fid,force=true)
 
     return nothing
 
@@ -97,5 +157,15 @@ function listera5variables(fname::AbstractString)
     catch
         return []
     end
+
+end
+
+function evarfiletype(fname::AbstractString)
+
+    vtype = readlines(fname)[1]
+    vtype = replace(vtype,"#"=>"")
+    vtype = replace(vtype," "=>"")
+
+    return vtype
 
 end

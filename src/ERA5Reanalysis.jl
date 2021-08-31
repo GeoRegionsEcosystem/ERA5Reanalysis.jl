@@ -22,21 +22,24 @@ import Base: show, read
 
 ## Exporting the following functions:
 export
-        ERA5Dataset, ERA5Variable, ERA5Region,
-        ERA5Hourly, ERA5Monthly, ERA5MonthlyHour,
-        SingleVariable,   SingleCustom,   listSingles,   isSingle,
-        PressureVariable, PressureCustom, listPressures, isPressure,
-        resetERA5Variables, addERA5Variables
+        ERA5Module, ERA5Hourly, ERA5Monthly, ERA5MonthlyHour,
+
+        ERA5Variable, SingleVariable, SingleCustom, PressureVariable, PressureCustom,
+        listSingles,   isSingle,   rmSingle,   resetSingles,
+        listPressures, isPressure, rmPressure, resetPressures,
+        resetERA5Variables, addERA5Variables, rmERA5Variable,
+
+        ERA5Region
 
 
 
 ## Abstract SuperTypes
 """
-    ERA5Dataset
+    ERA5Module
 
-Abstract supertype for ERA5 datasets.
+Abstract supertype for ERA5 dataset modules.
 """
-abstract type ERA5Dataset end
+abstract type ERA5Module end
 
 """
     ERA5Variable
