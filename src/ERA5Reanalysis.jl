@@ -38,6 +38,12 @@ export
     ERA5Module
 
 Abstract supertype for ERA5 dataset modules.
+
+All `ERA5Module` Types contain the following fields:
+- `modID` : The module ID, that also acts as a prefix to filenames
+- `eroot` : The specified directory in which to save the data
+- `dtbeg` : The date for which downloads/analysis begins
+- `dtend` : The date for which downloads/analysis finishes
 """
 abstract type ERA5Module end
 
@@ -45,6 +51,12 @@ abstract type ERA5Module end
     ERA5Variable
 
 Abstract supertype for ERA5 variables.
+
+All `ERA5Variable` Types contain the following fields:
+- `varID` : The variable ID, that is also the identifier in the NetCDF files
+- `lname` : The variable long-name, which is used to specify retrievals from CDS
+- `vname` : The full-name of the variable
+- `units` : The units of the variable
 """
 abstract type ERA5Variable end
 
@@ -66,5 +78,7 @@ include("region/region.jl")
 
 include("downloads/cdsapi.jl")
 include("downloads/downloads.jl")
+include("downloads/cdsretrieve.jl")
+include("downloads/pythonprint.jl")
 
 end

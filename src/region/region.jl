@@ -2,6 +2,13 @@
     ERA5Region
 
 Structure that imports relevant [GeoRegion](https://github.com/JuliaClimate/GeoRegions.jl) properties used in the handling of the gridded ERA5 datasets.
+
+All `ERA5Region` Types contain the following fields:
+- `geo`   : The `GeoRegion` containing the geographical information
+- `geoID` : The ID used to specify the `GeoRegion`
+- `gres`  : The resolution of the gridded data to be downloaded/analysed
+- `fstr`  : String, for specification of folder and file name
+- `isglb` : A Bool, true if spans the globe, false if no
 """
 struct ERA5Region{ST<:AbstractString, FT<:Real}
     geo   :: GeoRegion
