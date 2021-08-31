@@ -1,14 +1,12 @@
 """
     ERA5Region
 
-Structure that imports relevant GeoRegion properties used in the handling of the gridded ERA5 datasets.
+Structure that imports relevant [GeoRegion](https://github.com/JuliaClimate/GeoRegions.jl) properties used in the handling of the gridded ERA5 datasets.
 """
 struct ERA5Region{ST<:AbstractString, FT<:Real}
+    geo   :: GeoRegion
     geoID :: ST
-    name  :: ST
     gres  :: FT
-    grid  :: Vector{FT}
-    shape :: Vector{Point2{FT}}
     fstr  :: ST
     isglb :: Bool
 end
@@ -25,17 +23,8 @@ function ERA5Region(
     if iszero(gres); gres = regionstep(geoID,gres) end
     if geoID == "GLB"; isglb = true; else; isglb = false end
 
-    if typeof(geo) <: PolyRegion
-        shape = geo.shape
-    else
-        shape = Point2.(
-            [geo.E,geo.E,geo.W,geo.W,geo.E],
-            [geo.N,geo.S,geo.S,geo.N,geo.N]
-        )
-    end
-
     return ERA5Region{ST,FT}(
-        geo.regID, geo.name, gres, [geo.N, geo.S, geo.E, geo.W], shape,
+        geo, geo.regID, gres,
         "$(geo.regID)x$(@sprintf("%.2f",gres))", isglb
     )
 
@@ -72,14 +61,30 @@ function checkegrid(gres::Real)
 
 end
 
-function show(io::IO, geo::ERA5Region)
-    print(
-		io,
-		"The ERA5Region for the \"$(geo.geoID)\" GeoRegion has the following properties:\n",
-		"    Region ID (regID) : ", geo.geoID, '\n',
-		"    Name       (name) : ", geo.name,  '\n',
-		"    Resolution (gres) : ", geo.gres,  '\n',
-		"    Bounds  (N,S,E,W) : ", geo.grid,  '\n',
-		"    Shape     (shape) : ", geo.shape, '\n'
-	)
+function show(io::IO, ereg::ERA5Region)
+    geo = ereg.geo
+
+    if typeof(geo) <: PolyRegion
+        print(
+            io,
+            "The ERA5Region wrapper for the \"$(ereg.geoID)\" GeoRegion has the following properties:\n",
+            "    Region ID (regID) : ", ereg.geoID, '\n',
+            "    Name       (name) : ", ereg.geo.name,  '\n',
+            "    Resolution (gres) : ", ereg.gres,  '\n',
+            "    Bounds  (N,S,E,W) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
+            "    Shape     (shape) : ", geo.shape, '\n',
+            "        (is180,is360) : ",(geo.is180,geo.is360),"\n",
+        )
+    else
+        print(
+            io,
+            "The ERA5Region wrapper for the \"$(ereg.geoID)\" GeoRegion has the following properties:\n",
+            "    Region ID (regID) : ", ereg.geoID, '\n',
+            "    Name       (name) : ", ereg.geo.name,  '\n',
+            "    Resolution (gres) : ", ereg.gres,  '\n',
+            "    Bounds  (N,S,E,W) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
+            "        (is180,is360) : ",(geo.is180,geo.is360),"\n",
+        )
+    end
+
 end
