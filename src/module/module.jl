@@ -1,19 +1,19 @@
-struct ERA5Hourly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
-    e5dID :: ST
+struct ERA5Hourly{ST<:AbstractString, DT<:TimeType} <: ERA5Module
+    modID :: ST
     dtbeg :: Date
     dtend :: Date
     eroot :: ST
 end
 
-struct ERA5Monthly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
-    e5dID :: ST
+struct ERA5Monthly{ST<:AbstractString, DT<:TimeType} <: ERA5Module
+    modID :: ST
     dtbeg :: Date
     dtend :: Date
     eroot :: ST
 end
 
-struct ERA5MonthlyHour{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
-    e5dID :: ST
+struct ERA5MonthlyHour{ST<:AbstractString, DT<:TimeType} <: ERA5Module
+    modID :: ST
     dtbeg :: Date
     dtend :: Date
     hours :: Vector{Int}

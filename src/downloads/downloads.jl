@@ -1,5 +1,5 @@
 function download(
-    emod :: ERA5Dataset,
+    emod :: ERA5Module,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
     ispy :: Bool = false
