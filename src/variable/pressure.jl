@@ -53,7 +53,7 @@ function PressureVariable(
 )
 
     if isPressure(varID,throw=false)
-        error("$(modulelog()) - The PressureVariable \"$(varID)\" has already been defined,please use another identifier.")
+        error("$(modulelog()) - The PressureVariable \"$(varID)\" has already been defined, please use another identifier.")
     else
         @info "$(modulelog()) - Adding the PressureVariable \"$(varID)\" to the list."
     end
