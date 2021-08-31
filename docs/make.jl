@@ -16,15 +16,15 @@ makedocs(;
     pages    = [
         "Home" => "index.md",
         "ERA5Reanalysis Basics" => [
-            "Components"     => "index.md",
-            "ERA5 Modules"   => "modules.md",
-            "ERA5 Variables" => "variables.md",
-            "ERA5 Regions"   => "regions.md"
+            "Components"     => "basics/index.md",
+            "ERA5 Modules"   => "basics/modules.md",
+            "ERA5 Variables" => "basics/variables.md",
+            "ERA5 Regions"   => "basics/regions.md"
         ],
         "Downloading ERA5 Data" => [
-            "The CDSAPI"              => "cdsapi.md"
-            "Downloading with Julia"  => "downloadjulia.md"
-            "Downloading with Python" => "downloadpython.md"
+            "The CDSAPI"              => "downloads/cdsapi.md"
+            "Downloading with Julia"  => "downloads/julia.md"
+            "Downloading with Python" => "downloads/python.md"
         ]
     ],
 )
