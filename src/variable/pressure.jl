@@ -142,7 +142,7 @@ function rmPressure(varID::AbstractString)
         evar = PressureVariable(varID)
     end
 
-    rmERA5variable(evar)
+    rmERA5Variable(evar)
 
     return nothing
 

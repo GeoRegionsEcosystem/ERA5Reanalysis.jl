@@ -148,7 +148,7 @@ function rmSingle(varID::AbstractString)
         evar = SingleVariable(varID)
     end
 
-    rmERA5variable(evar)
+    rmERA5Variable(evar)
 
     return nothing
 

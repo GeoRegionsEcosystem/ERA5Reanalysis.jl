@@ -71,7 +71,7 @@ function addERA5Variables(fname::AbstractString)
 
 end
 
-function rmERA5variable(
+function rmERA5Variable(
     evar :: ERA5Variable
 )
 
