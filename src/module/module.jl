@@ -68,3 +68,23 @@ function ERA5Monthly(
     end
 
 end
+
+function checkdates(
+    dtbeg :: TimeType,
+    dtend :: TimeType,
+    throw :: Bool
+)
+
+    if dtend > (now() - Day(5))
+        error("$(modulelog()) - You have specified an end date that is in the future of the latest available date of the ERA5 reanalysis dataset")
+    end
+
+    if dtend > dtbeg
+        error("$(modulelog()) - You have specified an end date that is before your beginning date")
+    end
+
+    if (dtbeg < Date(1979,1,1)) || (dtend < Date(1979,1,1))
+        error("$(modulelog()) - You have specified a date (be it `dtbeg` or `dtend`) that is before the earliest available date of ERA5 reanalysis data")
+    end
+
+end
