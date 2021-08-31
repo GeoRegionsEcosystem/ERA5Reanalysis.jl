@@ -141,3 +141,34 @@ function isSingle(
     end
 
 end
+
+function rmSingle(varID::AbstractString)
+
+    if isSingle(varID,throw=false)
+        evar = SingleVariable(varID)
+    end
+
+    rmERA5variable(evar)
+
+    return nothing
+
+end
+
+function resetSingles(;allfiles=false)
+
+    if allfiles
+
+        @info "$(modulelog()) - Resetting both the master and custom lists of ERA5 SingleVariables back to the default"
+        flist = ["singlevariable.txt","singlecustom.txt",]
+    else
+        @info "$(modulelog()) - Resetting the custom lists of ERA5 variables back to the default"
+        flist = ["singlecustom.txt"]
+    end
+
+    for fname in flist
+        copyera5variables(fname,overwrite=true)
+    end
+
+    return
+
+end
