@@ -44,6 +44,9 @@ All `ERA5Module` Types contain the following fields:
 - `eroot` : The specified directory in which to save the data
 - `dtbeg` : The date for which downloads/analysis begins
 - `dtend` : The date for which downloads/analysis finishes
+
+!!! note
+    The `ERA5MonthlyHour` subType also has the field `hours` that specifies the hour(s) of day for which monthly data is downloaded
 """
 abstract type ERA5Module end
 

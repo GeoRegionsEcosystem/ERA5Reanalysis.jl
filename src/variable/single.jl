@@ -14,6 +14,19 @@ struct SingleCustom{ST<:AbstractString} <: SingleLevel
     units :: ST
 end
 
+"""
+    SingleVariable(
+        varID :: AbstractString,
+        ST = String,
+    ) -> evar :: SingleLevel
+
+Retrieve the basic properties of the Single-Level variable defined by `varID` and put them in the `evar` SingleLevel type structure.
+
+Arguments
+=========
+
+- `varID` : variable ID (in string format)
+"""
 function SingleVariable(
     varID :: AbstractString,
     ST = String,
@@ -37,6 +50,27 @@ function SingleVariable(
 
 end
 
+"""
+    SingleVariable(
+        ST = String;
+        varID :: AbstractString,
+        lname :: AbstractString = "",
+        vname :: AbstractString,
+        units :: AbstractString,
+        iscustom :: Bool = true
+    ) -> evar :: SingleLevel
+
+Create a custom Single-Level variable that is not in the default list exported by ERA5Reanalysis.jl.  These variables are either available in the CDS store (whereby they can be both downloaded analyzed), or not (in which case means that they were separately calculated from other variables and analyzed).
+
+Keyword Arguments
+=================
+
+- `varID` : variable ID (in string format)
+- `lname` : long-name for variable (used in specifying variable for CDS downloads)
+- `vname` : user-defined variable name
+- `units` : user-defined units of the variable
+- `iscustom` : Boolean that indicates if this variable is available on the CDS store
+"""
 function SingleVariable(
     ST = String;
     varID :: AbstractString,
@@ -52,7 +86,7 @@ function SingleVariable(
         @info "$(modulelog()) - Adding the SingleVariable \"$(varID)\" to the list."
     end
 
-    if iscustom
+    if !iscustom
 
         open(joinpath(
             DEPOT_PATH[1],"files","ERA5Reanalysis","singlevariable.txt"
@@ -73,7 +107,7 @@ function SingleVariable(
 end
 
 """
-    listSingles()
+    listSingles() -> varlist :: Array{ST}, fidlist :: Array{ST}
 
 List all Single-Level Variables and the files the data are stored in.
 
@@ -142,24 +176,43 @@ function isSingle(
 
 end
 
+"""
+    rmSingle( varID :: AbstractString ) -> nothing
+
+Remove the Single-Level Variable with the ID `varID` from the lists.
+
+Arguments
+=========
+
+- `RegID` : The keyword ID that will be used to identify the Single-Level Variable that is to be removed
+"""
 function rmSingle(varID::AbstractString)
 
     if isSingle(varID,throw=false)
-        evar = SingleVariable(varID)
+        rmERA5Variable(SingleVariable(varID))
+    else
+        @warn "$(modulelog()) - No Single-Level variable defined by \"$(varID)\" exists, please make sure you specified the correct variable ID"
     end
-
-    rmERA5Variable(evar)
 
     return nothing
 
 end
 
+"""
+    resetSingles( allfiles :: Bool ) -> nothing
+
+Reset the list of Single-Level variables.
+
+Arguments
+=========
+
+- `allfiles` : If false, only get rid of all the SingleCustom variables, but if true, then the SingleVariable list will be reset back to the default for ERA5Reanalysis.jl
+"""
 function resetSingles(;allfiles=false)
 
     if allfiles
-
         @info "$(modulelog()) - Resetting both the master and custom lists of ERA5 SingleVariables back to the default"
-        flist = ["singlevariable.txt","singlecustom.txt",]
+        flist = ["singlevariable.txt","singlecustom.txt"]
     else
         @info "$(modulelog()) - Resetting the custom lists of ERA5 variables back to the default"
         flist = ["singlecustom.txt"]
@@ -169,6 +222,6 @@ function resetSingles(;allfiles=false)
         copyera5variables(fname,overwrite=true)
     end
 
-    return
+    return nothing
 
 end

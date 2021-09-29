@@ -17,7 +17,7 @@ julia> ]
 ## Documentation Overview
 
 The documentation for `ERA5Reanalysis.jl` is divided into three components:
-1. Tutorials - meant as an introduction to the package
+1. Tutorials - meant as an introduction to the package.  There are three key components to ERA5Reanalysis.jl: (a) Dataset types specified by `ERA5Module`s, (b) Single- and Pressure-level Variables of interest specified by `ERA5Variable`s and (c) Geographic Regions of interest specified by `ERA5Region`s
 2. How-to Examples - geared towards those looking for specific examples of what can be done
 3. API Reference - comprehensive summary of all exported functionalities
 

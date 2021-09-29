@@ -15,9 +15,12 @@ makedocs(;
     sitename = "ERA5Reanalysis.jl",
     pages    = [
         "Home" => "index.md",
+        "ERA5 Modules"   => [
+            "CDS Datasets"   => "modules/index.md",
+            "Usage Examples" => "modules/examples.md",
+        ],
         "ERA5Reanalysis Basics" => [
-            "Components"     => "basics/index.md",
-            "ERA5 Modules"   => "basics/modules.md",
+            #"Components"     => "basics/index.md",
             "ERA5 Variables" => "basics/variables.md",
             "ERA5 Regions"   => "basics/regions.md"
         ],

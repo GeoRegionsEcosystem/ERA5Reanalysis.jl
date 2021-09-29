@@ -5,24 +5,6 @@ There are three essential components to specifying an ERA5 reanalysis dataset:
 2. The ERA5 variable (single-level, or pressure-level), held in the `ERA5Variable` supertype
 3. The ERA5 region to be downloaded/analyzed, held in an `ERA5Region` supertype, built over a `GeoRegion`
 
-## The `ERA5Module` superType
-
-ERA5 reanalysis data is stored on the Climate Data Store in several different categories, so different people with different needs may access different data types depending on their research.  ERA5Reanalysis.jl distinguishes between the modules that are most often called using the `ERA5Module` superType:
-* Hourly reanalysis data
-* Monthly reanalysis data, which is further broken down in
-    * Monthly-averaged data
-    * Monthly-averaged hourly data (i.e. a monthly average of the diurnal cycle)
-
-```@docs
-ERA5Module
-```
-
-There are other potential modules that could be incorporated into ERA5Reanalysis.jl, such as
-* ERA5-Land data
-* Ensemble model averages, individual members, and standard deviations
-
-More information on the different Types of `ERA5Module`s can be found [here](modules.md).
-
 ## The `ERA5Variable` superType
 
 There are two main variable types in ERA5 reanalysis:

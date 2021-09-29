@@ -16,6 +16,25 @@ struct PressureCustom{ST<:AbstractString} <: PressureLevel
     hPa   :: Int
 end
 
+"""
+    PressureVariable(
+        varID :: AbstractString,
+        ST = String;
+        hPa   :: Int = 0
+    ) -> evar :: SingleLevel
+
+Retrieve the basic properties of the Pressure-Level variable defined by `varID` at pressure-height indicated by `hPa` and put them in the `evar` SingleLevel type structure.
+
+Arguments
+=========
+
+- `varID` : variable ID (in string format)
+
+Keyword Arguments
+=================
+
+- `hPa` : Integer specifying pressure-level height in hPa
+"""
 function PressureVariable(
     varID :: AbstractString,
     ST = String;
@@ -43,6 +62,27 @@ function PressureVariable(
 
 end
 
+"""
+    PressureVariable(
+        ST = String;
+        varID :: AbstractString,
+        lname :: AbstractString = "",
+        vname :: AbstractString,
+        units :: AbstractString,
+        hPa   :: Int = 0,
+    ) -> evar :: SingleLevel
+
+Create a custom Single-Level variable that is not in the default list exported by ERA5Reanalysis.jl.  These variables are either available in the CDS store (whereby they can be both downloaded analyzed), or not (in which case means that they were separately calculated from other variables and analyzed).
+
+Keyword Arguments
+=================
+
+- `varID` : variable ID (in string format)
+- `lname` : long-name for variable (used in specifying variable for CDS downloads)
+- `vname` : user-defined variable name
+- `units` : user-defined units of the variable
+- `hPa`   : Pressure level specified in hPa. Default is 0, which indicates all levels.
+"""
 function PressureVariable(
     ST = String;
     varID :: AbstractString,
@@ -136,18 +176,33 @@ function isPressure(
 
 end
 
+"""
+    rmPressure( varID :: AbstractString ) -> nothing
+
+Remove the Pressure-Level Variable with the ID `varID` from the lists.
+
+Arguments
+=========
+
+- `RegID` : The keyword ID that will be used to identify the Pressure-Level Variable that is to be removed
+"""
 function rmPressure(varID::AbstractString)
 
     if isPressure(varID,throw=false)
-        evar = PressureVariable(varID)
+        rmERA5Variable(PressureVariable(varID))
+    else
+        @warn "$(modulelog()) - No Pressure-Level variable defined by \"$(varID)\" exists, please make sure you specified the correct variable ID"
     end
-
-    rmERA5Variable(evar)
 
     return nothing
 
 end
 
+"""
+    resetPressures() -> nothing
+
+Reset the list of Pressure-Level variables to the ERA5Reanalysis default.
+"""
 function resetPressures()
 
     @info "$(modulelog()) - Resetting the custom list of ERA5 PressureVariables back to the default"
@@ -157,7 +212,7 @@ function resetPressures()
         copyera5variables(fname,overwrite=true)
     end
 
-    return
+    return nothing
 
 end
 

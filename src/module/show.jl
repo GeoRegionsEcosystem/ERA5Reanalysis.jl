@@ -3,7 +3,7 @@ function show(io::IO, emod::ERA5Hourly)
 		io,
 		"The ERA5Hourly Module has the following properties:\n",
 		"    Module ID      (modID) : ", emod.modID, '\n',
-		"    Data Directory (eroot) : ", emod.seroot, '\n',
+		"    Data Directory (eroot) : ", emod.eroot, '\n',
 		"    Date Begin     (dtbeg) : ", emod.dtbeg, '\n',
 		"    Date End       (dtend) : ", emod.dtend, '\n',
 	)
@@ -14,7 +14,7 @@ function show(io::IO, emod::ERA5Monthly)
 		io,
 		"The ERA5Monthly Module has the following properties:\n",
 		"    Module ID      (modID) : ", emod.modID, '\n',
-		"    Data Directory (eroot) : ", emod.seroot, '\n',
+		"    Data Directory (eroot) : ", emod.eroot, '\n',
 		"    Date Begin     (dtbeg) : ", emod.dtbeg, '\n',
 		"    Date End       (dtend) : ", emod.dtend, '\n',
 	)
@@ -25,7 +25,7 @@ function show(io::IO, emod::ERA5MonthlyHour)
 		io,
 		"The ERA5MonthlyHour Module has the following properties:\n",
 		"    Module ID      (modID) : ", emod.modID, '\n',
-		"    Data Directory (eroot) : ", emod.seroot, '\n',
+		"    Data Directory (eroot) : ", emod.eroot, '\n',
 		"    Date Begin     (dtbeg) : ", emod.dtbeg, '\n',
 		"    Date End       (dtend) : ", emod.dtend, '\n',
 		"    Hours-of-Day   (hours) : ", emod.hours, '\n',
