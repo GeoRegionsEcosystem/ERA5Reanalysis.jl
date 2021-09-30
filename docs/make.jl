@@ -15,19 +15,18 @@ makedocs(;
     sitename = "ERA5Reanalysis.jl",
     pages    = [
         "Home" => "index.md",
-        "ERA5 Modules"   => [
+        "`ERA5Module`s" => [
             "CDS Datasets"   => "modules/index.md",
             "Usage Examples" => "modules/examples.md",
         ],
-        "ERA5 Variables"   => [
+        "`ERA5Variable`s" => [
             "Variable Types"                      => "variables/index.md",
             "Retrieving Existing `ERA5Variable`s" => "variables/read.md",
+            "List of Existing `ERA5Variable`s"    => "variables/list.md",
             "Creating New `ERA5Variable`s"        => "variables/create.md",
         ],
-        "ERA5Reanalysis Basics" => [
-            #"Components"     => "basics/index.md",
-            "ERA5 Variables" => "basics/variables.md",
-            "ERA5 Regions"   => "basics/regions.md"
+        "`ERA5Region`s" => [
+            "The Basics of an `ERA5Region`" => "regions/index.md",
         ],
         "Downloading ERA5 Data" => [
             "The CDSAPI"              => "downloads/cdsapi.md"
