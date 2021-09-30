@@ -27,9 +27,11 @@ export
         ERA5Variable, SingleVariable, SingleCustom, PressureVariable, PressureCustom,
         listSingles,   isSingle,   rmSingle,   resetSingles,
         listPressures, isPressure, rmPressure, resetPressures,
-        resetERA5Variables, addERA5Variables, rmERA5Variable,
+        resetERA5Variables, addERA5Variables, rmERA5Variable, tableERA5Variables,
 
-        ERA5Region
+        ERA5Region,
+
+        era5Pressures
 
 
 

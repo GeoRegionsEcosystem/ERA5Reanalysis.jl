@@ -104,6 +104,33 @@ function rmERA5Variable(
 
 end
 
+function tableERA5Variables()
+
+    jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol);
+    fvar = ["SingleVariable","SingleCustom","PressureVariable","PressureCustom"]
+    fmat = []
+    
+    for fname in fvar
+        fid  = joinpath(jfol,"$(lowercase(fname)).txt")
+        try
+            vmat = readdlm(fid,',',comments=true,comment_char='#')
+            nvar = size(vmat,1); ff = fill(fname,nvar)
+            vmat = cat(ff,vmat[:,[1,3,4,2]],dims=2)
+            fmat = cat(fmat,vmat,dims=1)
+        catch
+        end
+    end
+
+    head = ["Variable Type","ID","Name","Units","ERA5 Long-Name"];
+
+    pretty_table(
+        fmat,head,
+        alignment=[:c,:c,:l,:c,:l],
+        crop = :none, tf = tf_compact
+    );
+
+end
+
 ## Backend Functions
 
 function copyera5variables(
