@@ -1,5 +1,19 @@
+"""
+    SingleLevel <: ERA5Variable
+
+Abstract supertype for Single-Level variables.  Contains the following fields:
+- `varID` : The variable ID, that is also the identifier in the NetCDF files
+- `lname` : The variable long-name, which is used to specify retrievals from CDS
+- `vname` : The full-name of the variable
+- `units` : The units of the variable
+"""
 abstract type SingleLevel <: ERA5Variable end
 
+"""
+    SingleVariable <: SingleLevel
+
+Subtype for Single-Level variables that can be directly retrieved from the CDS
+"""
 struct SingleVariable{ST<:AbstractString} <: SingleLevel
     varID :: ST
     lname :: ST
@@ -7,6 +21,12 @@ struct SingleVariable{ST<:AbstractString} <: SingleLevel
     units :: ST
 end
 
+
+"""
+    SingleCustom <: SingleLevel
+
+Subtype for custom user-defined Single-Level variables
+"""
 struct SingleCustom{ST<:AbstractString} <: SingleLevel
     varID :: ST
     lname :: ST

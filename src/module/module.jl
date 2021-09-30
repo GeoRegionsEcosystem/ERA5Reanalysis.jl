@@ -46,7 +46,7 @@ end
         eroot :: AbstractString = homedir(),
     ) -> ERA5Hourly <: ERA5Module
 
-A function that creates an `ERA5Hourly` module.
+A function that creates an `ERA5Hourly` module.  All possible hours are downloaded, and data is saved month-by-month.
 
 Keyword Arguments
 =================
@@ -79,7 +79,7 @@ end
         hours :: Union{Int,Vector{Int}} = -1,
     ) -> ERA5Monthly <: ERA5Module or ERA5MonthlyHour <: ERA5Module
 
-A function that creates an `ERA5Monthly` or `ERA5MonthlyHour` module depending on the input arguments of `hours`.
+A function that creates an `ERA5Monthly` or `ERA5MonthlyHour` module depending on the input arguments of `hours`.  Data is saved year-by-year.
 
 Keyword Arguments
 =================

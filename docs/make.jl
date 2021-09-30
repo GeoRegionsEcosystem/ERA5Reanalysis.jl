@@ -19,6 +19,11 @@ makedocs(;
             "CDS Datasets"   => "modules/index.md",
             "Usage Examples" => "modules/examples.md",
         ],
+        "ERA5 Variables"   => [
+            "Variable Types"                      => "variables/index.md",
+            "Retrieving Existing `ERA5Variable`s" => "variables/read.md",
+            "Creating New `ERA5Variable`s"        => "variables/create.md",
+        ],
         "ERA5Reanalysis Basics" => [
             #"Components"     => "basics/index.md",
             "ERA5 Variables" => "basics/variables.md",

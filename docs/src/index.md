@@ -14,6 +14,13 @@ julia> ]
 (@v1.6) pkg> add https://github.com/natgeo-wong/ERA5Reanalysis.jl.git
 ```
 
+## The Basic Components of ERA5Reanalysis.jl
+
+There are three essential components to specifying an ERA5 reanalysis dataset:
+1. The ERA5 module (hourly, monthly, month-by-hour, etc.), held in an [`ERA5Module`](modules/index.md) supertype
+2. The ERA5 variable (single-level, or pressure-level), held in the [`ERA5Variable`](variables/index.md) supertype
+3. The ERA5 region to be downloaded/analyzed, held in an `ERA5Region` supertype, built over a `GeoRegion`
+
 ## Documentation Overview
 
 The documentation for `ERA5Reanalysis.jl` is divided into three components:

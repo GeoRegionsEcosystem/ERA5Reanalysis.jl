@@ -1,5 +1,20 @@
+"""
+    PressureLevel <: ERA5Variable
+
+Abstract supertype for Pressure-Level variables.  Contains the following fields:
+- `varID` : The variable ID, that is also the identifier in the NetCDF files
+- `lname` : The variable long-name, which is used to specify retrievals from CDS
+- `vname` : The full-name of the variable
+- `units` : The units of the variable
+- `hPa`   : The pressure-level height of the variable in concern
+"""
 abstract type PressureLevel <: ERA5Variable end
 
+"""
+    PressureVariable <: PressureLevel
+
+Subtype for Pressure-Level variables that can be directly retrieved from the CDS
+"""
 struct PressureVariable{ST<:AbstractString} <: PressureLevel
     varID :: ST
     lname :: ST
@@ -8,6 +23,11 @@ struct PressureVariable{ST<:AbstractString} <: PressureLevel
     hPa   :: Int
 end
 
+"""
+    PressureCustom <: PressureLevel
+
+Subtype for custom user-defined Pressure-Level variables
+"""
 struct PressureCustom{ST<:AbstractString} <: PressureLevel
     varID :: ST
     lname :: ST

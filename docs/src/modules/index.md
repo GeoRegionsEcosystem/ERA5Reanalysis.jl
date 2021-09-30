@@ -4,6 +4,10 @@ ERA5 reanalysis data is stored on the Climate Data Store in several different ca
 
 When defining an `ERA5Module` container, we also indicate the start and end dates of the dataset that we want to work on.
 
+```@docs
+ERA5Module
+```
+
 ## Available Modules in ERA5Reanalysis.jl
 
 The following datasets are currently supported by ERA5Reanalysis.jl:
@@ -13,7 +17,9 @@ The following datasets are currently supported by ERA5Reanalysis.jl:
     * Monthly-averaged hourly data (i.e. a monthly average of the diurnal cycle) (`ERA5MonthlyHour`)
 
 ```@docs
-ERA5Module
+ERA5Hourly
+ERA5Monthly
+ERA5MonthlyHour
 ```
 
 There are other potential modules that could be incorporated into ERA5Reanalysis.jl, such as
