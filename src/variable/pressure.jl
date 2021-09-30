@@ -41,6 +41,7 @@ end
         varID :: AbstractString,
         ST = String;
         hPa   :: Int = 0
+        throw :: Bool = true
     ) -> evar :: SingleLevel
 
 Retrieve the basic properties of the Pressure-Level variable defined by `varID` at pressure-height indicated by `hPa` and put them in the `evar` SingleLevel type structure.
@@ -54,11 +55,13 @@ Keyword Arguments
 =================
 
 - `hPa` : Integer specifying pressure-level height in hPa
+- `throw` : if `hPa` level does not exist and `throw` is true, throw error, otherwise find nearest pressure level
 """
 function PressureVariable(
     varID :: AbstractString,
     ST = String;
     hPa   :: Int = 0,
+    throw :: Bool = true
 )
 
     isPressure(varID)
@@ -71,6 +74,19 @@ function PressureVariable(
 
     IDinfo = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
     varID,lname,vname,units = IDinfo[[1,2,3,4]]
+
+    if !iszero(hPa)
+        prelist = era5Pressures()
+        if sum(prelist.==hPa) != 1
+            if throw
+                error("$(modulelog()) - Pressure level specified in \"hPa\" argument is invalid, please check and see if you requested correctly")
+            else
+                @warn "$(modulelog()) - Pressure level specified in \"hPa\" argument does not exist, snapping to nearest pressure level"
+                ipre = argmin(abs.(prelist.-hPa))
+                hPa  = prelist[ipre]
+            end
+        end
+    end
 
     if vtype == "pressurevariable"
         @info "$(modulelog()) - The ERA5Variable defined by \"$varID\" is of the PressureVariable type"
@@ -90,6 +106,7 @@ end
         vname :: AbstractString,
         units :: AbstractString,
         hPa   :: Int = 0,
+        throw :: Bool = true
     ) -> evar :: SingleLevel
 
 Create a custom Single-Level variable that is not in the default list exported by ERA5Reanalysis.jl.  These variables are either available in the CDS store (whereby they can be both downloaded analyzed), or not (in which case means that they were separately calculated from other variables and analyzed).
@@ -102,6 +119,7 @@ Keyword Arguments
 - `vname` : user-defined variable name
 - `units` : user-defined units of the variable
 - `hPa`   : Pressure level specified in hPa. Default is 0, which indicates all levels.
+- `throw` : if `hPa` level does not exist and `throw` is true, throw error, otherwise find nearest pressure level
 """
 function PressureVariable(
     ST = String;
@@ -110,6 +128,7 @@ function PressureVariable(
     vname :: AbstractString,
     units :: AbstractString,
     hPa   :: Int = 0,
+    throw :: Bool = true
 )
 
     if isPressure(varID,throw=false)
@@ -120,6 +139,19 @@ function PressureVariable(
 
     open(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","pressurecustom.txt"),"a") do io
         write(io,"$varID,$lname,$vname,$units\n")
+    end
+
+    if !izero(hPa)
+        prelist = era5Pressures()
+        if sum(prelist.=hPa) != 1
+            if throw
+                error("$(modulelog()) - Pressure level specified in \"hPa\" argument is invalid, please check and see if you requested correctly")
+            else
+                @warn "$(modulelog()) - Pressure level specified in \"hPa\" argument does not exist, snapping to nearest pressure level"
+                ipre = argmin(abs.(prelist.-hPa))
+                hPa  = prelist[ipre]
+            end
+        end
     end
 
     return PressureCustom{ST}(varID,lname,vname,units,hPa)
@@ -237,10 +269,7 @@ function resetPressures()
 end
 
 """
-    era5Pressures(
-        varID :: AbstractString;
-        throw :: Bool = true
-    ) -> parray :: Vector{Int}
+    era5Pressures() -> parray :: Vector{Int}
 
 Returns the a vector containing the 37 pressure levels available in ERA5 in hPa units.
 
