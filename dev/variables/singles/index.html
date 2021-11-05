@@ -11,10 +11,10 @@
            units = &quot;0-1&quot;,
            vname = &quot;High Vegetation Cover&quot;,
            lname = &quot;high_vegetation_cover&quot;,
-       )</code><code class="nohighlight hljs ansi" style="display:block;">[ Info: 2021-11-05T20:24:39.991 - ERA5Reanalysis.jl - Checking to see if the SingleVariable ID &quot;hvc&quot; is in use
-┌ Warning: 2021-11-05T20:24:39.992 - ERA5Reanalysis.jl - &quot;hvc&quot; is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list.
+       )</code><code class="nohighlight hljs ansi" style="display:block;">[ Info: 2021-11-05T21:05:11.983 - ERA5Reanalysis.jl - Checking to see if the SingleVariable ID &quot;hvc&quot; is in use
+┌ Warning: 2021-11-05T21:05:11.984 - ERA5Reanalysis.jl - &quot;hvc&quot; is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list.
 └ @ ERA5Reanalysis ~/work/ERA5Reanalysis.jl/ERA5Reanalysis.jl/src/variable/single.jl:189
-[ Info: 2021-11-05T20:24:39.993 - ERA5Reanalysis.jl - Adding the SingleVariable &quot;hvc&quot; to the list.
+[ Info: 2021-11-05T21:05:11.984 - ERA5Reanalysis.jl - Adding the SingleVariable &quot;hvc&quot; to the list.
 The Single-Level Variable &quot;hvc&quot; has the following properties:
     Variable ID    (varID) : hvc
     Long Name      (lname) : high_vegetation_cover
@@ -25,10 +25,10 @@ The Single-Level Variable &quot;hvc&quot; has the following properties:
            vname = &quot;Eddy Kinetic Energy&quot;,
            lname = &quot;eddy_kinetic_energy&quot;,
            inCDS = false
-       )</code><code class="nohighlight hljs ansi" style="display:block;">[ Info: 2021-11-05T20:24:40.023 - ERA5Reanalysis.jl - Checking to see if the SingleVariable ID &quot;eke&quot; is in use
-┌ Warning: 2021-11-05T20:24:40.024 - ERA5Reanalysis.jl - &quot;eke&quot; is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list.
+       )</code><code class="nohighlight hljs ansi" style="display:block;">[ Info: 2021-11-05T21:05:12.026 - ERA5Reanalysis.jl - Checking to see if the SingleVariable ID &quot;eke&quot; is in use
+┌ Warning: 2021-11-05T21:05:12.027 - ERA5Reanalysis.jl - &quot;eke&quot; is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list.
 └ @ ERA5Reanalysis ~/work/ERA5Reanalysis.jl/ERA5Reanalysis.jl/src/variable/single.jl:189
-[ Info: 2021-11-05T20:24:40.024 - ERA5Reanalysis.jl - Adding the SingleVariable &quot;eke&quot; to the list.
+[ Info: 2021-11-05T21:05:12.027 - ERA5Reanalysis.jl - Adding the SingleVariable &quot;eke&quot; to the list.
 The Single-Level Variable &quot;eke&quot; has the following properties:
     Variable ID    (varID) : eke
     Long Name      (lname) : eddy_kinetic_energy
@@ -61,15 +61,15 @@ The Single-Level Variable &quot;eke&quot; has the following properties:
   SingleVariable   cin    CIN                              J kg^{-1}    convective_inhibition
   SingleVariable   hvc    High Vegetation Cover               0-1       high_vegetation_cover
    SingleCustom    eke    Eddy Kinetic Energy               J m**-2     eddy_kinetic_energy
- ---------------- ------ -------------------------------- ------------ ---------------------------------------</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; rmSingle.([&quot;eke&quot;,&quot;hvc&quot;])</code><code class="nohighlight hljs ansi" style="display:block;">[ Info: 2021-11-05T20:24:40.228 - ERA5Reanalysis.jl - Checking to see if the SingleVariable ID &quot;eke&quot; is in use
-[ Info: 2021-11-05T20:24:40.229 - ERA5Reanalysis.jl - The SingleVariable ID &quot;eke&quot; is already in use
-[ Info: 2021-11-05T20:24:40.265 - ERA5Reanalysis.jl - Successfully removed the Single-Level variable defined by &quot;eke&quot;
-[ Info: 2021-11-05T20:24:40.265 - ERA5Reanalysis.jl - Checking to see if the SingleVariable ID &quot;hvc&quot; is in use
-[ Info: 2021-11-05T20:24:40.266 - ERA5Reanalysis.jl - The SingleVariable ID &quot;hvc&quot; is already in use
-[ Info: 2021-11-05T20:24:40.289 - ERA5Reanalysis.jl - Successfully removed the Single-Level variable defined by &quot;hvc&quot;
+ ---------------- ------ -------------------------------- ------------ ---------------------------------------</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; rmSingle.([&quot;eke&quot;,&quot;hvc&quot;])</code><code class="nohighlight hljs ansi" style="display:block;">[ Info: 2021-11-05T21:05:12.213 - ERA5Reanalysis.jl - Checking to see if the SingleVariable ID &quot;eke&quot; is in use
+[ Info: 2021-11-05T21:05:12.214 - ERA5Reanalysis.jl - The SingleVariable ID &quot;eke&quot; is already in use
+[ Info: 2021-11-05T21:05:12.248 - ERA5Reanalysis.jl - Successfully removed the Single-Level variable defined by &quot;eke&quot;
+[ Info: 2021-11-05T21:05:12.248 - ERA5Reanalysis.jl - Checking to see if the SingleVariable ID &quot;hvc&quot; is in use
+[ Info: 2021-11-05T21:05:12.249 - ERA5Reanalysis.jl - The SingleVariable ID &quot;hvc&quot; is already in use
+[ Info: 2021-11-05T21:05:12.271 - ERA5Reanalysis.jl - Successfully removed the Single-Level variable defined by &quot;hvc&quot;
 2-element Vector{Nothing}:
  nothing
- nothing</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; isSingle(&quot;eke&quot;,throw=false) # don&#39;t throw error, just show warning</code><code class="nohighlight hljs ansi" style="display:block;">[ Info: 2021-11-05T20:24:40.616 - ERA5Reanalysis.jl - Checking to see if the SingleVariable ID &quot;eke&quot; is in use
-┌ Warning: 2021-11-05T20:24:40.617 - ERA5Reanalysis.jl - &quot;eke&quot; is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list.
+ nothing</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; isSingle(&quot;eke&quot;,throw=false) # don&#39;t throw error, just show warning</code><code class="nohighlight hljs ansi" style="display:block;">[ Info: 2021-11-05T21:05:12.588 - ERA5Reanalysis.jl - Checking to see if the SingleVariable ID &quot;eke&quot; is in use
+┌ Warning: 2021-11-05T21:05:12.589 - ERA5Reanalysis.jl - &quot;eke&quot; is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list.
 └ @ ERA5Reanalysis ~/work/ERA5Reanalysis.jl/ERA5Reanalysis.jl/src/variable/single.jl:189
-false</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../pressures/">« Custom Pressure-Level Variables</a><a class="docs-footer-nextpage" href="../reset/">Resetting <code>ERA5Variable</code>s »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.10 on <span class="colophon-date" title="Friday 5 November 2021 20:24">Friday 5 November 2021</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+false</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../pressures/">« Custom Pressure-Level Variables</a><a class="docs-footer-nextpage" href="../reset/">Resetting <code>ERA5Variable</code>s »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.10 on <span class="colophon-date" title="Friday 5 November 2021 21:05">Friday 5 November 2021</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
