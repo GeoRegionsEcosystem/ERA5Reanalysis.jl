@@ -15,22 +15,23 @@ makedocs(;
     sitename = "ERA5Reanalysis.jl",
     pages    = [
         "Home" => "index.md",
-        "`ERA5Module`s" => [
+        "ERA5Modules" => [
             "CDS Datasets"   => "modules/index.md",
             "Usage Examples" => "modules/examples.md",
         ],
-        "`ERA5Variable`s" => [
-            "Variable Types"                      => "variables/index.md",
-            "Retrieving Existing `ERA5Variable`s" => "variables/read.md",
-            "List of Existing `ERA5Variable`s"    => "variables/list.md",
-            "Creating Custom `ERA5Variable`s"     => [
+        "ERA5Variables" => [
+            "Variable Types"                    => "variables/index.md",
+            "Retrieving Existing ERA5Variables" => "variables/read.md",
+            "List of Existing ERA5Variables"    => "variables/list.md",
+            "Creating Custom ERA5Variables"     => [
                 "Custom Pressure-Level Variables" => "variables/pressures.md",
                 "Custom Single-Level Variables"   => "variables/singles.md",
-                "Resetting `ERA5Variable`s"       => "variables/reset.md",
+                "Resetting ERA5Variables"         => "variables/reset.md",
             ],
         ],
-        "`ERA5Region`s" => [
-            "The Basics of an `ERA5Region`" => "regions/index.md",
+        "ERA5Regions" => [
+            "The Basics of an ERA5Region" => "regions/index.md",
+            "Manipulation of GeoRegions"  => "regions/georegions.md",
         ],
         "Downloading ERA5 Data" => [
             "The CDSAPI"              => "downloads/cdsapi.md"

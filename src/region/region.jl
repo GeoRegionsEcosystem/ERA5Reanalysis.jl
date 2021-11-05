@@ -18,17 +18,34 @@ struct ERA5Region{ST<:AbstractString, FT<:Real}
     isglb :: Bool
 end
 
+"""
+    ERA5Region(
+        geo  :: GeoRegion;
+        gres :: Real = 0,
+        ST = String,
+        FT = Float64
+    ) -> egeo :: ERA5Region
+
+Argument
+========
+
+- `geo`  : A `GeoRegion` structure type
+
+Keyword Argument
+================
+
+- `gres` : The spatial resolution that ERA5 reanalysis data will be downloaded/analyzed, and 360 must be a multiple of `gres`
+"""
 function ERA5Region(
-    geoID :: AbstractString,
-    gres  :: Real = 0,
+    geo  :: GeoRegion;
+    gres :: Real = 0,
     ST = String,
     FT = Float64
 )
 
-    @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$geoID\""
-    geo = GeoRegion(geoID)
-    if iszero(gres); gres = regionstep(geoID,gres) end
-    if geoID == "GLB"; isglb = true; else; isglb = false end
+    @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(geo.regID)\""
+    gres = regionstep(geo.regID,gres)
+    if geo.regID == "GLB"; isglb = true; else; isglb = false end
 
     return ERA5Region{ST,FT}(
         geo, geo.regID, gres,

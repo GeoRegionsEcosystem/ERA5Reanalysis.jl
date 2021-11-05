@@ -1,3 +1,13 @@
+"""
+    resetERA5Variables( allfiles :: Bool ) -> nothing
+
+Reset the list of Single-Level and PressureCustom variables.
+
+Arguments
+=========
+
+- `allfiles` : If false, only get rid of all the SingleCustom variables, but if true, then the SingleVariable list will be reset back to the default for ERA5Reanalysis.jl
+"""
 function resetERA5Variables(;allfiles=false)
 
     if allfiles
