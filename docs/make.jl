@@ -23,7 +23,11 @@ makedocs(;
             "Variable Types"                      => "variables/index.md",
             "Retrieving Existing `ERA5Variable`s" => "variables/read.md",
             "List of Existing `ERA5Variable`s"    => "variables/list.md",
-            "Creating New `ERA5Variable`s"        => "variables/create.md",
+            "Creating Custom `ERA5Variable`s"     => [
+                "Custom Pressure-Level Variables" => "variables/pressures.md",
+                "Custom Single-Level Variables"   => "variables/singles.md",
+                "Resetting `ERA5Variable`s"       => "variables/reset.md",
+            ],
         ],
         "`ERA5Region`s" => [
             "The Basics of an `ERA5Region`" => "regions/index.md",

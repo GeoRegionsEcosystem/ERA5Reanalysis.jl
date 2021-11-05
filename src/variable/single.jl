@@ -45,7 +45,7 @@ Retrieve the basic properties of the Single-Level variable defined by `varID` an
 Arguments
 =========
 
-- `varID` : variable ID (in string format)
+- `varID` : variable ID (in string format) used in the NetCDF file
 """
 function SingleVariable(
     varID :: AbstractString,
@@ -77,7 +77,7 @@ end
         lname :: AbstractString = "",
         vname :: AbstractString,
         units :: AbstractString,
-        iscustom :: Bool = true
+        inCDS :: Bool = true
     ) -> evar :: SingleLevel
 
 Create a custom Single-Level variable that is not in the default list exported by ERA5Reanalysis.jl.  These variables are either available in the CDS store (whereby they can be both downloaded analyzed), or not (in which case means that they were separately calculated from other variables and analyzed).
@@ -85,11 +85,11 @@ Create a custom Single-Level variable that is not in the default list exported b
 Keyword Arguments
 =================
 
-- `varID` : variable ID (in string format)
+- `varID` : variable ID (in string format) used in the NetCDF file
 - `lname` : long-name for variable (used in specifying variable for CDS downloads)
 - `vname` : user-defined variable name
 - `units` : user-defined units of the variable
-- `iscustom` : Boolean that indicates if this variable is available on the CDS store
+- `inCDS` : Boolean that indicates if this variable is available on the CDS store.  True if available.
 """
 function SingleVariable(
     ST = String;
@@ -97,7 +97,7 @@ function SingleVariable(
     lname :: AbstractString = "",
     vname :: AbstractString,
     units :: AbstractString,
-    iscustom :: Bool = true
+    inCDS :: Bool = true
 )
 
     if isSingle(varID,throw=false)
@@ -106,7 +106,7 @@ function SingleVariable(
         @info "$(modulelog()) - Adding the SingleVariable \"$(varID)\" to the list."
     end
 
-    if !iscustom
+    if inCDS
 
         open(joinpath(
             DEPOT_PATH[1],"files","ERA5Reanalysis","singlevariable.txt"
@@ -209,7 +209,10 @@ Arguments
 function rmSingle(varID::AbstractString)
 
     if isSingle(varID,throw=false)
+        disable_logging(Logging.Warn)
         rmERA5Variable(SingleVariable(varID))
+        disable_logging(Logging.Debug)
+        @info "$(modulelog()) - Successfully removed the Single-Level variable defined by \"$(varID)\""
     else
         @warn "$(modulelog()) - No Single-Level variable defined by \"$(varID)\" exists, please make sure you specified the correct variable ID"
     end
@@ -243,5 +246,32 @@ function resetSingles(;allfiles=false)
     end
 
     return nothing
+
+end
+
+function tableSingles()
+
+    jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol);
+    fvar = ["SingleVariable","SingleCustom"]
+    fmat = []
+    
+    for fname in fvar
+        fid  = joinpath(jfol,"$(lowercase(fname)).txt")
+        try
+            vmat = readdlm(fid,',',comments=true,comment_char='#')
+            nvar = size(vmat,1); ff = fill(fname,nvar)
+            vmat = cat(ff,vmat[:,[1,3,4,2]],dims=2)
+            fmat = cat(fmat,vmat,dims=1)
+        catch
+        end
+    end
+
+    head = ["Variable Type","ID","Name","Units","ERA5 Long-Name"];
+
+    pretty_table(
+        fmat,head,
+        alignment=[:c,:c,:l,:c,:l],
+        crop = :none, tf = tf_compact
+    );
 
 end

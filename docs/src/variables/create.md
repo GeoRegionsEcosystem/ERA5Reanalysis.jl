@@ -1,0 +1,3 @@
+# Creating new `ERA5Variable`s
+
+Besides retrieving information from the list predefined `ERA5Variable`s shown [here](list.md), we are also able to create and define new `ERA5Variable`s and add them to the default list for easy retrieval later on.  Compiling the information of all custom `ERA5Variable`s together with the ones predefined in ERA5Reanalysis.jl prevents us from using the same `ID`s to define different `ERA5Variable`s and prevents confusion.

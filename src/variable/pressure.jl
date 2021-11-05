@@ -49,7 +49,7 @@ Retrieve the basic properties of the Pressure-Level variable defined by `varID` 
 Arguments
 =========
 
-- `varID` : variable ID (in string format)
+- `varID` : variable ID (in string format) used in the NetCDF file
 
 Keyword Arguments
 =================
@@ -107,14 +107,14 @@ end
         units :: AbstractString,
         hPa   :: Int = 0,
         throw :: Bool = true
-    ) -> evar :: SingleLevel
+    ) -> evar :: PressureCustom
 
-Create a custom Single-Level variable that is not in the default list exported by ERA5Reanalysis.jl.  These variables are either available in the CDS store (whereby they can be both downloaded analyzed), or not (in which case means that they were separately calculated from other variables and analyzed).
+Create a custom Pressure-Level variable that is not in the default list exported by ERA5Reanalysis.jl.  These variables are not available in the CDS store, and so they must be separately calculated from other variables and analyzed.
 
 Keyword Arguments
 =================
 
-- `varID` : variable ID (in string format)
+- `varID` : variable ID (in string format) used in the NetCDF file
 - `lname` : long-name for variable (used in specifying variable for CDS downloads)
 - `vname` : user-defined variable name
 - `units` : user-defined units of the variable
@@ -141,9 +141,9 @@ function PressureVariable(
         write(io,"$varID,$lname,$vname,$units\n")
     end
 
-    if !izero(hPa)
+    if !iszero(hPa)
         prelist = era5Pressures()
-        if sum(prelist.=hPa) != 1
+        if sum(prelist.==hPa) != 1
             if throw
                 error("$(modulelog()) - Pressure level specified in \"hPa\" argument is invalid, please check and see if you requested correctly")
             else
@@ -241,7 +241,10 @@ Arguments
 function rmPressure(varID::AbstractString)
 
     if isPressure(varID,throw=false)
+        disable_logging(Logging.Warn)
         rmERA5Variable(PressureVariable(varID))
+        disable_logging(Logging.Debug)
+        @info "$(modulelog()) - Successfully removed the Pressure-Level variable defined by \"$(varID)\""
     else
         @warn "$(modulelog()) - No Pressure-Level variable defined by \"$(varID)\" exists, please make sure you specified the correct variable ID"
     end
@@ -283,3 +286,30 @@ era5Pressures() = [
     225,250,300,350,400,450,500,550,600,650,700,750,
     775,800,825,850,875,900,925,950,975,1000
 ]
+
+function tablePressures()
+
+    jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol);
+    fvar = ["PressureVariable","PressureCustom"]
+    fmat = []
+    
+    for fname in fvar
+        fid  = joinpath(jfol,"$(lowercase(fname)).txt")
+        try
+            vmat = readdlm(fid,',',comments=true,comment_char='#')
+            nvar = size(vmat,1); ff = fill(fname,nvar)
+            vmat = cat(ff,vmat[:,[1,3,4,2]],dims=2)
+            fmat = cat(fmat,vmat,dims=1)
+        catch
+        end
+    end
+
+    head = ["Variable Type","ID","Name","Units","ERA5 Long-Name"];
+
+    pretty_table(
+        fmat,head,
+        alignment=[:c,:c,:l,:c,:l],
+        crop = :none, tf = tf_compact
+    );
+
+end

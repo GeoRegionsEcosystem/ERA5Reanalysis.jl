@@ -25,9 +25,9 @@ export
         ERA5Module, ERA5Hourly, ERA5Monthly, ERA5MonthlyHour,
 
         ERA5Variable, SingleVariable, SingleCustom, PressureVariable, PressureCustom,
-        listSingles,   isSingle,   rmSingle,   resetSingles,
-        listPressures, isPressure, rmPressure, resetPressures,
-        resetERA5Variables, addERA5Variables, rmERA5Variable, tableERA5Variables,
+        listSingles,   isSingle,   rmSingle,   resetSingles,   tableSingles,
+        listPressures, isPressure, rmPressure, resetPressures, tablePressures,
+        resetERA5Variables, addERA5Variables, rmERA5Variable,  tableERA5Variables,
 
         ERA5Region,
 
