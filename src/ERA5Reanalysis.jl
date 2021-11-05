@@ -69,6 +69,17 @@ abstract type ERA5Variable end
 
 modulelog() = "$(now()) - ERA5Reanalysis.jl"
 
+function __init__()
+    jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol);
+    fvar = ["singlevariable.txt","singlecustom.txt","pressurevariable.txt","pressurecustom.txt"]
+    for fname in fvar
+        if !isfile(joinpath(jfol,fname))
+            copyera5variables(fname)
+            @info "$(modulelog()) - $(fname) does not exist in $(jfol), copying ..."
+        end
+    end
+end
+
 ## Including other files in the module
 
 include("module/module.jl")
