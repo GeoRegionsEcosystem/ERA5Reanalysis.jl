@@ -4,7 +4,7 @@ using Documenter
 DocMeta.setdocmeta!(ERA5Reanalysis, :DocTestSetup, :(using ERA5Reanalysis); recursive=true)
 
 makedocs(;
-    modules  = [ERA5Reanalysis],
+    modules  = [ERA5Reanalysis, GeoRegions],
     doctest  = false,
     format   = Documenter.HTML(;
         prettyurls=get(ENV,"CI","false") == "true",

@@ -24,12 +24,14 @@ import Base: show, read
 export
         ERA5Module, ERA5Hourly, ERA5Monthly, ERA5MonthlyHour,
 
-        ERA5Variable, SingleVariable, SingleCustom, PressureVariable, PressureCustom,
+        ERA5Variable,
+        SingleVariable, SingleCustom, PressureVariable, PressureCustom,
         listSingles,   isSingle,   rmSingle,   resetSingles,   tableSingles,
         listPressures, isPressure, rmPressure, resetPressures, tablePressures,
         resetERA5Variables, addERA5Variables, rmERA5Variable,  tableERA5Variables,
 
         ERA5Region,
+        isinERA5Region, coordERA5Region, ERA5RegionGrid,
 
         era5Pressures
 
@@ -91,6 +93,7 @@ include("variable/pressure.jl")
 include("variable/show.jl")
 
 include("region/region.jl")
+include("region/functions.jl")
 
 include("downloads/cdsapi.jl")
 include("downloads/downloads.jl")
