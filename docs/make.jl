@@ -4,7 +4,7 @@ using Documenter
 DocMeta.setdocmeta!(ERA5Reanalysis, :DocTestSetup, :(using ERA5Reanalysis); recursive=true)
 
 makedocs(;
-    modules  = [ERA5Reanalysis, GeoRegions],
+    modules  = [ERA5Reanalysis,GeoRegions],
     doctest  = false,
     format   = Documenter.HTML(;
         prettyurls=get(ENV,"CI","false") == "true",
@@ -30,8 +30,9 @@ makedocs(;
             ],
         ],
         "ERA5Regions" => [
-            "The Basics of an ERA5Region" => "regions/index.md",
-            "Manipulation of GeoRegions"  => "regions/georegions.md",
+            "The Basics of an ERA5Region"       => "regions/index.md",
+            "Is it in an ERA5Region"            => "regions/isin.md",
+            "Extracting Data using ERA5Regions" => "regions/gridded.md",
         ],
         "Downloading ERA5 Data" => [
             "The CDSAPI"              => "downloads/cdsapi.md"

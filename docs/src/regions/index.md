@@ -1,6 +1,11 @@
-# What is an `ERA5Region` and why do we need it?
+# An Introduction to `ERA5Region`s
+
+## What is an `ERA5Region` and why do we need it?
 
 By default, ERA5Reanalysis.jl will conduct downloads, or analyse data over, the entire globe.  However, most of the time we would rather perform these tasks over specified regions of interest.  In ERA5Reanalysis, we do this by specifying an `ERA5Region`, which is built on top of the `GeoRegion` functionality in [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl).
+
+!!! note "Why not just use `GeoRegion`s directly?"
+    The functionality of `ERA5Region`s and the basic manipulations are very similar to those of `GeoRegion`s.  However, in ERA5Reanalysis.jl, we must additionally specify the resolution of the data that needs to be downloaded and/or analyzed, and therefore we build an `ERA5Region` as a container of a `GeoRegion`.
 
 ```@docs
 ERA5Region{ST<:AbstractString, FT<:Real}

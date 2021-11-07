@@ -1,7 +1,7 @@
 """
     isinERA5Region(
         point :: Point2{<:Real},
-        e5geo :: GeoRegion;
+        e5geo :: ERA5Region;
         tlon  :: Real = 0,
         tlat  :: Real = 0,
         throw :: Bool = true
@@ -72,7 +72,7 @@ end
         e5geo :: ERA5Region{ST,FT},
         lon   :: Vector{<:Real},
         lat   :: Vector{<:Real}
-    ) -> RegionGrid
+    ) -> GeoRegion.RegionGrid
 
 Creates a RegionGrid containing information and mask information required to extract regional data for the ERA5Region from the raw data.
 
@@ -84,10 +84,10 @@ Arguments
 - `lat`   : A vector containing the latitude points
 """
 function ERA5RegionGrid(
-    e5geo :: ERA5Region{ST,FT},
+    e5geo :: ERA5Region,
     lon   :: Vector{<:Real},
     lat   :: Vector{<:Real}
-) where {FT <: Real, ST <: AbstractString}
+)
 
     return RegionGrid(e5geo.geo,lon,lat)
 
