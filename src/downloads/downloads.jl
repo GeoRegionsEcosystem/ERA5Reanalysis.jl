@@ -1,5 +1,5 @@
 function download(
-    emod :: ERA5Module,
+    emod :: ERA5Dataset,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
     ispy :: Bool = false
@@ -15,17 +15,17 @@ function download(
 end
 
 function downloadcheckevar(
-    evar :: Union{SingleVariable,PressureVariable}
+    evar :: ERA5Variable
 )
 
-    @info "$(modulelog()) - The ERA5Variable ID \"$(evar)\" is a valid ERA5 Variable identifier and therefore can be used to download data from the Climate Data Store"
+    if evar <: Union{SingleVariable,PressureVariable}
 
-end
+        @info "$(modulelog()) - The ERA5Variable ID \"$(evar)\" is a valid ERA5 Variable identifier and therefore can be used to download data from the Climate Data Store"
 
-function downloadcheckevar(
-    evar :: Union{SingleCustom,PressureCustom}
-)
+    else
 
-    error("$(modulelog()) - The ERA5Variable ID \"$(evar)\" is a custom ERA5 Variable identifier and therefore cannot be used to download data from the Climate Data Store, and can only be calculated/analyzed from preexisting valid ERA5 data")
+        error("$(modulelog()) - The ERA5Variable ID \"$(evar)\" is a custom ERA5 Variable identifier and therefore cannot be used to download data from the Climate Data Store, and can only be calculated/analyzed from preexisting valid ERA5 data")
+
+    end
 
 end

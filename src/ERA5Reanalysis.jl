@@ -22,7 +22,7 @@ import Base: show, read
 
 ## Exporting the following functions:
 export
-        ERA5Module, ERA5Hourly, ERA5Monthly, ERA5MonthlyHour,
+        ERA5Dataset, ERA5Hourly, ERA5Monthly, ERA5MonthlyHour,
 
         ERA5Variable,
         SingleVariable, SingleCustom, PressureVariable, PressureCustom,
@@ -39,20 +39,21 @@ export
 
 ## Abstract SuperTypes
 """
-    ERA5Module
+    ERA5Dataset
 
-Abstract supertype for ERA5 dataset modules.
+Abstract supertype for ERA5 reanalysis datasets.
 
-All `ERA5Module` Types contain the following fields:
-- `modID` : The module ID, that also acts as a prefix to filenames
+All `ERA5Dataset` Types contain the following fields:
+- `e5dID` : The module ID, that also acts as a prefix to filenames
 - `eroot` : The specified directory in which to save the data
 - `dtbeg` : The date for which downloads/analysis begins
 - `dtend` : The date for which downloads/analysis finishes
+- `dtext` : Is it the preliminary back extension from 1950-1978?
 
 !!! note
     The `ERA5MonthlyHour` subType also has the field `hours` that specifies the hour(s) of day for which monthly data is downloaded
 """
-abstract type ERA5Module end
+abstract type ERA5Dataset end
 
 """
     ERA5Variable
@@ -84,8 +85,8 @@ end
 
 ## Including other files in the module
 
-include("module/module.jl")
-include("module/show.jl")
+include("dataset/dataset.jl")
+include("dataset/show.jl")
 
 include("variable/common.jl")
 include("variable/single.jl")
