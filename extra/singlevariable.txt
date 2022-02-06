@@ -12,8 +12,6 @@ sst,sea_surface_temperature,Sea Surface Temperature,K
 skt,skin_temperature,Skin Temperature,K
 sp,surface_pressure,Surface Pressure,hPa
 msl,mean_sea_level_pressure,Sea Level Pressure,hPa
-z,geopotential,Surface Geopotential,m^2 s^{-2}
-lsm,land_sea_mask,Land-Sea Mask,0-1
 tp,total_precipitation,Total Precipitation,m
 cp,convective_precipitation,Convective Precipitation,m
 lsp,large_scale_precipitation,Large-Scale Precipitation,m
