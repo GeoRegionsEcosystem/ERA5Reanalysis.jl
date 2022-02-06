@@ -17,14 +17,14 @@ julia> ]
 ## The Basic Components of ERA5Reanalysis.jl
 
 There are three essential components to specifying an ERA5 reanalysis dataset:
-1. The ERA5 module (hourly, monthly, month-by-hour, etc.), held in an [`ERA5Module`](modules/index.md) supertype
+1. The ERA5 module (hourly, monthly, month-by-hour, etc.), held in an [`ERA5Dataset`](modules/index.md) supertype
 2. The ERA5 variable (single-level, or pressure-level), held in the [`ERA5Variable`](variables/index.md) supertype
 3. The ERA5 region to be downloaded/analyzed, held in an `ERA5Region` supertype, built over a `GeoRegion`
 
 ## Documentation Overview
 
 The documentation for `ERA5Reanalysis.jl` is divided into three components:
-1. Tutorials - meant as an introduction to the package.  There are three key components to ERA5Reanalysis.jl: (a) Dataset types specified by `ERA5Module`s, (b) Single- and Pressure-level Variables of interest specified by `ERA5Variable`s and (c) Geographic Regions of interest specified by `ERA5Region`s
+1. Tutorials - meant as an introduction to the package.  There are three key components to ERA5Reanalysis.jl: (a) Dataset types specified by `ERA5Dataset`s, (b) Single- and Pressure-level Variables of interest specified by `ERA5Variable`s and (c) Geographic Regions of interest specified by `ERA5Region`s
 2. How-to Examples - geared towards those looking for specific examples of what can be done
 3. API Reference - comprehensive summary of all exported functionalities
 

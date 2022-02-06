@@ -41,7 +41,7 @@ And it is often used as a measure of storm-track intensity.
 ```@repl
 using ERA5Reanalysis
 SingleVariable(
-    varID = "hvc",
+    varID = "cvh",
     units = "0-1",
     vname = "High Vegetation Cover",
     lname = "high_vegetation_cover",

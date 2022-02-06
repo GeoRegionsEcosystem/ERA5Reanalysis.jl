@@ -1,6 +1,6 @@
-# `ERA5Module` Examples
+# `ERA5Dataset` Examples
 
-Here, we list some basic examples for the creation of `ERA5Module`
+Here, we list some basic examples for the creation of `ERA5Dataset`
 
 ## Specifying an hourly dataset:
 
