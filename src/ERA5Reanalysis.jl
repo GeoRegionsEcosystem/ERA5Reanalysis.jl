@@ -22,7 +22,7 @@ import Base: show, read
 
 ## Exporting the following functions:
 export
-        ERA5Dataset, ERA5Hourly, ERA5Monthly, ERA5MonthlyHour,
+        ERA5Dataset, ERA5Hourly, ERA5Monthly,
 
         ERA5Variable,
         SingleVariable, SingleCustom, PressureVariable, PressureCustom,
@@ -32,6 +32,8 @@ export
 
         ERA5Region,
         isinERA5Region, coordERA5Region, ERA5RegionGrid,
+
+        download,
 
         era5Pressures
 
@@ -84,6 +86,10 @@ function __init__()
 end
 
 ## Including other files in the module
+
+include("filesystem.jl")
+include("backend.jl")
+include("read.jl")
 
 include("dataset/dataset.jl")
 include("dataset/show.jl")
