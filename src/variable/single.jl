@@ -6,6 +6,7 @@ Abstract supertype for Single-Level variables.  Contains the following fields:
 - `lname` : The variable long-name, which is used to specify retrievals from CDS
 - `vname` : The full-name of the variable
 - `units` : The units of the variable
+- `dname` : The name of the ERA5 dataset containing the variable
 """
 abstract type SingleLevel <: ERA5Variable end
 
@@ -19,6 +20,7 @@ struct SingleVariable{ST<:AbstractString} <: SingleLevel
     lname :: ST
     vname :: ST
     units :: ST
+    dname :: ST
 end
 
 
@@ -32,6 +34,7 @@ struct SingleCustom{ST<:AbstractString} <: SingleLevel
     lname :: ST
     vname :: ST
     units :: ST
+    dname :: ST
 end
 
 """
@@ -64,8 +67,8 @@ function SingleVariable(
     varID,lname,vname,units = IDinfo[[1,2,3,4]]
 
     if vtype == "singlevariable"
-          return SingleVariable{ST}(varID,lname,vname,units)
-    else; return SingleCustom{ST}(varID,lname,vname,units)
+          return SingleVariable{ST}(varID,lname,vname,units,"reanalysis-era5-single-levels")
+    else; return SingleCustom{ST}(varID,lname,vname,units,"reanalysis-era5-single-levels")
     end
 
 end
@@ -113,14 +116,14 @@ function SingleVariable(
         ),"a") do io
             write(io,"$varID,$lname,$vname,$units\n")
         end
-        return SingleVariable{ST}(varID,lname,vname,units)
+        return SingleVariable{ST}(varID,lname,vname,units,"reanalysis-era5-single-levels")
 
     else
 
         open(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","singlecustom.txt"),"a") do io
             write(io,"$varID,$lname,$vname,$units\n")
         end
-        return SingleCustom{ST}(varID,lname,vname,units)
+        return SingleCustom{ST}(varID,lname,vname,units,"reanalysis-era5-single-levels")
 
     end
 

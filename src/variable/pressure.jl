@@ -7,6 +7,7 @@ Abstract supertype for Pressure-Level variables.  Contains the following fields:
 - `vname` : The full-name of the variable
 - `units` : The units of the variable
 - `hPa`   : The pressure-level height of the variable in concern
+- `dname` : The name of the ERA5 dataset containing the variable
 """
 abstract type PressureLevel <: ERA5Variable end
 
@@ -21,6 +22,7 @@ struct PressureVariable{ST<:AbstractString} <: PressureLevel
     vname :: ST
     units :: ST
     hPa   :: Int
+    dname :: ST
 end
 
 """
@@ -34,6 +36,7 @@ struct PressureCustom{ST<:AbstractString} <: PressureLevel
     vname :: ST
     units :: ST
     hPa   :: Int
+    dname :: ST
 end
 
 """
@@ -90,10 +93,16 @@ function PressureVariable(
 
     if vtype == "pressurevariable"
         @info "$(modulelog()) - The ERA5Variable defined by \"$varID\" is of the PressureVariable type"
-        return PressureVariable{ST}(varID,lname,vname,units,hPa)
+        return PressureVariable{ST}(
+            varID,lname,vname,units,hPa,
+            "reanalysis-era5-pressure-levels"
+        )
     else
         @info "$(modulelog()) - The ERA5Variable defined by \"$varID\" is of the PressureCustom type"
-        return PressureCustom{ST}(varID,lname,vname,units,hPa)
+        return PressureCustom{ST}(
+            varID,lname,vname,units,hPa,
+            "reanalysis-era5-pressure-levels"
+        )
     end
 
 end
@@ -154,7 +163,7 @@ function PressureVariable(
         end
     end
 
-    return PressureCustom{ST}(varID,lname,vname,units,hPa)
+    return PressureCustom{ST}(varID,lname,vname,units,hPa,"reanalysis-era5-pressure-levels")
 
 end
 
