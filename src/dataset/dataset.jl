@@ -123,7 +123,7 @@ function ERA5Monthly(
 
         return ERA5Monthly{ST,DT}(
             "era5mh","ERA5 Monthly Averages (by Hour-of-Day)",
-            "monthly_averaged_reanalysis",
+            "monthly_averaged_reanalysis_by_hour_of_day",
             "10.24381/cds.f17050d7","10.24381/cds.6860a573",
             dtbeg,dtend,dtext,true,
             joinpath(eroot,"era5mh"),joinpath(eroot,"emask")
@@ -137,7 +137,7 @@ function ERA5Monthly(
 
         return ERA5Monthly{ST,DT}(
             "era5mo","ERA5 Monthly Averages",
-            "monthly_averaged_reanalysis_by_hour_of_day",
+            "monthly_averaged_reanalysis",
             "10.24381/cds.f17050d7","10.24381/cds.6860a573",
             dtbeg,dtend,dtext,false,
             joinpath(eroot,"era5mo"),joinpath(eroot,"emask")
