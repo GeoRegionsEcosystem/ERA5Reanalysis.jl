@@ -13,6 +13,7 @@ struct ERA5Hourly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
     dtend :: Date
     dtext :: Bool
     eroot :: ST
+    emask :: ST
 end
 
 """
@@ -31,6 +32,7 @@ struct ERA5Monthly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
     dtext :: Bool
     hours :: Bool
     eroot :: ST
+    emask :: ST
 end
 
 """
@@ -61,10 +63,19 @@ function ERA5Hourly(
 	dtend = Date(year(dtend),month(dtend),daysinmonth(dtend))
     dtext = checkdates(dtbeg,dtend,)
 
+    if !isdir(joinpath(eroot,"era5hr"))
+        mkpath(joinpath(eroot,"era5hr"))
+    end
+
+    if !isdir(joinpath(eroot,"emask"))
+        mkpath(joinpath(eroot,"emask"))
+    end
+
     return ERA5Hourly{ST,DT}(
         "era5hr","ERA5 Hourly","reanalysis",
         "10.24381/cds.adbb2d47","10.24381/cds.bd0915c6",
-        dtbeg,dtend,dtext,joinpath(eroot,"era5hr")
+        dtbeg,dtend,dtext,
+        joinpath(eroot,"era5hr"),joinpath(eroot,"emask")
     )
 
 end
@@ -100,20 +111,38 @@ function ERA5Monthly(
     dtend = Date(year(dtend),12,31)
     dtext = checkdates(dtbeg,dtend)
 
+    if !isdir(joinpath(eroot,"emask"))
+        mkpath(joinpath(eroot,"emask"))
+    end
+
     if hours
+
+        if !isdir(joinpath(eroot,"era5mh"))
+            mkpath(joinpath(eroot,"era5mh"))
+        end
+
         return ERA5Monthly{ST,DT}(
             "era5mh","ERA5 Monthly Averages (by Hour-of-Day)",
             "monthly_averaged_reanalysis",
             "10.24381/cds.f17050d7","10.24381/cds.6860a573",
-            dtbeg,dtend,dtext,true,joinpath(eroot,"era5mh")
+            dtbeg,dtend,dtext,true,
+            joinpath(eroot,"era5mh"),joinpath(eroot,"emask")
         )
+
     else
+
+        if !isdir(joinpath(eroot,"era5mo"))
+            mkpath(joinpath(eroot,"era5mo"))
+        end
+
         return ERA5Monthly{ST,DT}(
             "era5mo","ERA5 Monthly Averages",
             "monthly_averaged_reanalysis_by_hour_of_day",
             "10.24381/cds.f17050d7","10.24381/cds.6860a573",
-            dtbeg,dtend,dtext,false,joinpath(eroot,"era5mo")
+            dtbeg,dtend,dtext,false,
+            joinpath(eroot,"era5mo"),joinpath(eroot,"emask")
         )
+
     end
 
 end

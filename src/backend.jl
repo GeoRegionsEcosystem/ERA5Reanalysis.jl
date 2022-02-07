@@ -4,10 +4,10 @@ yrmo2str(date::TimeType) = Dates.format(date,dateformat"yyyymm")
 yr2str(date::TimeType)   = Dates.format(date,dateformat"yyyy")
 ymd2str(date::TimeType)  = Dates.format(date,dateformat"yyyymmdd")
 
-function ncoffsetscale(data::AbstractArray{<:Real},init=0)
+function ncoffsetscale(data::AbstractArray{<:Real})
 
-    dmax = init
-    dmin = init
+    dmax = data[1]
+    dmin = data[1]
     for ii = 1 : length(data)
         dataii = data[ii]
         if !isnan(dataii)

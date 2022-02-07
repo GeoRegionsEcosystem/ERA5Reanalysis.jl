@@ -18,7 +18,7 @@ using Reexport
 @reexport using Dates
 @reexport using GeoRegions
 
-import Base: show, read
+import Base: show, read, download
 
 ## Exporting the following functions:
 export
@@ -33,7 +33,10 @@ export
         ERA5Region,
         isinERA5Region, coordERA5Region, ERA5RegionGrid,
 
-        download,
+        LandSea,
+        getLandSea, downloadLandSea,
+
+        download, read,
 
         era5Pressures
 
@@ -102,6 +105,8 @@ include("downloads/cdsapi.jl")
 include("downloads/downloads.jl")
 include("downloads/cdsretrieve.jl")
 include("downloads/pythonprint.jl")
+
+include("landsea/landsea.jl")
 
 include("filesystem.jl")
 include("backend.jl")
