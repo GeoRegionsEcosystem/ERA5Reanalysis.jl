@@ -7,14 +7,14 @@ All `ERA5Region` Types contain the following fields:
 - `geo`   : The `GeoRegion` containing the geographical information
 - `geoID` : The ID used to specify the `GeoRegion`
 - `gres`  : The resolution of the gridded data to be downloaded/analysed
-- `fstr`  : String, for specification of folder and file name
+- `gstr`  : String, for specification of folder and file name
 - `isglb` : A Bool, true if spans the globe, false if no
 """
 struct ERA5Region{ST<:AbstractString, FT<:Real}
     geo   :: GeoRegion
     geoID :: ST
     gres  :: FT
-    fstr  :: ST
+    gstr  :: ST
     isglb :: Bool
 end
 
@@ -92,22 +92,24 @@ function show(io::IO, ereg::ERA5Region)
         print(
             io,
             "The ERA5Region wrapper for the \"$(ereg.geoID)\" GeoRegion has the following properties:\n",
-            "    Region ID (regID) : ", ereg.geoID, '\n',
-            "    Name       (name) : ", ereg.geo.name,  '\n',
-            "    Resolution (gres) : ", ereg.gres,  '\n',
-            "    Bounds  (N,S,E,W) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
-            "    Shape     (shape) : ", geo.shape, '\n',
-            "        (is180,is360) : ",(geo.is180,geo.is360),"\n",
+            "    Region ID      (geoID) : ", ereg.geoID, '\n',
+            "    Name        (geo.name) : ", ereg.geo.name,  '\n',
+            "    Resolution      (gres) : ", ereg.gres,  '\n',
+            "    Folder ID       (gstr) : ", ereg.gstr, '\n',
+            "    Bounds (geo.[N,S,E,W]) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
+            "    Shape      (geo.shape) : ", geo.shape, '\n',
+            "       (geo.[is180,is360]) : ",(geo.is180,geo.is360),"\n",
         )
     else
         print(
             io,
             "The ERA5Region wrapper for the \"$(ereg.geoID)\" GeoRegion has the following properties:\n",
-            "    Region ID (regID) : ", ereg.geoID, '\n',
-            "    Name       (name) : ", ereg.geo.name,  '\n',
-            "    Resolution (gres) : ", ereg.gres,  '\n',
-            "    Bounds  (N,S,E,W) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
-            "        (is180,is360) : ",(geo.is180,geo.is360),"\n",
+            "    Region ID      (geoID) : ", ereg.geoID, '\n',
+            "    Name        (geo.name) : ", ereg.geo.name,  '\n',
+            "    Resolution      (gres) : ", ereg.gres,  '\n',
+            "    Folder ID       (gstr) : ", ereg.gstr, '\n',
+            "    Bounds (geo.[N,S,E,W]) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
+            "       (geo.[is180,is360]) : ",(geo.is180,geo.is360),"\n",
         )
     end
 
