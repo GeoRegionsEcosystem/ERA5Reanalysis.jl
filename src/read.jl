@@ -11,32 +11,54 @@ Reads a NASA Precipitation dataset specified by `npd` for a GeoRegion specified 
 
 Arguments
 =========
-- `npd` : a `NASAPrecipitationDataset` specifying the dataset details and date download range
-- `geo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
-- `dt`  : A specified date. The NCDataset retrieved may will contain data for the date, although it may also contain data for other dates depending on the `NASAPrecipitationDataset` specified by `npd`
+- `e5ds` : a `NASAPrecipitationDataset` specifying the dataset details and date download range
+- `egeo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
+- `dt`   : A specified date. The NCDataset retrieved may will contain data for the date, although it may also contain data for other dates depending on the `NASAPrecipitationDataset` specified by `npd`
 
 Keyword Arguments
 =================
 - `lonlat` : if `true`, then return the longitude and latitude vectors for the dataset. Otherwise only the NCDataset type will be returned.
 """
 function read(
-	emod :: ERA5Dataset,
-	evar :: ERA5Variable,
+	e5ds :: ERA5Dataset,
+	evar :: SingleVariable,
 	egeo :: ERA5Region,
     dt   :: TimeType;
     lonlat :: Bool = false
 )
 
-    pnc = e5dfnc(npd,geo,dt)
-    if !isfile(pnc)
-        error("$(modulelog()) - The $(npd.lname) Dataset for the $(geo.regID) GeoRegion at Date $dt does not exist at $(pnc).  Check if files exist at $(npd.sroot) or download the files here")
+    enc = e5dfnc(e5ds,evar,egeo,dt)
+    if !isfile(enc)
+        error("$(modulelog()) - The $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.eroot) or download the files here")
     end
-    @info "$(modulelog()) - Opening the $(npd.lname) NCDataset in the $(geo.regID) GeoRegion for $dt"
-    pds = NCDataset(pnc)
+    @info "$(modulelog()) - Opening the $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+    eds = NCDataset(enc)
     
     if !lonlat
-          return pds
-    else; return pds, pds["longitude"][:], pds["latitude"][:]
+          return eds
+    else; return eds, eds["longitude"][:], eds["latitude"][:]
+    end
+
+end
+
+function read(
+	e5ds :: ERA5Dataset,
+	evar :: PressureVariable,
+	egeo :: ERA5Region,
+    dt   :: TimeType;
+    lonlat :: Bool = false
+)
+
+    enc = e5dfnc(e5ds,evar,egeo,dt)
+    if !isfile(enc)
+        error("$(modulelog()) - The $(e5ds.lname) Dataset for $(evar.vname) at the $(evar.hPa)hPa Pressure Level in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.eroot) or download the files here")
+    end
+    @info "$(modulelog()) - Opening the $(e5ds.lname) NCDataset for $(evar.vname) at the $(evar.hPa)hPa Pressure Level in the $(egeo.geoID) GeoRegion during Date $dt"
+    eds = NCDataset(enc)
+    
+    if !lonlat
+          return eds
+    else; return eds, eds["longitude"][:], eds["latitude"][:]
     end
 
 end
