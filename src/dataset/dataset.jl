@@ -6,6 +6,7 @@ Specifies that the dataset to be analyzed contains hourly data.  All fields are 
 struct ERA5Hourly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
     e5dID :: ST
     lname :: ST
+    ptype :: ST
 	sldoi :: ST
 	pldoi :: ST
     dtbeg :: Date
@@ -22,31 +23,13 @@ Specifies that the dataset to be analyzed contains monthly-mean data.  All field
 struct ERA5Monthly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
     e5dID :: ST
     lname :: ST
+    ptype :: ST
 	sldoi :: ST
 	pldoi :: ST
     dtbeg :: Date
     dtend :: Date
     dtext :: Bool
-    eroot :: ST
-end
-
-"""
-    ERA5MonthlyHour <: ERA5Dataset
-
-Specifies that the dataset to be analyzed contains monthly-mean hourly data.  There is one additional field compared to ERA5Dataset:
-
-Additional fields
-=================
-- `hours` : A vector of integers containing the hours-of-day to be downloaded/analyzed.
-"""
-struct ERA5MonthlyHour{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
-    e5dID :: ST
-    lname :: ST
-	sldoi :: ST
-	pldoi :: ST
-    dtbeg :: Date
-    dtend :: Date
-    dtext :: Bool
+    hours :: Bool
     eroot :: ST
 end
 
@@ -79,7 +62,7 @@ function ERA5Hourly(
     dtext = checkdates(dtbeg,dtend,)
 
     return ERA5Hourly{ST,DT}(
-        "era5hr","ERA5 Hourly",
+        "era5hr","ERA5 Hourly","reanalysis",
         "10.24381/cds.adbb2d47","10.24381/cds.bd0915c6",
         dtbeg,dtend,dtext,joinpath(eroot,"era5hr")
     )
@@ -118,16 +101,18 @@ function ERA5Monthly(
     dtext = checkdates(dtbeg,dtend)
 
     if hours
-        return ERA5MonthlyHour{ST,DT}(
+        return ERA5Monthly{ST,DT}(
             "era5mh","ERA5 Monthly Averages (by Hour-of-Day)",
+            "monthly_averaged_reanalysis",
             "10.24381/cds.f17050d7","10.24381/cds.6860a573",
-            dtbeg,dtend,dtext,joinpath(eroot,"era5mh")
+            dtbeg,dtend,dtext,true,joinpath(eroot,"era5mh")
         )
     else
         return ERA5Monthly{ST,DT}(
             "era5mo","ERA5 Monthly Averages",
+            "monthly_averaged_reanalysis_by_hour_of_day",
             "10.24381/cds.f17050d7","10.24381/cds.6860a573",
-            dtbeg,dtend,dtext,joinpath(eroot,"era5mo")
+            dtbeg,dtend,dtext,false,joinpath(eroot,"era5mo")
         )
     end
 
