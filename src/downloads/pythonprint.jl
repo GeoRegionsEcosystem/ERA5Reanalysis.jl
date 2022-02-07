@@ -66,7 +66,7 @@ end
 function pythonprint_body(
     fID, fol :: AbstractString, fnc :: AbstractString,
     e5ds :: ERA5Dataset,
-    evar :: SingleVariable,
+    evar :: ERA5Variable,
     ereg :: ERA5Region,
 )
 
