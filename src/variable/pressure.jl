@@ -63,7 +63,7 @@ Keyword Arguments
 function PressureVariable(
     varID :: AbstractString,
     ST = String;
-    hPa   :: Int = 0,
+    hPa   :: Int,
     throw :: Bool = true
 )
 
@@ -78,16 +78,14 @@ function PressureVariable(
     IDinfo = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
     varID,lname,vname,units = IDinfo[[1,2,3,4]]
 
-    if !iszero(hPa)
-        prelist = era5Pressures()
-        if sum(prelist.==hPa) != 1
-            if throw
-                error("$(modulelog()) - Pressure level specified in \"hPa\" argument is invalid, please check and see if you requested correctly")
-            else
-                @warn "$(modulelog()) - Pressure level specified in \"hPa\" argument does not exist, snapping to nearest pressure level"
-                ipre = argmin(abs.(prelist.-hPa))
-                hPa  = prelist[ipre]
-            end
+    prelist = era5Pressures()
+    if sum(prelist.==hPa) != 1
+        if throw
+            error("$(modulelog()) - Pressure level specified in \"hPa\" argument is invalid, please check and see if you requested correctly")
+        else
+            @warn "$(modulelog()) - Pressure level specified in \"hPa\" argument does not exist, snapping to nearest pressure level"
+            ipre = argmin(abs.(prelist.-hPa))
+            hPa  = prelist[ipre]
         end
     end
 
