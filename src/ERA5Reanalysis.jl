@@ -87,10 +87,6 @@ end
 
 ## Including other files in the module
 
-include("filesystem.jl")
-include("backend.jl")
-include("read.jl")
-
 include("dataset/dataset.jl")
 include("dataset/show.jl")
 
@@ -106,5 +102,9 @@ include("downloads/cdsapi.jl")
 include("downloads/downloads.jl")
 include("downloads/cdsretrieve.jl")
 include("downloads/pythonprint.jl")
+
+include("filesystem.jl")
+include("backend.jl")
+include("read.jl")
 
 end
