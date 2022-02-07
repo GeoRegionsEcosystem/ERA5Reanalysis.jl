@@ -5,6 +5,7 @@ function cdsretrieve(
 )
 
     dtvec = cdsretrieve_dtvec(e5ds)
+    ckeys = cdskey()
 
     for dtii in dtvec
 
@@ -27,7 +28,7 @@ function cdsretrieve(
         
         cdsretrieve_area!(e5dkey,ereg)
 
-        retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc)
+        retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
 
     end
 

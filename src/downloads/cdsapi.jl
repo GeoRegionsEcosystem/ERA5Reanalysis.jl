@@ -19,7 +19,6 @@ function retrieve(
     ckeys :: AbstractDict = cdskey()
 )
 
-    @info "$(now()) - CDSAPI - Welcome to the Climate Data Store"
     apikey = string("Basic ", base64encode(ckeys["key"]))
 
     @info "$(now()) - CDSAPI - Sending request to https://cds.climate.copernicus.eu/api/v2/resources/$(dset) ..."
