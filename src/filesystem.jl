@@ -37,6 +37,35 @@ function e5dfnc(
     evp = evar.varID * "-$(evar.hPa)hPa"
     dts = yr2str(dt)
     fol = joinpath(e5ds.eroot,egeo.gstr,evar.varID,evp,dts)
+    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp * "-" * yrmo2str(dt) * ".nc"
+    return joinpath(fol,fnc)
+
+end
+
+function e5dfnc(
+    e5ds :: ERA5Monthly,
+	evar :: SingleVariable,
+	egeo :: ERA5Region,
+    dt   :: TimeType
+)
+
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.eroot,egeo.gstr,evar.varID)
+    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evar.varID * "-" * dts * ".nc"
+    return joinpath(fol,fnc)
+
+end
+
+function e5dfnc(
+    e5ds :: ERA5Monthly,
+	evar :: PressureVariable,
+	egeo :: ERA5Region,
+    dt   :: TimeType
+)
+
+    evp = evar.varID * "-$(evar.hPa)hPa"
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.eroot,egeo.gstr,evar.varID,evp)
     fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp * "-" * dts * ".nc"
     return joinpath(fol,fnc)
 
