@@ -18,6 +18,8 @@ function pythonprint(
 
     fID = open(joinpath(fol,"$(fname).py"),"w")
 
+    @info "$(modulelog()) - Creating python download scripts to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.dtbeg) to $(e5ds.dtend)."
+
     write(fID,"#!/usr/bin/env python\n")
     write(fID,"import cdsapi\n")
     write(fID,"import os\n")

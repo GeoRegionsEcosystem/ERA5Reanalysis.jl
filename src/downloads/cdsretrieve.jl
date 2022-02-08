@@ -7,6 +7,8 @@ function cdsretrieve(
     dtvec = cdsretrieve_dtvec(e5ds)
     ckeys = cdskey()
 
+    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.dtbeg) to $(e5ds.dtend)."
+
     for dtii in dtvec
 
         fnc = e5dfnc(e5ds,evar,ereg,dtii)

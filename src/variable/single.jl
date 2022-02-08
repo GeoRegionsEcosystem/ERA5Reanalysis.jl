@@ -160,7 +160,8 @@ end
 """
     isSingle(
         varID :: AbstractString;
-        throw :: Bool = true
+        throw :: Bool = true,
+        dolog :: Bool = false
     ) -> tf :: Bool
 
 Extracts information of the Single-Level Variable with the ID `varID`.  If no Single-Level Variable with this ID exists, an error is thrown.
@@ -171,6 +172,7 @@ Arguments
 - `RegID` : The keyword ID that will be used to identify the Single-Level Variable.
         If the ID is not valid (i.e. not being used), then an error will be thrown.
 - `throw` : If `true`, then throws an error if `RegID` is not a valid Single-Level Variable identifier instead of returning the Boolean `tf`
+- `dolog` : If `true`, then return logging to screen along with results
 
 Returns
 =======
@@ -179,10 +181,16 @@ Returns
 """
 function isSingle(
     varID :: AbstractString;
-    throw :: Bool = true
+    throw :: Bool = true,
+    dolog :: Bool = false
 )
 
-    @info "$(modulelog()) - Checking to see if the SingleVariable ID \"$varID\" is in use"
+    if dolog
+        @info "$(modulelog()) - Checking if the SingleVariable ID \"$varID\" is in use"
+    else
+        @debug "$(modulelog()) - Checking if the SingleVariable ID \"$varID\" is in use"
+    end
+
     vlist,_ = listSingles()
 
     if sum(vlist.==varID) == 0
@@ -193,7 +201,9 @@ function isSingle(
             return false
         end
     else
-        @info "$(modulelog()) - The SingleVariable ID \"$varID\" is already in use"
+        if dolog
+            @info "$(modulelog()) - The SingleVariable ID \"$varID\" is already in use"
+        end
         return true
     end
 

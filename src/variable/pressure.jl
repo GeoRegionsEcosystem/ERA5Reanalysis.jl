@@ -92,13 +92,13 @@ function PressureVariable(
     if vtype == "pressurevariable"
         @info "$(modulelog()) - The ERA5Variable defined by \"$varID\" is of the PressureVariable type"
         return PressureVariable{ST}(
-            varID,lname,vname,units,hPa,
+            varID,lname,vname * " ($(hPa) hPa)",units,hPa,
             "reanalysis-era5-pressure-levels"
         )
     else
         @info "$(modulelog()) - The ERA5Variable defined by \"$varID\" is of the PressureCustom type"
         return PressureCustom{ST}(
-            varID,lname,vname,units,hPa,
+            varID,lname,vname * " ($(hPa) hPa)",units,hPa,
             "reanalysis-era5-pressure-levels"
         )
     end
@@ -196,7 +196,8 @@ end
 """
     isPressure(
         varID :: AbstractString;
-        throw :: Bool = true
+        throw :: Bool = true,
+        dolog :: Bool = false
     ) -> tf :: Bool
 
 Extracts information of the Pressure-Level Variable with the ID `varID`.  If no Pressure-Level Variable with this ID exists, an error is thrown.
@@ -207,6 +208,7 @@ Arguments
 - `RegID` : The keyword ID that will be used to identify the Pressure-Level Variable.
         If the ID is not valid (i.e. not being used), then an error will be thrown.
 - `throw` : If `true`, then throws an error if `RegID` is not a valid Pressure-Level Variable identifier instead of returning the Boolean `tf`
+- `dolog` : If `true`, then return logging to screen along with results
 
 Returns
 =======
@@ -215,10 +217,16 @@ Returns
 """
 function isPressure(
     varID :: AbstractString;
-    throw :: Bool = true
+    throw :: Bool = true,
+    dolog :: Bool = false
 )
 
-    @info "$(modulelog()) - Checking to see if the PressureVariable ID \"$varID\" is in use"
+    if dolog
+        @info "$(modulelog()) - Checking if the PressureVariable ID \"$varID\" is in use"
+    else
+        @debug "$(modulelog()) - Checking if the PressureVariable ID \"$varID\" is in use"
+    end
+
     vlist,_ = listPressures()
 
     if sum(vlist.==varID) == 0
@@ -229,7 +237,9 @@ function isPressure(
             return false
         end
     else
-        @info "$(modulelog()) - The PressureVariable ID \"$varID\" is already in use"
+        if dolog
+            @info "$(modulelog()) - The PressureVariable ID \"$varID\" is already in use"
+        end
         return true
     end
 
