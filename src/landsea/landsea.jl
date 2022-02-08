@@ -9,6 +9,7 @@ end
 function getLandSea(
     e5ds :: ERA5Dataset,
     ereg :: ERA5Region;
+    returnlsd = true,
     FT = Float64
 )
 
@@ -50,17 +51,25 @@ function getLandSea(
 
     end
 
-    lds = NCDataset(lsmfnc)
-    lon = lds["longitude"][:]
-    lat = lds["latitude"][:]
-    lsm = lds["lsm"][:] * 1
-    oro = lds["z"][:] * 1
-    msk = lds["mask"][:]
-    close(lds)
+    if returnlsd
 
-    @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.geoID)\" ERA5Region ..."
+        lds = NCDataset(lsmfnc)
+        lon = lds["longitude"][:]
+        lat = lds["latitude"][:]
+        lsm = lds["lsm"][:] * 1
+        oro = lds["z"][:] * 1
+        msk = lds["mask"][:]
+        close(lds)
 
-    return LandSea{FT}(lon,lat,lsm,oro,msk)
+        @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.geoID)\" ERA5Region ..."
+
+        return LandSea{FT}(lon,lat,lsm,oro,msk)
+        
+    else
+
+        return nothing
+
+    end
 
 end
 

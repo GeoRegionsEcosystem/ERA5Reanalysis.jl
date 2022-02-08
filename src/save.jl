@@ -1,5 +1,5 @@
 function save(
-    data :: Array{<:Real,3},
+    data :: AbstractArray{<:Real,3},
     dt   :: Date,
     e5ds :: ERA5Dataset,
     evar :: ERA5Variable,
@@ -9,6 +9,7 @@ function save(
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
 
     fnc = e5dfnc(e5ds,evar,egeo,dt)
+    fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
         @info "$(modulelog()) - Stale NetCDF file $(fnc) detected.  Overwriting ..."
         rm(fnc);
