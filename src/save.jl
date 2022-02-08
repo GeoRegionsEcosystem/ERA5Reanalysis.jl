@@ -16,7 +16,7 @@ function save(
     end
     ds = NCDataset(fnc,"c",attrib = Dict(
         "Conventions" => "CF-1.6",
-        "history"     => "Created on $(Dates.now()) with ERA5Reanalysis.jl"
+        "history"     => "Created on $(Dates.now()) with ERA5Reanalysis.jl",
         "comments"    => "ERA5Reanalysis.jl creates NetCDF files in the same format that data is saved on the Climate Data Store"
     ))
 
