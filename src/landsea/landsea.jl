@@ -38,7 +38,10 @@ function getLandSea(
         rlsm  = zeros(nlon,nlat)
         roro  = zeros(nlon,nlat)
         
-        rinfo.mask[isnan.(rinfo.mask)] .= 0
+        if typeof(ereg.geo) <: PolyGrid
+              mask = rinfo.mask; mask[isnan.(mask)] .= 0
+        else; mask = ones(Int16,nlon,nlat)
+        end
 
         @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.geoID)\" ERA5Region from the Global ERA5 Land-Sea mask dataset ..."
 
@@ -47,7 +50,7 @@ function getLandSea(
             roro[iglon,iglat] = goro[ilon[iglon],ilat[iglat]]
         end
 
-        saveLandSea(e5ds,ereg,rinfo.glon,rinfo.glat,rlsm,roro,Int16.(rinfo.mask))
+        saveLandSea(e5ds,ereg,rinfo.glon,rinfo.glat,rlsm,roro,Int16.(mask))
 
     end
 
@@ -64,7 +67,7 @@ function getLandSea(
         @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.geoID)\" ERA5Region ..."
 
         return LandSea{FT}(lon,lat,lsm,oro,msk)
-        
+
     else
 
         return nothing
