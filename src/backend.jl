@@ -6,8 +6,8 @@ ymd2str(date::TimeType)  = Dates.format(date,dateformat"yyyymmdd")
 
 function ncoffsetscale(data::AbstractArray{<:Real})
 
-    dmax = data[1]
-    dmin = data[1]
+    dmax = data[findfirst(!isnan,data)]
+    dmin = data[findfirst(!isnan,data)]
     for ii = 1 : length(data)
         dataii = data[ii]
         if !isnan(dataii)
@@ -24,18 +24,18 @@ function ncoffsetscale(data::AbstractArray{<:Real})
 end
 
 function real2int16!(
-    outarray :: AbstractArray{Int16},
-    inarray  :: AbstractArray{<:Real},
-    scale    :: Real,
-    offset   :: Real
+    oarray :: AbstractArray{Int16},
+    iarray :: AbstractArray{<:Real},
+    scale  :: Real,
+    offset :: Real
 )
 
-    for ii = 1 : length(inarray)
+    for ii = 1 : length(iarray)
 
-        idata = (inarray[ii] - offset) / scale
+        idata = (iarray[ii] - offset) / scale
         if isnan(idata)
-              outarray[ii] = -32767
-        else; outarray[ii] = round(Int16,idata)
+              oarray[ii] = -32767
+        else; oarray[ii] = round(Int16,idata)
         end
 
     end

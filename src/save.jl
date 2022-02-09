@@ -27,8 +27,8 @@ function save(
         ds.attrib["doi"] = e5ds.pldoi
     end
 
-    nhr = 24 * daysinmonth(dt);
-    scale,offset = ncoffsetscale(data);
+    nhr = 24 * daysinmonth(dt)
+    scale,offset = ncoffsetscale(data)
 
     ds.dim["longitude"] = length(lsd.lon);
     ds.dim["latitude"]  = length(lsd.lat);
