@@ -177,7 +177,7 @@ function pythonprint_body_filename(
     :: ERA5Hourly,
 )
 
-    write(fID,"            os.joinpath(\n")
+    write(fID,"            os.path.join(\n")
     write(fID,"                \"$(fol)\", str(yr),\n")
     write(fID,"                \"$(fnc)-\" + str(yr) + str(mo).zfill(2) + \".nc\"\n")
     write(fID,"            )\n");
@@ -189,7 +189,7 @@ function pythonprint_body_filename(
     fID, fol :: AbstractString, fnc :: AbstractString,
     :: ERA5Monthly,
 )
-    write(fID,"            os.joinpath(\n")
+    write(fID,"            os.path.join(\n")
     write(fID,"                \"$(fol)\",\n")
     write(fID,"                \"$(fnc)-\" + str(yr) + \".nc\"\n")
     write(fID,"            )\n");
