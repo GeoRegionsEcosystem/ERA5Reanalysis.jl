@@ -84,7 +84,7 @@ function e5dfnc(
 end
 
 function e5dfnc(
-    e5ds :: ERA5Hourly,
+    e5ds :: ERA5Dataset,
 	evar :: PressureVariable,
 	egeo :: ERA5Region
 )
