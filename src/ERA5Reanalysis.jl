@@ -36,7 +36,7 @@ export
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read,
+        download, read, save,
 
         era5Pressures
 
@@ -111,5 +111,6 @@ include("landsea/landsea.jl")
 include("filesystem.jl")
 include("backend.jl")
 include("read.jl")
+include("save.jl")
 
 end
