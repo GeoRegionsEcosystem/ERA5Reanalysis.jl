@@ -27,6 +27,10 @@ function cdsretrieve(
         if typeof(e5ds) <: ERA5Hourly
             e5dkey["day"] = collect(1:31)
         end
+
+        if typeof(evar) <: PressureVariable
+            e5dkey["pressure_level"] = evar.hPa
+        end
         
         cdsretrieve_area!(e5dkey,ereg)
 
