@@ -39,24 +39,32 @@ function pythonprint(
 
     if yrbeg == yrend
         write(fID,"for yr in [$yrbeg]:\n")
-        write(fID,"    for mo in $(collect(mobeg : moend)):\n")
+        if typeof(e5ds) <: ERA5Hourly
+            write(fID,"    for mo in $(collect(mobeg : moend)):\n")
+        end
         pythonprint_body(fID,fol,fnc,e5ds,evar,ereg)
     else
 
         write(fID,"for yr in [$yrbeg]:\n")
-        write(fID,"    for mo in $(collect(mobeg : 12)):\n")
+        if typeof(e5ds) <: ERA5Hourly
+            write(fID,"    for mo in $(collect(mobeg : 12)):\n")
+        end
         pythonprint_body(fID,fol,fnc,e5ds,evar,ereg)
 
         if yrbeg != (yrend-1)
 
             write(fID,"for yr in $(collect((yrbeg+1) : (yrend-1))):\n")
-            write(fID,"    for mo in $(collect(1 : 12)):\n")
+            if typeof(e5ds) <: ERA5Hourly
+                write(fID,"    for mo in $(collect(1 : 12)):\n")
+            end
             pythonprint_body(fID,fol,fnc,e5ds,evar,ereg)
 
         end
 
         write(fID,"for yr in [$yrend]:\n")
-        write(fID,"    for mo in $(collect(1 : moend)):\n")
+        if typeof(e5ds) <: ERA5Hourly
+            write(fID,"    for mo in $(collect(1 : moend)):\n")
+        end
         pythonprint_body(fID,fol,fnc,e5ds,evar,ereg)
 
     end
@@ -73,19 +81,9 @@ function pythonprint_body(
 )
 
     pythonprint_body_producttype(fID,e5ds,evar)
-    pythonprint_body_variable(fID,evar)
-    
-    if !(ereg.isglb)
-        geo = ereg.geo
-        write(fID,"                \"area\": [$(geo.N), $(geo.W), $(geo.S), $(geo.E)],\n");
-    end
-    write(fID,"                \"grid\": [$(ereg.gres), $(ereg.gres)],\n");
-
+    pythonprint_body_variable(fID,e5ds,evar)
+    pythonprint_body_regiongrid(fID,e5ds,evar)
     pythonprint_body_datetime(fID,e5ds)
-
-    write(fID,"                \"format\": \"netcdf\"\n");
-    write(fID,"            },\n");
-
     pythonprint_body_filename(fID,fol,fnc,e5ds)
 
 end
@@ -108,14 +106,15 @@ function pythonprint_body_producttype(
     evar :: ERA5Variable,
 )
 
-    write(fID,"        c.retrieve(\"$(evar.dname)-monthly-means\",\n")
-    write(fID,"            {\n");
-    write(fID,"                \"product_type\": \"$(e5ds.ptype)\",\n");
+    write(fID,"    c.retrieve(\"$(evar.dname)-monthly-means\",\n")
+    write(fID,"        {\n");
+    write(fID,"            \"product_type\": \"$(e5ds.ptype)\",\n");
 
 end
 
 function pythonprint_body_variable(
-    fID, evar :: SingleVariable,
+    fID, :: ERA5Hourly,
+    evar :: ERA5Variable,
 )
 
     write(fID,"                \"variable\": \"$(evar.lname)\",\n");
@@ -123,11 +122,57 @@ function pythonprint_body_variable(
 end
 
 function pythonprint_body_variable(
-    fID, evar :: PressureVariable,
+    fID, :: ERA5Hourly,
+    evar :: ERA5Variable,
 )
 
     write(fID,"                \"variable\": \"$(evar.lname)\",\n");
     write(fID,"                \"pressure_level\": \"$(evar.hPa)\",\n");
+
+end
+
+function pythonprint_body_variable(
+    fID, :: ERA5Monthly,
+    evar :: ERA5Variable,
+)
+
+    write(fID,"            \"variable\": \"$(evar.lname)\",\n");
+
+end
+
+function pythonprint_body_variable(
+    fID, :: ERA5Monthly,
+    evar :: ERA5Variable,
+)
+
+    write(fID,"            \"variable\": \"$(evar.lname)\",\n");
+    write(fID,"            \"pressure_level\": \"$(evar.hPa)\",\n");
+
+end
+
+function pythonprint_body_regiongrid(
+    fID, :: ERA5Hourly,
+    ereg :: ERA5Region,
+)
+
+    if !(ereg.isglb)
+        geo = ereg.geo
+        write(fID,"                \"area\": [$(geo.N), $(geo.W), $(geo.S), $(geo.E)],\n");
+    end
+    write(fID,"                \"grid\": [$(ereg.gres), $(ereg.gres)],\n");
+
+end
+
+function pythonprint_body_regiongrid(
+    fID, :: ERA5Monthly,
+    ereg :: ERA5Region,
+)
+
+    if !(ereg.isglb)
+        geo = ereg.geo
+        write(fID,"            \"area\": [$(geo.N), $(geo.W), $(geo.S), $(geo.E)],\n");
+    end
+    write(fID,"            \"grid\": [$(ereg.gres), $(ereg.gres)],\n");
 
 end
 
@@ -156,18 +201,20 @@ function pythonprint_body_datetime(
     fID, e5ds :: ERA5Monthly,
 )
 
-    write(fID,"                \"year\": yr,\n");
-    write(fID,"                \"month\": [1,2,3,4,5,6,7,8,9,10,11,12],\n");
+    write(fID,"            \"year\": yr,\n");
+    write(fID,"            \"month\": [1,2,3,4,5,6,7,8,9,10,11,12],\n");
 
     if e5ds.hours
-        write(fID,"                \"time\":[\n");
-        write(fID,"                    \"00:00\",\"01:00\",\"02:00\",\"03:00\",\n");
-        write(fID,"                    \"04:00\",\"05:00\",\"06:00\",\"07:00\",\n");
-        write(fID,"                    \"08:00\",\"09:00\",\"10:00\",\"11:00\",\n");
-        write(fID,"                    \"12:00\",\"13:00\",\"14:00\",\"15:00\",\n");
-        write(fID,"                    \"16:00\",\"17:00\",\"18:00\",\"19:00\",\n");
-        write(fID,"                    \"20:00\",\"21:00\",\"22:00\",\"23:00\"\n")
-        write(fID,"                ],\n")
+        write(fID,"            \"time\":[\n");
+        write(fID,"                \"00:00\",\"01:00\",\"02:00\",\"03:00\",\n");
+        write(fID,"                \"04:00\",\"05:00\",\"06:00\",\"07:00\",\n");
+        write(fID,"                \"08:00\",\"09:00\",\"10:00\",\"11:00\",\n");
+        write(fID,"                \"12:00\",\"13:00\",\"14:00\",\"15:00\",\n");
+        write(fID,"                \"16:00\",\"17:00\",\"18:00\",\"19:00\",\n");
+        write(fID,"                \"20:00\",\"21:00\",\"22:00\",\"23:00\"\n")
+        write(fID,"            ],\n")
+    else
+        write(fID,"            \"time\": \"00:00\"\n");
     end
 
 end
@@ -177,6 +224,9 @@ function pythonprint_body_filename(
     :: ERA5Hourly,
 )
 
+
+    write(fID,"                \"format\": \"netcdf\"\n");
+    write(fID,"            },\n");
     write(fID,"            os.path.join(\n")
     write(fID,"                \"$(fol)\", str(yr),\n")
     write(fID,"                \"$(fnc)-\" + str(yr) + str(mo).zfill(2) + \".nc\"\n")
@@ -189,10 +239,13 @@ function pythonprint_body_filename(
     fID, fol :: AbstractString, fnc :: AbstractString,
     :: ERA5Monthly,
 )
-    write(fID,"            os.path.join(\n")
-    write(fID,"                \"$(fol)\",\n")
-    write(fID,"                \"$(fnc)-\" + str(yr) + \".nc\"\n")
-    write(fID,"            )\n");
-    write(fID,"        )\n\n");
+
+    write(fID,"            \"format\": \"netcdf\"\n");
+    write(fID,"        },\n");
+    write(fID,"        os.path.join(\n")
+    write(fID,"            \"$(fol)\",\n")
+    write(fID,"            \"$(fnc)-\" + str(yr) + \".nc\"\n")
+    write(fID,"        )\n");
+    write(fID,"    )\n\n");
 
 end
