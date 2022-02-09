@@ -37,11 +37,11 @@ function addERA5Variables(fname::AbstractString)
     vtype  = evarfiletype(fname)
     vlist  = listera5variables(fname); nvar = length(vlist)
     varray = readdlm(fname,',',comments=true,comment_char='#')
-    
+
     if vtype == "SingleLevel"
         for ivar in 1 : nvar
             if isSingle(vlist[ivar],throw=false)
-                @warn "$(modulelog()) - The SingleVariable ID \"$varID\" is already in use and thus cannot be added to singlevariable.txt, please use another ID"
+                @warn "$(modulelog()) - The SingleVariable ID \"$(vlist[ivar])\" is already in use and thus cannot be added to singlevariable.txt, please use another ID"
             else
                 SingleVariable(
                     varID = varray[ivar,1], lname = varray[ivar,2],
@@ -53,7 +53,7 @@ function addERA5Variables(fname::AbstractString)
     elseif vtype == "SingleCustom"
         for ivar in 1 : nvar
             if isSingle(vlist[ivar],throw=false)
-                @warn "$(modulelog()) - The SingleVariable ID \"$varID\" is already in use and thus cannot be added to singlecustom.txt, please use another ID"
+                @warn "$(modulelog()) - The SingleVariable ID \"$(vlist[ivar])\" is already in use and thus cannot be added to singlecustom.txt, please use another ID"
             else
                 SingleVariable(
                     varID = varray[ivar,1], lname = varray[ivar,2],
@@ -64,7 +64,7 @@ function addERA5Variables(fname::AbstractString)
     elseif vtype == "PressureCustom"
         for ivar in 1 : nvar
             if isPressure(vlist[ivar],throw=false)
-                @warn "$(modulelog()) - The PressureVariable ID \"$varID\" is already in use and thus cannot be added to pressurecustom.txt, please use another ID"
+                @warn "$(modulelog()) - The PressureVariable ID \"$(vlist[ivar])\" is already in use and thus cannot be added to pressurecustom.txt, please use another ID"
             else
                 PressureVariable(
                     varID = varray[ivar,1], lname = varray[ivar,2],
