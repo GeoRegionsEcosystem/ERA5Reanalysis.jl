@@ -82,7 +82,7 @@ function pythonprint_body(
 
     pythonprint_body_producttype(fID,e5ds,evar)
     pythonprint_body_variable(fID,e5ds,evar)
-    pythonprint_body_regiongrid(fID,e5ds,evar)
+    pythonprint_body_regiongrid(fID,e5ds,ereg)
     pythonprint_body_datetime(fID,e5ds)
     pythonprint_body_filename(fID,fol,fnc,e5ds)
 
@@ -114,7 +114,7 @@ end
 
 function pythonprint_body_variable(
     fID, :: ERA5Hourly,
-    evar :: ERA5Variable,
+    evar :: SingleVariable,
 )
 
     write(fID,"                \"variable\": \"$(evar.lname)\",\n");
@@ -123,17 +123,17 @@ end
 
 function pythonprint_body_variable(
     fID, :: ERA5Hourly,
-    evar :: ERA5Variable,
+    evar :: PressureVariable,
 )
 
     write(fID,"                \"variable\": \"$(evar.lname)\",\n");
-    write(fID,"                \"pressure_level\": \"$(evar.hPa)\",\n");
+    write(fID,"                \"pressure_level\": $(evar.hPa),\n");
 
 end
 
 function pythonprint_body_variable(
     fID, :: ERA5Monthly,
-    evar :: ERA5Variable,
+    evar :: SingleVariable,
 )
 
     write(fID,"            \"variable\": \"$(evar.lname)\",\n");
@@ -142,11 +142,11 @@ end
 
 function pythonprint_body_variable(
     fID, :: ERA5Monthly,
-    evar :: ERA5Variable,
+    evar :: PressureVariable,
 )
 
     write(fID,"            \"variable\": \"$(evar.lname)\",\n");
-    write(fID,"            \"pressure_level\": \"$(evar.hPa)\",\n");
+    write(fID,"            \"pressure_level\": $(evar.hPa),\n");
 
 end
 
@@ -214,7 +214,7 @@ function pythonprint_body_datetime(
         write(fID,"                \"20:00\",\"21:00\",\"22:00\",\"23:00\"\n")
         write(fID,"            ],\n")
     else
-        write(fID,"            \"time\": \"00:00\"\n");
+        write(fID,"            \"time\": \"00:00\",\n");
     end
 
 end
