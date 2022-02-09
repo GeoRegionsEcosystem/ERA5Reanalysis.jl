@@ -50,7 +50,7 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = defVar(ds,epar["ID"],Int16,("longitude","latitude","time"),attrib = Dict(
+    ncvar = defVar(ds,evar.varID,Int16,("longitude","latitude","time"),attrib = Dict(
         "long_name"     => evar.lname,
         "full_name"     => evar.vname,
         "units"         => evar.units,
@@ -123,7 +123,7 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = defVar(ds,epar["ID"],Int16,("longitude","latitude","time"),attrib = Dict(
+    ncvar = defVar(ds,evar.varID,Int16,("longitude","latitude","time"),attrib = Dict(
         "long_name"     => evar.lname,
         "full_name"     => evar.vname,
         "units"         => evar.units,
