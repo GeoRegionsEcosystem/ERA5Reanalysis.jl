@@ -8,7 +8,7 @@ function save(
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
 
-    fnc = e5dfnc(e5ds,evar,egeo,dt)
+    fnc = e5dfnc(e5ds,evar,ereg,dt)
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
         @info "$(modulelog()) - Stale NetCDF file $(fnc) detected.  Overwriting ..."
@@ -26,8 +26,8 @@ function save(
         ds.attrib["doi"] = e5ds.pldoi
     end
 
-    nhr = ehr * daysinmonth(date);
-    scale,offset = erancoffsetscale(data);
+    nhr = 24 * daysinmonth(dt);
+    scale,offset = ncoffsetscale(data);
 
     ds.dim["longitude"] = ereg["size"][1];
     ds.dim["latitude"]  = ereg["size"][2];
@@ -60,7 +60,7 @@ function save(
     ))
 
     nclongitude[:] = ereg["lon"]; nclatitude[:] = ereg["lat"]
-    nctime[:] = (collect(1:nhr).-1) * ehr; ncvar[:] = data;
+    nctime[:] = (collect(1:nhr).-1) * 24; ncvar[:] = data;
 
     close(ds)
 
