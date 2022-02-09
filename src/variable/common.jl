@@ -35,8 +35,9 @@ function addERA5Variables(fname::AbstractString)
     @info "$(modulelog()) - Importing user-defined GeoRegions from the file $fname directly into the custom lists"
 
     vtype  = evarfiletype(fname)
-    varray = listera5variables(fname)
-    vlist  = varray[:,1]; nvar = length(vlist)
+    vlist  = listera5variables(fname); nvar = length(vlist)
+    varray = readdlm(fname,',',comments=true,comment_char='#')
+    
     if vtype == "SingleLevel"
         for ivar in 1 : nvar
             if isSingle(vlist[ivar],throw=false)
