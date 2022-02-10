@@ -228,23 +228,24 @@ function save_definevar!(
 
 end
 
-function save_definetimes!(
+function save_definetimes(
     e5ds :: ERA5Monthly,
     dt   :: Date
 )
 
     yr = year(dt)
+    di = Dates.value(Date(yr,1,1))
 
     if e5ds.hours
 
         hr = collect(0:23)
-        dy = day.(Date(yr,1,15):Month(1):Date(yr,12,31) .- Date(yr,1,1))
+        dy = Dates.value.(Date(yr,1,15):Month(1):Date(yr,12,31)) .- di
         tt = hr .+ (dy' * 24)
         tt = tt[:]
 
     else
 
-        dy = day.(Date(yr,1,1):Month(1):Date(yr,12,31) .- Date(yr,1,1))
+        dy = Dates.value.(Date(yr,1,15):Month(1):Date(yr,12,31)) .- di
         tt = dy * 24
 
     end
