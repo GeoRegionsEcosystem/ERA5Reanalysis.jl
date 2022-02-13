@@ -16,7 +16,7 @@ function ncoffsetscale(data::AbstractArray{<:Real})
         end
     end
 
-    scale = (dmax-dmin) / 65533;
+    scale = (dmax-dmin) / 65531;
     offset = (dmax+dmin-scale) / 2;
 
     return scale,offset
