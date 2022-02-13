@@ -108,6 +108,8 @@ include("downloads/pythonprint.jl")
 
 include("landsea/landsea.jl")
 
+include("subregion/extract.jl")
+
 include("filesystem.jl")
 include("backend.jl")
 include("read.jl")
