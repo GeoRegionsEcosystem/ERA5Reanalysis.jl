@@ -17,6 +17,7 @@ using Statistics
 using Reexport
 @reexport using Dates
 @reexport using GeoRegions
+@reexport using NCDatasets: nomissing
 
 import Base: show, read, download
 
