@@ -36,7 +36,7 @@ export
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read, save,
+        download, read, save, extract,
 
         era5Pressures
 

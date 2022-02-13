@@ -21,7 +21,7 @@ Keyword Arguments
 """
 function read(
 	e5ds :: ERA5Dataset,
-	evar :: SingleVariable,
+	evar :: ERA5Variable,
 	egeo :: ERA5Region,
     dt   :: TimeType;
     lonlat :: Bool = false
@@ -32,28 +32,6 @@ function read(
         error("$(modulelog()) - The $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.eroot) or download the files here")
     end
     @info "$(modulelog()) - Opening the $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
-    eds = NCDataset(enc)
-    
-    if !lonlat
-          return eds
-    else; return eds, eds["longitude"][:], eds["latitude"][:]
-    end
-
-end
-
-function read(
-	e5ds :: ERA5Dataset,
-	evar :: PressureVariable,
-	egeo :: ERA5Region,
-    dt   :: TimeType;
-    lonlat :: Bool = false
-)
-
-    enc = e5dfnc(e5ds,evar,egeo,dt)
-    if !isfile(enc)
-        error("$(modulelog()) - The $(e5ds.lname) Dataset for $(evar.vname) at the $(evar.hPa)hPa Pressure Level in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.eroot) or download the files here")
-    end
-    @info "$(modulelog()) - Opening the $(e5ds.lname) NCDataset for $(evar.vname) at the $(evar.hPa)hPa Pressure Level in the $(egeo.geoID) GeoRegion during Date $dt"
     eds = NCDataset(enc)
     
     if !lonlat
