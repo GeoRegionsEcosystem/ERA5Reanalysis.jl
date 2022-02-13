@@ -4,7 +4,7 @@ function extract(
 	ereg :: ERA5Region,
 )
 
-    @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(ereg.regID)\", \"$(ereg.geo.parID)\""
+    @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(ereg.geoID)\", \"$(ereg.geo.parID)\""
 
     preg = ERA5Region(GeoRegion(ereg.geo.parID))
     plsd = getLandSea(e5ds,preg);
@@ -12,7 +12,7 @@ function extract(
     plon = plsd.lon
     plat = plsd.lat
 
-    @info "$(modulelog()) - Creating RegionGrid for \"$(ereg.regID)\" based on the longitude and latitude vectors of the parent GeoRegion \"$(ereg.geo.parID)\""
+    @info "$(modulelog()) - Creating RegionGrid for \"$(ereg.geoID)\" based on the longitude and latitude vectors of the parent GeoRegion \"$(ereg.geo.parID)\""
 
     rinfo = ERA5RegionGrid(ereg,plon,plat)
     ilon  = rinfo.ilon; nlon = length(ilon)
@@ -22,25 +22,31 @@ function extract(
     else; mask = ones(nlon,nlat)
     end
     
-    rmat = zeros(Float32,nlon,nlat)
+    if typeof(e5ds) <: ERA5Hourly
+          rmat = zeros(Float32,nlon,nlat,31*24)
+    elseif !(e5ds.hours)
+          rmat = zeros(Float32,nlon,nlat,12)
+    else; rmat = zeros(Float32,nlon,nlat,12*24)
+    end
 
     for dt in extract_time(e5ds)
 
         pnc  = read(e5ds,evar,preg,dt)
         pmat = pnc[evar.varID][:] * 1
+        nt   = size(pmat,3)
 
         @info "$(modulelog()) - Extracting the $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) GeoRegion from the $(preg.geo.name) (Horizontal Resolution: $(preg.gres)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
 
-        for i_ilat = 1 : nlat, i_ilon = 1 : nlon
+        for it = 1 : nt, i_ilat = 1 : nlat, i_ilon = 1 : nlon
 
             if isone(mask[i_ilon,i_ilat])
-                  rmat[i_ilon,i_ilat] = pmat[ilon[i_ilon],ilat[i_ilat]]
-            else; rmat[i_ilon,i_ilat] = NaN
+                  rmat[i_ilon,i_ilat,it] = pmat[ilon[i_ilon],ilat[i_ilat],it]
+            else; rmat[i_ilon,i_ilat,it] = NaN
             end
 
         end
 
-        save(rmat,dt,e5ds,evar,ereg,rlsd)
+        save(view(rmat,:,:,1:nt),dt,e5ds,evar,ereg,rlsd)
 
     end
 
