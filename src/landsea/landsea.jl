@@ -3,7 +3,7 @@ struct LandSea{FT<:Real}
     lat  :: Vector{FT}
     lsm  :: Array{FT,2}
     z    :: Array{FT,2}
-    mask :: Array{Int16,2}
+    mask :: Array{Int,2}
 end
 
 function getLandSea(
@@ -38,7 +38,7 @@ function getLandSea(
         rlsm  = zeros(nlon,nlat)
         roro  = zeros(nlon,nlat)
         
-        if typeof(ereg.geo) <: PolyGrid
+        if typeof(rinfo) <: PolyGrid
               mask = rinfo.mask; mask[isnan.(mask)] .= 0
         else; mask = ones(Int16,nlon,nlat)
         end
@@ -46,8 +46,13 @@ function getLandSea(
         @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.geoID)\" ERA5Region from the Global ERA5 Land-Sea mask dataset ..."
 
         for iglat = 1 : nlat, iglon = 1 : nlon
-            rlsm[iglon,iglat] = glsm[ilon[iglon],ilat[iglat]]
-            roro[iglon,iglat] = goro[ilon[iglon],ilat[iglat]]
+            if isone(mask[iglon,iglat])
+                rlsm[iglon,iglat] = glsm[ilon[iglon],ilat[iglat]]
+                roro[iglon,iglat] = goro[ilon[iglon],ilat[iglat]]
+            else
+                rlsm[iglon,iglat] = NaN
+                roro[iglon,iglat] = NaN
+            end
         end
 
         saveLandSea(e5ds,ereg,rinfo.glon,rinfo.glat,rlsm,roro,Int16.(mask))
@@ -59,8 +64,8 @@ function getLandSea(
         lds = NCDataset(lsmfnc)
         lon = lds["longitude"][:]
         lat = lds["latitude"][:]
-        lsm = lds["lsm"][:] * 1
-        oro = lds["z"][:] * 1
+        lsm = nomissing(lds["lsm"][:], NaN)
+        oro = nomissing(lds["z"][:],   NaN)
         msk = lds["mask"][:]
         close(lds)
 
@@ -118,7 +123,7 @@ function saveLandSea(
     lat  :: Vector{<:Real},
     lsm  :: Array{<:Real,2},
     oro  :: Array{<:Real,2},
-    msk  :: Array{Int16,2},
+    mask :: Array{Int16,2},
 )
 
     fnc = joinpath(e5ds.emask,"emask-$(ereg.gstr).nc")
@@ -175,9 +180,16 @@ function saveLandSea(
 
     nclon[:] = lon
     nclat[:] = lat
-    nclsm[:] = lsm
-    ncoro[:] = oro
-    ncmsk[:] = msk
+
+    if iszero(sum(iszero.(mask)))
+        nclsm[:] = lsm
+        ncoro[:] = oro
+    else
+        nclsm.var[:] = real2int16(lsm,lscale,loffset)
+        ncoro.var[:] = real2int16(oro,zscale,zoffset)
+    end
+
+    ncmsk[:] = mask
 
     close(ds)
 
