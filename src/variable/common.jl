@@ -142,6 +142,20 @@ function tableERA5Variables()
 
 end
 
+function templateERA5Variables(;path=pwd(),force=false)
+
+    flist = ["singlevariable.txt","singlecustom.txt","pressurecustom.txt"]
+
+    for fname in flist
+        ftem = joinpath(@__DIR__,"..","..","extra",fname)
+        fvar = joinpath(path,fname)
+        cp(ftem,fvar,force=force)
+    end
+
+    return nothing
+
+end
+
 ## Backend Functions
 
 function copyera5variables(
