@@ -32,7 +32,7 @@ function extract(
     for dt in extract_time(e5ds)
 
         pnc  = read(e5ds,evar,preg,dt)
-        pmat = pnc[evar.varID][:] * 1
+        pmat = nomissing(pnc[evar.varID][:],NaN)
         nt   = size(pmat,3)
 
         @info "$(modulelog()) - Extracting the $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) GeoRegion from the $(preg.geo.name) (Horizontal Resolution: $(preg.gres)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
