@@ -10,7 +10,7 @@ function getLandSea(
     e5ds :: ERA5Dataset,
     ereg :: ERA5Region = ERA5Region(GeoRegion("GLB"));
     returnlsd = true,
-    FT = Float64
+    FT = Float32
 )
 
     lsmfnc = joinpath(e5ds.emask,"emask-$(ereg.gstr).nc")
