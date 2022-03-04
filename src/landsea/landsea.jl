@@ -8,7 +8,7 @@ end
 
 function getLandSea(
     e5ds :: ERA5Dataset,
-    ereg :: ERA5Region;
+    ereg :: ERA5Region = ERA5Region(GeoRegion("GLB"));
     returnlsd = true,
     FT = Float64
 )
