@@ -53,7 +53,7 @@ function pythonprint(
 
         if yrbeg != (yrend-1)
 
-            write(fID,"for yr in $(collect((yrbeg+1) : (yrend-1))):\n")
+            write(fID,"for yr in range($(yrbeg),$(yrend)):\n")
             if typeof(e5ds) <: ERA5Hourly
                 write(fID,"    for mo in $(collect(1 : 12)):\n")
             end
