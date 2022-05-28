@@ -15,7 +15,7 @@ Arguments
 """
 function e5dfnc(
     e5ds :: ERA5Hourly,
-	evar :: SingleVariable,
+	evar :: SingleLevel,
 	egeo :: ERA5Region,
     dt   :: TimeType
 )
@@ -29,7 +29,7 @@ end
 
 function e5dfnc(
     e5ds :: ERA5Hourly,
-	evar :: PressureVariable,
+	evar :: PressureLevel,
 	egeo :: ERA5Region,
     dt   :: TimeType
 )
@@ -44,7 +44,7 @@ end
 
 function e5dfnc(
     e5ds :: ERA5Monthly,
-	evar :: SingleVariable,
+	evar :: SingleLevel,
 	egeo :: ERA5Region,
     dt   :: TimeType
 )
@@ -58,7 +58,7 @@ end
 
 function e5dfnc(
     e5ds :: ERA5Monthly,
-	evar :: PressureVariable,
+	evar :: PressureLevel,
 	egeo :: ERA5Region,
     dt   :: TimeType
 )
@@ -73,7 +73,7 @@ end
 
 function e5dfnc(
     e5ds :: ERA5Dataset,
-	evar :: SingleVariable,
+	evar :: SingleLevel,
 	egeo :: ERA5Region
 )
 
@@ -85,7 +85,7 @@ end
 
 function e5dfnc(
     e5ds :: ERA5Dataset,
-	evar :: PressureVariable,
+	evar :: PressureLevel,
 	egeo :: ERA5Region
 )
 
