@@ -12,7 +12,7 @@ function analysis(
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
 
-    @info "$(modulelog()) - Preallocating data arrays for the analysis ..."
+    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
 
     davg = zeros(Float32,nlon,nlat,25,13)
     dstd = zeros(Float32,nlon,nlat,25,13)
@@ -107,7 +107,7 @@ function analysis(
         end
         
         @info "$(modulelog()) - Calculating meridional-averaged climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
-        for imo = 1 : 13, ihr = 1 : 25, ilon = 1 : nlon;
+        for imo = 1 : 13, ihr = 1 : 25, ilon = 1 : nlon
             mavg[ilon,ihr,imo] = nanmean(view(davg,ilon,:,ihr,imo),lat_NaN);
             mstd[ilon,ihr,imo] = nanmean(view(dstd,ilon,:,ihr,imo),lat_NaN);
             mmax[ilon,ihr,imo] = nanmean(view(dmax,ilon,:,ihr,imo),lat_NaN);

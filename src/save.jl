@@ -14,8 +14,8 @@ function save(
     nhr = 24 * daysinmonth(dt)
     scale,offset = ncoffsetscale(data)
 
-    ds.dim["longitude"] = length(lsd.lon);
-    ds.dim["latitude"]  = length(lsd.lat);
+    ds.dim["longitude"] = length(lsd.lon)
+    ds.dim["latitude"]  = length(lsd.lat)
     ds.dim["time"] = nhr
 
     nclon,nclat = save_definelonlat!(ds)
@@ -55,12 +55,12 @@ function save(
 
     ds,fnc = save_createds(e5ds,evar,ereg,dt)
 
-    nhr = 24 * daysinmonth(dt);
-    scale,offset = ncoffsetscale(data);
+    nhr = 24 * daysinmonth(dt)
+    scale,offset = ncoffsetscale(data)
 
     lsd = getLandSea(e5ds,ereg)
-    ds.dim["longitude"] = length(lsd.lon);
-    ds.dim["latitude"]  = length(lsd.lat);
+    ds.dim["longitude"] = length(lsd.lon)
+    ds.dim["latitude"]  = length(lsd.lat)
     ds.dim["time"] = nhr
 
     nclon,nclat = save_definelonlat!(ds)
@@ -104,8 +104,8 @@ function save(
     nt = 12; if e5ds.hours; nt = nt * 24 end
     scale,offset = ncoffsetscale(data)
 
-    ds.dim["longitude"] = length(lsd.lon);
-    ds.dim["latitude"]  = length(lsd.lat);
+    ds.dim["longitude"] = length(lsd.lon)
+    ds.dim["latitude"]  = length(lsd.lat)
     ds.dim["time"] = nt
 
     nclon,nclat = save_definelonlat!(ds)
@@ -146,11 +146,11 @@ function save(
     ds,fnc = save_createds(e5ds,evar,ereg,dt)
 
     nt = 12; if e5ds.hours; nt = nt * 24 end
-    scale,offset = ncoffsetscale(data);
+    scale,offset = ncoffsetscale(data)
 
     lsd = getLandSea(e5ds,ereg)
-    ds.dim["longitude"] = length(lsd.lon);
-    ds.dim["latitude"]  = length(lsd.lat);
+    ds.dim["longitude"] = length(lsd.lon)
+    ds.dim["latitude"]  = length(lsd.lat)
     ds.dim["time"] = nt
 
     nclon,nclat = save_definelonlat!(ds)
