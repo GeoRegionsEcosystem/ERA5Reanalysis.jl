@@ -183,6 +183,10 @@ function save(
         "missing_value" => Int16(-32767),
     )
 
+    if typeof(evar) <: PressureLevel
+        attr_var["level"] = evar.hPa
+    end
+
     ## DOMAIN YEARLY CLIMATOLOGY
 
     scale,offset = ncoffsetscale(view(davg,:,:,25,13))
@@ -303,7 +307,7 @@ function save(
         ("longitude","latitude","hour","month"),attrib=attr_var);
     ncvar.var[:] = real2int16(view(dmin,:,:,1:24,1:12),scale,offset)
 
-    ## DOMAIN YEARLY ZONAL-MEAN CLIMATOLOGY
+    ## ZONAL-MEAN YEARLY CLIMATOLOGY
 
     scale,offset = ncoffsetscale(view(zavg,:,25,13))
     attr_var["scale_factor"] = scale
@@ -333,7 +337,7 @@ function save(
         ("latitude",),attrib=attr_var);
     ncvar.var[:] = real2int16(view(zmin,:,25,13),scale,offset)
 
-    ## DOMAIN YEARLY ZONAL-MEAN DIURNAL STATISTICS
+    ## ZONAL-MEAN YEARLY DIURNAL STATISTICS
 
     scale,offset = ncoffsetscale(view(zavg,:,1:24,13))
     attr_var["scale_factor"] = scale
@@ -363,7 +367,7 @@ function save(
         ("latitude","hour"),attrib=attr_var);
     ncvar.var[:] = real2int16(view(zmin,:,1:24,13),scale,offset)
 
-    ## DOMAIN MONTHLY ZONAL-MEAN CLIMATOLOGY
+    ## ZONAL-MEAN MONTHLY CLIMATOLOGY
 
     scale,offset = ncoffsetscale(view(zavg,:,25,1:12))
     attr_var["scale_factor"] = scale
@@ -393,7 +397,7 @@ function save(
         ("latitude","month"),attrib=attr_var);
     ncvar.var[:] = real2int16(view(zmin,:,25,1:12),scale,offset)
 
-    ## DOMAIN MONTHLY ZONAL-MEAN DIURNAL STATISTICS
+    ## ZONAL-MEAN MONTHLY DIURNAL STATISTICS
 
     scale,offset = ncoffsetscale(view(zavg,:,1:24,1:12))
     attr_var["scale_factor"] = scale
@@ -423,7 +427,7 @@ function save(
         ("latitude","hour","month"),attrib=attr_var);
     ncvar.var[:] = real2int16(view(zmin,:,1:24,1:12),scale,offset)
 
-    ## DOMAIN YEARLY MERIDIONAL-MEAN CLIMATOLOGY
+    ## MERIDIONAL-MEAN YEARLY CLIMATOLOGY
 
     scale,offset = ncoffsetscale(view(mavg,:,25,13))
     attr_var["scale_factor"] = scale
@@ -453,7 +457,7 @@ function save(
         ("longitude",),attrib=attr_var);
     ncvar.var[:] = real2int16(view(mmin,:,25,13),scale,offset)
 
-    ## DOMAIN YEARLY MERIDIONAL-MEAN DIURNAL STATISTICS
+    ## MERIDIONAL-MEAN YEARLY DIURNAL STATISTICS
 
     scale,offset = ncoffsetscale(view(mavg,:,1:24,13))
     attr_var["scale_factor"] = scale
@@ -483,7 +487,7 @@ function save(
         ("longitude","hour"),attrib=attr_var);
     ncvar.var[:] = real2int16(view(mmin,:,1:24,13),scale,offset)
 
-    ## DOMAIN MONTHLY MERIDIONAL-MEAN CLIMATOLOGY
+    ## MERIDIONAL-MEAN MONTHLY CLIMATOLOGY
 
     scale,offset = ncoffsetscale(view(mavg,:,25,1:12))
     attr_var["scale_factor"] = scale
@@ -513,7 +517,7 @@ function save(
         ("longitude","month"),attrib=attr_var);
     ncvar.var[:] = real2int16(view(mmin,:,25,1:12),scale,offset)
 
-    ## DOMAIN MONTHLY MERIDIONAL-MEAN DIURNAL STATISTICS
+    ## MERIDIONAL-MEAN MONTHLY DIURNAL STATISTICS
 
     scale,offset = ncoffsetscale(view(mavg,:,1:24,1:12))
     attr_var["scale_factor"] = scale
