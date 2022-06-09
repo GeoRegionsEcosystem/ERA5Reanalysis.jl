@@ -53,8 +53,8 @@ Keyword Arguments
 function ERA5Hourly(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = now() - Month(3),
+    dtend :: TimeType = now() - Month(3),
     eroot :: AbstractString = homedir(),
 )
 
@@ -100,8 +100,8 @@ Keyword Arguments
 function ERA5Monthly(
     ST = String,
     DT = Date;
-    dtbeg :: TimeType,
-    dtend :: TimeType,
+    dtbeg :: TimeType = now() - Month(3),
+    dtend :: TimeType = now() - Month(3),
     eroot :: AbstractString = homedir(),
     hours :: Bool = false,
 )
