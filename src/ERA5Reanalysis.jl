@@ -37,7 +37,7 @@ export
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read, save, extract,
+        download, read, save, extract, analysis,
 
         era5Pressures
 
@@ -102,16 +102,22 @@ include("variable/show.jl")
 include("region/region.jl")
 include("region/functions.jl")
 
+include("landsea/landsea.jl")
+
 include("downloads/cdsapi.jl")
 include("downloads/downloads.jl")
 include("downloads/cdsretrieve.jl")
 include("downloads/pythonprint.jl")
 
-include("landsea/landsea.jl")
+include("analysis/hourly.jl")
+include("analysis/compile.jl")
 
 include("subregion/extract.jl")
 
-include("filesystem.jl")
+include("filesystem/raw.jl")
+include("filesystem/analysis.jl")
+include("filesystem/compile.jl")
+
 include("backend.jl")
 include("read.jl")
 include("save.jl")
