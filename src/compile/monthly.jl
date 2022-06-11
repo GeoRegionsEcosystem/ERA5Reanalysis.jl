@@ -13,6 +13,7 @@ function compile(
     lsd = getLandSea(e5ds,egeo)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
+    mask = lsd.mask
 
     @info "$(modulelog()) - Preallocating data arrays for the compilation ..."
 
@@ -26,10 +27,10 @@ function compile(
         earr = zeros(Float32,nlon,nlat,12)
     end
 
-    eavg = zeros(nlon,nlat)
-    emax = zeros(nlon,nlat)
-    emin = zeros(nlon,nlat)
-    esea = zeros(nlon,nlat)
+    eavg = zeros(Float32,nlon,nlat)
+    emax = zeros(Float32,nlon,nlat)
+    emin = zeros(Float32,nlon,nlat)
+    esea = zeros(Float32,nlon,nlat)
 
     if iseramohr; edhr = zeros(nlon,nlat) end
 
@@ -48,7 +49,11 @@ function compile(
             NCDatasets.load!(eds[evar.varID].var,eint,:,:,:,:)
             int2real!(eflt,eint,scale=sc,offset=of,mvalue=mv,fvalue=fv)
             for imo = 1 : 12, ihr = 1 : 24, ilat = 1 : nlat, ilon = 1 : nlon
-                earr[ilon,ilat,ihr,imo] = eflt[ilon,ilat,ihr + (imo-1)*24]
+                if iszero(mask[ilon,ilat])
+                    earr[ilon,ilat,ihr,imo] = NaN32
+                else
+                    earr[ilon,ilat,ihr,imo] = eflt[ilon,ilat,ihr + (imo-1)*24]
+                end
             end
 
             eyr   = dropdims(mean(earr,dims=(3,4)),dims=(3,4))
@@ -71,6 +76,11 @@ function compile(
 
             NCDatasets.load!(eds[evar.varID].var,eint,:,:,:)
             int2real!(earr,eint,scale=sc,offset=of,mvalue=mv,fvalue=fv)
+            for imo = 1 : 12, ilat = 1 : nlat, ilon = 1 : nlon
+                if iszero(mask[ilon,ilat])
+                    earr[ilon,ilat,imo] = NaN32
+                end
+            end
 
             eyr   = dropdims(mean(earr,dims=3),dims=3)
 
@@ -107,10 +117,10 @@ function compile(
 end
 
 function save(
-    eavg :: Array{<:Real,2},
-    edhr :: Array{<:Real,2},
-    esea :: Array{<:Real,2},
-    eian :: Array{<:Real,2},
+    eavg :: Array{Float32,2},
+    edhr :: Array{Float32,2},
+    esea :: Array{Float32,2},
+    eian :: Array{Float32,2},
     e5ds :: ERA5Monthly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region,
@@ -190,9 +200,9 @@ function save(
 end
 
 function save(
-    eavg :: Array{<:Real,2},
-    esea :: Array{<:Real,2},
-    eian :: Array{<:Real,2},
+    eavg :: Array{Float32,2},
+    esea :: Array{Float32,2},
+    eian :: Array{Float32,2},
     e5ds :: ERA5Monthly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region,

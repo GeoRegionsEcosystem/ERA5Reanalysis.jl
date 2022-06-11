@@ -14,13 +14,13 @@ function compile(
 
     @info "$(modulelog()) - Preallocating data arrays for the compilation ..."
 
-    eavg = zeros(nlon,nlat)
-    emax = zeros(nlon,nlat)
-    emin = zeros(nlon,nlat)
-    erng = zeros(nlon,nlat)
-    edhr = zeros(nlon,nlat)
-    eitr = zeros(nlon,nlat)
-    esea = zeros(nlon,nlat)
+    eavg = zeros(Float32,nlon,nlat)
+    emax = zeros(Float32,nlon,nlat)
+    emin = zeros(Float32,nlon,nlat)
+    erng = zeros(Float32,nlon,nlat)
+    edhr = zeros(Float32,nlon,nlat)
+    eitr = zeros(Float32,nlon,nlat)
+    esea = zeros(Float32,nlon,nlat)
 
     for yr in yrbeg : yrend
 
@@ -63,12 +63,12 @@ function compile(
 end
 
 function save(
-    eavg :: Array{<:Real,2},
-    edhr :: Array{<:Real,2},
-    eitr :: Array{<:Real,2},
-    esea :: Array{<:Real,2},
-    erng :: Array{<:Real,2},
-    eian :: Array{<:Real,2},
+    eavg :: Array{Float32,2},
+    edhr :: Array{Float32,2},
+    eitr :: Array{Float32,2},
+    esea :: Array{Float32,2},
+    erng :: Array{Float32,2},
+    eian :: Array{Float32,2},
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region,

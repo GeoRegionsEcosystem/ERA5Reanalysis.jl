@@ -110,7 +110,10 @@ include("downloads/cdsretrieve.jl")
 include("downloads/pythonprint.jl")
 
 include("analysis/hourly.jl")
-include("analysis/compile.jl")
+include("analysis/monthly.jl")
+
+include("compile/hourly.jl")
+include("compile/monthly.jl")
 
 include("subregion/extract.jl")
 

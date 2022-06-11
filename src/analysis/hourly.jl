@@ -11,6 +11,7 @@ function analysis(
     lsd = getLandSea(e5ds,egeo)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
+    mask = lsd.mask
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
 
@@ -60,6 +61,12 @@ function analysis(
                 scale=sc, offset=of, mvalue=mv, fvalue=fv
             )
             close(ds)
+
+            for idy = 1 : ndy, ihr = 1 : 24, ilat = 1 : nlat, ilon = 1 : nlon
+                if iszero(mask[ilon,ilat])
+                    rvar[ilon,ilat,ihr,idy] = NaN32
+                end
+            end
 
             if verbose
                 @info "$(modulelog()) - Calculating daily means for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr $(monthname(mo)) ..."
