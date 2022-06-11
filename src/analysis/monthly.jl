@@ -21,7 +21,8 @@ function analysis(
         davg = zeros(Float32,nlon,nlat,28,16)
         zavg = zeros(Float32,nlat,28,16)
         mavg = zeros(Float32,nlon,28,16)
-        tvar = zeros(Int16,nlon,nlat,24,12)
+        tint = zeros(Int16,nlon,nlat,24,12)
+        traw = zeros(Int16,nlon,nlat,288)
     else
         davg = zeros(Float32,nlon,nlat,16)
         zavg = zeros(Float32,nlat,16)
@@ -41,10 +42,12 @@ function analysis(
         fv  = ds[evar.varID].attrib["_FillValue"]
 
         if iseramohr
-            tvr = view(tvar,:,:,1:24,1:12)
-            NCDatasets.load!(ds[evar.varID].var,tvr,:,:,:,:)
+            NCDatasets.load!(ds[evar.varID].var,traw,:,:,:,:)
+            for imo = 1 : 12, ihr = 1 : 24, ilat = 1 : nlat, ilon = 1 : nlon
+                tint[ilon,ilat,ihr,imo] = traw[ilon,ilat,ihr + (imo-1)*24]
+            end
             int2real!(
-                view(davg,:,:,1:24,1:12), tvr,
+                view(davg,:,:,1:24,1:12), tint,
                 scale=sc, offset=of, mvalue=mv, fvalue=fv
             )
             for imo = 1 : 12, ihr = 1 : 24, ilat = 1 : nlat, ilon = 1 : nlon
@@ -53,10 +56,9 @@ function analysis(
                 end
             end
         else
-            tvr = view(tvar,:,:,1:12)
-            NCDatasets.load!(ds[evar.varID].var,tvr,:,:,:)
+            NCDatasets.load!(ds[evar.varID].var,tvar,:,:,:)
             int2real!(
-                view(davg,:,:,1:12), tvr,
+                view(davg,:,:,1:12), tvar,
                 scale=sc, offset=of, mvalue=mv, fvalue=fv
             )
             for imo = 1 : 12, ilat = 1 : nlat, ilon = 1 : nlon
@@ -70,19 +72,23 @@ function analysis(
 
         if iseramohr
 
-            @info "$(modulelog()) - Calculating yearly climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
-            for ihr = 1 : 24, ilat = 1 : nlat, ilon = 1 : nlon
-                davg[ilon,ilat,ihr,13] = mean(view(davg,ilon,ilat,ihr,1:12))    # domain_yearly_mean_hourly
-                dstd[ilon,ilat,ihr,14] = std(view(davg,ilon,ilat,ihr,1:12))     # domain_yearly_std_hourly
-                dmax[ilon,ilat,ihr,15] = maximum(view(davg,ilon,ilat,ihr,1:12)) # domain_yearly_maximum_hourly
-                dmin[ilon,ilat,ihr,16] = minimum(view(davg,ilon,ilat,ihr,1:12)) # domain_yearly_minimum_hourly
-            end
+            @info "$(modulelog()) - Calculating monthly climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
             for imo = 1 : 12, ilat = 1 : nlat, ilon = 1 : nlon
                 davg[ilon,ilat,25,imo] = mean(view(davg,ilon,ilat,1:24,imo))    # domain_monthly_mean_climatology
                 dstd[ilon,ilat,26,imo] = std(view(davg,ilon,ilat,1:24,imo))     # domain_monthly_std_climatology
                 dmax[ilon,ilat,27,imo] = maximum(view(davg,ilon,ilat,1:24,imo)) # domain_monthly_maximum_climatology
                 dmin[ilon,ilat,28,imo] = minimum(view(davg,ilon,ilat,1:24,imo)) # domain_monthly_minimum_climatology
             end
+
+            @info "$(modulelog()) - Calculating yearly diurnal climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+            for ihr = 1 : 24, ilat = 1 : nlat, ilon = 1 : nlon
+                davg[ilon,ilat,ihr,13] = mean(view(davg,ilon,ilat,ihr,1:12))    # domain_yearly_mean_hourly
+                dstd[ilon,ilat,ihr,14] = std(view(davg,ilon,ilat,ihr,1:12))     # domain_yearly_std_hourly
+                dmax[ilon,ilat,ihr,15] = maximum(view(davg,ilon,ilat,ihr,1:12)) # domain_yearly_maximum_hourly
+                dmin[ilon,ilat,ihr,16] = minimum(view(davg,ilon,ilat,ihr,1:12)) # domain_yearly_minimum_hourly
+            end
+
+            @info "$(modulelog()) - Calculating yearly climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
             for ilat = 1 : nlat, ilon = 1 : nlon
                 davg[ilon,ilat,25,13] = mean(view(davg,ilon,ilat,1:24,1:12))    # domain_yearly_mean_climatology
                 dstd[ilon,ilat,26,14] = std(view(davg,ilon,ilat,1:24,1:12))     # domain_yearly_std_climatology
