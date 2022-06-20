@@ -40,6 +40,58 @@ function cdsretrieve(
 
 end
 
+function cdsretrieve(
+    e5ds :: ERA5Dataset,
+    evar :: PressureVariable,
+    ereg :: ERA5Region,
+    pvec :: Vector{Int}
+)
+
+    dtvec = cdsretrieve_dtvec(e5ds)
+    ckeys = cdskey()
+
+    @info "$(modulelog()) - Preallocation of temporary data arrays to split downloaded data into their respective pressure levels ..."
+
+    lsd  = getLandSea(e5ds,ereg)
+    nlon = length(lsd.lon)
+    nlat = length(lsd.lat)
+    tmpd = zeros(Int16,nlon,nlat,31*24)
+    tmpf = zeros(Float32,nlon,nlat,31*24)
+
+    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.dtbeg) to $(e5ds.dtend)."
+
+    for dtii in dtvec
+
+        fnc = "tmp.nc"
+        fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
+
+        e5dkey = Dict(
+            "product_type" => e5ds.ptype,
+            "year"         => year(dtii),
+            "month"        => cdsretrieve_month(dtii,e5ds),
+            "variable"     => evar.lname,
+            "grid"         => [ereg.gres, ereg.gres],
+            "time"         => cdsretrieve_time(e5ds),
+            "format"       => "netcdf",
+        )
+
+        if typeof(e5ds) <: ERA5Hourly
+            e5dkey["day"] = collect(1:31)
+        end
+
+        if typeof(evar) <: PressureVariable
+            e5dkey["pressure_level"] = pvec
+        end
+        
+        cdsretrieve_area!(e5dkey,ereg)
+
+        retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
+        split(e5ds,evar,ereg,lsd,dtii,pvec,fnc,tmpd,tmpf)
+
+    end
+
+end
+
 
 cdsretrieve_dtvec(e5ds::ERA5Hourly)  = e5ds.dtbeg : Month(1) : e5ds.dtend
 cdsretrieve_dtvec(e5ds::ERA5Monthly) = e5ds.dtbeg : Year(1)  : e5ds.dtend

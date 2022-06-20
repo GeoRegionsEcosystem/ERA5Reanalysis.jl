@@ -108,6 +108,7 @@ include("downloads/cdsapi.jl")
 include("downloads/downloads.jl")
 include("downloads/cdsretrieve.jl")
 include("downloads/pythonprint.jl")
+include("downloads/split.jl")
 
 include("analysis/hourly.jl")
 include("analysis/monthly.jl")
