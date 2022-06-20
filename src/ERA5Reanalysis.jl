@@ -19,7 +19,7 @@ using Reexport
 @reexport using GeoRegions
 @reexport using NCDatasets: nomissing
 
-import Base: show, read, download
+import Base: show, read, download, split
 
 ## Exporting the following functions:
 export
