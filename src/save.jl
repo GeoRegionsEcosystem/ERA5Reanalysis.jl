@@ -32,9 +32,13 @@ function save(
     nclat[:]  = lsd.lat
     nctime[:] = collect(1:nhr) .- 1
 
-    if iszero(sum(isnan.(data)))
-          ncvar[:] = data
-    else; ncvar.var[:] = real2int16(data,scale,offset)
+    if iszero(scale)
+        ncvar.var[:] = 0
+    else
+        if iszero(sum(isnan.(data)))
+              ncvar[:] = data
+        else; ncvar.var[:] = real2int16(data,scale,offset)
+        end
     end
 
     close(ds)
@@ -77,9 +81,13 @@ function save(
     nclat[:]  = lsd.lat
     nctime[:] = collect(1:nhr) .- 1
     
-    if iszero(sum(isnan.(data)))
-          ncvar[:] = data
-    else; ncvar.var[:] = real2int16(data,scale,offset)
+    if iszero(scale)
+        ncvar.var[:] = 0
+    else
+        if iszero(sum(isnan.(data)))
+              ncvar[:] = data
+        else; ncvar.var[:] = real2int16(data,scale,offset)
+        end
     end
 
     close(ds)
@@ -122,9 +130,13 @@ function save(
     nclat[:]  = lsd.lat
     nctime[:] = save_definetimes(e5ds,dt)
 
-    if iszero(sum(isnan.(data)))
-          ncvar[:] = data
-    else; ncvar.var[:] = real2int16(data,scale,offset)
+    if iszero(scale)
+        ncvar.var[:] = 0
+    else
+        if iszero(sum(isnan.(data)))
+              ncvar[:] = data
+        else; ncvar.var[:] = real2int16(data,scale,offset)
+        end
     end
 
     close(ds)
@@ -167,9 +179,13 @@ function save(
     nclat[:]  = lsd.lat
     nctime[:] = save_definetimes(e5ds,dt)
     
-    if iszero(sum(isnan.(data)))
-          ncvar[:] = data
-    else; ncvar.var[:] = real2int16(data,scale,offset)
+    if iszero(scale)
+        ncvar.var[:] = 0
+    else
+        if iszero(sum(isnan.(data)))
+              ncvar[:] = data
+        else; ncvar.var[:] = real2int16(data,scale,offset)
+        end
     end
 
     close(ds)
