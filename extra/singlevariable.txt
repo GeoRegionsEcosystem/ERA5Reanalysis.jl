@@ -2,10 +2,10 @@
 # List of ERA5 Single-Level Variables (v0.1)
 # (1)ID, (2)era5, (3)Full, (4)Units
 
-u10,10m_u_component_of_wind,Zonal Wind at 10m Height,m s^{-1}
-v10,10m_v_component_of_wind,Meridional Wind at 10m Height,m s^{-1}
-u100,100m_u_component_of_wind,Zonal Wind at 100m Height,m s^{-1}
-v100,100m_v_component_of_wind,Meridional Wind at 100m Height,m s^{-1}
+u10,10m_u_component_of_wind,Zonal Wind at 10m Height,m s**-1
+v10,10m_v_component_of_wind,Meridional Wind at 10m Height,m s**-1
+u100,100m_u_component_of_wind,Zonal Wind at 100m Height,m s**-1
+v100,100m_v_component_of_wind,Meridional Wind at 100m Height,m s**-1
 t2m,2m_temperature,2m Temperature,K
 d2m,2m_dewpoint_temperature,2m Dewpoint Temperature,K
 sst,sea_surface_temperature,Sea Surface Temperature,K
@@ -15,11 +15,17 @@ msl,mean_sea_level_pressure,Sea Level Pressure,hPa
 tp,total_precipitation,Total Precipitation,m
 cp,convective_precipitation,Convective Precipitation,m
 lsp,large_scale_precipitation,Large-Scale Precipitation,m
-tcw,total_column_water,Total Column Water,kg m^{-2}
-tcwv,total_column_water_vapour,Total Column Water Vapour,kg m^{-2}
-cc,total_cloud_cover,Total Cloud Cover,%%
-hcc,high_cloud_cover,High Cloud Cover,%%
-mcc,medium_cloud_cover,Medium Cloud Cover,%%
-lcc,low_cloud_cover,Low Cloud Cover,%%
-cape,convective_available_potential_energy,CAPE,J kg^{-1}
-cin,convective_inhibition,CIN,J kg^{-1}
+tcw,total_column_water,Total Column Water,kg m**-2
+tcwv,total_column_water_vapour,Total Column Water Vapour,kg m**-2
+cc,total_cloud_cover,Total Cloud Cover,0-1
+hcc,high_cloud_cover,High Cloud Cover,0-1
+mcc,medium_cloud_cover,Medium Cloud Cover,0-1
+lcc,low_cloud_cover,Low Cloud Cover,0-1
+cape,convective_available_potential_energy,CAPE,J kg**-1
+cin,convective_inhibition,CIN,J kg**-1
+tsr,top_net_solar_radiation,Top Net Solar Radiation,J m**-2
+ttr,top_net_thermal_radiation,Top Net Thermal Radiation,J m**-2
+ssr,surface_net_solar_radiation,Surface Net Solar Radiation,  J m**-2
+str,surface_net_thermal_radiation,Surface Net Thermal Radiation,J m**-2
+sshf,surface_sensible_heat_flux,Surface Sensible Heat Flux,J m**-2
+slhf,surface_latent_heat_flux,Surface Latent Heat Flux,J m**-2
