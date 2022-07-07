@@ -30,6 +30,8 @@ function split(
 
     close(ds)
 
+    rm(fnc,force=true)
+
 end
 
 function save(

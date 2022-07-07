@@ -2,6 +2,7 @@ function cdsretrieve(
     e5ds :: ERA5Dataset,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
+    overwrite :: Bool
 )
 
     dtvec = cdsretrieve_dtvec(e5ds)
@@ -33,8 +34,10 @@ function cdsretrieve(
         end
         
         cdsretrieve_area!(e5dkey,ereg)
-
-        retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
+        
+        if !isfile(fnc) || overwrite
+            retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
+        end
 
     end
 
@@ -44,7 +47,8 @@ function cdsretrieve(
     e5ds :: ERA5Dataset,
     evar :: PressureVariable,
     ereg :: ERA5Region,
-    pvec :: Vector{Int}
+    pvec :: Vector{Int},
+    overwrite :: Bool
 )
 
     dtvec = cdsretrieve_dtvec(e5ds)
@@ -62,6 +66,7 @@ function cdsretrieve(
 
     for dtii in dtvec
 
+        inc = e5dfnc(e5ds,PressureVariable(evar.varID,hPa=pvec[1]),ereg,dtii)
         fnc = "tmp.nc"
         fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
 
@@ -85,8 +90,10 @@ function cdsretrieve(
         
         cdsretrieve_area!(e5dkey,ereg)
 
-        retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
-        split(e5ds,evar,ereg,lsd,dtii,pvec,fnc,tmpd,tmpf)
+        if !isfile(inc) || overwrite
+            retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
+            split(e5ds,evar,ereg,lsd,dtii,pvec,fnc,tmpd,tmpf)
+        end
 
     end
 

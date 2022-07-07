@@ -2,14 +2,15 @@ function download(
     e5ds :: ERA5Dataset,
     evar :: SingleVariable,
     ereg :: ERA5Region;
-    ispy :: Bool = false
+    ispy :: Bool = false,
+    overwrite :: Bool = false
 )
 
     downloadcheckevar(evar)
 
     if ispy
           pythonprint(e5ds,evar,ereg)
-    else; cdsretrieve(e5ds,evar,ereg)
+    else; cdsretrieve(e5ds,evar,ereg,overwrite)
     end
 
 end
@@ -21,7 +22,8 @@ function download(
     ispy :: Bool = false,
     pall :: Bool = false,
     ptop :: Int = 0,
-    pbot :: Int = 0
+    pbot :: Int = 0,
+    overwrite :: Bool = false
 )
 
     downloadcheckevar(evar)
@@ -31,9 +33,9 @@ function download(
     else
         pvec = downloadcheckplvl(pall,ptop,pbot)
         if pall
-            cdsretrieve(e5ds,evar,ereg,pvec)
+            cdsretrieve(e5ds,evar,ereg,pvec,overwrite)
         else
-            cdsretrieve(e5ds,evar,ereg)
+            cdsretrieve(e5ds,evar,ereg,overwrite)
         end
     end
 
