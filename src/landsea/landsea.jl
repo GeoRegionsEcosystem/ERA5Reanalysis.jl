@@ -206,22 +206,22 @@ function saveLandSea(
 end
 
 function getLandSea(
-    ereg  :: ERA5Region = ERA5Region(GeoRegion("GLB"));
-    eroot :: AbstractString = homedir(),
+    ereg :: ERA5Region = ERA5Region(GeoRegion("GLB"));
+    path :: AbstractString = homedir(),
     returnlsd = true,
     FT = Float32
 )
 
-    lsmfnc = joinpath(eroot,"emask-$(ereg.gstr).nc")
+    lsmfnc = joinpath(path,"emask-$(ereg.gstr).nc")
 
     if !isfile(lsmfnc)
 
         @info "$(modulelog()) - The ERA5 Land-Sea mask dataset for the \"$(ereg.geoID)\" ERA5Region is not available, extracting from Global ERA5 Land-Sea mask dataset ..."
 
-        glbfnc = joinpath(eroot,"emask-GLBx$(@sprintf("%.2f",ereg.gres)).nc")
+        glbfnc = joinpath(path,"emask-GLBx$(@sprintf("%.2f",ereg.gres)).nc")
         if !isfile(glbfnc)
             @info "$(modulelog()) - The Global ERA5 Land-Sea mask dataset for the \"$(ereg.geoID)\" ERA5Region is not available, downloading from the Climate Data Store ..."
-            downloadLandSea(eroot,ereg)
+            downloadLandSea(path,ereg)
         end
 
         gds  = NCDataset(glbfnc)
@@ -254,7 +254,7 @@ function getLandSea(
             end
         end
 
-        saveLandSea(eroot,ereg,rinfo.glon,rinfo.glat,rlsm,roro,Int16.(mask))
+        saveLandSea(path,ereg,rinfo.glon,rinfo.glat,rlsm,roro,Int16.(mask))
 
     end
 
@@ -281,11 +281,11 @@ function getLandSea(
 end
 
 function downloadLandSea(
-    eroot :: AbstractString,
-    ereg  :: ERA5Region
+    path :: AbstractString,
+    ereg :: ERA5Region
 )
 
-    tmpfnc = joinpath(eroot,"tmp.nc")
+    tmpfnc = joinpath(path,"tmp.nc")
     retrieve(
         "reanalysis-era5-single-levels-monthly-means", Dict(
             "product_type" => "monthly_averaged_reanalysis",
@@ -307,7 +307,7 @@ function downloadLandSea(
     close(tds)
 
     saveLandSea(
-        eroot,ERA5Region(GeoRegion("GLB"),gres=ereg.gres),
+        path,ERA5Region(GeoRegion("GLB"),gres=ereg.gres),
         lon,lat,lsm,oro,msk
     )
 
@@ -316,16 +316,16 @@ function downloadLandSea(
 end
 
 function saveLandSea(
-    eroot :: AbstractString,
-    ereg  :: ERA5Region,
-    lon   :: Vector{<:Real},
-    lat   :: Vector{<:Real},
-    lsm   :: Array{<:Real,2},
-    oro   :: Array{<:Real,2},
-    mask  :: Array{Int16,2},
+    path :: AbstractString,
+    ereg :: ERA5Region,
+    lon  :: Vector{<:Real},
+    lat  :: Vector{<:Real},
+    lsm  :: Array{<:Real,2},
+    oro  :: Array{<:Real,2},
+    mask :: Array{Int16,2},
 )
 
-    fnc = joinpath(eroot,"emask-$(ereg.gstr).nc")
+    fnc = joinpath(path,"emask-$(ereg.gstr).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end
