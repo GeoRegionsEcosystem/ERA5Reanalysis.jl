@@ -26,7 +26,8 @@ function retrieve(
         "POST", ckeys["url"] * "/resources/$(dset)",
         ["Authorization" => apikey],
         body = JSON.json(dkeys),
-        verbose = 0
+        verbose = 0,
+        retry = true, retries = 19
     )
     resp_dict = JSON.parse(String(response.body))
     data = Dict("state" => "queued")
@@ -53,21 +54,21 @@ function retrieve(
         """
 
         tries = 0
-        while iseven(tries) && (tries < 20)
+        while isinteger(tries) && (tries < 10)
             try
                 dt1 = now()
                 HTTP.download(data["location"],fnc,update_period=Inf)
                 dt2 = now()
-                tries += 1
+                tries += 0.5
                 @info "$(now()) - CDSAPI - Downloaded $(@sprintf("%.1f",data["content_length"]/1e6)) MB in $(@sprintf("%.1f",Dates.value(dt2-dt1)/1000)) seconds (Rate: $(@sprintf("%.1f",data["content_length"]/1e3/Dates.value(dt2-dt1))) MB/s)"
             catch
-                tries += 2
-                @info "$(now()) - CDSAPI - Failed to download on Attempt $(tries/2) of 10"
+                tries += 1
+                @info "$(now()) - CDSAPI - Failed to download on Attempt $(tries) of 10"
             end
         end
 
         if tries == 10
-            @warn "$(now()) - CDSAPI - Failed to download data, skipping to next request and will revisit on next round"
+            @warn "$(now()) - CDSAPI - Failed to download data, skipping to next request"
         end
 
     elseif data["state"] == "failed"
