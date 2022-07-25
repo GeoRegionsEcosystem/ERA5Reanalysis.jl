@@ -45,6 +45,8 @@ function retrieve(
 
         @info "$(now()) - CDSAPI - Request is completed"
 
+        sleep(10)
+
         @info """$(now()) - CDSAPI - Downloading $(uppercase(dset)) data ...
           URL:         $(data["location"])
           Destination: $(fnc)
