@@ -72,7 +72,6 @@ function cdsretrieve(
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
     tmpd = zeros(Int16,nlon,nlat,31*24)
-    tmpf = zeros(Float32,nlon,nlat,31*24)
 
     @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.dtbeg) to $(e5ds.dtend)."
 
@@ -104,7 +103,7 @@ function cdsretrieve(
 
         if !isfile(inc) || overwrite
             retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
-            split(e5ds,evar,ereg,lsd,dtii,pvec,fnc,tmpd,tmpf)
+            split(e5ds,evar,ereg,lsd,dtii,pvec,fnc,tmpd)
         end
 
     end

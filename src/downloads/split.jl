@@ -6,8 +6,7 @@ function split(
     dt   :: Date,
     pvec :: Vector{Int},
     fnc  :: AbstractString,
-    tmpd :: Array{Int16,3},
-    tmpf :: Array{Float32,3}
+    tmpd :: Array{Int16,3}
 )
 
     ds = NCDataset(fnc)
@@ -17,15 +16,31 @@ function split(
     mv = ds[evar.varID].attrib["missing_value"]
     fv = ds[evar.varID].attrib["_FillValue"]
     dataint = @view tmpd[:,:,1:nt]
-    dataflt = @view tmpf[:,:,1:nt]
 
     for ip in 1 : length(pvec)
         NCDatasets.load!(ds[evar.varID].var,dataint,:,:,ip,:)
-        int2real!(dataflt,dataint,scale=sc,offset=of,mvalue=mv,fvalue=fv)
+
+        if mv != -32767
+            for ii in eachindex(dataint)
+                dataii = dataint[ii]
+                if dataii == mv
+                    dataint[ii] = -32767
+                end
+            end
+        end
+
+        if fv != -32767
+            for ii in eachindex(dataint)
+                dataii = dataint[ii]
+                if dataii == fv
+                    dataint[ii] = -32767
+                end
+            end
+        end
 
         p = pvec[ip]
         evarii = PressureVariable(evar.varID,hPa=p)
-        save(dataflt,dt,e5ds,evarii,ereg,lsd,sc,of)
+        save(dataint,dt,e5ds,evarii,ereg,lsd,sc,of)
     end
 
     close(ds)
@@ -35,7 +50,7 @@ function split(
 end
 
 function save(
-    data :: AbstractArray{<:Real,3},
+    data :: AbstractArray{Int16,3},
     dt   :: Date,
     e5ds :: ERA5Hourly,
     evar :: ERA5Variable,
@@ -68,11 +83,7 @@ function save(
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
     nctime[:] = collect(1:nhr) .- 1
-
-    if iszero(sum(isnan.(data)))
-          ncvar[:] = data
-    else; ncvar.var[:] = real2int16(data,scale,offset)
-    end
+    ncvar.var[:] = data
 
     close(ds)
 
@@ -81,7 +92,7 @@ function save(
 end
 
 function save(
-    data :: AbstractArray{<:Real,3},
+    data :: AbstractArray{Int16,3},
     dt   :: Date,
     e5ds :: ERA5Monthly,
     evar :: ERA5Variable,
@@ -114,11 +125,7 @@ function save(
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
     nctime[:] = save_definetimes(e5ds,dt)
-
-    if iszero(sum(isnan.(data)))
-          ncvar[:] = data
-    else; ncvar.var[:] = real2int16(data,scale,offset)
-    end
+    ncvar.var[:] = data
 
     close(ds)
 
