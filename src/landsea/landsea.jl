@@ -55,7 +55,7 @@ function getLandSea(
             end
         end
 
-        saveLandSea(e5ds,ereg,rinfo.glon,rinfo.glat,rlsm,roro,Int16.(mask))
+        saveLandSea(e5ds,ereg,rinfo.lon,rinfo.lat,rlsm,roro,Int16.(mask))
 
     end
 
@@ -254,7 +254,7 @@ function getLandSea(
             end
         end
 
-        saveLandSea(path,ereg,rinfo.glon,rinfo.glat,rlsm,roro,Int16.(mask))
+        saveLandSea(path,ereg,rinfo.lon,rinfo.lat,rlsm,roro,Int16.(mask))
 
     end
 
