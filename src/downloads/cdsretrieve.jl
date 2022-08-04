@@ -102,7 +102,19 @@ function cdsretrieve(
         cdsretrieve_area!(e5dkey,ereg)
 
         if !isfile(inc) || overwrite
-            retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
+            tryretrieve = 0
+            while isinteger(tryretrieve) && (tryretrieve < 20)
+                try
+                    retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
+                    tryretrieve += 0.5
+                catch
+                    tryretrieve += 1
+                    @info "$(modulelog()) - Failed to retrieve/request data from CDSAPI on Attempt $(tryretrieve) of 20"
+                end
+            end
+            if tryretrieve == 20
+                @warn "$(modulelog()) - Failed to retrieve/request data, skipping to next set of requests"
+            end
             split(e5ds,evar,ereg,lsd,dtii,pvec,fnc,tmpd)
         end
 
