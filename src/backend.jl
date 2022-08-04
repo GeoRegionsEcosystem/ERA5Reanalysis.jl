@@ -6,9 +6,10 @@ ymd2str(date::TimeType)  = Dates.format(date,dateformat"yyyymmdd")
 
 function ncoffsetscale(data::AbstractArray{<:Real})
 
-    dmax = data[findfirst(!isnan,data)]
-    dmin = data[findfirst(!isnan,data)]
-    for ii in eachindex(iarray)
+    init = data[findfirst(!isnan,data)]
+    dmax = init
+    dmin = init
+    for ii in eachindex(data)
         dataii = data[ii]
         if !isnan(dataii)
             if dataii > dmax; dmax = dataii end
