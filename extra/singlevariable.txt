@@ -17,7 +17,7 @@ cp,convective_precipitation,Convective Precipitation,m
 lsp,large_scale_precipitation,Large-Scale Precipitation,m
 tcw,total_column_water,Total Column Water,kg m**-2
 tcwv,total_column_water_vapour,Total Column Water Vapour,kg m**-2
-cc,total_cloud_cover,Total Cloud Cover,0-1
+tcc,total_cloud_cover,Total Cloud Cover,0-1
 hcc,high_cloud_cover,High Cloud Cover,0-1
 mcc,medium_cloud_cover,Medium Cloud Cover,0-1
 lcc,low_cloud_cover,Low Cloud Cover,0-1
