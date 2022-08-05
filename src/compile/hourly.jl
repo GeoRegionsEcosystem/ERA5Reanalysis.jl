@@ -4,8 +4,8 @@ function compile(
     egeo :: ERA5Region
 )
 
-    yrbeg = year(e5ds.dtbeg)
-    yrend = year(e5ds.dtend)
+    yrbeg = year(e5ds.start)
+    yrend = year(e5ds.stop)
     nt    = yrend - yrbeg + 1
 
     lsd = getLandSea(e5ds,egeo)

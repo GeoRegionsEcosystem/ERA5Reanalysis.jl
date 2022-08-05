@@ -21,7 +21,7 @@ function e5danc(
     dt   :: TimeType
 )
 
-    fol = joinpath(e5ds.eroot,egeo.gstr,evar.varID)
+    fol = joinpath(e5ds.path,egeo.gstr,evar.varID)
     fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evar.varID * "-" * yr2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
@@ -35,7 +35,7 @@ function e5danc(
 )
 
     evp = evar.varID * "-$(evar.hPa)hPa"
-    fol = joinpath(e5ds.eroot,egeo.gstr,evar.varID,evp)
+    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp)
     fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp * "-" * yr2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
@@ -47,7 +47,7 @@ function e5danc(
 	egeo :: ERA5Region
 )
 
-    fol = joinpath(e5ds.eroot,egeo.gstr,evar.varID)
+    fol = joinpath(e5ds.path,egeo.gstr,evar.varID)
     fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evar.varID
     return fol, fnc
 
@@ -60,7 +60,7 @@ function e5danc(
 )
 
     evp = evar.varID * "-$(evar.hPa)hPa"
-    fol = joinpath(e5ds.eroot,egeo.gstr,evar.varID,evp)
+    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp)
     fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp
     return fol, fnc
 

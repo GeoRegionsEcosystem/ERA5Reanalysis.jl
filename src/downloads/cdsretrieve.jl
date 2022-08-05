@@ -8,7 +8,7 @@ function cdsretrieve(
     dtvec = cdsretrieve_dtvec(e5ds)
     ckeys = cdskey()
 
-    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.dtbeg) to $(e5ds.dtend)."
+    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.start) to $(e5ds.stop)."
 
     for dtii in dtvec
 
@@ -73,7 +73,7 @@ function cdsretrieve(
     nlat = length(lsd.lat)
     tmpd = zeros(Int16,nlon,nlat,31*24)
 
-    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.dtbeg) to $(e5ds.dtend)."
+    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.start) to $(e5ds.stop)."
 
     for dtii in dtvec
 
@@ -123,8 +123,8 @@ function cdsretrieve(
 end
 
 
-cdsretrieve_dtvec(e5ds::ERA5Hourly)  = e5ds.dtbeg : Month(1) : e5ds.dtend
-cdsretrieve_dtvec(e5ds::ERA5Monthly) = e5ds.dtbeg : Year(1)  : e5ds.dtend
+cdsretrieve_dtvec(e5ds::ERA5Hourly)  = e5ds.start : Month(1) : e5ds.stop
+cdsretrieve_dtvec(e5ds::ERA5Monthly) = e5ds.start : Year(1)  : e5ds.stop
 
 cdsretrieve_dataset(evar::ERA5Variable,::ERA5Hourly)  = evar.dname
 cdsretrieve_dataset(evar::ERA5Variable,::ERA5Monthly) = evar.dname * "-monthly-means"

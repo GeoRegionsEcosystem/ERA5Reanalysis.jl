@@ -19,8 +19,8 @@ function e5dcnc(
 	evar :: SingleLevel,
 	egeo :: ERA5Region,
 )
-    yrs = yr2str(e5ds.dtbeg) * "_" * yr2str(e5ds.dtend)
-    fol = joinpath(e5ds.eroot,egeo.gstr,evar.varID)
+    yrs = yr2str(e5ds.start) * "_" * yr2str(e5ds.stop)
+    fol = joinpath(e5ds.path,egeo.gstr,evar.varID)
     fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evar.varID * "-" * yrs * ".nc"
     return joinpath(fol,fnc)
 
@@ -32,9 +32,9 @@ function e5dcnc(
 	egeo :: ERA5Region,
 )
 
-    yrs = yr2str(e5ds.dtbeg) * "_" * yr2str(e5ds.dtend)
+    yrs = yr2str(e5ds.start) * "_" * yr2str(e5ds.stop)
     evp = evar.varID * "-$(evar.hPa)hPa"
-    fol = joinpath(e5ds.eroot,egeo.gstr,evar.varID,evp)
+    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp)
     fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp * "-" * yrs * ".nc"
     return joinpath(fol,fnc)
 

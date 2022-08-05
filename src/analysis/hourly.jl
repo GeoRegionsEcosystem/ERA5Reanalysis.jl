@@ -5,8 +5,8 @@ function analysis(
     verbose :: Bool = false
 )
 
-    yrbeg = year(e5ds.dtbeg)
-    yrend = year(e5ds.dtend)
+    yrbeg = year(e5ds.start)
+    yrend = year(e5ds.stop)
 
     lsd = getLandSea(e5ds,egeo)
     nlon = length(lsd.lon)

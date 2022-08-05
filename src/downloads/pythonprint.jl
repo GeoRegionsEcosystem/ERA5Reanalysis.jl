@@ -18,15 +18,15 @@ function pythonprint(
 
     fID = open(joinpath(fol,"$(fname).py"),"w")
 
-    @info "$(modulelog()) - Creating python download scripts to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.dtbeg) to $(e5ds.dtend)."
+    @info "$(modulelog()) - Creating python download scripts to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.start) to $(e5ds.stop)."
 
     write(fID,"#!/usr/bin/env python\n")
     write(fID,"import cdsapi\n")
     write(fID,"import os\n")
     write(fID,"c = cdsapi.Client()\n\n")
 
-    yrbeg = year(e5ds.dtbeg); mobeg = month(e5ds.dtbeg)
-    yrend = year(e5ds.dtend); moend = month(e5ds.dtend)
+    yrbeg = year(e5ds.start); mobeg = month(e5ds.start)
+    yrend = year(e5ds.stop); moend = month(e5ds.stop)
 
     if typeof(e5ds) <: ERA5Hourly
         for yrii in yrbeg : yrend

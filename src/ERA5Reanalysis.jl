@@ -53,8 +53,8 @@ Abstract supertype for ERA5 reanalysis datasets.
 All `ERA5Dataset` Types contain the following fields:
 - `e5dID` : The module ID, that also acts as a prefix to filenames
 - `eroot` : The specified directory in which to save the data
-- `dtbeg` : The date for which downloads/analysis begins
-- `dtend` : The date for which downloads/analysis finishes
+- `start` : The date for which downloads/analysis begins
+- `stop`  : The date for which downloads/analysis finishes
 - `dtext` : Is it the preliminary back extension from 1950-1978?
 
 !!! note

@@ -61,5 +61,5 @@ function extract(
 
 end
 
-extract_time(e5ds::ERA5Hourly)  = e5ds.dtbeg : Month(1) : e5ds.dtend
-extract_time(e5ds::ERA5Monthly) = e5ds.dtbeg : Year(1)  : e5ds.dtend
+extract_time(e5ds::ERA5Hourly)  = e5ds.start : Month(1) : e5ds.stop
+extract_time(e5ds::ERA5Monthly) = e5ds.start : Year(1)  : e5ds.stop
