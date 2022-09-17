@@ -79,7 +79,7 @@ function cdsretrieve(
 
         inc = e5dfnc(e5ds,PressureVariable(evar.varID,hPa=pvec[1]),ereg,dtii)
         fnc = "tmp.nc"
-        fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
+        fol = dirname(inc); if !isdir(fol); mkpath(fol) end
 
         e5dkey = Dict(
             "product_type" => e5ds.ptype,
@@ -116,6 +116,66 @@ function cdsretrieve(
                 @warn "$(modulelog()) - Failed to retrieve/request data, skipping to next set of requests"
             end
             split(e5ds,evar,ereg,lsd,dtii,pvec,fnc,tmpd)
+        end
+
+    end
+
+end
+
+function cdsretrieve(
+    e5ds :: ERA5Dataset,
+    evar :: Vector{SingleVariable{ST}},
+    ereg :: ERA5Region,
+    overwrite :: Bool
+) where ST <: AbstractString
+
+    dtvec = cdsretrieve_dtvec(e5ds)
+    ckeys = cdskey()
+
+    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $([evarii.lname for evarii in evar]) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.start) to $(e5ds.stop)."
+
+    lsd  = getLandSea(e5ds,ereg)
+    nlon = length(lsd.lon)
+    nlat = length(lsd.lat)
+    tmpd = zeros(Int16,nlon,nlat,31*24)
+
+    for dtii in dtvec
+
+        inc = e5dfnc(e5ds,evar[1],ereg,dtii)
+        fnc = "tmp.nc"
+        fol = dirname(inc); if !isdir(fol); mkpath(fol) end
+
+        e5dkey = Dict(
+            "product_type" => e5ds.ptype,
+            "year"         => year(dtii),
+            "month"        => cdsretrieve_month(dtii,e5ds),
+            "variable"     => [evarii.lname for evarii in evar],
+            "grid"         => [ereg.gres, ereg.gres],
+            "time"         => cdsretrieve_time(e5ds),
+            "format"       => "netcdf",
+        )
+
+        if typeof(e5ds) <: ERA5Hourly
+            e5dkey["day"] = collect(1:31)
+        end
+        
+        cdsretrieve_area!(e5dkey,ereg)
+        
+        if !isfile(inc) || overwrite
+            tryretrieve = 0
+            while isinteger(tryretrieve) && (tryretrieve < 20)
+                try
+                    retrieve(cdsretrieve_dataset(evar[1],e5ds),e5dkey,fnc,ckeys)
+                    tryretrieve += 0.5
+                catch
+                    tryretrieve += 1
+                    @info "$(modulelog()) - Failed to retrieve/request data from CDSAPI on Attempt $(tryretrieve) of 20"
+                end
+            end
+            if tryretrieve == 20
+                @warn "$(modulelog()) - Failed to retrieve/request data, skipping to next set of requests"
+            end
+            split(e5ds,evar,ereg,lsd,dtii,fnc,tmpd)
         end
 
     end

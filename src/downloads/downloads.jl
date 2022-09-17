@@ -17,6 +17,21 @@ end
 
 function download(
     e5ds :: ERA5Dataset,
+    evar :: Vector{SingleVariable{ST}},
+    ereg :: ERA5Region;
+    overwrite :: Bool = false
+) where ST <: AbstractString
+
+    for evarii in evar
+        downloadcheckevar(evarii)
+    end
+
+    cdsretrieve(e5ds,evar,ereg,overwrite)
+
+end
+
+function download(
+    e5ds :: ERA5Dataset,
     evar :: PressureVariable,
     ereg :: ERA5Region;
     ispy :: Bool = false,
