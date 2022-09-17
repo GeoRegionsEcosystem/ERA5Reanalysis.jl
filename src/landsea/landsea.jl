@@ -1,6 +1,6 @@
 struct LandSea{FT<:Real}
-    lon  :: Vector{FT}
-    lat  :: Vector{FT}
+    lon  :: Vector{Float32}
+    lat  :: Vector{Float32}
     lsm  :: Array{FT,2}
     z    :: Array{FT,2}
     mask :: Array{Int,2}
@@ -10,7 +10,7 @@ function getLandSea(
     e5ds :: ERA5Dataset,
     ereg :: ERA5Region = ERA5Region(GeoRegion("GLB"));
     returnlsd = true,
-    FT = Float32
+    FT = Float64
 )
 
     lsmfnc = joinpath(e5ds.emask,"emask-$(ereg.gstr).nc")
@@ -209,7 +209,7 @@ function getLandSea(
     ereg :: ERA5Region = ERA5Region(GeoRegion("GLB"));
     path :: AbstractString = homedir(),
     returnlsd = true,
-    FT = Float32
+    FT = Float64
 )
 
     lsmfnc = joinpath(path,"emask-$(ereg.gstr).nc")
