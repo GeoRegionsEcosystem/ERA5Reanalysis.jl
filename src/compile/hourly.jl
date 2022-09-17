@@ -14,13 +14,13 @@ function compile(
 
     @info "$(modulelog()) - Preallocating data arrays for the compilation ..."
 
-    eavg = zeros(Float32,nlon,nlat)
-    emax = zeros(Float32,nlon,nlat)
-    emin = zeros(Float32,nlon,nlat)
-    erng = zeros(Float32,nlon,nlat)
-    edhr = zeros(Float32,nlon,nlat)
-    eitr = zeros(Float32,nlon,nlat)
-    esea = zeros(Float32,nlon,nlat)
+    eavg = zeros(Float64,nlon,nlat)
+    emax = zeros(Float64,nlon,nlat)
+    emin = zeros(Float64,nlon,nlat)
+    erng = zeros(Float64,nlon,nlat)
+    edhr = zeros(Float64,nlon,nlat)
+    eitr = zeros(Float64,nlon,nlat)
+    esea = zeros(Float64,nlon,nlat)
 
     for yr in yrbeg : yrend
 
@@ -63,12 +63,12 @@ function compile(
 end
 
 function save(
-    eavg :: Array{Float32,2},
-    edhr :: Array{Float32,2},
-    eitr :: Array{Float32,2},
-    esea :: Array{Float32,2},
-    erng :: Array{Float32,2},
-    eian :: Array{Float32,2},
+    eavg :: Array{Float64,2},
+    edhr :: Array{Float64,2},
+    eitr :: Array{Float64,2},
+    esea :: Array{Float64,2},
+    erng :: Array{Float64,2},
+    eian :: Array{Float64,2},
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region,
@@ -92,12 +92,12 @@ function save(
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
 
-    nclon = defVar(ds,"longitude",Float64,("longitude",),attrib = Dict(
+    nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
         "long_name" => "longitude",
     ))
 
-    nclat = defVar(ds,"latitude",Float64,("latitude",),attrib = Dict(
+    nclat = defVar(ds,"latitude",Float32,("latitude",),attrib = Dict(
         "units"     => "degrees_north",
         "long_name" => "latitude",
     ))

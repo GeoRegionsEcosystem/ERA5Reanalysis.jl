@@ -20,17 +20,17 @@ function compile(
     if iseramohr
         @info "$(modulelog()) - The ERA5 Dataset is an Hourly Monthly Dataset, allocating and adjusting compilation scripts ..."
         eint = zeros(Int16,nlon,nlat,288)
-        eflt = zeros(Float32,nlon,nlat,288)
-        earr = zeros(Float32,nlon,nlat,24,12)
+        eflt = zeros(Float64,nlon,nlat,288)
+        earr = zeros(Float64,nlon,nlat,24,12)
     else
         eint = zeros(Int16,nlon,nlat,12)
-        earr = zeros(Float32,nlon,nlat,12)
+        earr = zeros(Float64,nlon,nlat,12)
     end
 
-    eavg = zeros(Float32,nlon,nlat)
-    emax = zeros(Float32,nlon,nlat)
-    emin = zeros(Float32,nlon,nlat)
-    esea = zeros(Float32,nlon,nlat)
+    eavg = zeros(Float64,nlon,nlat)
+    emax = zeros(Float64,nlon,nlat)
+    emin = zeros(Float64,nlon,nlat)
+    esea = zeros(Float64,nlon,nlat)
 
     if iseramohr; edhr = zeros(nlon,nlat) end
 
@@ -117,10 +117,10 @@ function compile(
 end
 
 function save(
-    eavg :: Array{Float32,2},
-    edhr :: Array{Float32,2},
-    esea :: Array{Float32,2},
-    eian :: Array{Float32,2},
+    eavg :: Array{Float64,2},
+    edhr :: Array{Float64,2},
+    esea :: Array{Float64,2},
+    eian :: Array{Float64,2},
     e5ds :: ERA5Monthly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region,
@@ -144,12 +144,12 @@ function save(
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
 
-    nclon = defVar(ds,"longitude",Float64,("longitude",),attrib = Dict(
+    nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
         "long_name" => "longitude",
     ))
 
-    nclat = defVar(ds,"latitude",Float64,("latitude",),attrib = Dict(
+    nclat = defVar(ds,"latitude",Float32,("latitude",),attrib = Dict(
         "units"     => "degrees_north",
         "long_name" => "latitude",
     ))
@@ -200,9 +200,9 @@ function save(
 end
 
 function save(
-    eavg :: Array{Float32,2},
-    esea :: Array{Float32,2},
-    eian :: Array{Float32,2},
+    eavg :: Array{Float64,2},
+    esea :: Array{Float64,2},
+    eian :: Array{Float64,2},
     e5ds :: ERA5Monthly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region,

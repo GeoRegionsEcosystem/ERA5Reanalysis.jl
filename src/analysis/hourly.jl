@@ -15,27 +15,27 @@ function analysis(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
 
-    davg = zeros(Float32,nlon,nlat,25,13)
-    dstd = zeros(Float32,nlon,nlat,25,13)
-    dmax = zeros(Float32,nlon,nlat,25,13)
-    dmin = zeros(Float32,nlon,nlat,25,13)
+    davg = zeros(Float64,nlon,nlat,25,13)
+    dstd = zeros(Float64,nlon,nlat,25,13)
+    dmax = zeros(Float64,nlon,nlat,25,13)
+    dmin = zeros(Float64,nlon,nlat,25,13)
 
     lon_NaN = zeros(Bool,nlon)
     lat_NaN = zeros(Bool,nlat)
 
-    zavg = zeros(Float32,nlat,25,13)
-    zstd = zeros(Float32,nlat,25,13)
-    zmax = zeros(Float32,nlat,25,13)
-    zmin = zeros(Float32,nlat,25,13)
+    zavg = zeros(Float64,nlat,25,13)
+    zstd = zeros(Float64,nlat,25,13)
+    zmax = zeros(Float64,nlat,25,13)
+    zmin = zeros(Float64,nlat,25,13)
 
-    mavg = zeros(Float32,nlon,25,13)
-    mstd = zeros(Float32,nlon,25,13)
-    mmax = zeros(Float32,nlon,25,13)
-    mmin = zeros(Float32,nlon,25,13)
+    mavg = zeros(Float64,nlon,25,13)
+    mstd = zeros(Float64,nlon,25,13)
+    mmax = zeros(Float64,nlon,25,13)
+    mmin = zeros(Float64,nlon,25,13)
 
     tvar = zeros(Int16,nlon,nlat,24,31)
-    rvar = zeros(Float32,nlon,nlat,24,31)
-    dvar = zeros(Float32,nlon,nlat,31)
+    rvar = zeros(Float64,nlon,nlat,24,31)
+    dvar = zeros(Float64,nlon,nlat,31)
 
     for yr in yrbeg : yrend
 
@@ -131,18 +131,18 @@ function analysis(
 end
 
 function save(
-    davg :: Array{Float32,4},
-    dstd :: Array{Float32,4},
-    dmax :: Array{Float32,4},
-    dmin :: Array{Float32,4},
-    zavg :: Array{Float32,3},
-    zstd :: Array{Float32,3},
-    zmax :: Array{Float32,3},
-    zmin :: Array{Float32,3},
-    mavg :: Array{Float32,3},
-    mstd :: Array{Float32,3},
-    mmax :: Array{Float32,3},
-    mmin :: Array{Float32,3},
+    davg :: Array{Float64,4},
+    dstd :: Array{Float64,4},
+    dmax :: Array{Float64,4},
+    dmin :: Array{Float64,4},
+    zavg :: Array{Float64,3},
+    zstd :: Array{Float64,3},
+    zmax :: Array{Float64,3},
+    zmin :: Array{Float64,3},
+    mavg :: Array{Float64,3},
+    mstd :: Array{Float64,3},
+    mmax :: Array{Float64,3},
+    mmin :: Array{Float64,3},
     date :: Date,
     e5ds :: ERA5Hourly,
     evar :: ERA5Variable,
@@ -169,12 +169,12 @@ function save(
     ds.dim["hour"]  = 24
     ds.dim["month"] = 12
 
-    nclon = defVar(ds,"longitude",Float64,("longitude",),attrib = Dict(
+    nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
         "long_name" => "longitude",
     ))
 
-    nclat = defVar(ds,"latitude",Float64,("latitude",),attrib = Dict(
+    nclat = defVar(ds,"latitude",Float32,("latitude",),attrib = Dict(
         "units"     => "degrees_north",
         "long_name" => "latitude",
     ))

@@ -18,15 +18,15 @@ function analysis(
     lat_NaN = zeros(Bool,nlat)
 
     if iseramohr
-        davg = zeros(Float32,nlon,nlat,28,16)
-        zavg = zeros(Float32,nlat,28,16)
-        mavg = zeros(Float32,nlon,28,16)
+        davg = zeros(Float64,nlon,nlat,28,16)
+        zavg = zeros(Float64,nlat,28,16)
+        mavg = zeros(Float64,nlon,28,16)
         tint = zeros(Int16,nlon,nlat,24,12)
         traw = zeros(Int16,nlon,nlat,288)
     else
-        davg = zeros(Float32,nlon,nlat,16)
-        zavg = zeros(Float32,nlat,16)
-        mavg = zeros(Float32,nlon,16)
+        davg = zeros(Float64,nlon,nlat,16)
+        zavg = zeros(Float64,nlat,16)
+        mavg = zeros(Float64,nlon,16)
         tvar = zeros(Int16,nlon,nlat,12)
     end
 
@@ -141,9 +141,9 @@ function analysis(
 end
 
 function save(
-    davg :: Array{Float32,3},
-    zavg :: Array{Float32,2},
-    mavg :: Array{Float32,2},
+    davg :: Array{Float64,3},
+    zavg :: Array{Float64,2},
+    mavg :: Array{Float64,2},
     date :: Date,
     e5ds :: ERA5Monthly,
     evar :: ERA5Variable,
@@ -170,12 +170,12 @@ function save(
     ds.dim["hour"]  = 24
     ds.dim["month"] = 12
 
-    nclon = defVar(ds,"longitude",Float64,("longitude",),attrib = Dict(
+    nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
         "long_name" => "longitude",
     ))
 
-    nclat = defVar(ds,"latitude",Float64,("latitude",),attrib = Dict(
+    nclat = defVar(ds,"latitude",Float32,("latitude",),attrib = Dict(
         "units"     => "degrees_north",
         "long_name" => "latitude",
     ))
@@ -313,9 +313,9 @@ function save(
 end
 
 function save(
-    davg :: Array{Float32,4},
-    zavg :: Array{Float32,3},
-    mavg :: Array{Float32,3},
+    davg :: Array{Float64,4},
+    zavg :: Array{Float64,3},
+    mavg :: Array{Float64,3},
     date :: Date,
     e5ds :: ERA5Monthly,
     evar :: ERA5Variable,
