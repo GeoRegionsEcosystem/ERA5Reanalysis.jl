@@ -1,7 +1,7 @@
 function compile(
     e5ds :: ERA5Monthly,
 	evar :: ERA5Variable,
-    egeo :: ERA5Region
+    ereg :: ERA5Region
 )
 
     iseramohr = ERA5Monthly.hours
@@ -10,7 +10,7 @@ function compile(
     yrend = year(e5ds.stop)
     nt    = yrend - yrbeg + 1
 
-    lsd = getLandSea(e5ds,egeo)
+    lsd = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
     mask = lsd.mask
@@ -109,9 +109,9 @@ function compile(
 
     if iseramohr
         edhr = edhr / nt
-        save(eavg, edhr, esea, eian, e5ds, evar, egeo, lsd)
+        save(eavg, edhr, esea, eian, e5ds, evar, ereg, lsd)
     else
-        save(eavg,       esea, eian, e5ds, evar, egeo, lsd)
+        save(eavg,       esea, eian, e5ds, evar, ereg, lsd)
     end
 
 end

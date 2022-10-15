@@ -1,7 +1,7 @@
 function timeseries(
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
-    egeo :: ERA5Region;
+    ereg :: ERA5Region;
     verbose :: Bool = false
 )
 
@@ -11,7 +11,7 @@ function timeseries(
     dtend = Date(yrend,moend) + Month(1)
     ndt   = Dates.value(dtend-dtbeg)
 
-    lsd = getLandSea(e5ds,egeo)
+    lsd = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
     wgtmask = lsd.mask .* lsd.lat'
@@ -31,7 +31,7 @@ function timeseries(
         end
         ndy = daysinmonth(Date(yr,mo))
         nt  = ndy * 24
-        ds  = NCDataset(e5dfnc(e5ds,evar,egeo,Date(yr,mo)))
+        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,Date(yr,mo)))
         sc  = ds[evar.varID].attrib["scale_factor"]
         of  = ds[evar.varID].attrib["add_offset"]
         mv  = ds[evar.varID].attrib["missing_value"]
@@ -39,7 +39,7 @@ function timeseries(
 
         iiload = @view tmpload[:,:,1:nt]
         iidata = @view tmpdata[:,:,1:nt]
-        NCDatasets.load!(ds[evar.varID].var,tvr,:,:,:)
+        NCDatasets.load!(ds[evar.varID].var,iiload,:,:,:)
         int2real!(iidata,iiload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
         close(ds)
 
@@ -58,7 +58,7 @@ function timeseries(
 
     end
 
-    save_timeseries(tsvec, e5ds, evar, egeo)
+    save_timeseries(tsvec, e5ds, evar, ereg)
 
 end
 
@@ -66,7 +66,7 @@ function timeseries(
     sgeo :: GeoRegion,
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
-    egeo :: ERA5Region;
+    ereg :: ERA5Region;
     verbose :: Bool = false
 )
 
@@ -76,7 +76,7 @@ function timeseries(
     dtend = Date(yrend,moend) + Month(1)
     ndt   = Dates.value(dtend-dtbeg)
 
-    lsd  = getLandSea(e5ds,egeo)
+    lsd  = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
 
@@ -105,7 +105,7 @@ function timeseries(
         end
         ndy = daysinmonth(Date(yr,mo))
         nt  = ndy * 24
-        ds  = NCDataset(e5dfnc(e5ds,evar,egeo,Date(yr,mo)))
+        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,Date(yr,mo)))
         sc  = ds[evar.varID].attrib["scale_factor"]
         of  = ds[evar.varID].attrib["add_offset"]
         mv  = ds[evar.varID].attrib["missing_value"]
@@ -113,7 +113,7 @@ function timeseries(
 
         iiload = @view tmpload[:,:,1:nt]
         iidata = @view tmpdata[:,:,1:nt]
-        NCDatasets.load!(ds[evar.varID].var,tvr,:,:,:)
+        NCDatasets.load!(ds[evar.varID].var,iiload,:,:,:)
         int2real!(iidata,iiload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
         close(ds)
 
@@ -132,7 +132,7 @@ function timeseries(
 
     end
 
-    save_timeseries(tsvec, e5ds, evar, ERA5Region(sgeo,gres=egeo.gres))
+    save_timeseries(tsvec, e5ds, evar, ERA5Region(sgeo,gres=ereg.gres))
 
 end
 

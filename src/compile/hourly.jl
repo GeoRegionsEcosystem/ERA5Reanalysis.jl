@@ -1,14 +1,14 @@
 function compile(
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
-    egeo :: ERA5Region
+    ereg :: ERA5Region
 )
 
     yrbeg = year(e5ds.start)
     yrend = year(e5ds.stop)
     nt    = yrend - yrbeg + 1
 
-    lsd = getLandSea(e5ds,egeo)
+    lsd = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
 
@@ -58,7 +58,7 @@ function compile(
     erng = erng / nt .- (esea .+ eitr)
     eian = emax .- emin
 
-    save(eavg, edhr, eitr, esea, erng, eian, e5ds, evar, egeo, lsd)
+    save(eavg, edhr, eitr, esea, erng, eian, e5ds, evar, ereg, lsd)
 
 end
 

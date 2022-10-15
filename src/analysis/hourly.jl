@@ -1,14 +1,14 @@
 function analysis(
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
-    egeo :: ERA5Region;
+    ereg :: ERA5Region;
     verbose :: Bool = false
 )
 
     yrbeg = year(e5ds.start)
     yrend = year(e5ds.stop)
 
-    lsd = getLandSea(e5ds,egeo)
+    lsd = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
     mask = lsd.mask
@@ -46,7 +46,7 @@ function analysis(
                 @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr $(monthname(mo)) ..."
             end
             ndy = daysinmonth(Date(yr,mo))
-            ds  = NCDataset(e5dfnc(e5ds,evar,egeo,Date(yr,mo)))
+            ds  = NCDataset(e5dfnc(e5ds,evar,ereg,Date(yr,mo)))
             sc  = ds[evar.varID].attrib["scale_factor"]
             of  = ds[evar.varID].attrib["add_offset"]
             mv  = ds[evar.varID].attrib["missing_value"]
@@ -123,7 +123,7 @@ function analysis(
 
         save(
             davg, dstd, dmax, dmin, zavg, zstd, zmax, zmin, mavg, mstd, mmax, mmin,
-            Date(yr), e5ds, evar, egeo, lsd
+            Date(yr), e5ds, evar, ereg, lsd
         )
 
     end

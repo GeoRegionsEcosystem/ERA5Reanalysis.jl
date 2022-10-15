@@ -1,13 +1,13 @@
 function analysis(
     e5ds :: ERA5Monthly,
 	evar :: ERA5Variable,
-    egeo :: ERA5Region
+    ereg :: ERA5Region
 )
 
     yrbeg = year(e5ds.start)
     yrend = year(e5ds.stop)
 
-    lsd = getLandSea(e5ds,egeo)
+    lsd = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
     mask = lsd.mask
@@ -35,7 +35,7 @@ function analysis(
 
         @info "$(modulelog()) - Calculating monthly climatology and diurnal statistics for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
 
-        ds  = NCDataset(e5dfnc(e5ds,evar,egeo,Date(yr)))
+        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,Date(yr)))
         sc  = ds[evar.varID].attrib["scale_factor"]
         of  = ds[evar.varID].attrib["add_offset"]
         mv  = ds[evar.varID].attrib["missing_value"]
@@ -134,7 +134,7 @@ function analysis(
 
         end
 
-        save(davg, zavg, mavg, Date(yr), e5ds, evar, egeo, lsd)
+        save(davg, zavg, mavg, Date(yr), e5ds, evar, ereg, lsd)
 
     end
 
