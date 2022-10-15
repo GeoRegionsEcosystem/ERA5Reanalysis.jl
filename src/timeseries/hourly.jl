@@ -9,7 +9,7 @@ function timeseries(
     mobeg = month(e5ds.start); moend = month(e5ds.stop)
     dtbeg = Date(yrbeg,mobeg)
     dtend = Date(yrend,moend) + Month(1)
-    ndt   = Dates.value(dtend-dtbeg)
+    ndt   = Dates.value(dtend-dtbeg) * 24
 
     lsd = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
@@ -24,14 +24,14 @@ function timeseries(
     tsvec   = zeros(ndt)
     ii = 0
 
-    for yr in yrbeg : yrend, mo = 1 : 12
+    for dt in e5ds.start : Month(1) : e5ds.stop
 
         if verbose
-            @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr $(monthname(mo)) ..."
+            @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) ..."
         end
-        ndy = daysinmonth(Date(yr,mo))
+        ndy = daysinmonth(dt)
         nt  = ndy * 24
-        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,Date(yr,mo)))
+        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
         sc  = ds[evar.varID].attrib["scale_factor"]
         of  = ds[evar.varID].attrib["add_offset"]
         mv  = ds[evar.varID].attrib["missing_value"]
@@ -44,7 +44,7 @@ function timeseries(
         close(ds)
 
         if verbose
-            @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr $(monthname(mo)) and allocating into timeseries vector ..."
+            @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) and allocating into timeseries vector ..."
         end
         for it = 1 : nt
             ii += 1
@@ -74,7 +74,7 @@ function timeseries(
     mobeg = month(e5ds.start); moend = month(e5ds.stop)
     dtbeg = Date(yrbeg,mobeg)
     dtend = Date(yrend,moend) + Month(1)
-    ndt   = Dates.value(dtend-dtbeg)
+    ndt   = Dates.value(dtend-dtbeg) * 24
 
     lsd  = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
@@ -98,14 +98,14 @@ function timeseries(
     tsvec   = zeros(ndt)
     ii = 0
 
-    for yr in yrbeg : yrend, mo = 1 : 12
+    for dt in e5ds.start : Month(1) : e5ds.stop
 
         if verbose
-            @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr $(monthname(mo)) ..."
+            @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) ..."
         end
-        ndy = daysinmonth(Date(yr,mo))
+        ndy = daysinmonth(dt)
         nt  = ndy * 24
-        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,Date(yr,mo)))
+        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
         sc  = ds[evar.varID].attrib["scale_factor"]
         of  = ds[evar.varID].attrib["add_offset"]
         mv  = ds[evar.varID].attrib["missing_value"]
@@ -118,7 +118,7 @@ function timeseries(
         close(ds)
 
         if verbose
-            @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr $(monthname(mo)) and allocating into timeseries vector ..."
+            @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(sgeo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) and allocating into timeseries vector ..."
         end
         for it = 1 : nt
             ii += 1
@@ -143,7 +143,7 @@ function save_timeseries(
     ereg :: ERA5Region
 )
 
-    @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
+    @info "$(modulelog()) - Saving domain-mean timeseries of $(uppercase(e5ds.lname)) $(evar.vname) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(year(e5ds.start)) $(Dates.monthname(e5ds.start)) to $(year(e5ds.stop)) $(Dates.monthname(e5ds.stop)) ..."
 
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
