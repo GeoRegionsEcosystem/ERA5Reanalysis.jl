@@ -38,7 +38,7 @@ export
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read, save, extract, analysis,
+        download, read, save, extract, analysis, timeseries,
 
         era5Pressures
 
@@ -117,11 +117,14 @@ include("analysis/monthly.jl")
 include("compile/hourly.jl")
 include("compile/monthly.jl")
 
+include("timeseries/hourly.jl")
+
 include("subregion/extract.jl")
 
 include("filesystem/raw.jl")
 include("filesystem/analysis.jl")
 include("filesystem/compile.jl")
+include("filesystem/timeseries.jl")
 
 include("backend.jl")
 include("read.jl")
