@@ -21,7 +21,7 @@ function e5dtnc(
 )
 
     fol = joinpath(e5ds.path,egeo.gstr,evar.varID)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evar.varID * "-" * 
+    fnc = e5ds.e5dID * "-" * "timeseries" * "-" * egeo.gstr * "-" * evar.varID * "-" * 
           yrmo2str(e5ds.start) * "_" * yrmo2str(e5ds.stop) * ".nc"
     return joinpath(fol,fnc)
 
@@ -35,7 +35,7 @@ function e5dtnc(
 
     evp = evar.varID * "-$(evar.hPa)hPa"
     fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp * "-" * 
+    fnc = e5ds.e5dID * "-" * "timeseries" * "-" * egeo.gstr * "-" * evp * "-" * 
           yrmo2str(e5ds.start) * "_" * yrmo2str(e5ds.stop) * ".nc"
     return joinpath(fol,fnc)
 

@@ -46,13 +46,11 @@ function timeseries(
         if verbose
             @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) and allocating into timeseries vector ..."
         end
-        for it = 1 : nt
-            ii += 1
-            for ilat = 1 : nlat, ilon = 1 : nlon
-                idata = iidata[ilon,ilat,it]
-                if !isnan(idata)
-                    tsvec[ii] += idata * wgtmask[ilon,ilat]
-                end
+        ii = Dates.value(dt-dtbeg) * 24
+        for it = 1 : nt, ilat = 1 : nlat, ilon = 1 : nlon
+            idata = iidata[ilon,ilat,it]
+            if !isnan(idata)
+                tsvec[ii+it] += idata * wgtmask[ilon,ilat]
             end
         end
 
@@ -120,13 +118,12 @@ function timeseries(
         if verbose
             @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(sgeo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) and allocating into timeseries vector ..."
         end
-        for it = 1 : nt
-            ii += 1
-            for ilat = 1 : nglat, ilon = 1 : nglon
-                idata = iidata[iglon[ilon],iglat[ilat],it]
-                if !isnan(idata)
-                    tsvec[ii] += idata * wgtmask[ilon,ilat]
-                end
+
+        ii = Dates.value(dt-dtbeg) * 24
+        for it = 1 : nt, ilat = 1 : nglat, ilon = 1 : nglon
+            idata = iidata[iglon[ilon],iglat[ilat],it]
+            if !isnan(idata)
+                tsvec[ii+it] += idata * wgtmask[ilon,ilat]
             end
         end
 
@@ -145,6 +142,7 @@ function save_timeseries(
 
     @info "$(modulelog()) - Saving domain-mean timeseries of $(uppercase(e5ds.lname)) $(evar.vname) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(year(e5ds.start)) $(Dates.monthname(e5ds.start)) to $(year(e5ds.stop)) $(Dates.monthname(e5ds.stop)) ..."
 
+    fnc = e5dtnc(e5ds,evar,ereg)
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
         @info "$(modulelog()) - Stale NetCDF file $(fnc) detected.  Overwriting ..."
@@ -172,8 +170,16 @@ function save_timeseries(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = save_definevar!(ds,evar,scale,offset)
-
+    ncvar = defVar(ds,evar.varID,Int16,("time",),attrib = Dict(
+        "long_name"     => evar.lname,
+        "full_name"     => evar.vname,
+        "units"         => evar.units,
+        "scale_factor"  => scale,
+        "add_offset"    => offset,
+        "_FillValue"    => Int16(-32767),
+        "missing_value" => Int16(-32767),
+    ))
+    
     nctime[:] = collect(1:nhr) .- 1
 
     if iszero(scale)
