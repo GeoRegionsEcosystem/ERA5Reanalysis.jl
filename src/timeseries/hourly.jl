@@ -14,8 +14,8 @@ function timeseries(
     lsd = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
-    wgtmask = lsd.mask .* lsd.lat'
-    wgtmask = wgtmask / sum(wgtmask)
+    wgtmask = lsd.mask .* cosd.(lsd.lat)'
+    summask = sum(wgtmask)
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
 
@@ -47,11 +47,18 @@ function timeseries(
             @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) and allocating into timeseries vector ..."
         end
         ii = Dates.value(dt-dtbeg) * 24
-        for it = 1 : nt, ilat = 1 : nlat, ilon = 1 : nlon
-            idata = iidata[ilon,ilat,it]
-            if !isnan(idata)
-                tsvec[ii+it] += idata * wgtmask[ilon,ilat]
+        for it = 1 : nt
+            tsii = 0
+            adjsum = summask
+            for ilat = 1 : nlat, ilon = 1 : nlon
+                idata = iidata[ilon,ilat,it]
+                if !isnan(idata)
+                    tsii += idata * wgtmask[ilon,ilat]
+                else
+                    adjsum -= wgtmask[ilon,ilat]
+                end
             end
+            tsvec[ii+it] = tsii / adjsum
         end
 
     end
@@ -84,10 +91,10 @@ function timeseries(
     wgtmask = zeros(nglon,nglat)
     for ilat = 1 : nglat, ilon = 1 : nglon
         if !isnan(ggrd.mask[ilon,ilat])
-            wgtmask[ilon,ilat] = lsd.mask[iglon[ilon],iglat[ilat]] * lsd.lat[iglat[ilat]]
+            wgtmask[ilon,ilat] = lsd.mask[iglon[ilon],iglat[ilat]] * cosd(lsd.lat[iglat[ilat]])
         end
     end
-    wgtmask = wgtmask / sum(wgtmask)
+    summask = sum(wgtmask)
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
 
@@ -120,11 +127,18 @@ function timeseries(
         end
 
         ii = Dates.value(dt-dtbeg) * 24
-        for it = 1 : nt, ilat = 1 : nglat, ilon = 1 : nglon
-            idata = iidata[iglon[ilon],iglat[ilat],it]
-            if !isnan(idata)
-                tsvec[ii+it] += idata * wgtmask[ilon,ilat]
+        for it = 1 : nt
+            tsii = 0
+            adjsum = summask
+            for ilat = 1 : nglat, ilon = 1 : nglon
+                idata = iidata[iglon[ilon],iglat[ilat],it]
+                if !isnan(idata)
+                    tsii += idata * wgtmask[ilon,ilat]
+                else
+                    adjsum -= wgtmask[ilon,ilat]
+                end
             end
+            tsvec[ii+it] = tsii / adjsum
         end
 
     end
