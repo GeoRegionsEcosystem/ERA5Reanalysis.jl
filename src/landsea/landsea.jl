@@ -184,7 +184,7 @@ function saveLandSea(
     if iszero(lscale)
         nclsm.var[:] = 0
     else
-        if iszero(sum(isnan.(mask)))
+        if iszero(sum(iszero.(mask)))
               nclsm[:] = lsm
         else; nclsm.var[:] = real2int16(lsm,lscale,loffset)
         end
@@ -193,7 +193,7 @@ function saveLandSea(
     if iszero(zscale)
         ncoro.var[:] = 0
     else
-        if iszero(sum(isnan.(mask)))
+        if iszero(sum(iszero.(mask)))
               ncoro[:] = oro
         else; ncoro.var[:] = real2int16(oro,zscale,zoffset)
         end
@@ -383,7 +383,7 @@ function saveLandSea(
     if iszero(lscale)
         nclsm.var[:] = 0
     else
-        if iszero(sum(isnan.(mask)))
+        if iszero(sum(iszero.(mask)))
               nclsm[:] = lsm
         else; nclsm.var[:] = real2int16(lsm,lscale,loffset)
         end
@@ -392,7 +392,7 @@ function saveLandSea(
     if iszero(zscale)
         ncoro.var[:] = 0
     else
-        if iszero(sum(isnan.(mask)))
+        if iszero(sum(iszero.(mask)))
               ncoro[:] = oro
         else; ncoro.var[:] = real2int16(oro,zscale,zoffset)
         end
