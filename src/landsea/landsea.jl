@@ -28,8 +28,8 @@ function getLandSea(
         gds  = NCDataset(glbfnc)
         glon = gds["longitude"][:]
         glat = gds["latitude"][:]
-        glsm = gds["lsm"][:] * 1
-        goro = gds["z"][:] * 1
+        glsm = nomissing(gds["lsm"][:],NaN)
+        goro = nomissing(gds["z"][:],NaN)
         close(gds)
 
         rinfo = ERA5RegionGrid(ereg,glon,glat)
@@ -139,9 +139,6 @@ function saveLandSea(
     ds.dim["longitude"] = length(lon)
     ds.dim["latitude"]  = length(lat)
 
-    lscale,loffset = ncoffsetscale(lsm)
-    zscale,zoffset = ncoffsetscale(oro)
-
     nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
         "long_name" => "longitude",
@@ -152,24 +149,16 @@ function saveLandSea(
         "long_name" => "latitude",
     ))
 
-    nclsm = defVar(ds,"lsm",Int16,("longitude","latitude",),attrib = Dict(
+    nclsm = defVar(ds,"lsm",Float64,("longitude","latitude",),attrib = Dict(
         "long_name"     => "land_sea_mask",
         "full_name"     => "Land-Sea Mask",
         "units"         => "0-1",
-        "scale_factor"  => lscale,
-        "add_offset"    => loffset,
-        "_FillValue"    => Int16(-32767),
-        "missing_value" => Int16(-32767),
     ))
 
-    ncoro = defVar(ds,"z",Int16,("longitude","latitude",),attrib = Dict(
+    ncoro = defVar(ds,"z",Float64,("longitude","latitude",),attrib = Dict(
         "long_name"     => "geopotential",
         "full_name"     => "Surface Geopotential",
         "units"         => "m**2 s**-2",
-        "scale_factor"  => zscale,
-        "add_offset"    => zoffset,
-        "_FillValue"    => Int16(-32767),
-        "missing_value" => Int16(-32767),
     ))
 
     ncmsk = defVar(ds,"mask",Int16,("longitude","latitude",),attrib = Dict(
@@ -180,25 +169,8 @@ function saveLandSea(
 
     nclon[:] = lon
     nclat[:] = lat
-
-    if iszero(lscale)
-        nclsm.var[:] = 0
-    else
-        if iszero(sum(iszero.(mask)))
-              nclsm[:] = lsm
-        else; nclsm.var[:] = real2int16(lsm,lscale,loffset)
-        end
-    end
-
-    if iszero(zscale)
-        ncoro.var[:] = 0
-    else
-        if iszero(sum(iszero.(mask)))
-              ncoro[:] = oro
-        else; ncoro.var[:] = real2int16(oro,zscale,zoffset)
-        end
-    end
-
+    nclsm[:] = lsm
+    ncoro[:] = oro
     ncmsk[:] = mask
 
     close(ds)
@@ -227,8 +199,8 @@ function getLandSea(
         gds  = NCDataset(glbfnc)
         glon = gds["longitude"][:]
         glat = gds["latitude"][:]
-        glsm = gds["lsm"][:] * 1
-        goro = gds["z"][:] * 1
+        glsm = nomissing(gds["lsm"][:],NaN)
+        goro = nomissing(gds["z"][:],NaN)
         close(gds)
 
         rinfo = ERA5RegionGrid(ereg,glon,glat)
@@ -338,9 +310,6 @@ function saveLandSea(
     ds.dim["longitude"] = length(lon)
     ds.dim["latitude"]  = length(lat)
 
-    lscale,loffset = ncoffsetscale(lsm)
-    zscale,zoffset = ncoffsetscale(oro)
-
     nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
         "long_name" => "longitude",
@@ -351,24 +320,16 @@ function saveLandSea(
         "long_name" => "latitude",
     ))
 
-    nclsm = defVar(ds,"lsm",Int16,("longitude","latitude",),attrib = Dict(
+    nclsm = defVar(ds,"lsm",Float64,("longitude","latitude",),attrib = Dict(
         "long_name"     => "land_sea_mask",
         "full_name"     => "Land-Sea Mask",
         "units"         => "0-1",
-        "scale_factor"  => lscale,
-        "add_offset"    => loffset,
-        "_FillValue"    => Int16(-32767),
-        "missing_value" => Int16(-32767),
     ))
 
-    ncoro = defVar(ds,"z",Int16,("longitude","latitude",),attrib = Dict(
+    ncoro = defVar(ds,"z",Float64,("longitude","latitude",),attrib = Dict(
         "long_name"     => "geopotential",
         "full_name"     => "Surface Geopotential",
         "units"         => "m**2 s**-2",
-        "scale_factor"  => zscale,
-        "add_offset"    => zoffset,
-        "_FillValue"    => Int16(-32767),
-        "missing_value" => Int16(-32767),
     ))
 
     ncmsk = defVar(ds,"mask",Int16,("longitude","latitude",),attrib = Dict(
@@ -379,25 +340,8 @@ function saveLandSea(
 
     nclon[:] = lon
     nclat[:] = lat
-
-    if iszero(lscale)
-        nclsm.var[:] = 0
-    else
-        if iszero(sum(iszero.(mask)))
-              nclsm[:] = lsm
-        else; nclsm.var[:] = real2int16(lsm,lscale,loffset)
-        end
-    end
-
-    if iszero(zscale)
-        ncoro.var[:] = 0
-    else
-        if iszero(sum(iszero.(mask)))
-              ncoro[:] = oro
-        else; ncoro.var[:] = real2int16(oro,zscale,zoffset)
-        end
-    end
-
+    nclsm[:] = lsm
+    ncoro[:] = oro
     ncmsk[:] = mask
 
     close(ds)
