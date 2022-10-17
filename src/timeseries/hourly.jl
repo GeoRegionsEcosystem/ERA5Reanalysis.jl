@@ -82,18 +82,11 @@ function timeseries(
     ndt   = Dates.value(dtend-dtbeg) * 24
 
     lsd  = getLandSea(e5ds,ereg)
-    nlon = length(lsd.lon)
-    nlat = length(lsd.lat)
-
+    slsd = getLandSea(e5ds,ERA5Region(sgeo,gres=ereg.gres))
     ggrd = RegionGrid(sgeo,lsd.lon,lsd.lat)
-    iglon = ggrd.ilon; nglon = length(iglon)
-    iglat = ggrd.ilat; nglat = length(iglat)
-    wgtmask = zeros(nglon,nglat)
-    for ilat = 1 : nglat, ilon = 1 : nglon
-        if !isnan(ggrd.mask[ilon,ilat])
-            wgtmask[ilon,ilat] = lsd.mask[iglon[ilon],iglat[ilat]] * cosd(lsd.lat[iglat[ilat]])
-        end
-    end
+    nlon = length(lsd.lon); iglon = ggrd.ilon; nglon = length(iglon)
+    nlat = length(lsd.lat); iglat = ggrd.ilat; nglat = length(iglat)
+    wgtmask = slsd.mask .* cosd.(slsd.lat)'
     summask = sum(wgtmask)
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
