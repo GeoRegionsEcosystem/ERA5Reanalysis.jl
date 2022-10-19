@@ -21,8 +21,9 @@ function timeseries(
 
     tmpload = zeros(Int16,nlon,nlat,744)
     tmpdata = zeros(nlon,nlat,744)
-    tsvec   = zeros(ndt)
-    ii = 0
+    totts = zeros(ndt)
+    lndts = zeros(ndt)
+    ocnts = zeros(ndt)
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
@@ -48,22 +49,36 @@ function timeseries(
         end
         ii = Dates.value(dt-dtbeg) * 24
         for it = 1 : nt
-            tsii = 0
-            adjsum = summask
+            totii = 0; adjsum = summask
+            ocnii = 0; ocnsum = summask
+            lndii = 0; lndsum = summask
             for ilat = 1 : nlat, ilon = 1 : nlon
                 idata = iidata[ilon,ilat,it]
+                ilsm  = lsd.lsm[ilon,ilat]
                 if !isnan(idata)
-                    tsii += idata * wgtmask[ilon,ilat]
+                    totii += idata * wgtmask[ilon,ilat]
+                    if ilsm <= 0.5
+                        ocnii += idata * wgtmask[ilon,ilat]
+                        lndsum -= wgtmask[ilon,ilat]
+                    end
+                    if ilsm >= 0.5
+                        lndii += idata * wgtmask[ilon,ilat]
+                        ocnsum -= wgtmask[ilon,ilat]
+                    end
                 else
                     adjsum -= wgtmask[ilon,ilat]
+                    lndsum -= wgtmask[ilon,ilat]
+                    ocnsum -= wgtmask[ilon,ilat]
                 end
             end
-            tsvec[ii+it] = tsii / adjsum
+            if !iszero(adjsum); totts[ii+it] = totii / adjsum; else; totts[ii+it] = NaN end
+            if !iszero(lndsum); lndts[ii+it] = lndii / lndsum; else; lndts[ii+it] = NaN end
+            if !iszero(ocnsum); ocnts[ii+it] = ocnii / ocnsum; else; ocnts[ii+it] = NaN end
         end
 
     end
 
-    save_timeseries(tsvec, e5ds, evar, ereg)
+    save_timeseries(totts, lndts, ocnts, e5ds, evar, ereg)
 
 end
 
@@ -93,8 +108,9 @@ function timeseries(
 
     tmpload = zeros(Int16,nlon,nlat,744)
     tmpdata = zeros(nlon,nlat,744)
-    tsvec   = zeros(ndt)
-    ii = 0
+    totts = zeros(ndt)
+    lndts = zeros(ndt)
+    ocnts = zeros(ndt)
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
@@ -121,30 +137,46 @@ function timeseries(
 
         ii = Dates.value(dt-dtbeg) * 24
         for it = 1 : nt
-            tsii = 0
-            adjsum = summask
+            totii = 0; adjsum = summask
+            ocnii = 0; ocnsum = summask
+            lndii = 0; lndsum = summask
             for ilat = 1 : nglat, ilon = 1 : nglon
                 idata = iidata[iglon[ilon],iglat[ilat],it]
+                ilsm  = slsd.lsm[ilon,ilat]
                 if !isnan(idata)
-                    tsii += idata * wgtmask[ilon,ilat]
+                    totii += idata * wgtmask[ilon,ilat]
+                    if ilsm <= 0.5
+                        ocnii += idata * wgtmask[ilon,ilat]
+                        lndsum -= wgtmask[ilon,ilat]
+                    end
+                    if ilsm >= 0.5
+                        lndii += idata * wgtmask[ilon,ilat]
+                        ocnsum -= wgtmask[ilon,ilat]
+                    end
                 else
                     adjsum -= wgtmask[ilon,ilat]
+                    lndsum -= wgtmask[ilon,ilat]
+                    ocnsum -= wgtmask[ilon,ilat]
                 end
             end
-            tsvec[ii+it] = tsii / adjsum
+            totts[ii+it] = totii / adjsum
+            lndts[ii+it] = lndii / lndsum
+            ocnts[ii+it] = ocnii / ocnsum
         end
 
     end
 
-    save_timeseries(tsvec, e5ds, evar, ERA5Region(sgeo,gres=ereg.gres))
+    save_timeseries(totts, lndts, ocnts, e5ds, evar, ERA5Region(sgeo,gres=ereg.gres))
 
 end
 
 function save_timeseries(
-    data :: Vector{<:Real},
-    e5ds :: ERA5Hourly,
-    evar :: ERA5Variable,
-    ereg :: ERA5Region
+    totts :: Vector{<:Real},
+    lndts :: Vector{<:Real},
+    ocnts :: Vector{<:Real},
+    e5ds  :: ERA5Hourly,
+    evar  :: ERA5Variable,
+    ereg  :: ERA5Region
 )
 
     @info "$(modulelog()) - Saving domain-mean timeseries of $(uppercase(e5ds.lname)) $(evar.vname) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(year(e5ds.start)) $(Dates.monthname(e5ds.start)) to $(year(e5ds.stop)) $(Dates.monthname(e5ds.stop)) ..."
@@ -167,8 +199,7 @@ function save_timeseries(
         ds.attrib["doi"] = e5ds.pldoi
     end
 
-    nhr = length(data)
-    scale,offset = ncoffsetscale(data)
+    nhr = length(totts)
     ds.dim["time"] = nhr
 
     nctime = defVar(ds,"time",Int32,("time",),attrib = Dict(
@@ -177,26 +208,28 @@ function save_timeseries(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = defVar(ds,evar.varID,Int16,("time",),attrib = Dict(
+    nctot = defVar(ds,"$(evar.varID)_domain",Float64,("time",),attrib = Dict(
         "long_name"     => evar.lname,
         "full_name"     => evar.vname,
         "units"         => evar.units,
-        "scale_factor"  => scale,
-        "add_offset"    => offset,
-        "_FillValue"    => Int16(-32767),
-        "missing_value" => Int16(-32767),
+    ))
+
+    nclnd = defVar(ds,"$(evar.varID)_land",Float64,("time",),attrib = Dict(
+        "long_name"     => evar.lname,
+        "full_name"     => evar.vname,
+        "units"         => evar.units,
+    ))
+
+    ncocn = defVar(ds,"$(evar.varID)_ocean",Float64,("time",),attrib = Dict(
+        "long_name"     => evar.lname,
+        "full_name"     => evar.vname,
+        "units"         => evar.units,
     ))
     
     nctime[:] = collect(1:nhr) .- 1
-
-    if iszero(scale)
-        ncvar.var[:] = 0
-    else
-        if iszero(sum(isnan.(data)))
-              ncvar[:] = data
-        else; ncvar.var[:] = real2int16(data,scale,offset)
-        end
-    end
+    nctot[:] = totts
+    nclnd[:] = lndts
+    ncocn[:] = ocnts
 
     close(ds)
 
