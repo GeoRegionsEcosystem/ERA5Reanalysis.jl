@@ -20,6 +20,7 @@ using Reexport
 @reexport using NCDatasets: nomissing
 
 import Base: show, read, download, split
+import GeoRegions: getLandSea
 
 ## Exporting the following functions:
 export
@@ -38,7 +39,7 @@ export
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read, save, extract, analysis, timeseries,
+        download, read, save, extract, analysis, timeseries, hourly2daily,
 
         era5Pressures
 
@@ -111,6 +112,8 @@ include("downloads/cdsretrieve.jl")
 include("downloads/pythonprint.jl")
 include("downloads/split.jl")
 
+include("hour2day.jl")
+
 include("analysis/hourly.jl")
 include("analysis/monthly.jl")
 
@@ -122,6 +125,7 @@ include("timeseries/hourly.jl")
 include("subregion/extract.jl")
 
 include("filesystem/raw.jl")
+include("filesystem/hour2day.jl")
 include("filesystem/analysis.jl")
 include("filesystem/compile.jl")
 include("filesystem/timeseries.jl")

@@ -24,28 +24,21 @@ function read(
 	evar :: ERA5Variable,
 	egeo :: ERA5Region,
     dt   :: TimeType;
-    analysis :: Bool = false,
-    compiled :: Bool = false,
-    timeseries :: Bool = false
+    daily    :: Bool = false,
+    analysis :: Bool = false
 )
 
     enc = e5dfnc(e5ds,evar,egeo,dt)
-    
+
     raw = true
+    if daily
+        enc = e5dh2d(e5ds,evar,egeo,dt)
+        raw = false
+    end
     if analysis
         enc = e5danc(e5ds,evar,egeo,dt)
+        daily = false
         raw = false
-    end
-    if compiled
-        enc = e5dcnc(e5ds,evar,egeo)
-        raw = false
-        analysis = false
-    end
-    if timeseries
-        enc = e5dtnc(e5ds,evar,egeo)
-        raw = false
-        analysis = false
-        compiled = false
     end
 
     if raw
@@ -54,12 +47,39 @@ function read(
         end
         @info "$(modulelog()) - Opening the $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
     end
+    if daily
+        if !isfile(enc)
+            error("$(modulelog()) - The daily $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
+        end
+        @info "$(modulelog()) - Opening the daily $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+    end
     if analysis
         if !isfile(enc)
             error("$(modulelog()) - The annually analyzed $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
         @info "$(modulelog()) - Opening the annually analyzed  $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
     end
+
+    return NCDataset(enc)
+
+end
+
+function read(
+	e5ds :: ERA5Dataset,
+	evar :: ERA5Variable,
+	egeo :: ERA5Region;
+    compiled :: Bool = false,
+    timeseries :: Bool = false
+)
+
+    if compiled
+        enc = e5dcnc(e5ds,evar,egeo)
+    end
+    if timeseries
+        enc = e5dtnc(e5ds,evar,egeo)
+        compiled = false
+    end
+    
     if compiled
         if !isfile(enc)
             error("$(modulelog()) - The compiled $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop)) does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
