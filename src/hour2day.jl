@@ -43,27 +43,31 @@ function hourly2daily(
         )
         close(ds)
 
+        if verbose
+            @info "$(modulelog()) - Performing daily-averaging on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) ..."
+        end
         for idy = 1 : ndy, ilat = 1 : nlat, ilon = 1 : nlon
             dydata[ilon,ilat,idy] = mean(view(tmpdata,ilon,ilat,:,idy))
         end
 
-        save_hourly2daily(view(dydata,:,:,1:ndy), e5ds, evar, ereg, lsd)
+        save_hourly2daily(view(dydata,:,:,1:ndy), e5ds, evar, ereg, lsd, dt)
 
     end
 
 end
 
 function save_hourly2daily(
-    dayts :: Array{<:Real,3},
+    dayts :: AbstractArray{<:Real,3},
     e5ds  :: ERA5Hourly,
     evar  :: ERA5Variable,
     ereg  :: ERA5Region,
-    lsd   :: LandSea
+    lsd   :: LandSea,
+    date  :: TimeType
 )
 
-    @info "$(modulelog()) - Saving daily $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(year(e5ds.start)) $(Dates.monthname(e5ds.start)) to $(year(e5ds.stop)) $(Dates.monthname(e5ds.stop)) ..."
+    @info "$(modulelog()) - Saving daily $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) $(Dates.monthname(date)) ..."
 
-    fnc = e5dh2d(e5ds,evar,ereg)
+    fnc = e5dh2d(e5ds,evar,ereg,date)
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
         @info "$(modulelog()) - Stale NetCDF file $(fnc) detected.  Overwriting ..."
@@ -81,7 +85,7 @@ function save_hourly2daily(
         ds.attrib["doi"] = e5ds.pldoi
     end
 
-    ndy = length(dayts)
+    ndy = size(dayts,3)
     ds.dim["time"] = ndy
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
@@ -97,12 +101,12 @@ function save_hourly2daily(
     ))
 
     nctime = defVar(ds,"time",Int32,("time",),attrib = Dict(
-        "units"     => "days since $(e5ds.start) 00:00:00.0",
+        "units"     => "days since $(date) 00:00:00.0",
         "long_name" => "time",
         "calendar"  => "gregorian",
     ))
 
-    ncday = defVar(ds,"$(evar.varID)_domain",Float64,("time",),attrib = Dict(
+    ncday = defVar(ds,"$(evar.varID)",Float64,("longitude","latitude","time",),attrib = Dict(
         "long_name"     => evar.lname,
         "full_name"     => evar.vname,
         "units"         => evar.units,
@@ -115,6 +119,6 @@ function save_hourly2daily(
 
     close(ds)
 
-    @info "$(modulelog()) - Daily timeseries of $(uppercase(e5ds.lname)) $(evar.vname) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(year(e5ds.start)) $(Dates.monthname(e5ds.start)) to $(year(e5ds.stop)) $(Dates.monthname(e5ds.stop)) has been saved into $(fnc)."
+    @info "$(modulelog()) - Daily timeseries of $(uppercase(e5ds.lname)) $(evar.vname) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) $(Dates.monthname(date)) has been saved into $(fnc)."
 
 end
