@@ -78,7 +78,7 @@ function cdsretrieve(
     for dtii in dtvec
 
         inc = e5dfnc(e5ds,PressureVariable(evar.varID,hPa=pvec[1]),ereg,dtii)
-        fnc = "tmp.nc"
+        fnc = "tmp-$(Dates.now()).nc"
         fol = dirname(inc); if !isdir(fol); mkpath(fol) end
 
         e5dkey = Dict(
@@ -142,7 +142,7 @@ function cdsretrieve(
     for dtii in dtvec
 
         inc = e5dfnc(e5ds,evar[1],ereg,dtii)
-        fnc = "tmp.nc"
+        fnc = "tmp-$(Dates.now()).nc"
         fol = dirname(inc); if !isdir(fol); mkpath(fol) end
 
         e5dkey = Dict(
