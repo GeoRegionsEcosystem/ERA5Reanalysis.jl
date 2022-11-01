@@ -9,6 +9,7 @@ All `ERA5Region` Types contain the following fields:
 - `gres`  : The resolution of the gridded data to be downloaded/analysed
 - `gstr`  : String, for specification of folder and file name
 - `isglb` : A Bool, true if spans the globe, false if no
+- `is360` : True if it spans 360º longitude
 """
 struct ERA5Region{ST<:AbstractString, FT<:Real}
     geo   :: GeoRegion
@@ -16,6 +17,7 @@ struct ERA5Region{ST<:AbstractString, FT<:Real}
     gres  :: FT
     gstr  :: ST
     isglb :: Bool
+    is360 :: Bool
 end
 
 """
@@ -46,11 +48,27 @@ function ERA5Region(
     @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(geo.regID)\""
     gres = regionstep(geo.regID,gres)
     if geo.regID == "GLB"; isglb = true; else; isglb = false end
+    if mod(geo.E,360) == mod(geo.W,360); is360 = true; else; is360 = false end
 
     return ERA5Region{ST,FT}(
         geo, geo.regID, gres,
-        "$(geo.regID)x$(@sprintf("%.2f",gres))", isglb
+        "$(geo.regID)x$(@sprintf("%.2f",gres))", isglb, is360
     )
+
+end
+
+function ERA5Region(
+    geoID :: AbstractString;
+    gres :: Real = 0,
+    ST = String,
+    FT = Float64
+)
+
+    @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(geoID)\""
+    gres = regionstep(geoID,gres)
+    if geoID == "GLB"; isglb = true; else; isglb = false end
+
+    return ERA5Region(GeoRegion(geoID),gres=gres,ST=ST,FT=FT)
 
 end
 
