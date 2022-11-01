@@ -9,7 +9,7 @@ function smooth(
 )
 
     if iszero(smooth) && (iszero(smoothlon)||iszero(smoothlat))
-        error("$(modulelog()) - ")
+        error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
     end
 
     if iszero(smoothlon); smoothlon = smooth end
