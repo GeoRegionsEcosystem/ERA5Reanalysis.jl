@@ -1,5 +1,5 @@
 function download(
-    e5ds :: ERA5Dataset,
+    e5ds :: Union{ERA5Hourly,ERA5Monthly},
     evar :: SingleVariable,
     ereg :: ERA5Region;
     ispy :: Bool = false,
@@ -16,7 +16,7 @@ function download(
 end
 
 function download(
-    e5ds :: ERA5Dataset,
+    e5ds :: Union{ERA5Hourly,ERA5Monthly},
     evar :: Vector{SingleVariable{ST}},
     ereg :: ERA5Region;
     overwrite :: Bool = false
@@ -31,7 +31,7 @@ function download(
 end
 
 function download(
-    e5ds :: ERA5Dataset,
+    e5ds :: Union{ERA5Hourly,ERA5Monthly},
     evar :: PressureVariable,
     ereg :: ERA5Region;
     ispy :: Bool = false,

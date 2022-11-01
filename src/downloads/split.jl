@@ -1,5 +1,5 @@
 function split(
-    e5ds :: ERA5Dataset,
+    e5ds :: Union{ERA5Hourly,ERA5Monthly},
     evar :: PressureVariable,
     ereg :: ERA5Region,
     lsd  :: LandSea,
@@ -50,7 +50,7 @@ function split(
 end
 
 function split(
-    e5ds :: ERA5Dataset,
+    e5ds :: Union{ERA5Hourly,ERA5Monthly},
     evar :: Vector{SingleVariable{ST}},
     ereg :: ERA5Region,
     lsd  :: LandSea,
