@@ -23,10 +23,11 @@ function e5dsmth(
     smoothlat :: Real
 )
 
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID)
-    fnc = e5ds.e5dID * "-" * "smooth" * "_" * 
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,dts)
+    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * "smooth" * "_" * 
           @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
-          egeo.gstr * "-" * evar.varID * "-" * yrmo2str(dt) * ".nc"
+          "-" * evar.varID * "-" * yrmo2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -41,10 +42,11 @@ function e5dsmth(
 )
 
     evp = evar.varID * "-$(evar.hPa)hPa"
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp)
-    fnc = e5ds.e5dID * "-" * "smooth" * "_" * 
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,dts)
+    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * "smooth" * "_" * 
           @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
-          egeo.gstr * "-" * evp * "-" * yrmo2str(dt) * ".nc"
+          "-" * evp * "-" * yrmo2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
