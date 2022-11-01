@@ -46,7 +46,10 @@ function smooth(
                 circshift!(view(shfttmp,:,:,ishift),view(tmpdata,:,:,idy),(ishiftlon,ishiftlat))
             end
             for ilat = 1 : nlat, ilon = 1 : nlon
-                smthdata[ilon,ilat,idy] = nanmean(view(shfttmp,ilon,ilat,:),shftnan)
+                if !isnan(tmpdata[ilon,ilat,idy])
+                      smthdata[ilon,ilat,idy] = nanmean(view(shfttmp,ilon,ilat,:),shftnan)
+                else; smthdata[ilon,ilat,idy] = NaN
+                end
             end
         end
 
