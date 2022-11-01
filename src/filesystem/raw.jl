@@ -44,7 +44,7 @@ function e5dfnc(
 end
 
 function e5dfnc(
-    e5ds :: ERA5Monthly,
+    e5ds :: Union{ERA5Daily,ERA5Monthly},
 	evar :: SingleLevel,
 	egeo :: ERA5Region,
     dt   :: TimeType
@@ -58,7 +58,7 @@ function e5dfnc(
 end
 
 function e5dfnc(
-    e5ds :: ERA5Monthly,
+    e5ds :: Union{ERA5Daily,ERA5Monthly},
 	evar :: PressureLevel,
 	egeo :: ERA5Region,
     dt   :: TimeType

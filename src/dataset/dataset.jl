@@ -17,6 +17,24 @@ struct ERA5Hourly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
 end
 
 """
+    ERA5Hourly <: ERA5Dataset
+
+Specifies that the dataset to be analyzed contains hourly data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
+"""
+struct ERA5Daily{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
+    e5dID :: ST
+    lname :: ST
+    ptype :: ST
+	sldoi :: ST
+	pldoi :: ST
+    start :: Date
+    stop  :: Date
+    dtext :: Bool
+    path  :: ST
+    emask :: ST
+end
+
+"""
     ERA5Monthly <: ERA5Dataset
 
 Specifies that the dataset to be analyzed contains monthly-mean data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
@@ -76,6 +94,51 @@ function ERA5Hourly(
         "10.24381/cds.adbb2d47","10.24381/cds.bd0915c6",
         start,stop,dtext,
         joinpath(path,"era5hr"),joinpath(path,"emask")
+    )
+
+end
+
+"""
+    ERA5Daily(;
+        start :: TimeType,
+        stop  :: TimeType,
+        path  :: AbstractString = homedir(),
+    ) -> ERA5Hourly <: ERA5Dataset
+
+A function that creates an `ERA5Hourly` module.  All possible hours are downloaded, and data is saved month-by-month.
+
+Keyword Arguments
+=================
+- `path` : The specified directory in which to save the data
+- `start` : The date for which downloads/analysis begins, automatically rounded to the nearest month
+- `stop` : The date for which downloads/analysis finishes, automatically rounded to the nearest month
+"""
+function ERA5Daily(
+    ST = String,
+    DT = Date;
+    start :: TimeType = now() - Month(3),
+    stop  :: TimeType = now() - Month(3),
+    path  :: AbstractString = homedir(),
+)
+
+    @info "$(modulelog()) - Setting up data structure containing information on the ERA5 Daily data to be created from ERA5 Hourly data"
+    start = Date(year(start),month(start),1)
+	stop = Date(year(stop),month(stop),daysinmonth(stop))
+    dtext = checkdates(start,stop,)
+
+    if !isdir(joinpath(path,"era5dy"))
+        mkpath(joinpath(path,"era5dy"))
+    end
+
+    if !isdir(joinpath(path,"emask"))
+        mkpath(joinpath(path,"emask"))
+    end
+
+    return ERA5Daily{ST,DT}(
+        "era5dy","ERA5 Daily","N/A",
+        "10.24381/cds.adbb2d47","10.24381/cds.bd0915c6",
+        start,stop,dtext,
+        joinpath(path,"era5dy"),joinpath(path,"emask")
     )
 
 end

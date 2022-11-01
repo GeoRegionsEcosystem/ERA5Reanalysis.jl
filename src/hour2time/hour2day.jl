@@ -5,11 +5,7 @@ function hourly2daily(
     verbose :: Bool = false
 )
 
-    yrbeg = year(e5ds.start);  yrend = year(e5ds.stop)
-    mobeg = month(e5ds.start); moend = month(e5ds.stop)
-    dtbeg = Date(yrbeg,mobeg)
-    dtend = Date(yrend,moend) + Month(1)
-    ndt   = Dates.value(dtend-dtbeg)
+    e5dsdy = ERA5Daily(start=e5ds.start,stop=e5ds.stop,path=dirname(e5ds.path))
 
     lsd = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
@@ -19,7 +15,7 @@ function hourly2daily(
 
     tmpload = zeros(Int16,nlon,nlat,24,31)
     tmpdata = zeros(nlon,nlat,24,31)
-    dydata  = zeros(nlon,nlat,31)
+    dydata  = zeros(nlon,nlat,366)
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
@@ -50,7 +46,7 @@ function hourly2daily(
             dydata[ilon,ilat,idy] = mean(view(tmpdata,ilon,ilat,:,idy))
         end
 
-        save_hourly2daily(view(dydata,:,:,1:ndy), e5ds, evar, ereg, lsd, dt)
+        save_hourly2daily(view(dydata,:,:,1:ndy), e5dsdy, evar, ereg, lsd, dt)
 
     end
 
@@ -58,7 +54,7 @@ end
 
 function save_hourly2daily(
     dayts :: AbstractArray{<:Real,3},
-    e5ds  :: ERA5Hourly,
+    e5ds  :: ERA5Daily,
     evar  :: ERA5Variable,
     ereg  :: ERA5Region,
     lsd   :: LandSea,
@@ -67,7 +63,7 @@ function save_hourly2daily(
 
     @info "$(modulelog()) - Saving daily $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) $(Dates.monthname(date)) ..."
 
-    fnc = e5dh2d(e5ds,evar,ereg,date)
+    fnc = e5dfnc(e5ds,evar,ereg,date)
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
         @info "$(modulelog()) - Stale NetCDF file $(fnc) detected.  Overwriting ..."
