@@ -15,7 +15,7 @@ Arguments
 - `dt`  : A specified date. The NCDataset retrieved may will contain data for the date, although it may also contain data for other dates depending on the `NASAPrecipitationDataset` specified by `npd`
 """
 function e5dfnc(
-    e5ds :: ERA5Hourly,
+    e5ds :: Union{ERA5Hourly,ERA5Daily},
 	evar :: SingleLevel,
 	egeo :: ERA5Region,
     dt   :: TimeType
@@ -29,7 +29,7 @@ function e5dfnc(
 end
 
 function e5dfnc(
-    e5ds :: ERA5Hourly,
+    e5ds :: Union{ERA5Hourly,ERA5Daily},
 	evar :: PressureLevel,
 	egeo :: ERA5Region,
     dt   :: TimeType
@@ -44,7 +44,7 @@ function e5dfnc(
 end
 
 function e5dfnc(
-    e5ds :: Union{ERA5Daily,ERA5Monthly},
+    e5ds :: ERA5Monthly,
 	evar :: SingleLevel,
 	egeo :: ERA5Region,
     dt   :: TimeType
@@ -58,7 +58,7 @@ function e5dfnc(
 end
 
 function e5dfnc(
-    e5ds :: Union{ERA5Daily,ERA5Monthly},
+    e5ds :: ERA5Monthly,
 	evar :: PressureLevel,
 	egeo :: ERA5Region,
     dt   :: TimeType
