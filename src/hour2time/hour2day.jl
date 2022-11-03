@@ -82,7 +82,7 @@ function save_hourly2daily(
     end
 
     ndy = size(dayts,3)
-    scale,offset = ncoffsetscale(data)
+    scale,offset = ncoffsetscale(dayts)
 
     ds.dim["time"] = ndy
     ds.dim["longitude"] = length(lsd.lon)
@@ -91,7 +91,7 @@ function save_hourly2daily(
     nclon,nclat = save_definelonlat!(ds)
 
     nctime = defVar(ds,"time",Int32,("time",),attrib = Dict(
-        "units"     => "days since $(dt) 00:00:00.0",
+        "units"     => "days since $(date) 00:00:00.0",
         "long_name" => "time",
         "calendar"  => "gregorian",
     ))
@@ -103,11 +103,11 @@ function save_hourly2daily(
     nctime[:] = collect(1:ndy) .- 1
 
     if iszero(scale)
-        ncvar.var[:] = 0
+        ncvar.var[:] .= 0
     else
-        if iszero(sum(isnan.(data)))
-              ncvar[:] = data
-        else; ncvar.var[:] = real2int16(data,scale,offset)
+        if iszero(sum(isnan.(dayts)))
+              ncvar[:] = dayts
+        else; real2int16!(ncvar.var[:],dayts,scale,offset)
         end
     end
 
