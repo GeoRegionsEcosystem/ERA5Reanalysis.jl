@@ -82,39 +82,37 @@ function save_hourly2daily(
     end
 
     ndy = size(dayts,3)
+    scale,offset = ncoffsetscale(data)
+
     ds.dim["time"] = ndy
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
 
-    nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
-        "units"     => "degrees_east",
-        "long_name" => "longitude",
-    ))
-
-    nclat = defVar(ds,"latitude",Float32,("latitude",),attrib = Dict(
-        "units"     => "degrees_north",
-        "long_name" => "latitude",
-    ))
+    nclon,nclat = save_definelonlat!(ds)
 
     nctime = defVar(ds,"time",Int32,("time",),attrib = Dict(
-        "units"     => "days since $(date) 00:00:00.0",
+        "units"     => "days since $(dt) 00:00:00.0",
         "long_name" => "time",
         "calendar"  => "gregorian",
     ))
 
-    ncday = defVar(ds,"$(evar.varID)",Float64,("longitude","latitude","time",),attrib = Dict(
-        "long_name"     => evar.lname,
-        "full_name"     => evar.vname,
-        "units"         => evar.units,
-    ))
+    ncvar = save_definevar!(ds,evar,scale,offset)
     
     nclon[:] = lsd.lon
     nclat[:] = lsd.lat
     nctime[:] = collect(1:ndy) .- 1
-    ncday[:] = dayts
+
+    if iszero(scale)
+        ncvar.var[:] = 0
+    else
+        if iszero(sum(isnan.(data)))
+              ncvar[:] = data
+        else; ncvar.var[:] = real2int16(data,scale,offset)
+        end
+    end
 
     close(ds)
 
-    @info "$(modulelog()) - Daily timeseries of $(uppercase(e5ds.lname)) $(evar.vname) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) $(Dates.monthname(date)) has been saved into $(fnc)."
+    @info "$(modulelog()) - Daily-averaged $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) $(Dates.monthname(date)) has been saved into $(fnc)."
 
 end

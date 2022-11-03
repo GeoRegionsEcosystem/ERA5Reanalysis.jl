@@ -25,6 +25,7 @@ function smooth(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
 
+    tmpload  = zeros(Int16,nlon,nlat,31)
     tmpdata  = zeros(nlon,nlat,31)
     shfttmp  = zeros(nlon,nlat,(2*shiftlon+1)*(2*shiftlat+1))
     smthdata = zeros(nlon,nlat,31)
@@ -35,7 +36,15 @@ function smooth(
         @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) ..."
         ndy = daysinmonth(dt)
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
-        NCDatasets.load!(ds[evar.varID].var,view(tmpdata,:,:,1:ndy),:,:,:)
+        sc  = ds[evar.varID].attrib["scale_factor"]
+        of  = ds[evar.varID].attrib["add_offset"]
+        mv  = ds[evar.varID].attrib["missing_value"]
+        fv  = ds[evar.varID].attrib["_FillValue"]
+        NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,1:ndy),:,:,:)
+        int2real!(
+            view(tmpdata,:,:,1:ndy), view(tmpload,:,:,1:ndy),
+            scale=sc, offset=of, mvalue=mv, fvalue=fv
+        )
         close(ds)
 
         @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) ..."
