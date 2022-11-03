@@ -137,6 +137,11 @@ include("filesystem/smooth.jl")
 
 include("backend.jl")
 include("read.jl")
-include("save.jl")
+
+include("save/define.jl")
+include("save/hourly.jl")
+include("save/daily.jl")
+include("save/monthly.jl")
+include("save/extract.jl")
 
 end
