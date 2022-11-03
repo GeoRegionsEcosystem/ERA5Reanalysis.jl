@@ -1,7 +1,10 @@
 function extract(
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
-	ereg :: ERA5Region,
+	ereg :: ERA5Region;
+    smooth    :: Bool = false,
+    smoothlon :: Real = 0,
+    smoothlat :: Real = 0
 )
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(ereg.geoID)\", \"$(ereg.geo.parID)\""
@@ -25,6 +28,9 @@ function extract(
     if typeof(e5ds) <: ERA5Hourly
         rmat = zeros(Int16,nlon,nlat,31*24)
         pmat = zeros(Int16,nplon,nplat,31*24)
+    elseif typeof(e5ds) <: ERA5Daily
+        rmat = zeros(Int16,nlon,nlat,31)
+        rmat = zeros(Int16,nplon,nplat,31)
     elseif !(e5ds.hours)
         rmat = zeros(Int16,nlon,nlat,12)
         rmat = zeros(Int16,nplon,nplat,12)
@@ -35,7 +41,7 @@ function extract(
 
     for dt in extract_time(e5ds)
 
-        pds  = read(e5ds,evar,preg,dt)
+        pds  = read(e5ds,evar,preg,dt,smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat)
         nt   = pds.dim["time"]
         sc   = pds[evar.varID].attrib["scale_factor"]
         of   = pds[evar.varID].attrib["add_offset"]
