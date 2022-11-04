@@ -42,7 +42,7 @@ function save(
     else
         if iszero(sum(isnan.(data)))
               ncvar[:] = data
-        else; real2int16!(ncvar.var[:],data,scale,offset)
+        else; ncvar.var[:] = real2int16(data,scale,offset)
         end
     end
 
@@ -96,7 +96,7 @@ function save(
     else
         if iszero(sum(isnan.(data)))
               ncvar[:] = data
-        else; real2int16!(ncvar.var[:],data,scale,offset)
+        else; 
         end
     end
 
