@@ -46,7 +46,7 @@ function hourly2daily(
             dydata[ilon,ilat,idy] = mean(view(tmpdata,ilon,ilat,:,idy))
         end
 
-        save_hourly2daily(view(dydata,:,:,1:ndy), e5dsdy, evar, ereg, lsd, dt)
+        save(view(dydata,:,:,1:ndy), dt, e5dsdy, evar, ereg, lsd)
 
     end
 

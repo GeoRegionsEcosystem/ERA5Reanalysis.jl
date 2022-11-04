@@ -42,6 +42,7 @@ function extract(
     for dt in extract_time(e5ds)
 
         pds  = read(e5ds,evar,preg,dt,smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat)
+        pnc  = basename(path(pds))
         nt   = pds.dim["time"]
         sc   = pds[evar.varID].attrib["scale_factor"]
         of   = pds[evar.varID].attrib["add_offset"]
@@ -61,7 +62,11 @@ function extract(
 
         close(pds)
 
-        save(view(rmat,:,:,1:nt),dt,e5ds,evar,ereg,rlsd,sc,of)
+        save(
+            view(rmat,:,:,1:nt),dt,e5ds,evar,ereg,rlsd,sc,of,
+            extract=true,extractnc=pnc,
+            smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat
+        )
 
     end
 

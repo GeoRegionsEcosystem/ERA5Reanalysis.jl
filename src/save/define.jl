@@ -3,9 +3,17 @@ function save_createds(
     evar :: ERA5Variable,
     ereg :: ERA5Region,
     dt   :: Date,
+    extract :: Bool = false,
+    smooth  :: Bool = false,
+    extractnc :: AbstractString = "",
+    smoothlon :: Real = 0,
+    smoothlat :: Real = 0,
 )
 
     fnc = e5dfnc(e5ds,evar,ereg,dt)
+    if smooth
+        fnc = e5dsmth(e5ds,evar,ereg,dt,smoothlon,smoothlat)
+    end
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
         @info "$(modulelog()) - Stale NetCDF file $(fnc) detected.  Overwriting ..."
@@ -16,6 +24,9 @@ function save_createds(
         "history"     => "Created on $(Dates.now()) with ERA5Reanalysis.jl",
         "comments"    => "ERA5Reanalysis.jl creates NetCDF files in the same format that data is saved on the Climate Data Store"
     ))
+    if extract
+        ds["extract"] = "Data for current GeoRegion ($(ereg.geo.regID), Horizontal Resolution: $(ereg.gres)) was extracted from file $(extractnc) on $(Dates.now())"
+    end
 
     if typeof(evar) <: SingleVariable
         ds.attrib["doi"] = e5ds.sldoi

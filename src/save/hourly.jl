@@ -4,12 +4,17 @@ function save(
     e5ds :: ERA5Hourly,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
-    lsd  :: LandSea
+    lsd  :: LandSea;
+    extract :: Bool = false,
+    smooth  :: Bool = false,
+    extractnc :: AbstractString = "",
+    smoothlon :: Real = 0,
+    smoothlat :: Real = 0,
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
 
-    ds,fnc = save_createds(e5ds,evar,ereg,dt)
+    ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
 
     nhr = 24 * daysinmonth(dt)
     scale,offset = ncoffsetscale(data)
@@ -52,12 +57,17 @@ function save(
     dt   :: Date,
     e5ds :: ERA5Hourly,
     evar :: ERA5Variable,
-    ereg :: ERA5Region
+    ereg :: ERA5Region;
+    extract :: Bool = false,
+    smooth  :: Bool = false,
+    extractnc :: AbstractString = "",
+    smoothlon :: Real = 0,
+    smoothlat :: Real = 0,
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
 
-    ds,fnc = save_createds(e5ds,evar,ereg,dt)
+    ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
 
     nhr = 24 * daysinmonth(dt)
     scale,offset = ncoffsetscale(data)

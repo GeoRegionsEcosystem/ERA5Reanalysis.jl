@@ -82,7 +82,10 @@ function smooth(
             end
         end
 
-        save_smooth(view(smthdata,:,:,1:ndy), e5ds, evar, ereg, lsd, dt, smoothlon, smoothlat)
+        save(
+            view(smthdata,:,:,1:ndy), dt, e5ds, evar, ereg, lsd,
+            smooth=true,smoothlon=smoothlon,smoothlat=smoothlat
+        )
 
     end
 
