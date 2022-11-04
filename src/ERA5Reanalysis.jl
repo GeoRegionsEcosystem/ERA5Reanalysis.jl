@@ -105,6 +105,7 @@ include("variable/show.jl")
 
 include("region/region.jl")
 include("region/functions.jl")
+include("region/extract.jl")
 
 include("landsea/landsea.jl")
 
@@ -126,8 +127,6 @@ include("timeseries/hourly.jl")
 include("timeseries/daily.jl")
 
 include("spatialsmoothing/daily.jl")
-
-include("subregion/extract.jl")
 
 include("filesystem/raw.jl")
 include("filesystem/analysis.jl")

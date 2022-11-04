@@ -95,8 +95,8 @@ function extract(
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(sgeo.regID)\", \"$(ereg.geoID)\""
 
     sreg = ERA5Region(sgeo,gres=ereg.gres)
-    plsd = getLandSea(e5ds,ereg);
-    rlsd = getLandSea(e5ds,sreg);
+    plsd = getLandSea(e5ds,ereg)
+    rlsd = getLandSea(e5ds,sreg)
     plon = plsd.lon; nplon = length(plon)
     plat = plsd.lat; nplat = length(plat)
 
@@ -115,13 +115,13 @@ function extract(
         pmat = zeros(Int16,nplon,nplat,31*24)
     elseif typeof(e5ds) <: ERA5Daily
         rmat = zeros(Int16,nlon,nlat,31)
-        rmat = zeros(Int16,nplon,nplat,31)
+        pmat = zeros(Int16,nplon,nplat,31)
     elseif !(e5ds.hours)
         rmat = zeros(Int16,nlon,nlat,12)
-        rmat = zeros(Int16,nplon,nplat,12)
+        pmat = zeros(Int16,nplon,nplat,12)
     else
         rmat = zeros(Int16,nlon,nlat,12*24)
-        rmat = zeros(Int16,nplon,nplat,12*24)
+        pmat = zeros(Int16,nplon,nplat,12*24)
     end
 
     for dt in extract_time(e5ds)
