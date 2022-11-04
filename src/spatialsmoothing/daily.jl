@@ -8,7 +8,7 @@ function smooth(
     verbose :: Bool = false
 )
 
-    if iszero(smooth) && (iszero(smoothlon)||iszero(smoothlat))
+    if iszero(smooth) && (iszero(smoothlon) && iszero(smoothlat))
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
     end
 

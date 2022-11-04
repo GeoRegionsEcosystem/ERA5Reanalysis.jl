@@ -7,6 +7,10 @@ function extract(
     smoothlat :: Real = 0
 )
 
+    if smooth && (iszero(smoothlon) && iszero(smoothlat))
+        error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
+    end
+
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(ereg.geoID)\", \"$(ereg.geo.parID)\""
 
     preg = ERA5Region(GeoRegion(ereg.geo.parID))
