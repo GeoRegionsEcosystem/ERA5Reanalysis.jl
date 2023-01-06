@@ -25,7 +25,7 @@ function save_createds(
         "comments"    => "ERA5Reanalysis.jl creates NetCDF files in the same format that data is saved on the Climate Data Store"
     ))
     if extract
-        ds.attrib["extract"] = "Data for current GeoRegion ($(ereg.geo.regID), Horizontal Resolution: $(ereg.gres)) was extracted from file $(extractnc) on $(Dates.now())"
+        ds.attrib["extract"] = "Data for current NetCDF file was extracted from file $(extractnc) on $(Dates.now())"
     end
 
     if typeof(evar) <: SingleVariable
