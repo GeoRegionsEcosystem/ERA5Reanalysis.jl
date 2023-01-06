@@ -13,14 +13,14 @@ using NCDatasets
 using PrettyTables
 using Statistics
 
+import Base: show, read, download, split
+import GeoRegions: getLandSea
+
 ## Reexporting exported functions within these modules
 using Reexport
 @reexport using Dates
 @reexport using GeoRegions
 @reexport using NCDatasets: nomissing
-
-import Base: show, read, download, split
-import GeoRegions: getLandSea
 
 ## Exporting the following functions:
 export
