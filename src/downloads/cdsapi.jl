@@ -16,7 +16,8 @@ function retrieve(
     dset  :: AbstractString,
     dkeys :: AbstractDict,
     fnc   :: AbstractString,
-    ckeys :: AbstractDict = cdskey()
+    ckeys :: AbstractDict = cdskey();
+    sleep :: Real = 120.
 )
 
     apikey = string("Basic ", base64encode(ckeys["key"]))
@@ -38,8 +39,11 @@ function retrieve(
     end
 
     @info "$(now()) - CDSAPI - Request is running"
+    sleep_seconds = 1.
     while data["state"] == "running"
         data = parserequest(ckeys,resp_dict,apikey)
+        sleep_seconds = min(1.5 * sleep_seconds,sleep)
+        sleep(sleep_seconds)
     end
 
     if data["state"] == "completed"
