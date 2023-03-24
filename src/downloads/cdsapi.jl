@@ -17,7 +17,7 @@ function retrieve(
     dkeys :: AbstractDict,
     fnc   :: AbstractString,
     ckeys :: AbstractDict = cdskey();
-    sleep :: Real = 120.
+    pause :: Real = 120.
 )
 
     apikey = string("Basic ", base64encode(ckeys["key"]))
@@ -34,15 +34,18 @@ function retrieve(
     data = Dict("state" => "queued")
 
     @info "$(now()) - CDSAPI - Request is queued"
+    sleep_seconds = 1.
     while data["state"] == "queued"
         data = parserequest(ckeys,resp_dict,apikey)
+        sleep_seconds = min(1.5 * sleep_seconds,5)
+        sleep(sleep_seconds)
     end
 
     @info "$(now()) - CDSAPI - Request is running"
     sleep_seconds = 1.
     while data["state"] == "running"
         data = parserequest(ckeys,resp_dict,apikey)
-        sleep_seconds = min(1.5 * sleep_seconds,sleep)
+        sleep_seconds = min(1.5 * sleep_seconds,pause)
         sleep(sleep_seconds)
     end
 
