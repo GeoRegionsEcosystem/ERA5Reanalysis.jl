@@ -99,6 +99,10 @@ function analysis(
 
         @info "$(modulelog()) - Calculating yearly climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
         for ihr = 1 : 25, ilat = 1 : nlat, ilon = 1 : nlon
+            davg[ilon,ilat,ihr,end] = 0
+            dstd[ilon,ilat,ihr,end] = 0
+            dmax[ilon,ilat,ihr,end] = 0
+            dmin[ilon,ilat,ihr,end] = 0
             for imo = 1 : 12
                 dtii = Date(yr,imo)
                 davg[ilon,ilat,ihr,end] += davg[ilon,ilat,ihr,imo] * daysinmonth(dtii)
