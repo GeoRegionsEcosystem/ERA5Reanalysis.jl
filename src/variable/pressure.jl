@@ -324,7 +324,7 @@ function tablePressures()
     head = ["Variable Type","ID","Name","Units","ERA5 Long-Name"];
 
     pretty_table(
-        fmat,head,
+        fmat,header=head,
         alignment=[:c,:c,:l,:c,:l],
         crop = :none, tf = tf_compact
     );
