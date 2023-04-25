@@ -27,7 +27,8 @@ function read(
     analysis :: Bool = false,
     smooth   :: Bool = false,
     smoothlon :: Real = 0,
-    smoothlat :: Real = 0
+    smoothlat :: Real = 0,
+    quiet :: Bool = false
 )
 
     enc = e5dfnc(e5ds,evar,egeo,dt)
@@ -50,19 +51,25 @@ function read(
         if !isfile(enc)
             error("$(modulelog()) - The $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+        if !quiet
+            @info "$(modulelog()) - Opening the $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+        end
     end
     if analysis
         if !isfile(enc)
             error("$(modulelog()) - The annually analyzed $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the annually analyzed $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+        if !quiet
+            @info "$(modulelog()) - Opening the annually analyzed $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+        end
     end
     if smooth
         if !isfile(enc)
             error("$(modulelog()) - The spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+        if !quiet
+            @info "$(modulelog()) - Opening the spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+        end
     end
 
     return NCDataset(enc)
@@ -74,7 +81,8 @@ function read(
 	evar :: ERA5Variable,
 	egeo :: ERA5Region;
     compiled :: Bool = false,
-    timeseries :: Bool = false
+    timeseries :: Bool = false,
+    quiet :: Bool = false
 )
 
     if compiled
@@ -89,13 +97,17 @@ function read(
         if !isfile(enc)
             error("$(modulelog()) - The compiled $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop)) does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the compiled $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop))"
+        if !quiet
+            @info "$(modulelog()) - Opening the compiled $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop))"
+        end
     end
     if timeseries
         if !isfile(enc)
             error("$(modulelog()) - The domain-averaged timeseries $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop)) does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the domain-averaged timeseries $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop))"
+        if !quiet
+            @info "$(modulelog()) - Opening the domain-averaged timeseries $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop))"
+        end
     end
 
     eds = NCDataset(enc)

@@ -38,6 +38,7 @@ function download(
     pall :: Bool = false,
     ptop :: Int = 0,
     pbot :: Int = 0,
+    pvec :: Vector{Int} = [],
     overwrite :: Bool = false
 )
 
@@ -46,7 +47,9 @@ function download(
     if ispy
         pythonprint(e5ds,evar,ereg)
     else
-        pvec = downloadcheckplvl(pall,ptop,pbot)
+        if isnothing(pvec)
+            pvec = downloadcheckplvl(pall,ptop,pbot)
+        end
         if pall
             cdsretrieve(e5ds,evar,ereg,pvec,overwrite)
         else
