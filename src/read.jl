@@ -26,8 +26,9 @@ function read(
     dt   :: TimeType;
     analysis :: Bool = false,
     smooth   :: Bool = false,
-    smoothlon :: Real = 0,
-    smoothlat :: Real = 0,
+    smoothlon  :: Real = 0,
+    smoothlat  :: Real = 0,
+    smoothtime :: Real = 0,
     quiet :: Bool = false
 )
 
@@ -39,10 +40,10 @@ function read(
         raw = false
     end
     if smooth
-        if iszero(smoothlon) || iszero(smoothlat)
+        if iszero(smoothlon) && iszero(smoothlat) && iszero(smoothtime)
             error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
         end
-        enc = e5dsmth(e5ds,evar,egeo,dt,smoothlon,smoothlat)
+        enc = e5dsmth(e5ds,evar,egeo,dt,smoothlon,smoothlat,smoothtime)
         raw = false
         analysis = false
     end
@@ -67,7 +68,7 @@ function read(
         if !isfile(enc)
             error("$(modulelog()) - The spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+        @info "$(modulelog()) - Opening the spatialtemporally smoothed ($(@sprintf("%.2f",smoothlon))ºx$(@sprintf("%.2f",smoothlat))º, $(@sprintf("%02d",smoothtime)) timesteps) $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
     end
 
     if quiet

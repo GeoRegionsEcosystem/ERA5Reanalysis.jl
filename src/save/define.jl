@@ -8,11 +8,12 @@ function save_createds(
     extractnc :: AbstractString = "",
     smoothlon :: Real = 0,
     smoothlat :: Real = 0,
+    smoothtime :: Int = 0,
 )
 
     fnc = e5dfnc(e5ds,evar,ereg,dt)
     if smooth
-        fnc = e5dsmth(e5ds,evar,ereg,dt,smoothlon,smoothlat)
+        fnc = e5dsmth(e5ds,evar,ereg,dt,spatiallon,spatiallat,smoothtime)
     end
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)

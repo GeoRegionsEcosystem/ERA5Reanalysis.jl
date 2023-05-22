@@ -39,7 +39,7 @@ export
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read, save, extract, analysis, timeseries, smooth,
+        download, read, save, extract, analysis, timeseries, smoothing,
         
         hourly2daily, hourly2monthly, hourly2monthlyhour,
 
@@ -126,7 +126,7 @@ include("compile/monthly.jl")
 include("timeseries/hourly.jl")
 include("timeseries/daily.jl")
 
-include("spatialsmoothing/daily.jl")
+include("smoothing.jl")
 
 include("filesystem/raw.jl")
 include("filesystem/analysis.jl")
