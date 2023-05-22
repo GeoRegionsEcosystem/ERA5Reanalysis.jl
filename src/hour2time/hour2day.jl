@@ -48,6 +48,8 @@ function hourly2daily(
 
         save(view(dydata,:,:,1:ndy), dt, e5dsdy, evar, ereg, lsd)
 
+        flush(stderr)
+
     end
 
 end

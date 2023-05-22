@@ -136,6 +136,8 @@ function analysis(
 
         save(davg, zavg, mavg, Date(yr), e5ds, evar, ereg, lsd)
 
+        flush(stderr)
+
     end
 
 end

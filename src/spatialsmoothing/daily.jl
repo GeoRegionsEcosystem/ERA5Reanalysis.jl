@@ -87,6 +87,8 @@ function smooth(
             smooth=true,smoothlon=smoothlon,smoothlat=smoothlat
         )
 
+        flush(stderr)
+
     end
 
 end

@@ -76,6 +76,8 @@ function timeseries(
             if !iszero(ocnsum); ocnts[ii+it] = ocnii / ocnsum; else; ocnts[ii+it] = NaN end
         end
 
+        flush(stderr)
+
     end
 
     save_timeseries(totts, lndts, ocnts, e5ds, evar, ereg)
@@ -167,6 +169,8 @@ function timeseries(
     end
 
     save_timeseries(totts, lndts, ocnts, e5ds, evar, ERA5Region(sgeo,gres=ereg.gres))
+
+    flush(stderr)
 
 end
 

@@ -137,6 +137,8 @@ function analysis(
             Date(yr), e5ds, evar, ereg, lsd
         )
 
+        flush(stderr)
+
     end
 
 end

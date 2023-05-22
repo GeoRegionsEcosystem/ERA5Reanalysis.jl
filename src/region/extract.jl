@@ -72,6 +72,8 @@ function extract(
             smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat
         )
 
+        flush(stderr)
+
     end
 
 end
@@ -152,6 +154,8 @@ function extract(
             extract=true,extractnc=pnc,
             smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat
         )
+
+        flush(stderr)
 
     end
 
@@ -259,6 +263,8 @@ function extract(
                 extract=true,extractnc=pnc,
                 smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat
             )
+
+            flush(stderr)
 
         end
         

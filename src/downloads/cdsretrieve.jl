@@ -51,6 +51,8 @@ function cdsretrieve(
             end
         end
 
+        flush(stderr)
+
     end
 
 end
@@ -118,6 +120,8 @@ function cdsretrieve(
             split(e5ds,evar,ereg,lsd,dtii,pvec,fnc,tmpd)
         end
 
+        flush(stderr)
+
     end
 
 end
@@ -177,6 +181,8 @@ function cdsretrieve(
             end
             split(e5ds,evar,ereg,lsd,dtii,fnc,tmpd)
         end
+
+        flush(stderr)
 
     end
 

@@ -74,6 +74,8 @@ function read(
         disable_logging(Logging.Debug)
     end
 
+    flush(stderr)
+
     return NCDataset(enc)
 
 end
@@ -115,6 +117,8 @@ function read(
     if quiet
         disable_logging(Logging.Debug)
     end
+
+    flush(stderr)
 
     eds = NCDataset(enc)
     
