@@ -7,14 +7,18 @@ function save(
     lsd  :: LandSea;
     extract :: Bool = false,
     smooth  :: Bool = false,
-    extractnc :: AbstractString = "",
-    smoothlon :: Real = 0,
-    smoothlat :: Real = 0,
+    extractnc  :: AbstractString = "",
+    smoothlon  :: Real = 0,
+    smoothlat  :: Real = 0,
+    smoothtime :: Int = 0
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
 
-    ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
+    ds,fnc = save_createds(
+        e5ds, evar, ereg, dt, extract, smooth,
+        extractnc, smoothlon, smoothlat, smoothtime
+    )
 
     nhr = 24 * daysinmonth(dt)
     scale,offset = ncoffsetscale(data)
@@ -67,7 +71,10 @@ function save(
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
 
-    ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
+    ds,fnc = save_createds(
+        e5ds, evar, ereg, dt, extract, smooth,
+        extractnc, smoothlon, smoothlat, smoothtime
+    )
 
     nhr = 24 * daysinmonth(dt)
     scale,offset = ncoffsetscale(data)

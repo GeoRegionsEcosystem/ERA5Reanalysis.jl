@@ -7,21 +7,25 @@ function save(
     lsd  :: LandSea;
     extract :: Bool = false,
     smooth  :: Bool = false,
-    extractnc :: AbstractString = "",
-    smoothlon :: Real = 0,
-    smoothlat :: Real = 0,
+    extractnc  :: AbstractString = "",
+    smoothlon  :: Real = 0,
+    smoothlat  :: Real = 0,
+    smoothtime :: Int = 0
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
 
-    ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
+    ds,fnc = save_createds(
+        e5ds, evar, ereg, dt, extract, smooth,
+        extractnc, smoothlon, smoothlat, smoothtime
+    )
 
-    nhr = daysinmonth(dt)
+    ndy = daysinmonth(dt)
     scale,offset = ncoffsetscale(data)
 
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
-    ds.dim["time"] = nhr
+    ds.dim["time"] = ndy
 
     nclon,nclat = save_definelonlat!(ds)
 
@@ -35,7 +39,7 @@ function save(
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
-    nctime[:] = collect(1:nhr) .- 1
+    nctime[:] = collect(1:ndy) .- 1
 
     if iszero(scale)
         ncvar.var[:] = 0
@@ -67,15 +71,18 @@ function save(
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
 
-    ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
+    ds,fnc = save_createds(
+        e5ds, evar, ereg, dt, extract, smooth,
+        extractnc, smoothlon, smoothlat, smoothtime
+    )
 
-    nhr = daysinmonth(dt)
+    ndy = daysinmonth(dt)
     scale,offset = ncoffsetscale(data)
 
     lsd = getLandSea(e5ds,ereg)
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
-    ds.dim["time"] = nhr
+    ds.dim["time"] = ndy
 
     nclon,nclat = save_definelonlat!(ds)
 
@@ -89,7 +96,7 @@ function save(
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
-    nctime[:] = collect(1:nhr) .- 1
+    nctime[:] = collect(1:ndy) .- 1
     
     if iszero(scale)
         ncvar.var[:] = 0

@@ -138,7 +138,7 @@ function smoothing(
 
         save(
             view(spatialdata,:,:,1:nhr), dt, e5ds, evar, ereg, lsd,
-            smooth=true, spatiallon=spatiallon, spatiallat=spatiallat, smoothtime=hours
+            smooth=true, smoothlon=spatiallon, smoothlat=spatiallat, smoothtime=hours
         )
 
         flush(stderr)
@@ -287,7 +287,7 @@ function smoothing(
 
         save(
             view(smthdata,:,:,1:ndy), dt, e5ds, evar, ereg, lsd,
-            smooth=true, spatiallon=spatiallon, spatiallat=spatiallat, smoothtime=days
+            smooth=true, smoothlon=spatiallon, smoothlat=spatiallat, smoothtime=days
         )
 
         flush(stderr)

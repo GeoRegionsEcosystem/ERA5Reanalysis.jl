@@ -9,14 +9,18 @@ function save(
     offset :: Real;
     extract :: Bool = false,
     smooth  :: Bool = false,
-    extractnc :: AbstractString = "",
-    smoothlon :: Real = 0,
-    smoothlat :: Real = 0,
+    extractnc  :: AbstractString = "",
+    smoothlon  :: Real = 0,
+    smoothlat  :: Real = 0,
+    smoothtime :: Int = 0
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
 
-    ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
+    ds,fnc = save_createds(
+        e5ds, evar, ereg, dt, extract, smooth,
+        extractnc, smoothlon, smoothlat, smoothtime
+    )
 
     nhr = 24 * daysinmonth(dt)
 
@@ -59,11 +63,15 @@ function save(
     extractnc :: AbstractString = "",
     smoothlon :: Real = 0,
     smoothlat :: Real = 0,
+    smoothtime :: Int = 0
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) $(Dates.monthname(dt)) ..."
 
-    ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
+    ds,fnc = save_createds(
+        e5ds, evar, ereg, dt, extract, smooth,
+        extractnc, smoothlon, smoothlat, smoothtime
+    )
 
     nhr = daysinmonth(dt)
 
@@ -106,17 +114,16 @@ function save(
     extractnc :: AbstractString = "",
     smoothlon :: Real = 0,
     smoothlat :: Real = 0,
+    smoothtime :: Int = 0
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) ..."
 
     ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
 
-    nt = 12; if e5ds.hours; nt = nt * 24 end
-
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
-    ds.dim["time"] = nt
+    ds.dim["time"] = ntimesteps(e5ds)
 
     nclon,nclat = save_definelonlat!(ds)
 

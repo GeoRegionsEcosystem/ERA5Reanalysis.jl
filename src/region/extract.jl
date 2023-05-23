@@ -2,9 +2,10 @@ function extract(
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
 	ereg :: ERA5Region;
-    smooth    :: Bool = false,
-    smoothlon :: Real = 0,
-    smoothlat :: Real = 0
+    smooth     :: Bool = false,
+    smoothlon  :: Real = 0,
+    smoothlat  :: Real = 0,
+    smoothtime :: Int = 0,
 )
 
     if smooth && (iszero(smoothlon) && iszero(smoothlat))
@@ -29,23 +30,16 @@ function extract(
     else; mask = ones(nlon,nlat)
     end
     
-    if typeof(e5ds) <: ERA5Hourly
-        rmat = zeros(Int16,nlon,nlat,31*24)
-        pmat = zeros(Int16,nplon,nplat,31*24)
-    elseif typeof(e5ds) <: ERA5Daily
-        rmat = zeros(Int16,nlon,nlat,31)
-        rmat = zeros(Int16,nplon,nplat,31)
-    elseif !(e5ds.hours)
-        rmat = zeros(Int16,nlon,nlat,12)
-        rmat = zeros(Int16,nplon,nplat,12)
-    else
-        rmat = zeros(Int16,nlon,nlat,12*24)
-        rmat = zeros(Int16,nplon,nplat,12*24)
-    end
+    ndt  = ntimesteps(e5ds)
+    rmat = zeros(Int16,nlon,nlat,ndt)
+    pmat = zeros(Int16,nplon,nplat,ndt)
 
     for dt in extract_time(e5ds)
 
-        pds  = read(e5ds,evar,preg,dt,smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat)
+        pds  = read(
+            e5ds,evar,preg,dt,smooth=smooth,
+            smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
+        )
         pnc  = basename(path(pds))
         nt   = pds.dim["time"]
         sc   = pds[evar.varID].attrib["scale_factor"]
@@ -69,7 +63,7 @@ function extract(
         save(
             view(rmat,:,:,1:nt),dt,e5ds,evar,ereg,rlsd,sc,of,
             extract=true,extractnc=pnc,
-            smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat
+            smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
         )
 
         flush(stderr)
@@ -83,9 +77,10 @@ function extract(
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
 	ereg :: ERA5Region;
-    smooth    :: Bool = false,
-    smoothlon :: Real = 0,
-    smoothlat :: Real = 0
+    smooth     :: Bool = false,
+    smoothlon  :: Real = 0,
+    smoothlat  :: Real = 0,
+    smoothtime :: Int = 0
 )
 
     isinGeoRegion(sgeo,ereg.geo)
@@ -112,23 +107,16 @@ function extract(
     else; mask = ones(nlon,nlat)
     end
     
-    if typeof(e5ds) <: ERA5Hourly
-        rmat = zeros(Int16,nlon,nlat,31*24)
-        pmat = zeros(Int16,nplon,nplat,31*24)
-    elseif typeof(e5ds) <: ERA5Daily
-        rmat = zeros(Int16,nlon,nlat,31)
-        pmat = zeros(Int16,nplon,nplat,31)
-    elseif !(e5ds.hours)
-        rmat = zeros(Int16,nlon,nlat,12)
-        pmat = zeros(Int16,nplon,nplat,12)
-    else
-        rmat = zeros(Int16,nlon,nlat,12*24)
-        pmat = zeros(Int16,nplon,nplat,12*24)
-    end
+    ndt  = ntimesteps(e5ds)
+    rmat = zeros(Int16,nlon,nlat,ndt)
+    pmat = zeros(Int16,nplon,nplat,ndt)
 
     for dt in extract_time(e5ds)
 
-        pds  = read(e5ds,evar,ereg,dt,smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat)
+        pds  = read(
+            e5ds,evar,preg,dt,smooth=smooth,
+            smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
+        )
         pnc  = basename(path(pds))
         nt   = pds.dim["time"]
         sc   = pds[evar.varID].attrib["scale_factor"]
@@ -152,7 +140,7 @@ function extract(
         save(
             view(rmat,:,:,1:nt),dt,e5ds,evar,sreg,rlsd,sc,of,
             extract=true,extractnc=pnc,
-            smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat
+            smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
         )
 
         flush(stderr)
@@ -166,9 +154,10 @@ function extract(
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
 	ereg :: ERA5Region;
-    smooth    :: Bool = false,
-    smoothlon :: Real = 0,
-    smoothlat :: Real = 0
+    smooth     :: Bool = false,
+    smoothlon  :: Real = 0,
+    smoothlat  :: Real = 0,
+    smoothtime :: Int = 0,
 )
 
     for sgeo in geov
@@ -210,32 +199,19 @@ function extract(
         end
     end
 
+    ndt  = ntimesteps(e5ds)
     rmat = Vector{Array}(undef,ngeo)
-    if typeof(e5ds) <: ERA5Hourly
-        for igeo in 1 : ngeo
-            rmat[igeo] = zeros(Int16,nlon[igeo],nlat[igeo],31*24)
-        end
-        pmat = zeros(Int16,nplon,nplat,31*24)
-    elseif typeof(e5ds) <: ERA5Daily
-        for igeo in 1 : ngeo
-            rmat[igeo] = zeros(Int16,nlon[igeo],nlat[igeo],31)
-        end
-        pmat = zeros(Int16,nplon,nplat,31)
-    elseif !(e5ds.hours)
-        for igeo in 1 : ngeo
-            rmat[igeo] = zeros(Int16,nlon[igeo],nlat[igeo],12)
-        end
-        pmat = zeros(Int16,nplon,nplat,12)
-    else
-        for igeo in 1 : ngeo
-            rmat[igeo] = zeros(Int16,nlon[igeo],nlat[igeo],12*24)
-        end
-        pmat = zeros(Int16,nplon,nplat,12*24)
+    for igeo in 1 : ngeo
+        rmat[igeo] = zeros(Int16,nlon[igeo],nlat[igeo],ndt)
     end
+    pmat = zeros(Int16,nplon,nplat,ndt)
 
     for dt in extract_time(e5ds)
 
-        pds  = read(e5ds,evar,ereg,dt,smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat)
+        pds  = read(
+            e5ds,evar,preg,dt,smooth=smooth,
+            smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
+        )
         pnc  = basename(path(pds))
         nt   = pds.dim["time"]
         sc   = pds[evar.varID].attrib["scale_factor"]
@@ -260,8 +236,8 @@ function extract(
 
             save(
                 view(rmat[igeo],:,:,1:nt),dt,e5ds,evar,sreg[igeo],rlsd[igeo],sc,of,
-                extract=true,extractnc=pnc,
-                smooth=smooth,smoothlon=smoothlon,smoothlat=smoothlat
+                extract=true,smooth=smooth,extractnc=pnc,
+                smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
             )
 
             flush(stderr)

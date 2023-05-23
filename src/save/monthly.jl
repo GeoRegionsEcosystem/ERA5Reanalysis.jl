@@ -14,9 +14,11 @@ function save(
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) ..."
 
-    ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
+    ds,fnc = save_createds(
+        e5ds,evar,ereg,dt,extract,smooth,
+        extractnc,smoothlon,smoothlat
+    )
 
-    nt = 12; if e5ds.hours; nt = nt * 24 end
     scale,offset = ncoffsetscale(data)
 
     ds.dim["longitude"] = length(lsd.lon)
@@ -67,9 +69,11 @@ function save(
 
     @info "$(modulelog()) - Saving raw $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(dt)) ..."
 
-    ds,fnc = save_createds(e5ds,evar,ereg,dt,extract,smooth,extractnc,smoothlon,smoothlat)
+    ds,fnc = save_createds(
+        e5ds,evar,ereg,dt,extract,smooth,
+        extractnc,smoothlon,smoothlat
+    )
 
-    nt = 12; if e5ds.hours; nt = nt * 24 end
     scale,offset = ncoffsetscale(data)
 
     lsd = getLandSea(e5ds,ereg)
