@@ -24,7 +24,7 @@ using Reexport
 
 ## Exporting the following functions:
 export
-        ERA5Dataset, ERA5Hourly, ERA5Daily, ERA5Monthly,
+        ERA5Dataset, ERA5Hourly, ERA5Daily, ERA5Monthly, ERA5Dummy,
 
         ERA5Variable,
         SingleLevel,   SingleVariable,   SingleCustom,

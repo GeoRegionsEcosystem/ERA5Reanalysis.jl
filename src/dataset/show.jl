@@ -37,3 +37,11 @@ function show(io::IO, emod::ERA5Monthly)
 		"    Hour-of-Day?   (hours) : ", emod.hours, '\n',
 	)
 end
+
+function show(io::IO, emod::ERA5Dummy)
+    print(
+		io,
+		"The ERA5Monthly Module has the following properties:\n",
+		"    Mask Directory (emask) : ", emod.emask, '\n',
+	)
+end

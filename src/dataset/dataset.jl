@@ -54,6 +54,15 @@ struct ERA5Monthly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
 end
 
 """
+    ERA5Dummy <: ERA5Dataset
+
+Specifies that the dataset to be analyzed contains monthly-mean data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
+"""
+struct ERA5Dummy{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
+    emask :: ST
+end
+
+"""
     ERA5Hourly(;
         start :: TimeType,
         stop  :: TimeType,
@@ -208,6 +217,31 @@ function ERA5Monthly(
 
     end
 
+end
+
+"""
+    ERA5Dummy(;
+        path  :: AbstractString = homedir(),
+    ) -> ERA5Dummy <: ERA5Dataset
+
+A function that creates a dummy `ERA5Dataset` that contains only information on the path of the ERA5 LandSea mask
+
+Keyword Arguments
+=================
+- `path` : The specified directory in which to save the data
+"""
+function ERA5Dummy(
+    ST = String;
+    path :: AbstractString = homedir(),
+)
+
+    @info "$(modulelog()) - Setting up data structure for the ERA5 Dummy Dataset"
+    if !isdir(joinpath(path,"emask"))
+        mkpath(joinpath(path,"emask"))
+    end
+
+    return ERA5Dummy{ST}(joinpath(path,"emask"))
+     
 end
 
 function checkdates(
