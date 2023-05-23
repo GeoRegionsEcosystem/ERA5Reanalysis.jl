@@ -295,3 +295,98 @@ function smoothing(
     end
 
 end
+
+function smoothing(
+    e5ds :: ERA5Monthly,
+	evar :: ERA5Variable,
+    ereg :: ERA5Region;
+    spatial :: Real = 0,
+    spatiallon :: Real = 0,
+    spatiallat :: Real = 0,
+    verbose :: Bool = false
+)
+
+    if iszero(spatial) && (iszero(spatiallon) && iszero(spatiallat))
+        error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
+    end
+
+    if iszero(spatiallon); spatiallon = spatial end
+    if iszero(spatiallat); spatiallat = spatial end
+
+    gres = ereg.gres
+    shiftlon = Int(floor(spatiallon/(2*gres)))
+    shiftlat = Int(floor(spatiallat/(2*gres)))
+
+    lsd  = getLandSea(e5ds,ereg)
+    nlon = length(lsd.lon)
+    nlat = length(lsd.lat)
+
+    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
+
+    ndt = ntimesteps(e5ds)
+    tmpload  = zeros(Int16,nlon,nlat,ndt)
+    tmpdata  = zeros(nlon,nlat,ndt)
+    smthdata = zeros(nlon,nlat,ndt)
+    shfttmp  = zeros(nlon,nlat,(2*shiftlon+1)*(2*shiftlat+1))
+    shftnan  = zeros(Bool,(2*shiftlon+1)*(2*shiftlat+1))
+
+    for dt in e5ds.start : Month(1) : e5ds.stop
+
+        @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) ..."
+        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
+        sc  = ds[evar.varID].attrib["scale_factor"]
+        of  = ds[evar.varID].attrib["add_offset"]
+        mv  = ds[evar.varID].attrib["missing_value"]
+        fv  = ds[evar.varID].attrib["_FillValue"]
+        NCDatasets.load!(ds[evar.varID].var,tmpload,:,:,:)
+        int2real!(tmpdata,tmpload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
+        close(ds)
+
+        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",spatiallon))x$(@sprintf("%.2f",spatiallat))) on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) ..."
+        for idt = 1 : ndt
+            ishift = 0
+            for ishiftlat = -shiftlat : shiftlat, ishiftlon = -shiftlon : shiftlon
+                ishift += 1
+                circshift!(
+                    view(shfttmp,:,:,ishift),view(tmpdata,:,:,idt),
+                    (ishiftlon,ishiftlat)
+                )
+            end
+            for ilat = 1 : nlat, ilon = 1 : nlon
+                if !isnan(tmpdata[ilon,ilat,idt])
+                      smthdata[ilon,ilat,idt] = nanmean(view(shfttmp,ilon,ilat,:),shftnan)
+                else; smthdata[ilon,ilat,idt] = NaN
+                end
+            end
+        end
+
+        if verbose
+            @info "$(modulelog()) - Setting edges to NaN because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
+        end
+        if !iszero(shiftlon) && !ereg.is360
+            for idt = 1 : ndt, ilat = 1 : nlat, ilon = 1 : shiftlon
+                smthdata[ilon,ilat,idt] = NaN
+            end
+            for idt = 1 : ndt, ilat = 1 : nlat, ilon = (nlon-shiftlon+1) : nlon
+                smthdata[ilon,ilat,idt] = NaN
+            end
+        end
+        if !iszero(shiftlat)
+            for idt = 1 : ndt, ilat = 1 : shiftlat, ilon = 1 : nlon
+                smthdata[ilon,ilat,idt] = NaN
+            end
+            for idt = 1 : ndt, ilat = (nlat-shiftlat+1) : nlat, ilon = 1 : nlon
+                smthdata[ilon,ilat,idt] = NaN
+            end
+        end
+
+        save(
+            smthdata, dt, e5ds, evar, ereg, lsd,
+            smooth=true, smoothlon=spatiallon, smoothlat=spatiallat
+        )
+
+        flush(stderr)
+
+    end
+
+end
