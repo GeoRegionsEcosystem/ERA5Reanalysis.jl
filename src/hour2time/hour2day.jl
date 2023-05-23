@@ -13,9 +13,9 @@ function hourly2daily(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
 
-    tmpload = zeros(Int16,nlon,nlat,24,31)
-    tmpdata = zeros(nlon,nlat,24,31)
-    dydata  = zeros(nlon,nlat,366)
+    tmpload = zeros(Int16,nlon,nlat,ntimesteps(e5ds))
+    tmpdata = zeros(nlon,nlat,24)
+    dydata  = zeros(nlon,nlat,ntimesteps(e5dsdy))
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
@@ -28,22 +28,23 @@ function hourly2daily(
         of  = ds[evar.varID].attrib["add_offset"]
         mv  = ds[evar.varID].attrib["missing_value"]
         fv  = ds[evar.varID].attrib["_FillValue"]
-
-        for idy = 1 : ndy, ihr = 1 : 24
-            it = ihr + (idy-1) * 24
-            NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,ihr,idy),:,:,it)
-        end
-        int2real!(
-            view(tmpdata,:,:,:,1:ndy),view(tmpload,:,:,:,1:ndy),
-            scale=sc,offset=of,mvalue=mv,fvalue=fv
-        )
+        NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,1:(ndy*24)),:,:,it)
         close(ds)
 
         if verbose
             @info "$(modulelog()) - Performing daily-averaging on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) ..."
         end
-        for idy = 1 : ndy, ilat = 1 : nlat, ilon = 1 : nlon
-            dydata[ilon,ilat,idy] = mean(view(tmpdata,ilon,ilat,:,idy))
+
+        for idy = 1 : ndy
+            ibeg = 24 * (idy-1) + 1
+            iend = 24 *  idy
+            int2real!(
+                tmpdata,view(tmpload,:,:,ibeg:iend),
+                scale=sc,offset=of,mvalue=mv,fvalue=fv
+            )
+            for ilat = 1 : nlat, ilon = 1 : nlon
+                dydata[ilon,ilat,idy] = mean(view(tmpdata,ilon,ilat,:))
+            end
         end
 
         save(view(dydata,:,:,1:ndy), dt, e5dsdy, evar, ereg, lsd)
@@ -51,70 +52,5 @@ function hourly2daily(
         flush(stderr)
 
     end
-
-end
-
-function save_hourly2daily(
-    dayts :: AbstractArray{<:Real,3},
-    e5ds  :: ERA5Daily,
-    evar  :: ERA5Variable,
-    ereg  :: ERA5Region,
-    lsd   :: LandSea,
-    date  :: TimeType
-)
-
-    @info "$(modulelog()) - Saving daily $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) $(Dates.monthname(date)) ..."
-
-    fnc = e5dfnc(e5ds,evar,ereg,date)
-    fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
-    if isfile(fnc)
-        @info "$(modulelog()) - Stale NetCDF file $(fnc) detected.  Overwriting ..."
-        rm(fnc);
-    end
-    ds = NCDataset(fnc,"c",attrib = Dict(
-        "Conventions" => "CF-1.6",
-        "history"     => "Created on $(Dates.now()) with ERA5Reanalysis.jl",
-        "comments"    => "ERA5Reanalysis.jl creates NetCDF files in the same format that data is saved on the Climate Data Store"
-    ))
-
-    if typeof(evar) <: SingleVariable
-        ds.attrib["doi"] = e5ds.sldoi
-    elseif typeof(evar) <: PressureVariable
-        ds.attrib["doi"] = e5ds.pldoi
-    end
-
-    ndy = size(dayts,3)
-    scale,offset = ncoffsetscale(dayts)
-
-    ds.dim["time"] = ndy
-    ds.dim["longitude"] = length(lsd.lon)
-    ds.dim["latitude"]  = length(lsd.lat)
-
-    nclon,nclat = save_definelonlat!(ds)
-
-    nctime = defVar(ds,"time",Int32,("time",),attrib = Dict(
-        "units"     => "days since $(date) 00:00:00.0",
-        "long_name" => "time",
-        "calendar"  => "gregorian",
-    ))
-
-    ncvar = save_definevar!(ds,evar,scale,offset)
-    
-    nclon[:] = lsd.lon
-    nclat[:] = lsd.lat
-    nctime[:] = collect(1:ndy) .- 1
-
-    if iszero(scale)
-        ncvar.var[:] .= 0
-    else
-        if iszero(sum(isnan.(dayts)))
-              ncvar[:] = dayts
-        else; real2int16!(ncvar.var[:],dayts,scale,offset)
-        end
-    end
-
-    close(ds)
-
-    @info "$(modulelog()) - Daily-averaged $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) $(Dates.monthname(date)) has been saved into $(fnc)."
 
 end

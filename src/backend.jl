@@ -127,3 +127,7 @@ function nanmean(
     dataii = @view data[dNaN]
     if !isempty(dataii); return mean(dataii); else; return NaN; end
 end
+
+ntimesteps(     :: ERA5Hourly)  = 31 * 24
+ntimesteps(     :: ERA5Daily)   = 31
+ntimesteps(e5ds :: ERA5Monthly) = if e5ds.hours; return 12 * 24; else; return 12 end

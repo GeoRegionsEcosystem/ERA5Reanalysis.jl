@@ -21,7 +21,7 @@ function save(
 
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
-    ds.dim["time"] = nt
+    ds.dim["time"] = ntimesteps(e5ds)
 
     nclon,nclat = save_definelonlat!(ds)
 
@@ -75,7 +75,7 @@ function save(
     lsd = getLandSea(e5ds,ereg)
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
-    ds.dim["time"] = nt
+    ds.dim["time"] = ntimesteps(e5ds)
 
     nclon,nclat = save_definelonlat!(ds)
 
