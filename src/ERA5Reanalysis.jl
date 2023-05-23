@@ -61,7 +61,7 @@ All `ERA5Dataset` Types contain the following fields:
 - `dtext` : Is it the preliminary back extension from 1950-1978?
 
 !!! note
-    The `ERA5MonthlyHour` subType also has the field `hours` that specifies the hour(s) of day for which monthly data is downloaded
+    The `ERA5Monthly` subType also has the field `hours` that specifies the hour(s) of day for which monthly data is downloaded
 """
 abstract type ERA5Dataset end
 
