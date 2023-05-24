@@ -39,9 +39,11 @@ export
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read, save, extract, analysis, timeseries, smoothing,
+        download, read, save,
+        addCDSAPIkey,
         
-        hourly2daily, hourly2monthly, hourly2monthlyhour,
+        extract, analysis, timeseries, smoothing, hourly2daily, hourly2monthly,
+        hourly2monthlyhour,
 
         era5Pressures
 
