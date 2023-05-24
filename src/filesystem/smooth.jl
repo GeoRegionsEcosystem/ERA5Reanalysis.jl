@@ -1,9 +1,12 @@
 """
-    e5danc(
+    e5dsmth(
         e5ds :: ERA5Hourly,
         evar :: ERA5Variable,
         egeo :: ERA5Region,
-        dt   :: TimeType
+        dt   :: TimeType,
+        smoothlon  :: Real,
+        smoothlat  :: Real,
+        smoothtime :: Int
     ) -> String
 
 Returns of the path of the file for the NASA Precipitation dataset specified by `npd` for a GeoRegion specified by `geo` at a date specified by `dt`.

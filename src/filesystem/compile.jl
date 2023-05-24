@@ -3,7 +3,6 @@
         e5ds :: ERA5Dataset,
         evar :: ERA5Variable,
         egeo :: ERA5Region,
-        dt   :: TimeType
     ) -> String
 
 Returns of the path of the file for the NASA Precipitation dataset specified by `npd` for a GeoRegion specified by `geo` at a date specified by `dt`.
