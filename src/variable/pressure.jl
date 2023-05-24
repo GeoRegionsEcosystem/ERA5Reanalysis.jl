@@ -79,7 +79,7 @@ function PressureVariable(
     varID,lname,vname,units = IDinfo[[1,2,3,4]]
 
     prelist = era5Pressures()
-    if sum(prelist.==hPa) != 1 || iszero(hPa)
+    if iszero(sum(prelist.==hPa)) && !iszero(hPa)
         if throw
             error("$(modulelog()) - Pressure level specified in \"hPa\" argument is invalid, please check and see if you requested correctly")
         else
@@ -150,7 +150,7 @@ function PressureVariable(
 
     if !iszero(hPa)
         prelist = era5Pressures()
-        if sum(prelist.==hPa) != 1 || iszero(hPa)
+        if iszero(sum(prelist.==hPa))
             if throw
                 error("$(modulelog()) - Pressure level specified in \"hPa\" argument is invalid, please check and see if you requested correctly")
             else
