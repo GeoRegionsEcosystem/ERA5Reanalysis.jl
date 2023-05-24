@@ -24,7 +24,10 @@ There are three essential components to specifying an ERA5 reanalysis dataset:
 ## Documentation Overview
 
 The documentation for `ERA5Reanalysis.jl` is divided into three components:
-1. Tutorials - meant as an introduction to the package.  There are three key components to ERA5Reanalysis.jl: (a) Dataset types specified by `ERA5Dataset`s, (b) Single- and Pressure-level Variables of interest specified by `ERA5Variable`s and (c) Geographic Regions of interest specified by `ERA5Region`s
+1. Tutorials - meant to introduce the three key components of ERA5Reanalysis.jl:
+    (a) `ERA5Dataset` Types that specify the ERA5 Dataset of interest
+    (b) `ERA5Variable` Types that specifiy the Single- and Pressure-level Variables of interest
+    (c) `ERA5Region` Type that specifies the Geographic Regions of interest
 2. How-to Examples - geared towards those looking for specific examples of what can be done
 3. API Reference - comprehensive summary of all exported functionalities
 
