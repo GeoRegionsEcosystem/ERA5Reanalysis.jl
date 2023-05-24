@@ -24,7 +24,7 @@ function compile(
 
     for yr in yrbeg : yrend
 
-        @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+        @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
 
         eds = NCDataset(e5danc(e5ds,evar,date))
 
@@ -50,7 +50,7 @@ function compile(
 
     end
 
-    @info "$(modulelog()) - Calculating yearly mean, and diurnal, seasonal and interannual variability for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) ..."
+    @info "$(modulelog()) - Calculating yearly mean, and diurnal, seasonal and interannual variability for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) ..."
     eavg = eavg / nt
     edhr = edhr / nt
     eitr = eitr / nt
@@ -75,7 +75,7 @@ function save(
     lsd  :: LandSea
 )
 
-    @info "$(modulelog()) - Saving compiled $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) ..."
+    @info "$(modulelog()) - Saving compiled $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) ..."
     fnc = e5dcnc(e5ds,evar)
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
@@ -157,6 +157,6 @@ function save(
 
     close(ds)
 
-    @info "$(modulelog()) - Compiled $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) has been saved into $(fnc)."
+    @info "$(modulelog()) - Compiled $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) has been saved into $(fnc)."
 
 end

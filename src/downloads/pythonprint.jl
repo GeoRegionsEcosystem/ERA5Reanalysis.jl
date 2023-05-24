@@ -5,8 +5,8 @@ function pythonprint(
 )
     
     if typeof(evar) <: PressureVariable
-          fname = "$(e5ds.e5dID)-$(ereg.gstr)-$(evar.varID)-$(evar.hPa)hPa"
-    else; fname = "$(e5ds.e5dID)-$(ereg.gstr)-$(evar.varID)"
+          fname = "$(e5ds.e5dID)-$(ereg.string)-$(evar.varID)-$(evar.hPa)hPa"
+    else; fname = "$(e5ds.e5dID)-$(ereg.string)-$(evar.varID)"
     end
 
     fol,fnc = e5dfnc(e5ds,evar,ereg)
@@ -18,7 +18,7 @@ function pythonprint(
 
     fID = open(joinpath(fol,"$(fname).py"),"w")
 
-    @info "$(modulelog()) - Creating python download scripts to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.start) to $(e5ds.stop)."
+    @info "$(modulelog()) - Creating python download scripts to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
     write(fID,"#!/usr/bin/env python\n")
     write(fID,"import cdsapi\n")
@@ -159,7 +159,7 @@ function pythonprint_body_regiongrid(
         geo = ereg.geo
         write(fID,"                \"area\": [$(geo.N), $(geo.W), $(geo.S), $(geo.E)],\n");
     end
-    write(fID,"                \"grid\": [$(ereg.gres), $(ereg.gres)],\n");
+    write(fID,"                \"grid\": [$(ereg.resolution), $(ereg.resolution)],\n");
 
 end
 
@@ -172,7 +172,7 @@ function pythonprint_body_regiongrid(
         geo = ereg.geo
         write(fID,"            \"area\": [$(geo.N), $(geo.W), $(geo.S), $(geo.E)],\n");
     end
-    write(fID,"            \"grid\": [$(ereg.gres), $(ereg.gres)],\n");
+    write(fID,"            \"grid\": [$(ereg.resolution), $(ereg.resolution)],\n");
 
 end
 

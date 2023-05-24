@@ -12,7 +12,7 @@ Reads a NASA Precipitation dataset specified by `npd` for a GeoRegion specified 
 Arguments
 =========
 - `e5ds` : a `NASAPrecipitationDataset` specifying the dataset details and date download range
-- `egeo` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
+- `ereg` : a `GeoRegion` (see [GeoRegions.jl](https://github.com/JuliaClimate/GeoRegions.jl)) that sets the geographic bounds of the data array in lon-lat
 - `dt`   : A specified date. The NCDataset retrieved may will contain data for the date, although it may also contain data for other dates depending on the `NASAPrecipitationDataset` specified by `npd`
 
 Keyword Arguments
@@ -22,7 +22,7 @@ Keyword Arguments
 function read(
 	e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
     dt   :: TimeType;
     analysis :: Bool = false,
     smooth   :: Bool = false,
@@ -32,18 +32,18 @@ function read(
     quiet :: Bool = false
 )
 
-    enc = e5dfnc(e5ds,evar,egeo,dt)
+    enc = e5dfnc(e5ds,evar,ereg,dt)
 
     raw = true
     if analysis
-        enc = e5danc(e5ds,evar,egeo,dt)
+        enc = e5danc(e5ds,evar,ereg,dt)
         raw = false
     end
     if smooth
         if iszero(smoothlon) && iszero(smoothlat) && iszero(smoothtime)
             error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
         end
-        enc = e5dsmth(e5ds,evar,egeo,dt,smoothlon,smoothlat,smoothtime)
+        enc = e5dsmth(e5ds,evar,ereg,dt,smoothlon,smoothlat,smoothtime)
         raw = false
         analysis = false
     end
@@ -54,21 +54,21 @@ function read(
 
     if raw
         if !isfile(enc)
-            error("$(modulelog()) - The $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
+            error("$(modulelog()) - The $(e5ds.lname) Dataset for $(evar.vname) in the $(ereg.ID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+        @info "$(modulelog()) - Opening the $(e5ds.lname) NCDataset for $(evar.vname) in the $(ereg.ID) GeoRegion during Date $dt"
     end
     if analysis
         if !isfile(enc)
-            error("$(modulelog()) - The annually analyzed $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
+            error("$(modulelog()) - The annually analyzed $(e5ds.lname) Dataset for $(evar.vname) in the $(ereg.ID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the annually analyzed $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+        @info "$(modulelog()) - Opening the annually analyzed $(e5ds.lname) NCDataset for $(evar.vname) in the $(ereg.ID) GeoRegion during Date $dt"
     end
     if smooth
         if !isfile(enc)
-            error("$(modulelog()) - The spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
+            error("$(modulelog()) - The spatially smoothed ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) $(e5ds.lname) Dataset for $(evar.vname) in the $(ereg.ID) GeoRegion during Date $dt does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the spatialtemporally smoothed ($(@sprintf("%.2f",smoothlon))ºx$(@sprintf("%.2f",smoothlat))º, $(@sprintf("%02d",smoothtime)) timesteps) $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion during Date $dt"
+        @info "$(modulelog()) - Opening the spatialtemporally smoothed ($(@sprintf("%.2f",smoothlon))ºx$(@sprintf("%.2f",smoothlat))º, $(@sprintf("%02d",smoothtime)) timesteps) $(e5ds.lname) NCDataset for $(evar.vname) in the $(ereg.ID) GeoRegion during Date $dt"
     end
 
     if quiet
@@ -84,17 +84,17 @@ end
 function read(
 	e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
-	egeo :: ERA5Region;
+	ereg :: ERA5Region;
     compiled :: Bool = false,
     timeseries :: Bool = false,
     quiet :: Bool = false
 )
 
     if compiled
-        enc = e5dcnc(e5ds,evar,egeo)
+        enc = e5dcnc(e5ds,evar,ereg)
     end
     if timeseries
-        enc = e5dtnc(e5ds,evar,egeo)
+        enc = e5dtnc(e5ds,evar,ereg)
         compiled = false
     end
 
@@ -104,15 +104,15 @@ function read(
     
     if compiled
         if !isfile(enc)
-            error("$(modulelog()) - The compiled $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop)) does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
+            error("$(modulelog()) - The compiled $(e5ds.lname) Dataset for $(evar.vname) in the $(ereg.ID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop)) does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the compiled $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop))"
+        @info "$(modulelog()) - Opening the compiled $(e5ds.lname) NCDataset for $(evar.vname) in the $(ereg.ID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop))"
     end
     if timeseries
         if !isfile(enc)
-            error("$(modulelog()) - The domain-averaged timeseries $(e5ds.lname) Dataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop)) does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
+            error("$(modulelog()) - The domain-averaged timeseries $(e5ds.lname) Dataset for $(evar.vname) in the $(ereg.ID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop)) does not exist at $(enc).  Check if files exist at $(e5ds.path) or download the files here")
         end
-        @info "$(modulelog()) - Opening the domain-averaged timeseries $(e5ds.lname) NCDataset for $(evar.vname) in the $(egeo.geoID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop))"
+        @info "$(modulelog()) - Opening the domain-averaged timeseries $(e5ds.lname) NCDataset for $(evar.vname) in the $(ereg.ID) GeoRegion from $(year(e5ds.start)) to $(year(e5ds.stop))"
     end
 
     if quiet

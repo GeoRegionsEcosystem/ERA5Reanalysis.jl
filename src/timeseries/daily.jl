@@ -17,7 +17,7 @@ function timeseries(
     wgtmask = lsd.mask .* cosd.(lsd.lat)'
     summask = sum(wgtmask)
 
-    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
+    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
     tmpload = zeros(Int16,nlon,nlat,31)
     tmpdata = zeros(nlon,nlat,31)
@@ -28,7 +28,7 @@ function timeseries(
     for dt in e5ds.start : Month(1) : e5ds.stop
 
         if verbose
-            @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) ..."
+            @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         end
         ndy = daysinmonth(dt)
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
@@ -44,7 +44,7 @@ function timeseries(
         close(ds)
 
         if verbose
-            @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) and allocating into timeseries vector ..."
+            @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) and allocating into timeseries vector ..."
         end
         ii = Dates.value(dt-dtbeg)
         for it = 1 : ndy
@@ -98,14 +98,14 @@ function timeseries(
     ndt   = Dates.value(dtend-dtbeg)
 
     lsd  = getLandSea(e5ds,ereg)
-    slsd = getLandSea(e5ds,ERA5Region(sgeo,gres=ereg.gres))
+    slsd = getLandSea(e5ds,ERA5Region(sgeo,gres=ereg.resolution))
     ggrd = RegionGrid(sgeo,lsd.lon,lsd.lat)
     nlon = length(lsd.lon); iglon = ggrd.ilon; nglon = length(iglon)
     nlat = length(lsd.lat); iglat = ggrd.ilat; nglat = length(iglat)
     wgtmask = slsd.mask .* cosd.(slsd.lat)'
     summask = sum(wgtmask)
 
-    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
+    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
     tmpload = zeros(Int16,nlon,nlat,31)
     tmpdata = zeros(nlon,nlat,31)
@@ -116,7 +116,7 @@ function timeseries(
     for dt in e5ds.start : Month(1) : e5ds.stop
 
         if verbose
-            @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) ..."
+            @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         end
         ndy = daysinmonth(dt)
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
@@ -132,7 +132,7 @@ function timeseries(
         close(ds)
 
         if verbose
-            @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(sgeo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(dt)) $(monthname(dt)) and allocating into timeseries vector ..."
+            @info "$(modulelog()) - Finding latitude-weighted domain-mean of $(e5ds.lname) $(evar.vname) data in $(sgeo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) and allocating into timeseries vector ..."
         end
 
         ii = Dates.value(dt-dtbeg)
@@ -166,7 +166,7 @@ function timeseries(
 
     end
 
-    save_timeseries(totts, lndts, ocnts, e5ds, evar, ERA5Region(sgeo,gres=ereg.gres))
+    save_timeseries(totts, lndts, ocnts, e5ds, evar, ERA5Region(sgeo,gres=ereg.resolution))
 
     flush(stderr)
 
@@ -181,7 +181,7 @@ function save_timeseries(
     ereg  :: ERA5Region
 )
 
-    @info "$(modulelog()) - Saving domain-mean timeseries of $(uppercase(e5ds.lname)) $(evar.vname) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(year(e5ds.start)) $(Dates.monthname(e5ds.start)) to $(year(e5ds.stop)) $(Dates.monthname(e5ds.stop)) ..."
+    @info "$(modulelog()) - Saving domain-mean timeseries of $(uppercase(e5ds.lname)) $(evar.vname) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(year(e5ds.start)) $(Dates.monthname(e5ds.start)) to $(year(e5ds.stop)) $(Dates.monthname(e5ds.stop)) ..."
 
     fnc = e5dtnc(e5ds,evar,ereg)
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
@@ -235,6 +235,6 @@ function save_timeseries(
 
     close(ds)
 
-    @info "$(modulelog()) - Domain-mean timeseries of $(uppercase(e5ds.lname)) $(evar.vname) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(year(e5ds.start)) $(Dates.monthname(e5ds.start)) to $(year(e5ds.stop)) $(Dates.monthname(e5ds.stop)) has been saved into $(fnc)."
+    @info "$(modulelog()) - Domain-mean timeseries of $(uppercase(e5ds.lname)) $(evar.vname) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(year(e5ds.start)) $(Dates.monthname(e5ds.start)) to $(year(e5ds.stop)) $(Dates.monthname(e5ds.stop)) has been saved into $(fnc)."
 
 end

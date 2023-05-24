@@ -2,7 +2,7 @@
     e5danc(
         e5ds :: ERA5Hourly,
         evar :: ERA5Variable,
-        egeo :: ERA5Region,
+        ereg :: ERA5Region,
     ) -> String
 
 Returns of the path of the file for the NASA Precipitation dataset specified by `npd` for a GeoRegion specified by `geo` at a date specified by `dt`.
@@ -16,11 +16,11 @@ Arguments
 function e5dtnc(
     e5ds :: Union{ERA5Hourly,ERA5Daily},
 	evar :: SingleLevel,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
 )
 
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID)
-    fnc = e5ds.e5dID * "-" * "timeseries" * "-" * egeo.gstr * "-" * evar.varID * "-" * 
+    fol = joinpath(e5ds.path,ereg.string,evar.varID)
+    fnc = e5ds.e5dID * "-" * "timeseries" * "-" * ereg.string * "-" * evar.varID * "-" * 
           yrmo2str(e5ds.start) * "_" * yrmo2str(e5ds.stop) * ".nc"
     return joinpath(fol,fnc)
 
@@ -29,12 +29,12 @@ end
 function e5dtnc(
     e5ds :: Union{ERA5Hourly,ERA5Daily},
 	evar :: PressureLevel,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
 )
 
     evp = evar.varID * "-$(evar.hPa)hPa"
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp)
-    fnc = e5ds.e5dID * "-" * "timeseries" * "-" * egeo.gstr * "-" * evp * "-" * 
+    fol = joinpath(e5ds.path,ereg.string,evar.varID,evp)
+    fnc = e5ds.e5dID * "-" * "timeseries" * "-" * ereg.string * "-" * evp * "-" * 
           yrmo2str(e5ds.start) * "_" * yrmo2str(e5ds.stop) * ".nc"
     return joinpath(fol,fnc)
 

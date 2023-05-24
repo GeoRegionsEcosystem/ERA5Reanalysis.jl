@@ -13,15 +13,15 @@ function getLandSea(
     FT = Float64
 )
 
-    lsmfnc = joinpath(e5ds.emask,"emask-$(ereg.gstr).nc")
+    lsmfnc = joinpath(e5ds.emask,"emask-$(ereg.string).nc")
 
     if !isfile(lsmfnc)
 
-        @info "$(modulelog()) - The ERA5 Land-Sea mask dataset for the \"$(ereg.geoID)\" ERA5Region is not available, extracting from Global ERA5 Land-Sea mask dataset ..."
+        @info "$(modulelog()) - The ERA5 Land-Sea mask dataset for the \"$(ereg.ID)\" ERA5Region is not available, extracting from Global ERA5 Land-Sea mask dataset ..."
 
-        glbfnc = joinpath(e5ds.emask,"emask-GLBx$(@sprintf("%.2f",ereg.gres)).nc")
+        glbfnc = joinpath(e5ds.emask,"emask-GLBx$(@sprintf("%.2f",ereg.resolution)).nc")
         if !isfile(glbfnc)
-            @info "$(modulelog()) - The Global ERA5 Land-Sea mask dataset for the \"$(ereg.geoID)\" ERA5Region is not available, downloading from the Climate Data Store ..."
+            @info "$(modulelog()) - The Global ERA5 Land-Sea mask dataset for the \"$(ereg.ID)\" ERA5Region is not available, downloading from the Climate Data Store ..."
             downloadLandSea(e5ds,ereg)
         end
 
@@ -43,7 +43,7 @@ function getLandSea(
         else; mask = ones(Int16,nlon,nlat)
         end
 
-        @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.geoID)\" ERA5Region from the Global ERA5 Land-Sea mask dataset ..."
+        @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region from the Global ERA5 Land-Sea mask dataset ..."
 
         for iglat = 1 : nlat, iglon = 1 : nlon
             if isone(mask[iglon,iglat])
@@ -69,7 +69,7 @@ function getLandSea(
         msk = lds["mask"][:]
         close(lds)
 
-        @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.geoID)\" ERA5Region ..."
+        @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region ..."
 
         return LandSea{FT}(lon,lat,lsm,oro,msk)
 
@@ -94,7 +94,7 @@ function downloadLandSea(
             "month" => 12,
             "format" => "netcdf",
             "variable" => ["geopotential", "land_sea_mask"],
-            "grid" => [ereg.gres, ereg.gres],
+            "grid" => [ereg.resolution, ereg.resolution],
             "time" => "00:00"
         ), tmpfnc
     )
@@ -108,7 +108,7 @@ function downloadLandSea(
     close(tds)
 
     saveLandSea(
-        e5ds,ERA5Region(GeoRegion("GLB"),gres=ereg.gres),
+        e5ds,ERA5Region(GeoRegion("GLB"),resolution=ereg.resolution),
         lon,lat,lsm,oro,msk
     )
 
@@ -126,7 +126,7 @@ function saveLandSea(
     mask :: Array{Int16,2},
 )
 
-    fnc = joinpath(e5ds.emask,"emask-$(ereg.gstr).nc")
+    fnc = joinpath(e5ds.emask,"emask-$(ereg.string).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end

@@ -10,7 +10,7 @@ function hourly2monthlyhour(
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
 
-    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
+    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
     tmpload = zeros(Int16,nlon,nlat,ntimesteps(e5ds))
     tmpdata = zeros(nlon,nlat,31)
@@ -22,7 +22,7 @@ function hourly2monthlyhour(
 
             idt = Date(year(dt),imo)
             if verbose
-                @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(idt)) $(monthname(idt)) ..."
+                @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
             end
             ndy = daysinmonth(idt)
             nhr = daysinmonth(idt) * 24
@@ -34,7 +34,7 @@ function hourly2monthlyhour(
             close(ds)
 
             if verbose
-                @info "$(modulelog()) - Performing daily-averaging on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(idt)) $(monthname(idt)) ..."
+                @info "$(modulelog()) - Performing daily-averaging on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
             end
 
             for ihr = 1 : 24

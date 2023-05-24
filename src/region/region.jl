@@ -4,29 +4,29 @@
 Structure that imports relevant [GeoRegion](https://github.com/JuliaClimate/GeoRegions.jl) properties used in the handling of the gridded ERA5 datasets.
 
 All `ERA5Region` Types contain the following fields:
-- `geo`   : The `GeoRegion` containing the geographical information
-- `geoID` : The ID used to specify the `GeoRegion`
-- `gres`  : The resolution of the gridded data to be downloaded/analysed
-- `gstr`  : String, for specification of folder and file name
+- `geo` : The `GeoRegion` containing the geographical information
+- `ID` : The ID used to specify the `GeoRegion`
+- `resolution` : The resolution of the gridded data to be downloaded/analysed
+- `string` : Specification of folder and file name, mostly for backend usage
 - `isglb` : A Bool, true if spans the globe, false if no
 - `is360` : True if it spans 360º longitude
 """
 struct ERA5Region{ST<:AbstractString, FT<:Real}
-    geo   :: GeoRegion
-    geoID :: ST
-    gres  :: FT
-    gstr  :: ST
+    geo        :: GeoRegion
+    ID         :: ST
+    resolution :: FT
+    string     :: ST
     isglb :: Bool
     is360 :: Bool
 end
 
 """
     ERA5Region(
-        geo  :: GeoRegion;
-        gres :: Real = 0,
+        geo :: GeoRegion;
+        resolution :: Real = 0,
         ST = String,
         FT = Float64
-    ) -> egeo :: ERA5Region
+    ) -> ereg :: ERA5Region
 
 Argument
 ========
@@ -36,17 +36,17 @@ Argument
 Keyword Argument
 ================
 
-- `gres` : The spatial resolution that ERA5 reanalysis data will be downloaded/analyzed, and 360 must be a multiple of `gres`
+- `resolution` : The spatial resolution that ERA5 reanalysis data will be downloaded/analyzed, and 360 must be a multiple of `gres`
 """
 function ERA5Region(
-    geo  :: GeoRegion;
-    gres :: Real = 0,
+    geo :: GeoRegion;
+    resolution :: Real = 0,
     ST = String,
     FT = Float64
 )
 
     @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(geo.regID)\""
-    gres = regionstep(geo.regID,gres)
+    gres = regionstep(geo.regID,resolution)
     if geo.regID == "GLB"; isglb = true; else; isglb = false end
     if mod(geo.E,360) == mod(geo.W,360); is360 = true; else; is360 = false end
 
@@ -57,18 +57,36 @@ function ERA5Region(
 
 end
 
+"""
+    ERA5Region(
+        geoID :: AbstractString;
+        resolution :: Real = 0,
+        ST = String,
+        FT = Float64
+    ) -> ereg :: ERA5Region
+
+Argument
+========
+
+- `geoID` : The ID used to specify the `GeoRegion`
+
+Keyword Argument
+================
+
+- `resolution` : The spatial resolution that ERA5 reanalysis data will be downloaded/analyzed, and 360 must be a multiple of `gres`
+"""
 function ERA5Region(
     geoID :: AbstractString;
-    gres :: Real = 0,
+    resolution :: Real = 0,
     ST = String,
     FT = Float64
 )
 
     @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(geoID)\""
-    gres = regionstep(geoID,gres)
+    gres = regionstep(geoID,resolution)
     if geoID == "GLB"; isglb = true; else; isglb = false end
 
-    return ERA5Region(GeoRegion(geoID),gres=gres,ST=ST,FT=FT)
+    return ERA5Region(GeoRegion(geoID),resolution=resolution,ST=ST,FT=FT)
 
 end
 
@@ -110,24 +128,24 @@ function show(io::IO, ereg::ERA5Region)
         print(
             io,
             "The ERA5Region wrapper for the \"$(ereg.geoID)\" GeoRegion has the following properties:\n",
-            "    Region ID      (geoID) : ", ereg.geoID, '\n',
-            "    Name        (geo.name) : ", ereg.geo.name,  '\n',
-            "    Resolution      (gres) : ", ereg.gres,  '\n',
-            "    Folder ID       (gstr) : ", ereg.gstr, '\n',
-            "    Bounds (geo.[N,S,E,W]) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
-            "    Shape      (geo.shape) : ", geo.shape, '\n',
-            "       (geo.[is180,is360]) : ",(geo.is180,geo.is360),"\n",
+            "    Region ID       (geoID) : ", ereg.geoID, '\n',
+            "    Name         (geo.name) : ", ereg.geo.name,  '\n',
+            "    Resolution (resolution) : ", ereg.gres,  '\n',
+            "    Folder ID        (gstr) : ", ereg.gstr, '\n',
+            "    Bounds  (geo.[N,S,E,W]) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
+            "    Shape       (geo.shape) : ", geo.shape, '\n',
+            "        (geo.[is180,is360]) : ",(geo.is180,geo.is360),"\n",
         )
     else
         print(
             io,
             "The ERA5Region wrapper for the \"$(ereg.geoID)\" GeoRegion has the following properties:\n",
-            "    Region ID      (geoID) : ", ereg.geoID, '\n',
-            "    Name        (geo.name) : ", ereg.geo.name,  '\n',
-            "    Resolution      (gres) : ", ereg.gres,  '\n',
-            "    Folder ID       (gstr) : ", ereg.gstr, '\n',
-            "    Bounds (geo.[N,S,E,W]) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
-            "       (geo.[is180,is360]) : ",(geo.is180,geo.is360),"\n",
+            "    Region ID       (geoID) : ", ereg.geoID, '\n',
+            "    Name         (geo.name) : ", ereg.geo.name,  '\n',
+            "    Resolution (resolution) : ", ereg.gres,  '\n',
+            "    Folder ID        (gstr) : ", ereg.gstr, '\n',
+            "    Bounds  (geo.[N,S,E,W]) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
+            "        (geo.[is180,is360]) : ",(geo.is180,geo.is360),"\n",
         )
     end
 

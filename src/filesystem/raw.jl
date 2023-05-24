@@ -2,7 +2,7 @@
     e5dfnc(
         e5ds :: ERA5Dataset,
         evar :: ERA5Variable,
-        egeo :: ERA5Region,
+        ereg :: ERA5Region,
         dt   :: TimeType
     ) -> String
 
@@ -17,13 +17,13 @@ Arguments
 function e5dfnc(
     e5ds :: Union{ERA5Hourly,ERA5Daily},
 	evar :: SingleLevel,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
     dt   :: TimeType
 )
 
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,dts)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evar.varID * "-" * yrmo2str(dt) * ".nc"
+    fol = joinpath(e5ds.path,ereg.string,evar.varID,dts)
+    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evar.varID * "-" * yrmo2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -31,14 +31,14 @@ end
 function e5dfnc(
     e5ds :: Union{ERA5Hourly,ERA5Daily},
 	evar :: PressureLevel,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
     dt   :: TimeType
 )
 
     evp = evar.varID * "-$(evar.hPa)hPa"
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp,dts)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp * "-" * yrmo2str(dt) * ".nc"
+    fol = joinpath(e5ds.path,ereg.string,evar.varID,evp,dts)
+    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evp * "-" * yrmo2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -46,13 +46,13 @@ end
 function e5dfnc(
     e5ds :: ERA5Monthly,
 	evar :: SingleLevel,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
     dt   :: TimeType
 )
 
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evar.varID * "-" * dts * ".nc"
+    fol = joinpath(e5ds.path,ereg.string,evar.varID)
+    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evar.varID * "-" * dts * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -60,14 +60,14 @@ end
 function e5dfnc(
     e5ds :: ERA5Monthly,
 	evar :: PressureLevel,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
     dt   :: TimeType
 )
 
     evp = evar.varID * "-$(evar.hPa)hPa"
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp * "-" * dts * ".nc"
+    fol = joinpath(e5ds.path,ereg.string,evar.varID,evp)
+    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evp * "-" * dts * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -75,11 +75,11 @@ end
 function e5dfnc(
     e5ds :: ERA5Dataset,
 	evar :: SingleLevel,
-	egeo :: ERA5Region
+	ereg :: ERA5Region
 )
 
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evar.varID
+    fol = joinpath(e5ds.path,ereg.string,evar.varID)
+    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evar.varID
     return fol, fnc
 
 end
@@ -87,12 +87,12 @@ end
 function e5dfnc(
     e5ds :: ERA5Dataset,
 	evar :: PressureLevel,
-	egeo :: ERA5Region
+	ereg :: ERA5Region
 )
 
     evp = evar.varID * "-$(evar.hPa)hPa"
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp
+    fol = joinpath(e5ds.path,ereg.string,evar.varID,evp)
+    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evp
     return fol, fnc
 
 end
