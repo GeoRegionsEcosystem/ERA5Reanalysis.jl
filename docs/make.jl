@@ -35,9 +35,9 @@ makedocs(;
             ]
         ],
         "Downloading ERA5 Data" => [
-            "Downloading ERA5 Datasets" => "downloads/overview.md",
-            "Examples"                  => "downloads/examples.md",
-            "An Overview of the CDSAPI" => "downloads/cdsapi.md",
+            "Overview and Functionality"  => "downloads/overview.md",
+            "Examples"                    => "downloads/examples.md",
+            "The CDSAPI - A Brief Primer" => "downloads/cdsapi.md",
         ]
     ],
 )
