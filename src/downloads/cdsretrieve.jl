@@ -8,7 +8,7 @@ function cdsretrieve(
     dtvec = cdsretrieve_dtvec(e5ds)
     ckeys = cdskey()
 
-    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.start) to $(e5ds.stop)."
+    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
     for dtii in dtvec
 
@@ -20,7 +20,7 @@ function cdsretrieve(
             "year"         => year(dtii),
             "month"        => cdsretrieve_month(dtii,e5ds),
             "variable"     => evar.lname,
-            "grid"         => [ereg.gres, ereg.gres],
+            "grid"         => [ereg.resolution, ereg.resolution],
             "time"         => cdsretrieve_time(e5ds),
             "format"       => "netcdf",
         )
@@ -75,7 +75,7 @@ function cdsretrieve(
     nlat = length(lsd.lat)
     tmpd = zeros(Int16,nlon,nlat,31*24)
 
-    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.start) to $(e5ds.stop)."
+    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
     for dtii in dtvec
 
@@ -88,7 +88,7 @@ function cdsretrieve(
             "year"         => year(dtii),
             "month"        => cdsretrieve_month(dtii,e5ds),
             "variable"     => evar.lname,
-            "grid"         => [ereg.gres, ereg.gres],
+            "grid"         => [ereg.resolution, ereg.resolution],
             "time"         => cdsretrieve_time(e5ds),
             "format"       => "netcdf",
         )
@@ -136,7 +136,7 @@ function cdsretrieve(
     dtvec = cdsretrieve_dtvec(e5ds)
     ckeys = cdskey()
 
-    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $([evarii.lname for evarii in evar]) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) from $(e5ds.start) to $(e5ds.stop)."
+    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.lname)) $([evarii.lname for evarii in evar]) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
     lsd  = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
@@ -154,7 +154,7 @@ function cdsretrieve(
             "year"         => year(dtii),
             "month"        => cdsretrieve_month(dtii,e5ds),
             "variable"     => [evarii.lname for evarii in evar],
-            "grid"         => [ereg.gres, ereg.gres],
+            "grid"         => [ereg.resolution, ereg.resolution],
             "time"         => cdsretrieve_time(e5ds),
             "format"       => "netcdf",
         )

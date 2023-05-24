@@ -127,7 +127,7 @@ function show(io::IO, ereg::ERA5Region)
     if typeof(geo) <: PolyRegion
         print(
             io,
-            "The ERA5Region wrapper for the \"$(ereg.geoID)\" GeoRegion has the following properties:\n",
+            "The ERA5Region wrapper for the \"$(ereg.ID)\" GeoRegion has the following properties:\n",
             "    Region ID          (ID) : ", ereg.ID, '\n',
             "    Name         (geo.name) : ", ereg.geo.name,  '\n',
             "    Resolution (resolution) : ", ereg.resolution,  '\n',
@@ -139,7 +139,7 @@ function show(io::IO, ereg::ERA5Region)
     else
         print(
             io,
-            "The ERA5Region wrapper for the \"$(ereg.geoID)\" GeoRegion has the following properties:\n",
+            "The ERA5Region wrapper for the \"$(ereg.ID)\" GeoRegion has the following properties:\n",
             "    Region ID          (ID) : ", ereg.ID, '\n',
             "    Name         (geo.name) : ", ereg.geo.name,  '\n',
             "    Resolution (resolution) : ", ereg.resolution,  '\n',
