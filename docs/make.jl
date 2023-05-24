@@ -15,29 +15,29 @@ makedocs(;
     sitename = "ERA5Reanalysis.jl",
     pages    = [
         "Home" => "index.md",
-        "ERA5Datasets" => [
-            "CDS Datasets"   => "modules/index.md",
-            "Usage Examples" => "modules/examples.md",
-        ],
-        "ERA5Variables" => [
-            "Variable Types"                    => "variables/index.md",
-            "Retrieving Existing ERA5Variables" => "variables/read.md",
-            "List of Existing ERA5Variables"    => "variables/list.md",
-            "Creating Custom ERA5Variables"     => [
-                "Custom Pressure-Level Variables" => "variables/pressures.md",
-                "Custom Single-Level Variables"   => "variables/singles.md",
-                "Resetting ERA5Variables"         => "variables/reset.md",
+        "Components" => [
+            "Overview" => "components/overview.md",
+            "ERA5Datasets" => [
+                "CDS Datasets"   => "components/datasets/index.md",
+                "Usage Examples" => "components/datasets/examples.md",
             ],
-        ],
-        "ERA5Regions" => [
-            "The Basics of an ERA5Region"       => "regions/index.md",
-            "Is it in an ERA5Region"            => "regions/isin.md",
-            "Extracting Data using ERA5Regions" => "regions/gridded.md",
+            "ERA5Variables" => [
+                "Variable Types"                    => "components/variables/index.md",
+                "Retrieving Existing ERA5Variables" => "components/variables/read.md",
+                "List of Existing ERA5Variables"    => "components/variables/list.md",
+                "Creating Custom ERA5Variables"     => "components/variables/custom.md",
+                "Resetting ERA5Variables"           => "components/variables/reset.md",
+            ],
+            "ERA5Regions" => [
+                "The Basics of an ERA5Region"       => "components/regions/index.md",
+                "Is it in an ERA5Region"            => "components/regions/isin.md",
+                "Extracting Data using ERA5Regions" => "components/regions/gridded.md",
+            ]
         ],
         "Downloading ERA5 Data" => [
-            "The CDSAPI"              => "downloads/cdsapi.md"
-            "Downloading with Julia"  => "downloads/julia.md"
-            "Downloading with Python" => "downloads/python.md"
+            "Downloading ERA5 Datasets" => "downloads/overview.md",
+            "Examples"                  => "downloads/examples.md",
+            "An Overview of the CDSAPI" => "downloads/cdsapi.md",
         ]
     ],
 )

@@ -11,6 +11,10 @@ SingleVariable(
     ST = String,
 )
 ```
+
+!!! note
+    Not all `SingleVariable` types are available by default in ERA5Reanalysis.jl, and must be defined using the `SingleVariable()` function.  When doing so, remember to `inCDS` to `true`.  More information can be found [here](singles.md)
+
 ```@repl
 using ERA5Reanalysis
 SingleVariable("u100")

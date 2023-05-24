@@ -19,7 +19,6 @@ The following datasets are currently supported by ERA5Reanalysis.jl:
 ```@docs
 ERA5Hourly
 ERA5Monthly
-ERA5MonthlyHour
 ```
 
 There are other potential modules that could be incorporated into ERA5Reanalysis.jl, such as
