@@ -168,7 +168,8 @@ function addCDSAPIkey(
     fID = joinpath(homedir(),filename)
     if !isfile(fID) || overwrite
 
-        open(filename,"w") do f
+        @info "$(now()) - CDSAPI - Adding key to $fID ..."
+        open(fID,"w") do f
 
             write(f,"url: $url\nkey: $key")
 

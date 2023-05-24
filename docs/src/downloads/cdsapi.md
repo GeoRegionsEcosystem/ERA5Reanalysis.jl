@@ -7,3 +7,13 @@ Then, you can either follow the instructions above in the API-how-to, or you can
 ```@docs
 addCDSAPIkey
 ```
+
+So, example
+
+```@repl
+using ERA5Reanalysis
+ckeys = ERA5Reanalysis.cdskey()
+addCDSAPIkey("<your-key-here>",overwrite=true)
+ckeys = ERA5Reanalysis.cdskey()
+rm(joinpath(homedir(),".cdsapirc"))
+```

@@ -13,7 +13,8 @@ using NCDatasets
 using PrettyTables
 using Statistics
 
-import Base: show, read, download, split
+import Base: show, read, split
+import Downloads: download
 import GeoRegions: getLandSea
 
 ## Reexporting exported functions within these modules
@@ -85,6 +86,7 @@ abstract type ERA5Variable end
 modulelog() = "$(now()) - ERA5Reanalysis.jl"
 
 function __init__()
+    
     jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol);
     fvar = ["singlevariable.txt","singlecustom.txt","pressurevariable.txt","pressurecustom.txt"]
     for fname in fvar
@@ -93,6 +95,32 @@ function __init__()
             @info "$(modulelog()) - $(fname) does not exist in $(jfol), copying ..."
         end
     end
+
+    fcdsapi = joinpath(homedir(),".cdsapirc")
+    if !isfile(fcdsapi)
+        @info "$(modulelog()) - No .cdsapirc file exists, copying .cdsapirc file with temporary key to home directory $(homedir()) ..."
+        cp(
+            joinpath(@__DIR__,"..","extra",".cdsapirc"),
+            fcdsapi
+        )
+    else
+        disable_logging(Logging.Warn)
+        ckeys = cdskey()
+        disable_logging(Logging.Debug)
+        if ckeys["key"] == "199699:c52da207-6f7d-4ae8-bd33-085246faee6e"
+            fdt = (Dates.unix2datetime(mtime(joinpath(homedir(),".cdsapirc"))))
+            if fdt < (Dates.now() - Month(1))
+                @warn "$(modulelog()) - The temporary key provided by ERA5Reanalysis.jl is not meant to be used on a permanent basis, and you need to create your own key per the instructions in the documentation.  Deleting key now ..."
+                cp(
+                    joinpath(@__DIR__,"..","extra",".cdsapircnokey"),
+                    fcdsapi, force = true
+                )
+            elseif fdt < (Dates.now() - Day(7))
+                @warn "$(modulelog()) - The temporary key provided by ERA5Reanalysis.jl is not meant to be used on a permanent basis, please create your own key per the instructions in the documentation as this key will be deleted eventually ..."
+            end
+        end
+    end
+
 end
 
 ## Including other files in the module
