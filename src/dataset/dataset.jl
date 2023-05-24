@@ -17,7 +17,7 @@ struct ERA5Hourly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
 end
 
 """
-    ERA5Hourly <: ERA5Dataset
+    ERA5Daily <: ERA5Dataset
 
 Specifies that the dataset to be analyzed contains hourly data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
 """
@@ -112,7 +112,7 @@ end
         start :: TimeType,
         stop  :: TimeType,
         path  :: AbstractString = homedir(),
-    ) -> ERA5Hourly <: ERA5Dataset
+    ) -> ERA5Daily <: ERA5Dataset
 
 A function that creates an `ERA5Hourly` module.  All possible hours are downloaded, and data is saved month-by-month.
 

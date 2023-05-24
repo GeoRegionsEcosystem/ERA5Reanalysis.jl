@@ -43,7 +43,7 @@ end
 """
     download(
         e5ds :: Union{ERA5Hourly,ERA5Monthly},
-        evar :: Vector{SingleVariable{ST}},
+        evar :: Vector{SingleVariable},
         ereg :: ERA5Region;
         overwrite :: Bool = false
     ) -> nothing
@@ -65,10 +65,10 @@ Arguments
 """
 function download(
     e5ds :: Union{ERA5Hourly,ERA5Monthly},
-    evar :: Vector{SingleVariable{ST}},
+    evar :: Vector{SingleVariable},
     ereg :: ERA5Region;
     overwrite :: Bool = false
-) where ST <: AbstractString
+)
 
     for evarii in evar
         downloadcheckevar(evarii)
