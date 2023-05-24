@@ -16,7 +16,7 @@ The package GeoRegions.jl is automatically reexported by ERA5Reanalysis.jl, so o
 ```@docs
 ERA5Region(
     geo  :: GeoRegion;
-    gres :: Real,
+    resolution :: Real,
     ST = String,
     FT = Float64
 )
@@ -31,6 +31,6 @@ using ERA5Reanalysis
 
 geo   = GeoRegion("AR6_SEA")
 egeo1 = ERA5Region(geo)
-egeo2 = ERA5Region(geo,gres=1.0)
-egeo3 = ERA5Region(geo,gres=1.3)
+egeo2 = ERA5Region(geo,resolution=1.0)
+egeo3 = ERA5Region(geo,resolution=1.3)
 ```

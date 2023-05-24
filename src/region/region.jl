@@ -128,10 +128,10 @@ function show(io::IO, ereg::ERA5Region)
         print(
             io,
             "The ERA5Region wrapper for the \"$(ereg.geoID)\" GeoRegion has the following properties:\n",
-            "    Region ID       (geoID) : ", ereg.geoID, '\n',
+            "    Region ID          (ID) : ", ereg.ID, '\n',
             "    Name         (geo.name) : ", ereg.geo.name,  '\n',
-            "    Resolution (resolution) : ", ereg.gres,  '\n',
-            "    Folder ID        (gstr) : ", ereg.gstr, '\n',
+            "    Resolution (resolution) : ", ereg.resolution,  '\n',
+            "    Folder ID      (string) : ", ereg.string, '\n',
             "    Bounds  (geo.[N,S,E,W]) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
             "    Shape       (geo.shape) : ", geo.shape, '\n',
             "        (geo.[is180,is360]) : ",(geo.is180,geo.is360),"\n",
@@ -140,10 +140,10 @@ function show(io::IO, ereg::ERA5Region)
         print(
             io,
             "The ERA5Region wrapper for the \"$(ereg.geoID)\" GeoRegion has the following properties:\n",
-            "    Region ID       (geoID) : ", ereg.geoID, '\n',
+            "    Region ID          (ID) : ", ereg.ID, '\n',
             "    Name         (geo.name) : ", ereg.geo.name,  '\n',
-            "    Resolution (resolution) : ", ereg.gres,  '\n',
-            "    Folder ID        (gstr) : ", ereg.gstr, '\n',
+            "    Resolution (resolution) : ", ereg.resolution,  '\n',
+            "    Folder ID      (string) : ", ereg.string, '\n',
             "    Bounds  (geo.[N,S,E,W]) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
             "        (geo.[is180,is360]) : ",(geo.is180,geo.is360),"\n",
         )
