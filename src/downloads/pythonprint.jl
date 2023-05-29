@@ -5,8 +5,8 @@ function pythonprint(
 )
     
     if typeof(evar) <: PressureVariable
-          fname = "$(e5ds.e5dID)-$(ereg.string)-$(evar.varID)-$(evar.hPa)hPa"
-    else; fname = "$(e5ds.e5dID)-$(ereg.string)-$(evar.varID)"
+          fname = "$(e5ds.ID)-$(ereg.string)-$(evar.ID)-$(evar.hPa)hPa"
+    else; fname = "$(e5ds.ID)-$(ereg.string)-$(evar.ID)"
     end
 
     fol,fnc = e5dfnc(e5ds,evar,ereg)
@@ -18,7 +18,7 @@ function pythonprint(
 
     fID = open(joinpath(fol,"$(fname).py"),"w")
 
-    @info "$(modulelog()) - Creating python download scripts to download $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
+    @info "$(modulelog()) - Creating python download scripts to download $(uppercase(e5ds.name)) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
     write(fID,"#!/usr/bin/env python\n")
     write(fID,"import cdsapi\n")
@@ -94,7 +94,7 @@ function pythonprint_body_producttype(
     evar :: ERA5Variable,
 )
 
-    write(fID,"        c.retrieve(\"$(evar.dname)\",\n")
+    write(fID,"        c.retrieve(\"$(evar.dataset)\",\n")
     write(fID,"            {\n");
     write(fID,"                \"product_type\": \"$(e5ds.ptype)\",\n");
 
@@ -106,7 +106,7 @@ function pythonprint_body_producttype(
     evar :: ERA5Variable,
 )
 
-    write(fID,"    c.retrieve(\"$(evar.dname)-monthly-means\",\n")
+    write(fID,"    c.retrieve(\"$(evar.dataset)-monthly-means\",\n")
     write(fID,"        {\n");
     write(fID,"            \"product_type\": \"$(e5ds.ptype)\",\n");
 
@@ -117,7 +117,7 @@ function pythonprint_body_variable(
     evar :: SingleVariable,
 )
 
-    write(fID,"                \"variable\": \"$(evar.lname)\",\n");
+    write(fID,"                \"variable\": \"$(evar.long)\",\n");
 
 end
 
@@ -126,7 +126,7 @@ function pythonprint_body_variable(
     evar :: PressureVariable,
 )
 
-    write(fID,"                \"variable\": \"$(evar.lname)\",\n");
+    write(fID,"                \"variable\": \"$(evar.long)\",\n");
     write(fID,"                \"pressure_level\": $(evar.hPa),\n");
 
 end
@@ -136,7 +136,7 @@ function pythonprint_body_variable(
     evar :: SingleVariable,
 )
 
-    write(fID,"            \"variable\": \"$(evar.lname)\",\n");
+    write(fID,"            \"variable\": \"$(evar.long)\",\n");
 
 end
 
@@ -145,7 +145,7 @@ function pythonprint_body_variable(
     evar :: PressureVariable,
 )
 
-    write(fID,"            \"variable\": \"$(evar.lname)\",\n");
+    write(fID,"            \"variable\": \"$(evar.long)\",\n");
     write(fID,"            \"pressure_level\": $(evar.hPa),\n");
 
 end

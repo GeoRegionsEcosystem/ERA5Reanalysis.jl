@@ -3,7 +3,7 @@
 
 Structure that imports relevant [GeoRegion](https://github.com/JuliaClimate/GeoRegions.jl) properties used in the handling of the gridded ERA5 datasets.
 
-All `ERA5Region` Types contain the following fields:
+The `ERA5Region` Type contain the following fields:
 - `geo` : The `GeoRegion` containing the geographical information
 - `ID` : The ID used to specify the `GeoRegion`
 - `resolution` : The resolution of the gridded data to be downloaded/analysed
@@ -45,21 +45,21 @@ function ERA5Region(
     FT = Float64
 )
 
-    @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(geo.regID)\""
-    gres = regionstep(geo.regID,resolution)
-    if geo.regID == "GLB"; isglb = true; else; isglb = false end
+    @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(geo.ID)\""
+    resolution = regionstep(geo.ID,resolution)
+    if geo.ID == "GLB"; isglb = true; else; isglb = false end
     if mod(geo.E,360) == mod(geo.W,360); is360 = true; else; is360 = false end
 
     return ERA5Region{ST,FT}(
-        geo, geo.regID, gres,
-        "$(geo.regID)x$(@sprintf("%.2f",gres))", isglb, is360
+        geo, geo.ID, gres,
+        "$(geo.ID)x$(@sprintf("%.2f",resolution))", isglb, is360
     )
 
 end
 
 """
     ERA5Region(
-        geoID :: AbstractString;
+        ID :: AbstractString;
         resolution :: Real = 0,
         ST = String,
         FT = Float64
@@ -68,7 +68,7 @@ end
 Argument
 ========
 
-- `geoID` : The ID used to specify the `GeoRegion`
+- `ID` : The ID used to specify the `GeoRegion`
 
 Keyword Argument
 ================
@@ -76,29 +76,29 @@ Keyword Argument
 - `resolution` : The spatial resolution that ERA5 reanalysis data will be downloaded/analyzed, and 360 must be a multiple of `gres`
 """
 function ERA5Region(
-    geoID :: AbstractString;
+    ID :: AbstractString;
     resolution :: Real = 0,
     ST = String,
     FT = Float64
 )
 
-    @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(geoID)\""
-    gres = regionstep(geoID,resolution)
-    if geoID == "GLB"; isglb = true; else; isglb = false end
+    @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(ID)\""
+    resolution = regionstep(ID,resolution)
+    if ID == "GLB"; isglb = true; else; isglb = false end
 
-    return ERA5Region(GeoRegion(geoID),resolution=resolution,ST=ST,FT=FT)
+    return ERA5Region(GeoRegion(ID),resolution=resolution,ST=ST,FT=FT)
 
 end
 
 function regionstep(
-    geoID :: AbstractString,
+    ID :: AbstractString,
     gres  :: Real = 0
 )
 
     @debug "$(modulelog()) - Determining spacing between grid points in the GeoRegion ..."
     if gres == 0
         @info "$(modulelog()) - No grid resolution specified, defaulting to the module default (1.0º for global GeoRegion, 0.25º for all others)"
-        if geoID == "GLB";
+        if ID == "GLB";
               gres = 1.0;
         else; gres = 0.25;
         end

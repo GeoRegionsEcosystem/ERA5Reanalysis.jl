@@ -83,7 +83,7 @@ Arguments
 - `lon`   : A vector containing the longitude points
 - `lat`   : A vector containing the latitude points
 """
-function ERA5RegionGrid(
+function RegionGrid(
     e5geo :: ERA5Region,
     lon   :: Vector{<:Real},
     lat   :: Vector{<:Real}
@@ -109,7 +109,7 @@ Arguments
 - `lon`   : An array containing the longitude points
 - `lat`   : An array containing the latitude points
 """
-function ERA5RegionGrid(
+function RegionGrid(
     e5geo :: ERA5Region,
     lon   :: Array{<:Real,2},
     lat   :: Array{<:Real,2}

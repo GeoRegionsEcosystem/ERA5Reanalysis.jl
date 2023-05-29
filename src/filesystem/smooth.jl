@@ -28,11 +28,11 @@ function e5dsmth(
 )
 
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,ereg.string,evar.varID,dts)
-    fnc = e5ds.e5dID * "-" * ereg.string * "-" * "smooth" * "_" *
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,dts)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * "smooth" * "_" *
           @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
           "_" * @sprintf("%02d",smoothtime) * "steps" *
-          "-" * evar.varID * "-" * yrmo2str(dt) * ".nc"
+          "-" * evar.ID * "-" * yrmo2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -47,10 +47,10 @@ function e5dsmth(
     smoothtime :: Int
 )
 
-    evp = evar.varID * "-$(evar.hPa)hPa"
+    evp = evar.ID * "-$(evar.hPa)hPa"
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,ereg.string,evar.varID,dts)
-    fnc = e5ds.e5dID * "-" * ereg.string * "-" * "smooth" * "_" *
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,dts)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * "smooth" * "_" *
           @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
           "_" * @sprintf("%02d",smoothtime) * "steps" *
           "-" * evp * "-" * yrmo2str(dt) * ".nc"

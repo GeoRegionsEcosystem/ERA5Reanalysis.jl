@@ -22,19 +22,19 @@ function hourly2monthlyhour(
 
             idt = Date(year(dt),imo)
             if verbose
-                @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
+                @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
             end
             ndy = daysinmonth(idt)
             nhr = daysinmonth(idt) * 24
-            sc  = ds[evar.varID].attrib["scale_factor"]
-            of  = ds[evar.varID].attrib["add_offset"]
-            mv  = ds[evar.varID].attrib["missing_value"]
-            fv  = ds[evar.varID].attrib["_FillValue"]
-            NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,1:nhr),:,:,it)
+            sc  = ds[evar.ID].attrib["scale_factor"]
+            of  = ds[evar.ID].attrib["add_offset"]
+            mv  = ds[evar.ID].attrib["missing_value"]
+            fv  = ds[evar.ID].attrib["_FillValue"]
+            NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhr),:,:,it)
             close(ds)
 
             if verbose
-                @info "$(modulelog()) - Performing daily-averaging on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
+                @info "$(modulelog()) - Performing daily-averaging on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
             end
 
             for ihr = 1 : 24

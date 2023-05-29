@@ -9,19 +9,17 @@ using Printf
 ## Modules Used
 using HTTP
 using JSON
-using NCDatasets
 using PrettyTables
 using Statistics
 
-import Base: show, read, split
-import Downloads: download
-import GeoRegions: getLandSea
+import Base: show, read, split, download
+import GeoRegions: RegionGrid, getLandSea
 
 ## Reexporting exported functions within these modules
 using Reexport
 @reexport using Dates
 @reexport using GeoRegions
-@reexport using NCDatasets: nomissing
+@reexport using NCDatasets
 
 ## Exporting the following functions:
 export
@@ -54,30 +52,47 @@ export
 """
     ERA5Dataset
 
-Abstract supertype for ERA5 reanalysis datasets.
+Abstract supertype for ERA5 reanalysis datasets, with the following subtypes:
+
+    ERA5Hourly  <: ERA5Dataset
+    ERA5Daily   <: ERA5Dataset
+    ERA5Monthly <: ERA5Dataset
 
 All `ERA5Dataset` Types contain the following fields:
-- `e5dID` : The module ID, that also acts as a prefix to filenames
-- `eroot` : The specified directory in which to save the data
+- `ID` : The module ID, that also acts as a prefix to filenames
+- `name` : The full name of the module
 - `start` : The date for which downloads/analysis begins
-- `stop`  : The date for which downloads/analysis finishes
-- `dtext` : Is it the preliminary back extension from 1950-1978?
+- `stop` : The date for which downloads/analysis finishes
+- `path` : The specified directory in which to save the data
+- `emask` : The specified directory in which to save the `LandSea` dataset
+- `sldoi` : Single-Level DOI (N/A for ERA5Daily)
+- `pldoi` : Pressure-Level DOI (N/A for ERA5Daily)
+- `ptype` : Product type (N/A for ERA5Daily), set to `reanalysis`
 
-!!! note
-    The `ERA5Monthly` subType also has the field `hours` that specifies the hour(s) of day for which monthly data is downloaded
+The `ERA5Monthly` Type will also contain the following fields:
+- `hours` : specifies the hour(s) of day for which monthly data is downloaded
 """
 abstract type ERA5Dataset end
 
 """
     ERA5Variable
 
-Abstract supertype for ERA5 variables.
+Abstract supertype for ERA5 variables, with the following subtypes, and their respective subtypes:
+
+    SingleVariable   <: SingleLevel   <: ERA5Variable
+    SingleCustom     <: SingleLevel   <: ERA5Variable
+    PressureVariable <: PressureLevel <: ERA5Variable
+    PressureCustom   <: PressureLevel <: ERA5Variable
 
 All `ERA5Variable` Types contain the following fields:
-- `varID` : The variable ID, that is also the identifier in the NetCDF files
-- `lname` : The variable long-name, which is used to specify retrievals from CDS
-- `vname` : The full-name of the variable
+- `ID` : The variable ID, that is also the identifier in the NetCDF files
+- `name` : The full-name of the variable
+- `long` : The variable long-name, which is used to specify retrievals from CDS
+- `dataset` : The full-name of the variable
 - `units` : The units of the variable
+
+All `PressureLevel` Types contain the following fields:
+- `hPa` : The pressure level (in hPa) of the pressure-variable of interest
 """
 abstract type ERA5Variable end
 
@@ -98,27 +113,7 @@ function __init__()
 
     fcdsapi = joinpath(homedir(),".cdsapirc")
     if !isfile(fcdsapi)
-        @info "$(modulelog()) - No .cdsapirc file exists, copying .cdsapirc file with temporary key to home directory $(homedir()) ..."
-        cp(
-            joinpath(@__DIR__,"..","extra",".cdsapirc"),
-            fcdsapi
-        )
-    else
-        disable_logging(Logging.Warn)
-        ckeys = cdskey()
-        disable_logging(Logging.Debug)
-        if ckeys["key"] == "199699:c52da207-6f7d-4ae8-bd33-085246faee6e"
-            fdt = (Dates.unix2datetime(mtime(joinpath(homedir(),".cdsapirc"))))
-            if fdt < (Dates.now() - Month(1))
-                @warn "$(modulelog()) - The temporary key provided by ERA5Reanalysis.jl is not meant to be used on a permanent basis, and you need to create your own key per the instructions in the documentation.  Deleting key now ..."
-                cp(
-                    joinpath(@__DIR__,"..","extra",".cdsapircnokey"),
-                    fcdsapi, force = true
-                )
-            elseif fdt < (Dates.now() - Day(7))
-                @warn "$(modulelog()) - The temporary key provided by ERA5Reanalysis.jl is not meant to be used on a permanent basis, please create your own key per the instructions in the documentation as this key will be deleted eventually ..."
-            end
-        end
+        @warn "$(modulelog()) - No .cdsapirc file exists, please follow the instructions on the Climate Data Store to find your key and set up the .cdsapirc file using the function addCDSAPIkey() ..."
     end
 
 end

@@ -47,42 +47,42 @@ function smoothing(
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
-        @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         nhr = daysinmonth(dt) * 24
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
-        sc  = ds[evar.varID].attrib["scale_factor"]
-        of  = ds[evar.varID].attrib["add_offset"]
-        mv  = ds[evar.varID].attrib["missing_value"]
-        fv  = ds[evar.varID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,1:nhr),:,:,:)
+        sc  = ds[evar.ID].attrib["scale_factor"]
+        of  = ds[evar.ID].attrib["add_offset"]
+        mv  = ds[evar.ID].attrib["missing_value"]
+        fv  = ds[evar.ID].attrib["_FillValue"]
+        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhr),:,:,:)
         int2real!(
             view(tmpdata,:,:,1:nhr), view(tmpload,:,:,1:nhr),
             scale=sc, offset=of, mvalue=mv, fvalue=fv
         )
         close(ds)
 
-        @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt-Month(1))) ..."
+        @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt-Month(1))) ..."
         nhb = daysinmonth(dt-Month(1)) * 24
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt-Month(1)))
-        sc  = ds[evar.varID].attrib["scale_factor"]
-        of  = ds[evar.varID].attrib["add_offset"]
-        mv  = ds[evar.varID].attrib["missing_value"]
-        fv  = ds[evar.varID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,1:nhb),:,:,:)
+        sc  = ds[evar.ID].attrib["scale_factor"]
+        of  = ds[evar.ID].attrib["add_offset"]
+        mv  = ds[evar.ID].attrib["missing_value"]
+        fv  = ds[evar.ID].attrib["_FillValue"]
+        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhb),:,:,:)
         int2real!(
             view(tmpdata,:,:,(1:buffer)), view(tmpload,:,:,(nhb+1-buffer):nhb),
             scale=sc, offset=of, mvalue=mv, fvalue=fv
         )
         close(ds)
 
-        @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt+Month(1))) ..."
+        @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt+Month(1))) ..."
         nhe = daysinmonth(dt+Month(1)) * 24
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt+Month(1)))
-        sc  = ds[evar.varID].attrib["scale_factor"]
-        of  = ds[evar.varID].attrib["add_offset"]
-        mv  = ds[evar.varID].attrib["missing_value"]
-        fv  = ds[evar.varID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,1:nhe),:,:,:)
+        sc  = ds[evar.ID].attrib["scale_factor"]
+        of  = ds[evar.ID].attrib["add_offset"]
+        mv  = ds[evar.ID].attrib["missing_value"]
+        fv  = ds[evar.ID].attrib["_FillValue"]
+        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhe),:,:,:)
         int2real!(
             view(tmpdata,:,:,(1:buffer).+(nhr+buffer)),
             view(tmpload,:,:,1:buffer),
@@ -90,7 +90,7 @@ function smoothing(
         )
         close(ds)
 
-        @info "$(modulelog()) - Performing $hours-hour temporal smoothing on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Performing $hours-hour temporal smoothing on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         for ihr = 1 : nhr, ilat = 1 : nlat, ilon = 1 : nlon
             for ii = 0 : (buffer*2)
                 smthii[ii+1] = tmpdata[ilon,ilat,ihr+ii] * weights[ii+1]
@@ -98,7 +98,7 @@ function smoothing(
             smthdata[ilon,ilat,ihr] = mean(smthii)
         end
 
-        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",spatiallon))x$(@sprintf("%.2f",spatiallat))) on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",spatiallon))x$(@sprintf("%.2f",spatiallat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         for ihr = 1 : nhr
             ishift = 0
             for ishiftlat = -shiftlat : shiftlat, ishiftlon = -shiftlon : shiftlon
@@ -196,42 +196,42 @@ function smoothing(
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
-        @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         ndy = daysinmonth(dt)
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
-        sc  = ds[evar.varID].attrib["scale_factor"]
-        of  = ds[evar.varID].attrib["add_offset"]
-        mv  = ds[evar.varID].attrib["missing_value"]
-        fv  = ds[evar.varID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,1:ndy),:,:,:)
+        sc  = ds[evar.ID].attrib["scale_factor"]
+        of  = ds[evar.ID].attrib["add_offset"]
+        mv  = ds[evar.ID].attrib["missing_value"]
+        fv  = ds[evar.ID].attrib["_FillValue"]
+        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:ndy),:,:,:)
         int2real!(
             view(tmpdata,:,:,(1:ndy).+buffer), view(tmpload,:,:,1:ndy),
             scale=sc, offset=of, mvalue=mv, fvalue=fv
         )
         close(ds)
 
-        @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt-Month(1))) ..."
+        @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt-Month(1))) ..."
         ndb = daysinmonth(dt-Month(1))
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt-Month(1)))
-        sc  = ds[evar.varID].attrib["scale_factor"]
-        of  = ds[evar.varID].attrib["add_offset"]
-        mv  = ds[evar.varID].attrib["missing_value"]
-        fv  = ds[evar.varID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,1:ndb),:,:,:)
+        sc  = ds[evar.ID].attrib["scale_factor"]
+        of  = ds[evar.ID].attrib["add_offset"]
+        mv  = ds[evar.ID].attrib["missing_value"]
+        fv  = ds[evar.ID].attrib["_FillValue"]
+        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:ndb),:,:,:)
         int2real!(
             view(tmpdata,:,:,(1:buffer)), view(tmpload,:,:,(ndb+1-buffer):ndb),
             scale=sc, offset=of, mvalue=mv, fvalue=fv
         )
         close(ds)
 
-        @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt+Month(1))) ..."
+        @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt+Month(1))) ..."
         nde = daysinmonth(dt+Month(1))
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt+Month(1)))
-        sc  = ds[evar.varID].attrib["scale_factor"]
-        of  = ds[evar.varID].attrib["add_offset"]
-        mv  = ds[evar.varID].attrib["missing_value"]
-        fv  = ds[evar.varID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,1:nde),:,:,:)
+        sc  = ds[evar.ID].attrib["scale_factor"]
+        of  = ds[evar.ID].attrib["add_offset"]
+        mv  = ds[evar.ID].attrib["missing_value"]
+        fv  = ds[evar.ID].attrib["_FillValue"]
+        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nde),:,:,:)
         int2real!(
             view(tmpdata,:,:,(1:buffer).+(ndy+buffer)),
             view(tmpload,:,:,1:buffer),
@@ -239,7 +239,7 @@ function smoothing(
         )
         close(ds)
 
-        @info "$(modulelog()) - Performing $hours-hour temporal smoothing on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Performing $hours-hour temporal smoothing on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         for ihr = 1 : nhr, ilat = 1 : nlat, ilon = 1 : nlon
             for ii = 0 : (buffer*2)
                 smthii[ii+1] = tmpdata[ilon,ilat,ihr+ii] * weights[ii+1]
@@ -247,7 +247,7 @@ function smoothing(
             smthdata[ilon,ilat,ihr] = mean(smthii)
         end
 
-        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",spatiallon))x$(@sprintf("%.2f",spatiallat))) on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",spatiallon))x$(@sprintf("%.2f",spatiallat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         for idy = 1 : ndy
             ishift = 0
             for ishiftlat = -shiftlat : shiftlat, ishiftlon = -shiftlon : shiftlon
@@ -332,17 +332,17 @@ function smoothing(
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
-        @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
-        sc  = ds[evar.varID].attrib["scale_factor"]
-        of  = ds[evar.varID].attrib["add_offset"]
-        mv  = ds[evar.varID].attrib["missing_value"]
-        fv  = ds[evar.varID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.varID].var,tmpload,:,:,:)
+        sc  = ds[evar.ID].attrib["scale_factor"]
+        of  = ds[evar.ID].attrib["add_offset"]
+        mv  = ds[evar.ID].attrib["missing_value"]
+        fv  = ds[evar.ID].attrib["_FillValue"]
+        NCDatasets.load!(ds[evar.ID].var,tmpload,:,:,:)
         int2real!(tmpdata,tmpload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
         close(ds)
 
-        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",spatiallon))x$(@sprintf("%.2f",spatiallat))) on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",spatiallon))x$(@sprintf("%.2f",spatiallat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         for idt = 1 : ndt
             ishift = 0
             for ishiftlat = -shiftlat : shiftlat, ishiftlon = -shiftlon : shiftlon

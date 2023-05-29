@@ -12,7 +12,7 @@ function analysis(
     nlat = length(lsd.lat)
     mask = lsd.mask
 
-    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
+    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
     lon_NaN = zeros(Bool,nlon)
     lat_NaN = zeros(Bool,nlat)
@@ -33,16 +33,16 @@ function analysis(
 
     for yr in yrbeg : yrend
 
-        @info "$(modulelog()) - Calculating monthly climatology and diurnal statistics for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+        @info "$(modulelog()) - Calculating monthly climatology and diurnal statistics for $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
 
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,Date(yr)))
-        sc  = ds[evar.varID].attrib["scale_factor"]
-        of  = ds[evar.varID].attrib["add_offset"]
-        mv  = ds[evar.varID].attrib["missing_value"]
-        fv  = ds[evar.varID].attrib["_FillValue"]
+        sc  = ds[evar.ID].attrib["scale_factor"]
+        of  = ds[evar.ID].attrib["add_offset"]
+        mv  = ds[evar.ID].attrib["missing_value"]
+        fv  = ds[evar.ID].attrib["_FillValue"]
 
         if iseramohr
-            NCDatasets.load!(ds[evar.varID].var,traw,:,:,:,:)
+            NCDatasets.load!(ds[evar.ID].var,traw,:,:,:,:)
             for imo = 1 : 12, ihr = 1 : 24, ilat = 1 : nlat, ilon = 1 : nlon
                 tint[ilon,ilat,ihr,imo] = traw[ilon,ilat,ihr + (imo-1)*24]
             end
@@ -56,7 +56,7 @@ function analysis(
                 end
             end
         else
-            NCDatasets.load!(ds[evar.varID].var,tvar,:,:,:)
+            NCDatasets.load!(ds[evar.ID].var,tvar,:,:,:)
             int2real!(
                 view(davg,:,:,1:12), tvar,
                 scale=sc, offset=of, mvalue=mv, fvalue=fv
@@ -72,7 +72,7 @@ function analysis(
 
         if iseramohr
 
-            @info "$(modulelog()) - Calculating monthly climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+            @info "$(modulelog()) - Calculating monthly climatology for $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
             for imo = 1 : 12, ilat = 1 : nlat, ilon = 1 : nlon
                 davg[ilon,ilat,25,imo] = mean(view(davg,ilon,ilat,1:24,imo))    # domain_monthly_mean_climatology
                 dstd[ilon,ilat,26,imo] = std(view(davg,ilon,ilat,1:24,imo))     # domain_monthly_std_climatology
@@ -80,7 +80,7 @@ function analysis(
                 dmin[ilon,ilat,28,imo] = minimum(view(davg,ilon,ilat,1:24,imo)) # domain_monthly_minimum_climatology
             end
 
-            @info "$(modulelog()) - Calculating yearly diurnal climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+            @info "$(modulelog()) - Calculating yearly diurnal climatology for $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
             for ihr = 1 : 24, ilat = 1 : nlat, ilon = 1 : nlon
                 davg[ilon,ilat,ihr,13] = mean(view(davg,ilon,ilat,ihr,1:12))    # domain_yearly_mean_hourly
                 dstd[ilon,ilat,ihr,14] = std(view(davg,ilon,ilat,ihr,1:12))     # domain_yearly_std_hourly
@@ -88,7 +88,7 @@ function analysis(
                 dmin[ilon,ilat,ihr,16] = minimum(view(davg,ilon,ilat,ihr,1:12)) # domain_yearly_minimum_hourly
             end
 
-            @info "$(modulelog()) - Calculating yearly climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+            @info "$(modulelog()) - Calculating yearly climatology for $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
             for ilat = 1 : nlat, ilon = 1 : nlon
                 davg[ilon,ilat,25,13] = mean(view(davg,ilon,ilat,1:24,1:12))    # domain_yearly_mean_climatology
                 dstd[ilon,ilat,26,14] = std(view(davg,ilon,ilat,1:24,1:12))     # domain_yearly_std_climatology
@@ -96,7 +96,7 @@ function analysis(
                 dmin[ilon,ilat,28,16] = minimum(view(davg,ilon,ilat,1:24,1:12)) # domain_yearly_minimum_climatology
             end
 
-            @info "$(modulelog()) - Calculating zonal-averaged climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+            @info "$(modulelog()) - Calculating zonal-averaged climatology for $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
             for ilat = 1 : nlat, ihr = 1 : 28, imo = 1 : 16
                 zavg[ilat,ihr,imo] = nanmean(view(davg,:,ilat,ihr,imo),lon_NaN)
                 zstd[ilat,ihr,imo] = nanmean(view(dstd,:,ilat,ihr,imo),lon_NaN)
@@ -104,7 +104,7 @@ function analysis(
                 zmin[ilat,ihr,imo] = nanmean(view(dmin,:,ilat,ihr,imo),lon_NaN)
             end
             
-            @info "$(modulelog()) - Calculating meridional-averaged climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+            @info "$(modulelog()) - Calculating meridional-averaged climatology for $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
             for imo = 1 : 16, ihr = 1 : 28, ilon = 1 : nlon
                 mavg[ilon,ihr,imo] = nanmean(view(davg,ilon,:,ihr,imo),lat_NaN)
                 mstd[ilon,ihr,imo] = nanmean(view(dstd,ilon,:,ihr,imo),lat_NaN)
@@ -114,7 +114,7 @@ function analysis(
 
         else
             
-            @info "$(modulelog()) - Calculating yearly climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+            @info "$(modulelog()) - Calculating yearly climatology for $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
             for ilat = 1 : nlat, ilon = 1 : nlon
                 davg[ilon,ilat,13] = mean(view(davg,ilon,ilat,1:12))    # domain_yearly_mean_climatology
                 davg[ilon,ilat,14] = std(view(davg,ilon,ilat,1:12))     # domain_yearly_std_climatology
@@ -122,12 +122,12 @@ function analysis(
                 davg[ilon,ilat,16] = minimum(view(davg,ilon,ilat,1:12)) # domain_yearly_minimum_climatology
             end
 
-            @info "$(modulelog()) - Calculating zonal-averaged climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+            @info "$(modulelog()) - Calculating zonal-averaged climatology for $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
             for ilat = 1 : nlat, imo = 1 : 16
                 zavg[ilat,imo] = nanmean(view(davg,:,ilat,imo),lon_NaN)
             end
             
-            @info "$(modulelog()) - Calculating meridional-averaged climatology for $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $yr ..."
+            @info "$(modulelog()) - Calculating meridional-averaged climatology for $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
             for imo = 1 : 16, ilon = 1 : nlon
                 mavg[ilon,imo] = nanmean(view(davg,ilon,:,imo),lat_NaN)
             end
@@ -153,7 +153,7 @@ function save(
     lsd  :: LandSea
 )
 
-    @info "$(modulelog()) - Saving analyzed $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) ..."
+    @info "$(modulelog()) - Saving analyzed $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) for $(year(date)) ..."
     fnc = e5danc(e5ds,evar,ereg,date)
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
@@ -186,8 +186,8 @@ function save(
     nclat[:] = lsd.lat
     
     attr_var = Dict(
-        "long_name"     => evar.lname,
-        "full_name"     => evar.vname,
+        "long_name"     => evar.long,
+        "full_name"     => evar.name,
         "units"         => evar.units,
         "_FillValue"    => Int16(-32767),
         "missing_value" => Int16(-32767),
@@ -310,7 +310,7 @@ function save(
 
     close(ds)
 
-    @info "$(modulelog()) - Analyzed $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) has been saved into $(fnc)."
+    @info "$(modulelog()) - Analyzed $(uppercase(e5ds.name)) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) for $(year(date)) has been saved into $(fnc)."
 
 end
 
@@ -325,7 +325,7 @@ function save(
     lsd  :: LandSea
 )
 
-    @info "$(modulelog()) - Saving analyzed $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) ..."
+    @info "$(modulelog()) - Saving analyzed $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) for $(year(date)) ..."
     fnc = e5danc(e5ds,evar,ereg,date)
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
@@ -358,8 +358,8 @@ function save(
     nclat[:] = lsd.lat
     
     attr_var = Dict(
-        "long_name"     => evar.lname,
-        "full_name"     => evar.vname,
+        "long_name"     => evar.long,
+        "full_name"     => evar.name,
         "units"         => evar.units,
         "_FillValue"    => Int16(-32767),
         "missing_value" => Int16(-32767),
@@ -664,6 +664,6 @@ function save(
 
     close(ds)
 
-    @info "$(modulelog()) - Analyzed $(uppercase(e5ds.lname)) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) for $(year(date)) has been saved into $(fnc)."
+    @info "$(modulelog()) - Analyzed $(uppercase(e5ds.name)) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) for $(year(date)) has been saved into $(fnc)."
 
 end

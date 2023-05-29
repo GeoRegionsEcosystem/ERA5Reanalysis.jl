@@ -1,10 +1,10 @@
 function show(io::IO, evar::SingleLevel)
     print(
 		io,
-		"The Single-Level Variable \"$(evar.varID)\" has the following properties:\n",
-		"    Variable ID    (varID) : ", evar.varID, '\n',
-		"    Long Name      (lname) : ", evar.lname, '\n',
-		"    Variable Name  (vname) : ", evar.vname, '\n',
+		"The Single-Level Variable \"$(evar.ID)\" has the following properties:\n",
+		"    Variable ID       (ID) : ", evar.ID,    '\n',
+		"    Long Name       (long) : ", evar.long,  '\n',
+		"    Variable Name   (name) : ", evar.name,  '\n',
 		"    Variable Units (units) : ", evar.units, '\n',
 	)
 end
@@ -12,11 +12,11 @@ end
 function show(io::IO, evar::PressureLevel)
     print(
 		io,
-		"The Pressure-Level Variable \"$(evar.varID)\" has the following properties:\n",
-		"    Variable ID    (varID) : ", evar.varID, '\n',
-		"    Long Name      (lname) : ", evar.lname, '\n',
-		"    Variable Name  (vname) : ", evar.vname, '\n',
+		"The Pressure-Level Variable \"$(evar.ID)\" has the following properties:\n",
+		"    Variable ID       (ID) : ", evar.ID,    '\n',
+		"    Long Name       (long) : ", evar.long,  '\n',
+		"    Variable Name   (name) : ", evar.name,  '\n',
 		"    Variable Units (units) : ", evar.units, '\n',
-		"    Pressure Level  (hPa)  : ", evar.hPa,   '\n',
+		"    Pressure Level   (hPa) : ", evar.hPa,   '\n',
 	)
 end

@@ -19,8 +19,8 @@ function e5dtnc(
 	ereg :: ERA5Region,
 )
 
-    fol = joinpath(e5ds.path,ereg.string,evar.varID)
-    fnc = e5ds.e5dID * "-" * "timeseries" * "-" * ereg.string * "-" * evar.varID * "-" * 
+    fol = joinpath(e5ds.path,ereg.string,evar.ID)
+    fnc = e5ds.ID * "-" * "timeseries" * "-" * ereg.string * "-" * evar.ID * "-" * 
           yrmo2str(e5ds.start) * "_" * yrmo2str(e5ds.stop) * ".nc"
     return joinpath(fol,fnc)
 
@@ -32,9 +32,9 @@ function e5dtnc(
 	ereg :: ERA5Region,
 )
 
-    evp = evar.varID * "-$(evar.hPa)hPa"
-    fol = joinpath(e5ds.path,ereg.string,evar.varID,evp)
-    fnc = e5ds.e5dID * "-" * "timeseries" * "-" * ereg.string * "-" * evp * "-" * 
+    evp = evar.ID * "-$(evar.hPa)hPa"
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp)
+    fnc = e5ds.ID * "-" * "timeseries" * "-" * ereg.string * "-" * evp * "-" * 
           yrmo2str(e5ds.start) * "_" * yrmo2str(e5ds.stop) * ".nc"
     return joinpath(fol,fnc)
 

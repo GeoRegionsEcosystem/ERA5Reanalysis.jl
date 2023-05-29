@@ -42,12 +42,12 @@ function extract(
         )
         pnc  = basename(path(pds))
         nt   = pds.dim["time"]
-        sc   = pds[evar.varID].attrib["scale_factor"]
-        of   = pds[evar.varID].attrib["add_offset"]
+        sc   = pds[evar.ID].attrib["scale_factor"]
+        of   = pds[evar.ID].attrib["add_offset"]
         tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds[evar.varID].var,tmat,:,:,1:nt)
+        NCDatasets.load!(pds[evar.ID].var,tmat,:,:,1:nt)
 
-        @info "$(modulelog()) - Extracting the $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion from the $(preg.geo.name) (Horizontal Resolution: $(preg.resolution)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
+        @info "$(modulelog()) - Extracting the $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion from the $(preg.geo.name) (Horizontal Resolution: $(preg.resolution)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
 
         for it = 1 : nt, i_ilat = 1 : nlat, i_ilon = 1 : nlon
 
@@ -89,7 +89,7 @@ function extract(
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
     end
 
-    @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(sgeo.regID)\", \"$(ereg.ID)\""
+    @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(sgeo.ID)\", \"$(ereg.ID)\""
 
     sreg = ERA5Region(sgeo,gres=ereg.resolution)
     plsd = getLandSea(e5ds,ereg)
@@ -119,12 +119,12 @@ function extract(
         )
         pnc  = basename(path(pds))
         nt   = pds.dim["time"]
-        sc   = pds[evar.varID].attrib["scale_factor"]
-        of   = pds[evar.varID].attrib["add_offset"]
+        sc   = pds[evar.ID].attrib["scale_factor"]
+        of   = pds[evar.ID].attrib["add_offset"]
         tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds[evar.varID].var,tmat,:,:,1:nt)
+        NCDatasets.load!(pds[evar.ID].var,tmat,:,:,1:nt)
 
-        @info "$(modulelog()) - Extracting the $(e5ds.lname) $(evar.vname) data in $(sreg.geo.name) (Horizontal Resolution: $(sreg.resolution)) GeoRegion from the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
+        @info "$(modulelog()) - Extracting the $(e5ds.name) $(evar.name) data in $(sreg.geo.name) (Horizontal Resolution: $(sreg.resolution)) GeoRegion from the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
 
         for it = 1 : nt, i_ilat = 1 : nlat, i_ilon = 1 : nlon
 
@@ -214,14 +214,14 @@ function extract(
         )
         pnc  = basename(path(pds))
         nt   = pds.dim["time"]
-        sc   = pds[evar.varID].attrib["scale_factor"]
-        of   = pds[evar.varID].attrib["add_offset"]
+        sc   = pds[evar.ID].attrib["scale_factor"]
+        of   = pds[evar.ID].attrib["add_offset"]
         tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds[evar.varID].var,tmat,:,:,1:nt)
+        NCDatasets.load!(pds[evar.ID].var,tmat,:,:,1:nt)
 
         for igeo = 1 : ngeo
 
-            @info "$(modulelog()) - Extracting the $(e5ds.lname) $(evar.vname) data in $(sreg[igeo].geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion from the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
+            @info "$(modulelog()) - Extracting the $(e5ds.name) $(evar.name) data in $(sreg[igeo].geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion from the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
 
             for it = 1 : nt, i_ilat = 1 : nlat[igeo], i_ilon = 1 : nlon[igeo]
 

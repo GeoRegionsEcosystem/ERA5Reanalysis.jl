@@ -22,8 +22,8 @@ function e5dfnc(
 )
 
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,ereg.string,evar.varID,dts)
-    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evar.varID * "-" * yrmo2str(dt) * ".nc"
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,dts)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evar.ID * "-" * yrmo2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -35,10 +35,10 @@ function e5dfnc(
     dt   :: TimeType
 )
 
-    evp = evar.varID * "-$(evar.hPa)hPa"
+    evp = evar.ID * "-$(evar.hPa)hPa"
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,ereg.string,evar.varID,evp,dts)
-    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evp * "-" * yrmo2str(dt) * ".nc"
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp,dts)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evp * "-" * yrmo2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -51,8 +51,8 @@ function e5dfnc(
 )
 
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,ereg.string,evar.varID)
-    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evar.varID * "-" * dts * ".nc"
+    fol = joinpath(e5ds.path,ereg.string,evar.ID)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evar.ID * "-" * dts * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -64,10 +64,10 @@ function e5dfnc(
     dt   :: TimeType
 )
 
-    evp = evar.varID * "-$(evar.hPa)hPa"
+    evp = evar.ID * "-$(evar.hPa)hPa"
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,ereg.string,evar.varID,evp)
-    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evp * "-" * dts * ".nc"
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evp * "-" * dts * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -78,8 +78,8 @@ function e5dfnc(
 	ereg :: ERA5Region
 )
 
-    fol = joinpath(e5ds.path,ereg.string,evar.varID)
-    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evar.varID
+    fol = joinpath(e5ds.path,ereg.string,evar.ID)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evar.ID
     return fol, fnc
 
 end
@@ -90,9 +90,9 @@ function e5dfnc(
 	ereg :: ERA5Region
 )
 
-    evp = evar.varID * "-$(evar.hPa)hPa"
-    fol = joinpath(e5ds.path,ereg.string,evar.varID,evp)
-    fnc = e5ds.e5dID * "-" * ereg.string * "-" * evp
+    evp = evar.ID * "-$(evar.hPa)hPa"
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evp
     return fol, fnc
 
 end

@@ -103,7 +103,7 @@ function downloadLandSea(
     lon = tds["longitude"][:]; nlon = length(lon)
     lat = tds["latitude"][:];  nlat = length(lat)
     lsm = tds["lsm"][:,:,1] * 1
-    oro = tds["z"][:,:,1] * 1
+    oro = tds["z"][:,:,1] / 9.80665
     msk = ones(Int16,nlon,nlat)
     close(tds)
 
@@ -156,9 +156,9 @@ function saveLandSea(
     ))
 
     ncoro = defVar(ds,"z",Float64,("longitude","latitude",),attrib = Dict(
-        "long_name"     => "geopotential",
-        "full_name"     => "Surface Geopotential",
-        "units"         => "m**2 s**-2",
+        "long_name"     => "height",
+        "full_name"     => "Surface Height",
+        "units"         => "m",
     ))
 
     ncmsk = defVar(ds,"mask",Int16,("longitude","latitude",),attrib = Dict(
