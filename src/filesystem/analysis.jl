@@ -2,7 +2,7 @@
     e5danc(
         e5ds :: ERA5Hourly,
         evar :: ERA5Variable,
-        egeo :: ERA5Region,
+        ereg :: ERA5Region,
         dt   :: TimeType
     ) -> String
 
@@ -17,12 +17,12 @@ Arguments
 function e5danc(
     e5ds :: ERA5Hourly,
 	evar :: SingleLevel,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
     dt   :: TimeType
 )
 
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evar.varID * "-" * yr2str(dt) * ".nc"
+    fol = joinpath(e5ds.path,ereg.string,evar.ID)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evar.ID * "-" * yr2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -30,13 +30,13 @@ end
 function e5danc(
     e5ds :: ERA5Hourly,
 	evar :: PressureLevel,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
     dt   :: TimeType
 )
 
-    evp = evar.varID * "-$(evar.hPa)hPa"
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp * "-" * yr2str(dt) * ".nc"
+    evp = evar.ID * "-$(evar.hPa)hPa"
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evp * "-" * yr2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -44,11 +44,11 @@ end
 function e5danc(
     e5ds :: ERA5Hourly,
 	evar :: SingleLevel,
-	egeo :: ERA5Region
+	ereg :: ERA5Region
 )
 
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evar.varID
+    fol = joinpath(e5ds.path,ereg.string,evar.ID)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evar.ID
     return fol, fnc
 
 end
@@ -56,12 +56,12 @@ end
 function e5danc(
     e5ds :: ERA5Hourly,
 	evar :: PressureLevel,
-	egeo :: ERA5Region
+	ereg :: ERA5Region
 )
 
-    evp = evar.varID * "-$(evar.hPa)hPa"
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,evp)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * evp
+    evp = evar.ID * "-$(evar.hPa)hPa"
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evp
     return fol, fnc
 
 end

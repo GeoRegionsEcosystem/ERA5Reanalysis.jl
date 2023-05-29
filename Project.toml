@@ -1,13 +1,12 @@
 name = "ERA5Reanalysis"
 uuid = "99c076f5-c00e-46eb-a0bd-7ba31777c146"
 authors = ["Nathanael Wong <natgeo.wong@outlook.com>"]
-version = "0.2.3"
+version = "0.3.0"
 
 [deps]
 Base64 = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
-Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 GeoRegions = "b001f823-fa75-4bff-bf55-6610c8f3688a"
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
@@ -19,7 +18,7 @@ Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
-GeoRegions = "4"
+GeoRegions = "^5.1"
 HTTP = "0.9, 1"
 JSON = "0.21"
 NCDatasets = "0.11, ^0.12.7"

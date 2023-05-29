@@ -11,7 +11,7 @@ function hourly2monthly(
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
 
-    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) Region ..."
+    @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
     tmpload = zeros(Int16,nlon,nlat,ntimesteps(e5ds))
     tmpdata = zeros(nlon,nlat,ntimesteps(e5ds))
@@ -23,15 +23,15 @@ function hourly2monthly(
 
             idt = Date(year(dt),imo)
             if verbose
-                @info "$(modulelog()) - Loading $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(idt)) $(monthname(idt)) ..."
+                @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
             end
             nhr = daysinmonth(idt) * 24
             ds  = NCDataset(e5dfnc(e5ds,evar,ereg,idt))
-            sc  = ds[evar.varID].attrib["scale_factor"]
-            of  = ds[evar.varID].attrib["add_offset"]
-            mv  = ds[evar.varID].attrib["missing_value"]
-            fv  = ds[evar.varID].attrib["_FillValue"]
-            NCDatasets.load!(ds[evar.varID].var,view(tmpload,:,:,1:nhr),:,:,:)
+            sc  = ds[evar.ID].attrib["scale_factor"]
+            of  = ds[evar.ID].attrib["add_offset"]
+            mv  = ds[evar.ID].attrib["missing_value"]
+            fv  = ds[evar.ID].attrib["_FillValue"]
+            NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhr),:,:,:)
             int2real!(
                 view(tmpdata,:,:,1:nhr),view(tmpload,:,:,1:nhr),
                 scale=sc,offset=of,mvalue=mv,fvalue=fv
@@ -39,7 +39,7 @@ function hourly2monthly(
             close(ds)
 
             if verbose
-                @info "$(modulelog()) - Performing daily-averaging on $(e5ds.lname) $(evar.vname) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.gres)) during $(year(idt)) $(monthname(idt)) ..."
+                @info "$(modulelog()) - Performing daily-averaging on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
             end
             for ilat = 1 : nlat, ilon = 1 : nlon
                 modata[ilon,ilat,imo] = mean(view(tmpdata,ilon,ilat,1:nhr))

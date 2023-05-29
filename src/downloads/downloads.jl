@@ -146,11 +146,11 @@ function downloadcheckevar(
 
     if typeof(evar) <: Union{SingleVariable,PressureVariable}
 
-        @info "$(modulelog()) - The ERA5Variable ID \"$(evar.varID)\" is a valid ERA5 Variable identifier and therefore can be used to download data from the Climate Data Store"
+        @info "$(modulelog()) - The ERA5Variable ID \"$(evar.ID)\" is a valid ERA5 Variable identifier and therefore can be used to download data from the Climate Data Store"
 
     else
 
-        error("$(modulelog()) - The ERA5Variable ID \"$(evar.varID)\" is a custom ERA5 Variable identifier and therefore cannot be used to download data from the Climate Data Store, and can only be calculated/analyzed from preexisting valid ERA5 data")
+        error("$(modulelog()) - The ERA5Variable ID \"$(evar.ID)\" is a custom ERA5 Variable identifier and therefore cannot be used to download data from the Climate Data Store, and can only be calculated/analyzed from preexisting valid ERA5 data")
 
     end
 

@@ -62,9 +62,9 @@ function save_definevar!(
     offset :: Real
 )
 
-    ncvar = defVar(ds,evar.varID,Int16,("longitude","latitude","time"),attrib = Dict(
-        "long_name"     => evar.lname,
-        "full_name"     => evar.vname,
+    ncvar = defVar(ds,evar.ID,Int16,("longitude","latitude","time"),attrib = Dict(
+        "long_name"     => evar.long,
+        "full_name"     => evar.name,
         "units"         => evar.units,
         "scale_factor"  => scale,
         "add_offset"    => offset,

@@ -1,12 +1,10 @@
 """
     SingleLevel <: ERA5Variable
 
-Abstract supertype for Single-Level variables.  Contains the following fields:
-- `varID` : The variable ID, that is also the identifier in the NetCDF files
-- `lname` : The variable long-name, which is used to specify retrievals from CDS
-- `vname` : The full-name of the variable
-- `units` : The units of the variable
-- `dname` : The name of the ERA5 dataset containing the variable
+Abstract supertype for Single-Level variables, with the following subtypes:
+
+    SingleVariable <: SingleLevel
+    SingleCustom   <: SingleLevel
 """
 abstract type SingleLevel <: ERA5Variable end
 
@@ -16,11 +14,11 @@ abstract type SingleLevel <: ERA5Variable end
 Subtype for Single-Level variables that can be directly retrieved from the CDS
 """
 struct SingleVariable{ST<:AbstractString} <: SingleLevel
-    varID :: ST
-    lname :: ST
-    vname :: ST
-    units :: ST
-    dname :: ST
+    ID      :: ST
+    long    :: ST
+    name    :: ST
+    units   :: ST
+    dataset :: ST
 end
 
 
@@ -30,45 +28,45 @@ end
 Subtype for custom user-defined Single-Level variables
 """
 struct SingleCustom{ST<:AbstractString} <: SingleLevel
-    varID :: ST
-    lname :: ST
-    vname :: ST
-    units :: ST
-    dname :: ST
+    ID      :: ST
+    long    :: ST
+    name    :: ST
+    units   :: ST
+    dataset :: ST
 end
 
 """
     SingleVariable(
-        varID :: AbstractString,
+        ID :: AbstractString,
         ST = String,
     ) -> evar :: SingleLevel
 
-Retrieve the basic properties of the Single-Level variable defined by `varID` and put them in the `evar` SingleLevel type structure.
+Retrieve the basic properties of the Single-Level variable defined by `ID` and put them in the `evar` SingleLevel type structure.
 
 Arguments
 =========
 
-- `varID` : variable ID (in string format) used in the NetCDF file
+- `ID` : variable ID (in string format) used in the NetCDF file
 """
 function SingleVariable(
-    varID :: AbstractString,
+    ID :: AbstractString,
     ST = String,
 )
 
-    isSingle(varID)
+    isSingle(ID)
 
-    @info "$(modulelog()) - Retrieving information for the SingleVariable defined by the ID \"$varID\""
-    vlist,flist = listSingles();      ind = findall(varID.==vlist)[1]
+    @info "$(modulelog()) - Retrieving information for the SingleVariable defined by the ID \"$ID\""
+    vlist,flist = listSingles();      ind = findall(ID.==vlist)[1]
     vtype = replace(flist[ind],".txt"=>"")
     fname = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis",flist[ind])
-    vlist = listera5variables(fname); ind = findall(varID.==vlist)[1]
+    vlist = listera5variables(fname); ind = findall(ID.==vlist)[1]
 
     IDinfo = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
-    varID,lname,vname,units = IDinfo[[1,2,3,4]]
+    ID,long,name,units = IDinfo[[1,2,3,4]]
 
     if vtype == "singlevariable"
-          return SingleVariable{ST}(varID,lname,vname,units,"reanalysis-era5-single-levels")
-    else; return SingleCustom{ST}(varID,lname,vname,units,"reanalysis-era5-single-levels")
+          return SingleVariable{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
+    else; return SingleCustom{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
     end
 
 end
@@ -76,9 +74,9 @@ end
 """
     SingleVariable(
         ST = String;
-        varID :: AbstractString,
-        lname :: AbstractString = "",
-        vname :: AbstractString,
+        ID :: AbstractString,
+        long :: AbstractString = "",
+        name :: AbstractString,
         units :: AbstractString,
         inCDS :: Bool = true
     ) -> evar :: SingleLevel
@@ -88,25 +86,25 @@ Create a custom Single-Level variable that is not in the default list exported b
 Keyword Arguments
 =================
 
-- `varID` : variable ID (in string format) used in the NetCDF file
-- `lname` : long-name for variable (used in specifying variable for CDS downloads)
-- `vname` : user-defined variable name
+- `ID` : variable ID (in string format) used in the NetCDF file
+- `long` : long-name for variable (used in specifying variable for CDS downloads)
+- `name` : user-defined variable name
 - `units` : user-defined units of the variable
 - `inCDS` : Boolean that indicates if this variable is available on the CDS store.  True if available.
 """
 function SingleVariable(
     ST = String;
-    varID :: AbstractString,
-    lname :: AbstractString = "",
-    vname :: AbstractString,
+    ID :: AbstractString,
+    long :: AbstractString = "",
+    name :: AbstractString,
     units :: AbstractString,
     inCDS :: Bool = true
 )
 
-    if isSingle(varID,throw=false)
-        error("$(modulelog()) - The SingleVariable \"$(varID)\" has already been defined,please use another identifier.")
+    if isSingle(ID,throw=false)
+        error("$(modulelog()) - The SingleVariable \"$(ID)\" has already been defined,please use another identifier.")
     else
-        @info "$(modulelog()) - Adding the SingleVariable \"$(varID)\" to the list."
+        @info "$(modulelog()) - Adding the SingleVariable \"$(ID)\" to the list."
     end
 
     if inCDS
@@ -114,16 +112,16 @@ function SingleVariable(
         open(joinpath(
             DEPOT_PATH[1],"files","ERA5Reanalysis","singlevariable.txt"
         ),"a") do io
-            write(io,"$varID,$lname,$vname,$units\n")
+            write(io,"$ID,$long,$name,$units\n")
         end
-        return SingleVariable{ST}(varID,lname,vname,units,"reanalysis-era5-single-levels")
+        return SingleVariable{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
 
     else
 
         open(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","singlecustom.txt"),"a") do io
-            write(io,"$varID,$lname,$vname,$units\n")
+            write(io,"$ID,$long,$name,$units\n")
         end
-        return SingleCustom{ST}(varID,lname,vname,units,"reanalysis-era5-single-levels")
+        return SingleCustom{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
 
     end
 
@@ -159,12 +157,12 @@ end
 
 """
     isSingle(
-        varID :: AbstractString;
+        ID :: AbstractString;
         throw :: Bool = true,
         dolog :: Bool = false
     ) -> tf :: Bool
 
-Extracts information of the Single-Level Variable with the ID `varID`.  If no Single-Level Variable with this ID exists, an error is thrown.
+Extracts information of the Single-Level Variable with the ID `ID`.  If no Single-Level Variable with this ID exists, an error is thrown.
 
 Arguments
 =========
@@ -180,29 +178,29 @@ Returns
 - `tf` : True / False
 """
 function isSingle(
-    varID :: AbstractString;
+    ID :: AbstractString;
     throw :: Bool = true,
     dolog :: Bool = false
 )
 
     if dolog
-        @info "$(modulelog()) - Checking if the SingleVariable ID \"$varID\" is in use"
+        @info "$(modulelog()) - Checking if the SingleVariable ID \"$ID\" is in use"
     else
-        @debug "$(modulelog()) - Checking if the SingleVariable ID \"$varID\" is in use"
+        @debug "$(modulelog()) - Checking if the SingleVariable ID \"$ID\" is in use"
     end
 
     vlist,_ = listSingles()
 
-    if sum(vlist.==varID) == 0
+    if sum(vlist.==ID) == 0
         if throw
-            error("$(modulelog()) - \"$(varID)\" is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list.")
+            error("$(modulelog()) - \"$(ID)\" is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list.")
         else
-            @warn "$(modulelog()) - \"$(varID)\" is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list."
+            @warn "$(modulelog()) - \"$(ID)\" is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list."
             return false
         end
     else
         if dolog
-            @info "$(modulelog()) - The SingleVariable ID \"$varID\" is already in use"
+            @info "$(modulelog()) - The SingleVariable ID \"$ID\" is already in use"
         end
         return true
     end
@@ -210,24 +208,24 @@ function isSingle(
 end
 
 """
-    rmSingle( varID :: AbstractString ) -> nothing
+    rmSingle( ID :: AbstractString ) -> nothing
 
-Remove the Single-Level Variable with the ID `varID` from the lists.
+Remove the Single-Level Variable with the ID `ID` from the lists.
 
 Arguments
 =========
 
 - `RegID` : The keyword ID that will be used to identify the Single-Level Variable that is to be removed
 """
-function rmSingle(varID::AbstractString)
+function rmSingle(ID::AbstractString)
 
-    if isSingle(varID,throw=false)
+    if isSingle(ID,throw=false)
         disable_logging(Logging.Warn)
-        rmERA5Variable(SingleVariable(varID))
+        rmERA5Variable(SingleVariable(ID))
         disable_logging(Logging.Debug)
-        @info "$(modulelog()) - Successfully removed the Single-Level variable defined by \"$(varID)\""
+        @info "$(modulelog()) - Successfully removed the Single-Level variable defined by \"$(ID)\""
     else
-        @warn "$(modulelog()) - No Single-Level variable defined by \"$(varID)\" exists, please make sure you specified the correct variable ID"
+        @warn "$(modulelog()) - No Single-Level variable defined by \"$(ID)\" exists, please make sure you specified the correct variable ID"
     end
 
     return nothing

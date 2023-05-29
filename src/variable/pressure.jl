@@ -1,13 +1,10 @@
 """
     PressureLevel <: ERA5Variable
 
-Abstract supertype for Pressure-Level variables.  Contains the following fields:
-- `varID` : The variable ID, that is also the identifier in the NetCDF files
-- `lname` : The variable long-name, which is used to specify retrievals from CDS
-- `vname` : The full-name of the variable
-- `units` : The units of the variable
-- `hPa`   : The pressure-level height of the variable in concern
-- `dname` : The name of the ERA5 dataset containing the variable
+Abstract supertype for Single-Level variables, with the following subtypes:
+
+    PressureVariable <: SingleLevel
+    PressureCustom   <: SingleLevel
 """
 abstract type PressureLevel <: ERA5Variable end
 
@@ -17,12 +14,12 @@ abstract type PressureLevel <: ERA5Variable end
 Subtype for Pressure-Level variables that can be directly retrieved from the CDS
 """
 struct PressureVariable{ST<:AbstractString} <: PressureLevel
-    varID :: ST
-    lname :: ST
-    vname :: ST
-    units :: ST
-    hPa   :: Int
-    dname :: ST
+    ID      :: ST
+    long    :: ST
+    name    :: ST
+    units   :: ST
+    hPa     :: Int
+    dataset :: ST
 end
 
 """
@@ -31,28 +28,28 @@ end
 Subtype for custom user-defined Pressure-Level variables
 """
 struct PressureCustom{ST<:AbstractString} <: PressureLevel
-    varID :: ST
-    lname :: ST
-    vname :: ST
-    units :: ST
-    hPa   :: Int
-    dname :: ST
+    ID      :: ST
+    long    :: ST
+    name    :: ST
+    units   :: ST
+    hPa     :: Int
+    dataset :: ST
 end
 
 """
     PressureVariable(
-        varID :: AbstractString,
+        ID :: AbstractString,
         ST = String;
         hPa   :: Int = 0
         throw :: Bool = true
     ) -> evar :: SingleLevel
 
-Retrieve the basic properties of the Pressure-Level variable defined by `varID` at pressure-height indicated by `hPa` and put them in the `evar` SingleLevel type structure.
+Retrieve the basic properties of the Pressure-Level variable defined by `ID` at pressure-height indicated by `hPa` and put them in the `evar` SingleLevel type structure.
 
 Arguments
 =========
 
-- `varID` : variable ID (in string format) used in the NetCDF file
+- `ID` : variable ID (in string format) used in the NetCDF file
 
 Keyword Arguments
 =================
@@ -61,22 +58,22 @@ Keyword Arguments
 - `throw` : if `hPa` level does not exist and `throw` is true, throw error, otherwise find nearest pressure level
 """
 function PressureVariable(
-    varID :: AbstractString,
+    ID :: AbstractString,
     ST = String;
     hPa   :: Int = 0,
     throw :: Bool = true
 )
 
-    isPressure(varID)
+    isPressure(ID)
 
-    @info "$(modulelog()) - Retrieving information for the PressureVariable defined by the ID \"$varID\""
-    vlist,flist = listPressures();    ind = findall(varID.==vlist)[1]
+    @info "$(modulelog()) - Retrieving information for the PressureVariable defined by the ID \"$ID\""
+    vlist,flist = listPressures();    ind = findall(ID.==vlist)[1]
     vtype = replace(flist[ind],".txt"=>"")
     fname = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis",flist[ind])
-    vlist = listera5variables(fname); ind = findall(varID.==vlist)[1]
+    vlist = listera5variables(fname); ind = findall(ID.==vlist)[1]
 
     IDinfo = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
-    varID,lname,vname,units = IDinfo[[1,2,3,4]]
+    ID,long,name,units = IDinfo[[1,2,3,4]]
 
     prelist = era5Pressures()
     if iszero(sum(prelist.==hPa)) && !iszero(hPa)
@@ -90,15 +87,15 @@ function PressureVariable(
     end
 
     if vtype == "pressurevariable"
-        @info "$(modulelog()) - The ERA5Variable defined by \"$varID\" is of the PressureVariable type"
+        @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the PressureVariable type"
         return PressureVariable{ST}(
-            varID,lname,vname * " ($(hPa) hPa)",units,hPa,
+            ID,long,name * " ($(hPa) hPa)",units,hPa,
             "reanalysis-era5-pressure-levels"
         )
     else
-        @info "$(modulelog()) - The ERA5Variable defined by \"$varID\" is of the PressureCustom type"
+        @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the PressureCustom type"
         return PressureCustom{ST}(
-            varID,lname,vname * " ($(hPa) hPa)",units,hPa,
+            ID,long,name * " ($(hPa) hPa)",units,hPa,
             "reanalysis-era5-pressure-levels"
         )
     end
@@ -108,9 +105,9 @@ end
 """
     PressureVariable(
         ST = String;
-        varID :: AbstractString,
-        lname :: AbstractString = "",
-        vname :: AbstractString,
+        ID :: AbstractString,
+        long :: AbstractString = "",
+        name :: AbstractString,
         units :: AbstractString,
         hPa   :: Int = 0,
         throw :: Bool = true
@@ -121,31 +118,31 @@ Create a custom Pressure-Level variable that is not in the default list exported
 Keyword Arguments
 =================
 
-- `varID` : variable ID (in string format) used in the NetCDF file
-- `lname` : long-name for variable (used in specifying variable for CDS downloads)
-- `vname` : user-defined variable name
+- `ID` : variable ID (in string format) used in the NetCDF file
+- `long` : long-name for variable (used in specifying variable for CDS downloads)
+- `name` : user-defined variable name
 - `units` : user-defined units of the variable
 - `hPa`   : Pressure level specified in hPa. Default is 0, which indicates all levels.
 - `throw` : if `hPa` level does not exist and `throw` is true, throw error, otherwise find nearest pressure level
 """
 function PressureVariable(
     ST = String;
-    varID :: AbstractString,
-    lname :: AbstractString = "",
-    vname :: AbstractString,
+    ID :: AbstractString,
+    long :: AbstractString = "",
+    name :: AbstractString,
     units :: AbstractString,
     hPa   :: Int = 0,
     throw :: Bool = true
 )
 
-    if isPressure(varID,throw=false)
-        error("$(modulelog()) - The PressureVariable \"$(varID)\" has already been defined, please use another identifier.")
+    if isPressure(ID,throw=false)
+        error("$(modulelog()) - The PressureVariable \"$(ID)\" has already been defined, please use another identifier.")
     else
-        @info "$(modulelog()) - Adding the PressureVariable \"$(varID)\" to the list."
+        @info "$(modulelog()) - Adding the PressureVariable \"$(ID)\" to the list."
     end
 
     open(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","pressurecustom.txt"),"a") do io
-        write(io,"$varID,$lname,$vname,$units\n")
+        write(io,"$ID,$long,$name,$units\n")
     end
 
     if !iszero(hPa)
@@ -161,7 +158,7 @@ function PressureVariable(
         end
     end
 
-    return PressureCustom{ST}(varID,lname,vname,units,hPa,"reanalysis-era5-pressure-levels")
+    return PressureCustom{ST}(ID,long,name,units,hPa,"reanalysis-era5-pressure-levels")
 
 end
 
@@ -195,12 +192,12 @@ end
 
 """
     isPressure(
-        varID :: AbstractString;
+        ID :: AbstractString;
         throw :: Bool = true,
         dolog :: Bool = false
     ) -> tf :: Bool
 
-Extracts information of the Pressure-Level Variable with the ID `varID`.  If no Pressure-Level Variable with this ID exists, an error is thrown.
+Extracts information of the Pressure-Level Variable with the ID `ID`.  If no Pressure-Level Variable with this ID exists, an error is thrown.
 
 Arguments
 =========
@@ -216,29 +213,29 @@ Returns
 - `tf` : True / False
 """
 function isPressure(
-    varID :: AbstractString;
+    ID :: AbstractString;
     throw :: Bool = true,
     dolog :: Bool = false
 )
 
     if dolog
-        @info "$(modulelog()) - Checking if the PressureVariable ID \"$varID\" is in use"
+        @info "$(modulelog()) - Checking if the PressureVariable ID \"$ID\" is in use"
     else
-        @debug "$(modulelog()) - Checking if the PressureVariable ID \"$varID\" is in use"
+        @debug "$(modulelog()) - Checking if the PressureVariable ID \"$ID\" is in use"
     end
 
     vlist,_ = listPressures()
 
-    if sum(vlist.==varID) == 0
+    if sum(vlist.==ID) == 0
         if throw
-            error("$(modulelog()) - \"$(varID)\" is not a valid PressureVariable identifier, use the function PressureCustom() to add this ERA5Variable to the list.")
+            error("$(modulelog()) - \"$(ID)\" is not a valid PressureVariable identifier, use the function PressureCustom() to add this ERA5Variable to the list.")
         else
-            @warn "$(modulelog()) - \"$(varID)\" is not a valid PressureVariable identifier, use the function PressureCustom() to add this ERA5Variable to the list."
+            @warn "$(modulelog()) - \"$(ID)\" is not a valid PressureVariable identifier, use the function PressureCustom() to add this ERA5Variable to the list."
             return false
         end
     else
         if dolog
-            @info "$(modulelog()) - The PressureVariable ID \"$varID\" is already in use"
+            @info "$(modulelog()) - The PressureVariable ID \"$ID\" is already in use"
         end
         return true
     end
@@ -246,24 +243,24 @@ function isPressure(
 end
 
 """
-    rmPressure( varID :: AbstractString ) -> nothing
+    rmPressure( ID :: AbstractString ) -> nothing
 
-Remove the Pressure-Level Variable with the ID `varID` from the lists.
+Remove the Pressure-Level Variable with the ID `ID` from the lists.
 
 Arguments
 =========
 
 - `RegID` : The keyword ID that will be used to identify the Pressure-Level Variable that is to be removed
 """
-function rmPressure(varID::AbstractString)
+function rmPressure(ID::AbstractString)
 
-    if isPressure(varID,throw=false)
+    if isPressure(ID,throw=false)
         disable_logging(Logging.Warn)
-        rmERA5Variable(PressureVariable(varID))
+        rmERA5Variable(PressureVariable(ID))
         disable_logging(Logging.Debug)
-        @info "$(modulelog()) - Successfully removed the Pressure-Level variable defined by \"$(varID)\""
+        @info "$(modulelog()) - Successfully removed the Pressure-Level variable defined by \"$(ID)\""
     else
-        @warn "$(modulelog()) - No Pressure-Level variable defined by \"$(varID)\" exists, please make sure you specified the correct variable ID"
+        @warn "$(modulelog()) - No Pressure-Level variable defined by \"$(ID)\" exists, please make sure you specified the correct variable ID"
     end
 
     return nothing

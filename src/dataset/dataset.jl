@@ -4,14 +4,13 @@
 Specifies that the dataset to be analyzed contains hourly data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
 """
 struct ERA5Hourly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
-    e5dID :: ST
-    lname :: ST
+    ID    :: ST
+    name  :: ST
     ptype :: ST
 	sldoi :: ST
 	pldoi :: ST
     start :: Date
     stop  :: Date
-    dtext :: Bool
     path  :: ST
     emask :: ST
 end
@@ -22,14 +21,13 @@ end
 Specifies that the dataset to be analyzed contains hourly data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
 """
 struct ERA5Daily{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
-    e5dID :: ST
-    lname :: ST
+    ID    :: ST
+    name  :: ST
     ptype :: ST
 	sldoi :: ST
 	pldoi :: ST
     start :: Date
     stop  :: Date
-    dtext :: Bool
     path  :: ST
     emask :: ST
 end
@@ -40,14 +38,13 @@ end
 Specifies that the dataset to be analyzed contains monthly-mean data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
 """
 struct ERA5Monthly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
-    e5dID :: ST
-    lname :: ST
+    ID    :: ST
+    name  :: ST
     ptype :: ST
 	sldoi :: ST
 	pldoi :: ST
     start :: Date
     stop  :: Date
-    dtext :: Bool
     hours :: Bool
     path  :: ST
     emask :: ST
@@ -145,8 +142,8 @@ function ERA5Daily(
 
     return ERA5Daily{ST,DT}(
         "era5dy","ERA5 Daily","N/A",
-        "10.24381/cds.adbb2d47","10.24381/cds.bd0915c6",
-        start,stop,dtext,
+        "N/A","N/A",
+        start,stop,
         joinpath(path,"era5dy"),joinpath(path,"emask")
     )
 

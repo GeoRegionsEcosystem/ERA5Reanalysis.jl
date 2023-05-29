@@ -2,7 +2,7 @@
     e5dsmth(
         e5ds :: ERA5Hourly,
         evar :: ERA5Variable,
-        egeo :: ERA5Region,
+        ereg :: ERA5Region,
         dt   :: TimeType,
         smoothlon  :: Real,
         smoothlat  :: Real,
@@ -20,7 +20,7 @@ Arguments
 function e5dsmth(
     e5ds :: ERA5Dataset,
 	evar :: SingleLevel,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
     dt   :: TimeType,
     smoothlon  :: Real,
     smoothlat  :: Real,
@@ -28,11 +28,11 @@ function e5dsmth(
 )
 
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,dts)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * "smooth" * "_" *
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,dts)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * "smooth" * "_" *
           @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
           "_" * @sprintf("%02d",smoothtime) * "steps" *
-          "-" * evar.varID * "-" * yrmo2str(dt) * ".nc"
+          "-" * evar.ID * "-" * yrmo2str(dt) * ".nc"
     return joinpath(fol,fnc)
 
 end
@@ -40,17 +40,17 @@ end
 function e5dsmth(
     e5ds :: ERA5Dataset,
 	evar :: PressureLevel,
-	egeo :: ERA5Region,
+	ereg :: ERA5Region,
     dt   :: TimeType,
     smoothlon :: Real,
     smoothlat :: Real,
     smoothtime :: Int
 )
 
-    evp = evar.varID * "-$(evar.hPa)hPa"
+    evp = evar.ID * "-$(evar.hPa)hPa"
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,egeo.gstr,evar.varID,dts)
-    fnc = e5ds.e5dID * "-" * egeo.gstr * "-" * "smooth" * "_" *
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,dts)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * "smooth" * "_" *
           @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
           "_" * @sprintf("%02d",smoothtime) * "steps" *
           "-" * evp * "-" * yrmo2str(dt) * ".nc"
