@@ -1,6 +1,8 @@
 using ERA5Reanalysis
 using Documenter
 
+addCDSAPIkey("199699:c52da207-6f7d-4ae8-bd33-085246faee6e")
+
 DocMeta.setdocmeta!(ERA5Reanalysis, :DocTestSetup, :(using ERA5Reanalysis); recursive=true)
 
 makedocs(;
