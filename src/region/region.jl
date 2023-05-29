@@ -36,7 +36,7 @@ Argument
 Keyword Argument
 ================
 
-- `resolution` : The spatial resolution that ERA5 reanalysis data will be downloaded/analyzed, and 360 must be a multiple of `gres`
+- `resolution` : The spatial resolution that ERA5 reanalysis data will be downloaded/analyzed, and 360 must be a multiple of `resolution`
 """
 function ERA5Region(
     geo :: GeoRegion;
@@ -51,7 +51,7 @@ function ERA5Region(
     if mod(geo.E,360) == mod(geo.W,360); is360 = true; else; is360 = false end
 
     return ERA5Region{ST,FT}(
-        geo, geo.ID, gres,
+        geo, geo.ID, resolution,
         "$(geo.ID)x$(@sprintf("%.2f",resolution))", isglb, is360
     )
 
@@ -73,7 +73,7 @@ Argument
 Keyword Argument
 ================
 
-- `resolution` : The spatial resolution that ERA5 reanalysis data will be downloaded/analyzed, and 360 must be a multiple of `gres`
+- `resolution` : The spatial resolution that ERA5 reanalysis data will be downloaded/analyzed, and 360 must be a multiple of `resolution`
 """
 function ERA5Region(
     ID :: AbstractString;
@@ -92,29 +92,29 @@ end
 
 function regionstep(
     ID :: AbstractString,
-    gres  :: Real = 0
+    resolution  :: Real = 0
 )
 
     @debug "$(modulelog()) - Determining spacing between grid points in the GeoRegion ..."
-    if gres == 0
+    if resolution == 0
         @info "$(modulelog()) - No grid resolution specified, defaulting to the module default (1.0º for global GeoRegion, 0.25º for all others)"
         if ID == "GLB";
-              gres = 1.0;
-        else; gres = 0.25;
+              resolution = 1.0;
+        else; resolution = 0.25;
         end
     else
-        if !checkegrid(gres)
-            error("$(modulelog()) - The grid resolution $(gres)º is not valid as it does not divide 360º without remainder")
+        if !checkegrid(resolution)
+            error("$(modulelog()) - The grid resolution $(resolution)º is not valid as it does not divide 360º without remainder")
         end
     end
 
-    return gres
+    return resolution
 
 end
 
-function checkegrid(gres::Real)
+function checkegrid(resolution::Real)
 
-    if rem(360,gres) == 0
+    if rem(360,resolution) == 0
           return true
     else; return false
     end
