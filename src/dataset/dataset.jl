@@ -87,7 +87,6 @@ function ERA5Hourly(
     @info "$(modulelog()) - Setting up data structure containing information on the ERA5 Hourly data to be downloaded"
     start = Date(year(start),month(start),1)
 	stop = Date(year(stop),month(stop),daysinmonth(stop))
-    dtext = checkdates(start,stop,)
 
     if !isdir(joinpath(path,"era5hr"))
         mkpath(joinpath(path,"era5hr"))
@@ -100,7 +99,7 @@ function ERA5Hourly(
     return ERA5Hourly{ST,DT}(
         "era5hr","ERA5 Hourly","reanalysis",
         "10.24381/cds.adbb2d47","10.24381/cds.bd0915c6",
-        start,stop,dtext,
+        start,stop,
         joinpath(path,"era5hr"),joinpath(path,"emask")
     )
 
@@ -132,7 +131,6 @@ function ERA5Daily(
     @info "$(modulelog()) - Setting up data structure containing information on the ERA5 Daily data to be created from ERA5 Hourly data"
     start = Date(year(start),month(start),1)
 	stop = Date(year(stop),month(stop),daysinmonth(stop))
-    dtext = checkdates(start,stop,)
 
     if !isdir(joinpath(path,"era5dy"))
         mkpath(joinpath(path,"era5dy"))
@@ -180,7 +178,6 @@ function ERA5Monthly(
     @info "$(modulelog()) - Setting up data structure containing information on the ERA5 Monthly data to be downloaded"
     start = Date(year(start),1,1)
     stop = Date(year(stop),12,31)
-    dtext = checkdates(start,stop)
 
     if !isdir(joinpath(path,"emask"))
         mkpath(joinpath(path,"emask"))
@@ -196,7 +193,7 @@ function ERA5Monthly(
             "era5mh","ERA5 Monthly Averages (by Hour-of-Day)",
             "monthly_averaged_reanalysis_by_hour_of_day",
             "10.24381/cds.f17050d7","10.24381/cds.6860a573",
-            start,stop,dtext,true,
+            start,stop,true,
             joinpath(path,"era5mh"),joinpath(path,"emask")
         )
 
@@ -210,7 +207,7 @@ function ERA5Monthly(
             "era5mo","ERA5 Monthly Averages",
             "monthly_averaged_reanalysis",
             "10.24381/cds.f17050d7","10.24381/cds.6860a573",
-            start,stop,dtext,false,
+            start,stop,false,
             joinpath(path,"era5mo"),joinpath(path,"emask")
         )
 
@@ -249,8 +246,6 @@ function checkdates(
     stop  :: TimeType
 )
 
-    dtext = false
-
     if stop > (now() - Day(5))
         error("$(modulelog()) - You have specified an end date that is likely in the future of the latest available date of the ERA5 reanalysis dataset")
     end
@@ -259,18 +254,8 @@ function checkdates(
         error("$(modulelog()) - You have specified an end date that is before your beginning date")
     end
 
-    if start < Date(1950,1,1)
+    if start < Date(1940,1,1)
         error("$(modulelog()) - You have specified a date that is before the earliest available date of preliminary ERA5 reanalysis dataset from 1950 to 1978")
     end
-
-    if start < Date(1979,1,1)
-        @info "$(modulelog()) - You have specified the preliminary back-extension ERA5 reanalysis dataset from 1950 to 1978"
-        if stop >= Date(1979,1,1)
-            error("$(modulelog()) - You have specified an end date that is outside the range of the preliminary back-extension (i.e. it is within the actual reanalysis dataset) and must be specified separately")
-        end
-        dtext = true
-    end
-
-    return dtext
 
 end
