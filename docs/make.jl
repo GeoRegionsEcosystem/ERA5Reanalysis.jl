@@ -20,26 +20,32 @@ makedocs(;
         "Components" => [
             "Overview" => "components/overview.md",
             "ERA5Datasets" => [
-                "CDS Datasets"   => "components/datasets/index.md",
-                "Usage Examples" => "components/datasets/examples.md",
+                "An Overview of ERA5 Datasets" => "components/datasets/overview.md",
+                "Defining ERA5 Datasets"       => "components/datasets/define.md",
+                "Climate Data Store Datasets"  => "components/datasets/cds.md",
+                "Custom ERA5 Datasets"         => "components/datasets/custom.md",
             ],
             "ERA5Variables" => [
-                "Variable Types"                    => "components/variables/index.md",
-                "Retrieving Existing ERA5Variables" => "components/variables/read.md",
-                "List of Existing ERA5Variables"    => "components/variables/list.md",
-                "Creating Custom ERA5Variables"     => "components/variables/custom.md",
-                "Resetting ERA5Variables"           => "components/variables/reset.md",
+                "What is an ERA5 Variable"           => "components/variables/index.md",
+                "Retrieving Existing ERA5 Variables" => "components/variables/read.md",
+                "List of Existing ERA5 Variables"    => "components/variables/list.md",
+                "Creating Custom ERA5 Variables"     => "components/variables/custom.md",
+                "Resetting ERA5 Variables"           => "components/variables/reset.md",
             ],
-            "ERA5Regions" => [
-                "The Basics of an ERA5Region"       => "components/regions/index.md",
-                "Is it in an ERA5Region"            => "components/regions/isin.md",
-                "Extracting Data using ERA5Regions" => "components/regions/gridded.md",
-            ]
-        ],
-        "Downloading ERA5 Data" => [
-            "Overview and Functionality"  => "downloads/overview.md",
-            "Examples"                    => "downloads/examples.md",
-            "The CDSAPI - A Brief Primer" => "downloads/cdsapi.md",
+            # "ERA5Regions" => [
+        #         "Integration with GeoRegions.jl" => "components/regions/georegions.md",
+        #         "A GeoRegion vs an ERA5Region"   => "components/regions/comparison.md",
+        #     ]
+        # ],
+        # "Using ERA5Reanalysis.jl" => [
+        #     "LandSea Datasets in ERA5"      => [
+        #         "What is a LandSea Dataset"    => "using/landsea/intro.md",
+        #         "Downloading LandSea Datasets" => "using/landsea/download.md",
+        #     ],
+        #     "Downloading and Reading Data"  => "using/download.md",
+        #     "Extraction of subGeoRegions"   => "using/extract.md",
+        #     "Analysis and Basic Statistics" => "using/analysis.md",
+        #     "Spatialtemporal Smoothing"     => "using/smoothing.md",
         ]
     ],
 )

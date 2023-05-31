@@ -3,15 +3,15 @@
 
 Abstract supertype for Single-Level variables, with the following subtypes:
 
-    PressureVariable <: SingleLevel
-    PressureCustom   <: SingleLevel
+    PressureVariable <: PressureLevel
+    PressureCustom   <: PressureLevel
 """
 abstract type PressureLevel <: ERA5Variable end
 
 """
     PressureVariable <: PressureLevel
 
-Subtype for Pressure-Level variables that can be directly retrieved from the CDS
+Subtype for Pressure-Level variables that can be directly retrieved from the Climate Data Store.
 """
 struct PressureVariable{ST<:AbstractString} <: PressureLevel
     ID      :: ST
@@ -25,7 +25,7 @@ end
 """
     PressureCustom <: PressureLevel
 
-Subtype for custom user-defined Pressure-Level variables
+Subtype for custom user-defined Pressure-Level variables which can only be calculated and not downloaded from the Climate Data Store.
 """
 struct PressureCustom{ST<:AbstractString} <: PressureLevel
     ID      :: ST

@@ -11,7 +11,7 @@ abstract type SingleLevel <: ERA5Variable end
 """
     SingleVariable <: SingleLevel
 
-Subtype for Single-Level variables that can be directly retrieved from the CDS
+Subtype for Single-Level variables that can be directly retrieved from the Climate Data Store.
 """
 struct SingleVariable{ST<:AbstractString} <: SingleLevel
     ID      :: ST
@@ -25,7 +25,7 @@ end
 """
     SingleCustom <: SingleLevel
 
-Subtype for custom user-defined Single-Level variables
+Subtype for custom user-defined Single-Level variables, which can only be calculated and not downloaded from the Climate Data Store.
 """
 struct SingleCustom{ST<:AbstractString} <: SingleLevel
     ID      :: ST
