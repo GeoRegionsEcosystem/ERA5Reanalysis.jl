@@ -92,9 +92,9 @@ end
     cdskey() -> Dict{Any,Any}
 Retrieves the CDS API ckeys from the `~/.cdsapirc` file in the home directory
 """
-function cdskey()
+function cdskey(path :: AbstractString = homedir())
 
-    ckeys = Dict(); cdsapirc = joinpath(homedir(),".cdsapirc")
+    ckeys = Dict(); cdsapirc = joinpath(path,".cdsapirc")
 
     @info "$(now()) - CDSAPI - Loading CDSAPI credentials from $(cdsapirc) ..."
     open(cdsapirc) do f
@@ -159,13 +159,14 @@ Keyword Arguments
 * `overwrite` : If `true` and if `filename` already exists, then overwrite
 """
 function addCDSAPIkey(
-    key :: AbstractString;
-    url :: AbstractString = "https://cds.climate.copernicus.eu/api/v2",
+    key  :: AbstractString;
+    url  :: AbstractString = "https://cds.climate.copernicus.eu/api/v2",
+    path :: AbstractString = homedir(),
     filename  :: AbstractString = ".cdsapirc",
     overwrite :: Bool = false
 )
 
-    fID = joinpath(homedir(),filename)
+    fID = joinpath(path,filename)
     if !isfile(fID) || overwrite
 
         @info "$(now()) - CDSAPI - Adding key to $fID ..."
@@ -174,6 +175,10 @@ function addCDSAPIkey(
             write(f,"url: $url\nkey: $key")
 
         end
+
+    else
+
+        @info "$(now()) - CDSAPI - Existing .cdsapirc file detected at $fID, since overwrite options is not selected, leaving file be ...  ..."
 
     end
 
