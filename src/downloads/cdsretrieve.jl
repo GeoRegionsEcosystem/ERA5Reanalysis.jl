@@ -1,5 +1,5 @@
 function cdsretrieve(
-    e5ds :: Union{ERA5Hourly,ERA5Monthly},
+    e5ds :: ERA5CDStore,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
     overwrite :: Bool
@@ -58,7 +58,7 @@ function cdsretrieve(
 end
 
 function cdsretrieve(
-    e5ds :: Union{ERA5Hourly,ERA5Monthly},
+    e5ds :: ERA5CDStore,
     evar :: PressureVariable,
     ereg :: ERA5Region,
     pvec :: Vector{Int},
@@ -127,7 +127,7 @@ function cdsretrieve(
 end
 
 function cdsretrieve(
-    e5ds :: Union{ERA5Hourly,ERA5Monthly},
+    e5ds :: ERA5CDStore,
     evar :: Vector{SingleVariable{ST}},
     ereg :: ERA5Region,
     overwrite :: Bool

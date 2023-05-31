@@ -1,5 +1,5 @@
 function pythonprint(
-    e5ds :: Union{ERA5Hourly,ERA5Monthly},
+    e5ds :: ERA5CDStore,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
 )
@@ -75,7 +75,7 @@ end
 
 function pythonprint_body(
     fID, fol :: AbstractString, fnc :: AbstractString,
-    e5ds :: Union{ERA5Hourly,ERA5Monthly},
+    e5ds :: ERA5CDStore,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
 )

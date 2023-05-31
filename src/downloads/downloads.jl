@@ -112,7 +112,7 @@ Arguments
 - `overwrite` : `false` by default. If set to true, existing data will be overwritten.
 """
 function download(
-    e5ds :: Union{ERA5Hourly,ERA5Monthly},
+    e5ds :: ERA5CDStore,
     evar :: PressureVariable,
     ereg :: ERA5Region;
     ispy :: Bool = false,

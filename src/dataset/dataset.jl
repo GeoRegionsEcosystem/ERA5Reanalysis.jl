@@ -1,9 +1,9 @@
 """
-    ERA5Hourly <: ERA5Dataset
+    ERA5Hourly <: ERA5CDStore
 
 Specifies that the dataset to be analyzed contains hourly data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
 """
-struct ERA5Hourly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
+struct ERA5Hourly{ST<:AbstractString, DT<:TimeType} <: ERA5CDStore
     ID    :: ST
     name  :: ST
     ptype :: ST
@@ -16,11 +16,11 @@ struct ERA5Hourly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
 end
 
 """
-    ERA5Daily <: ERA5Dataset
+    ERA5Daily <: ERA5Custom
 
-Specifies that the dataset to be analyzed contains hourly data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
+Specifies that the dataset to be analyzed contains hourly data.  All fields are the same as that specified in the `ERA5Dataset` docstring.  However, the fields `sldoi`, `pldoi` and `ptype` are all set to `N/A` because `ERA5Daily` is not available in, nor downloadable from, the Climate Data Store.
 """
-struct ERA5Daily{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
+struct ERA5Daily{ST<:AbstractString, DT<:TimeType} <: ERA5Custom
     ID    :: ST
     name  :: ST
     ptype :: ST
@@ -33,11 +33,12 @@ struct ERA5Daily{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
 end
 
 """
-    ERA5Monthly <: ERA5Dataset
+    ERA5Monthly <: ERA5CDStore
 
-Specifies that the dataset to be analyzed contains monthly-mean data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
+Specifies that the dataset to be analyzed contains monthly-mean data.  The `ERA5Monthly` Type will also contain the following fields:
+- `hours` : specifies the hour(s) of day for which monthly data is downloaded
 """
-struct ERA5Monthly{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
+struct ERA5Monthly{ST<:AbstractString, DT<:TimeType} <: ERA5CDStore
     ID    :: ST
     name  :: ST
     ptype :: ST
@@ -53,9 +54,10 @@ end
 """
     ERA5Dummy <: ERA5Dataset
 
-Specifies that the dataset to be analyzed contains monthly-mean data.  All fields are the same as that specified in the `ERA5Dataset` docstring.
+The ERA5Dummy dataset contains only information on the data and mask paths.
 """
-struct ERA5Dummy{ST<:AbstractString, DT<:TimeType} <: ERA5Dataset
+struct ERA5Dummy{ST<:AbstractString} <: ERA5Dataset
+    path  :: ST
     emask :: ST
 end
 
@@ -233,11 +235,12 @@ function ERA5Dummy(
 )
 
     @info "$(modulelog()) - Setting up data structure for the ERA5 Dummy Dataset"
+    if !isdir(path); mkpath(path) end
     if !isdir(joinpath(path,"emask"))
         mkpath(joinpath(path,"emask"))
     end
 
-    return ERA5Dummy{ST}(joinpath(path,"emask"))
+    return ERA5Dummy{ST}(path,joinpath(path,"emask"))
      
 end
 

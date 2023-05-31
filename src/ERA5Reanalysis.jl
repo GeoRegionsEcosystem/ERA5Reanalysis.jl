@@ -23,7 +23,10 @@ using Reexport
 
 ## Exporting the following functions:
 export
-        ERA5Dataset, ERA5Hourly, ERA5Daily, ERA5Monthly, ERA5Dummy,
+        ERA5Dataset,
+        ERA5CDStore, ERA5Hourly, ERA5Monthly,
+        ERA5Custom, ERA5Daily,
+        ERA5Dummy,
 
         ERA5Variable,
         SingleLevel,   SingleVariable,   SingleCustom,
@@ -54,35 +57,36 @@ export
 
 Abstract supertype for ERA5 reanalysis datasets, with the following subtypes:
 
-    ERA5Hourly  <: ERA5Dataset
-    ERA5Daily   <: ERA5Dataset
-    ERA5Monthly <: ERA5Dataset
+    ERA5CDStore <: ERA5Dataset
+    ERA5Custom  <: ERA5Dataset
+    ERA5Dummy   <: ERA5Dataset
 
 All `ERA5Dataset` Types contain the following fields:
+- `path` : The specified directory in which to save the data
+- `emask` : The specified directory in which to save the `LandSea` dataset
+
+All `ERA5CDStore` and `ERA5Custom` Types also contain the following additional fields:
 - `ID` : The module ID, that also acts as a prefix to filenames
 - `name` : The full name of the module
 - `start` : The date for which downloads/analysis begins
 - `stop` : The date for which downloads/analysis finishes
-- `path` : The specified directory in which to save the data
-- `emask` : The specified directory in which to save the `LandSea` dataset
 - `sldoi` : Single-Level DOI (N/A for ERA5Daily)
 - `pldoi` : Pressure-Level DOI (N/A for ERA5Daily)
 - `ptype` : Product type (N/A for ERA5Daily), set to `reanalysis`
-
-The `ERA5Monthly` Type will also contain the following fields:
-- `hours` : specifies the hour(s) of day for which monthly data is downloaded
 """
 abstract type ERA5Dataset end
+
+abstract type ERA5Custom <: ERA5Dataset end
+
+abstract type ERA5CDStore <: ERA5Dataset end
 
 """
     ERA5Variable
 
-Abstract supertype for ERA5 variables, with the following subtypes, and their respective subtypes:
+Abstract supertype for ERA5 variables, with the following subtypes
 
-    SingleVariable   <: SingleLevel   <: ERA5Variable
-    SingleCustom     <: SingleLevel   <: ERA5Variable
-    PressureVariable <: PressureLevel <: ERA5Variable
-    PressureCustom   <: PressureLevel <: ERA5Variable
+    SingleLevel   <: ERA5Variable
+    PressureLevel <: ERA5Variable
 
 All `ERA5Variable` Types contain the following fields:
 - `ID` : The variable ID, that is also the identifier in the NetCDF files
