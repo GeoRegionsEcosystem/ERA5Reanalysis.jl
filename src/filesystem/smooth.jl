@@ -18,7 +18,7 @@ Arguments
 - `dt`  : A specified date. The NCDataset retrieved may will contain data for the date, although it may also contain data for other dates depending on the `NASAPrecipitationDataset` specified by `npd`
 """
 function e5dsmth(
-    e5ds :: ERA5Dataset,
+    e5ds :: Union{ERA5Hourly,ERA5Daily},
 	evar :: SingleLevel,
 	ereg :: ERA5Region,
     dt   :: TimeType,
@@ -38,7 +38,7 @@ function e5dsmth(
 end
 
 function e5dsmth(
-    e5ds :: ERA5Dataset,
+    e5ds :: Union{ERA5Hourly,ERA5Daily},
 	evar :: PressureLevel,
 	ereg :: ERA5Region,
     dt   :: TimeType,
@@ -49,7 +49,48 @@ function e5dsmth(
 
     evp = evar.ID * "-$(evar.hPa)hPa"
     dts = yr2str(dt)
-    fol = joinpath(e5ds.path,ereg.string,evar.ID,dts)
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp,dts)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * "smooth" * "_" *
+          @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
+          "_" * @sprintf("%02d",smoothtime) * "steps" *
+          "-" * evp * "-" * yrmo2str(dt) * ".nc"
+    return joinpath(fol,fnc)
+
+end
+
+function e5dsmth(
+    e5ds :: ERA5Monthly,
+	evar :: SingleLevel,
+	ereg :: ERA5Region,
+    dt   :: TimeType,
+    smoothlon  :: Real,
+    smoothlat  :: Real,
+    smoothtime :: Int
+)
+
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.path,ereg.string,evar.ID)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * "smooth" * "_" *
+          @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
+          "_" * @sprintf("%02d",smoothtime) * "steps" *
+          "-" * evar.ID * "-" * yrmo2str(dt) * ".nc"
+    return joinpath(fol,fnc)
+
+end
+
+function e5dsmth(
+    e5ds :: ERA5Monthly,
+	evar :: PressureLevel,
+	ereg :: ERA5Region,
+    dt   :: TimeType,
+    smoothlon :: Real,
+    smoothlat :: Real,
+    smoothtime :: Int
+)
+
+    evp = evar.ID * "-$(evar.hPa)hPa"
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp)
     fnc = e5ds.ID * "-" * ereg.string * "-" * "smooth" * "_" *
           @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
           "_" * @sprintf("%02d",smoothtime) * "steps" *
