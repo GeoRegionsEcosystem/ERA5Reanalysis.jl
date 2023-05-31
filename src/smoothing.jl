@@ -2,14 +2,23 @@ function smoothing(
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region;
-    spatial :: Real = 0,
+    spatial  :: Bool = false,
+    temporal :: Bool = false,
     hours :: Int,
-    spatiallon :: Real = 0,
-    spatiallat :: Real = 0,
+    smoothlon :: Real = 0,
+    smoothlat :: Real = 0,
     verbose :: Bool = false
 )
 
-    if iszero(spatial) && (iszero(spatiallon) && iszero(spatiallat))
+    if !spatial && !temporal
+        error("$(modulelog()) - You need to specify at least one of the `spatial` and `temporal` keyword arguments")
+    end
+
+    if spatial && (iszero(smoothlon) && iszero(smoothlat))
+        error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
+    end
+
+    if temporal && iszero(hours)
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
     end
 
@@ -17,12 +26,9 @@ function smoothing(
         error("$(modulelog()) - Setting a hard cap to the maximum number of days that can be included in the timeaveraging to 30 days (720 hours). This may expand in the future.")
     end
 
-    if iszero(spatiallon); spatiallon = spatial end
-    if iszero(spatiallat); spatiallat = spatial end
-
     gres = ereg.resolution
-    shiftlon = Int(floor(spatiallon/(2*gres)))
-    shiftlat = Int(floor(spatiallat/(2*gres)))
+    shiftlon = Int(floor(smoothlon/(2*gres)))
+    shiftlat = Int(floor(smoothlat/(2*gres)))
 
     buffer = Int(ceil((hours-1)/2))
     weights = ones(buffer*2+1)
@@ -98,7 +104,7 @@ function smoothing(
             smthdata[ilon,ilat,ihr] = mean(smthii)
         end
 
-        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",spatiallon))x$(@sprintf("%.2f",spatiallat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         for ihr = 1 : nhr
             ishift = 0
             for ishiftlat = -shiftlat : shiftlat, ishiftlon = -shiftlon : shiftlon
@@ -138,7 +144,7 @@ function smoothing(
 
         save(
             view(spatialdata,:,:,1:nhr), dt, e5ds, evar, ereg, lsd,
-            smooth=true, smoothlon=spatiallon, smoothlat=spatiallat, smoothtime=hours
+            smooth=true, smoothlon=smoothlon, smoothlat=smoothlat, smoothtime=hours
         )
 
         flush(stderr)
@@ -151,14 +157,23 @@ function smoothing(
     e5ds :: ERA5Daily,
 	evar :: ERA5Variable,
     ereg :: ERA5Region;
-    spatial :: Real = 0,
+    spatial  :: Bool = false,
+    temporal :: Bool = false,
     days :: Int,
-    spatiallon :: Real = 0,
-    spatiallat :: Real = 0,
+    smoothlon :: Real = 0,
+    smoothlat :: Real = 0,
     verbose :: Bool = false
 )
 
-    if iszero(spatial) && (iszero(spatiallon) && iszero(spatiallat))
+    if !spatial && !temporal
+        error("$(modulelog()) - You need to specify at least one of the `spatial` and `temporal` keyword arguments")
+    end
+
+    if spatial && (iszero(smoothlon) && iszero(smoothlat))
+        error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
+    end
+
+    if temporal && iszero(days)
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
     end
 
@@ -166,12 +181,9 @@ function smoothing(
         error("$(modulelog()) - Setting a hard cap to the maximum number of days that can be included in the timeaveraging to 30 days (720 hours). This may expand in the future.")
     end
 
-    if iszero(spatiallon); spatiallon = spatial end
-    if iszero(spatiallat); spatiallat = spatial end
-
     gres = ereg.resolution
-    shiftlon = Int(floor(spatiallon/(2*gres)))
-    shiftlat = Int(floor(spatiallat/(2*gres)))
+    shiftlon = Int(floor(smoothlon/(2*gres)))
+    shiftlat = Int(floor(smoothlat/(2*gres)))
 
     buffer = Int(ceil((days-1)/2))
     weights = ones(buffer*2+1)
@@ -239,15 +251,15 @@ function smoothing(
         )
         close(ds)
 
-        @info "$(modulelog()) - Performing $hours-hour temporal smoothing on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
-        for ihr = 1 : nhr, ilat = 1 : nlat, ilon = 1 : nlon
+        @info "$(modulelog()) - Performing $days-day temporal smoothing on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        for idy = 1 : ndy, ilat = 1 : nlat, ilon = 1 : nlon
             for ii = 0 : (buffer*2)
-                smthii[ii+1] = tmpdata[ilon,ilat,ihr+ii] * weights[ii+1]
+                smthii[ii+1] = tmpdata[ilon,ilat,idy+ii] * weights[ii+1]
             end
-            smthdata[ilon,ilat,ihr] = mean(smthii)
+            smthdata[ilon,ilat,idy] = mean(smthii)
         end
 
-        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",spatiallon))x$(@sprintf("%.2f",spatiallat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         for idy = 1 : ndy
             ishift = 0
             for ishiftlat = -shiftlat : shiftlat, ishiftlon = -shiftlon : shiftlon
@@ -287,7 +299,7 @@ function smoothing(
 
         save(
             view(smthdata,:,:,1:ndy), dt, e5ds, evar, ereg, lsd,
-            smooth=true, smoothlon=spatiallon, smoothlat=spatiallat, smoothtime=days
+            smooth=true, smoothlon=smoothlon, smoothlat=smoothlat, smoothtime=days
         )
 
         flush(stderr)
@@ -300,22 +312,23 @@ function smoothing(
     e5ds :: ERA5Monthly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region;
-    spatial :: Real = 0,
-    spatiallon :: Real = 0,
-    spatiallat :: Real = 0,
+    spatial :: Bool = false,
+    smoothlon :: Real = 0,
+    smoothlat :: Real = 0,
     verbose :: Bool = false
 )
 
-    if iszero(spatial) && (iszero(spatiallon) && iszero(spatiallat))
+    if spatial && (iszero(smoothlon) && iszero(smoothlat))
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
     end
 
-    if iszero(spatiallon); spatiallon = spatial end
-    if iszero(spatiallat); spatiallat = spatial end
+    if temporal && iszero(hours)
+        error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
+    end
 
     gres = ereg.resolution
-    shiftlon = Int(floor(spatiallon/(2*gres)))
-    shiftlat = Int(floor(spatiallat/(2*gres)))
+    shiftlon = Int(floor(smoothlon/(2*gres)))
+    shiftlat = Int(floor(smoothlat/(2*gres)))
 
     lsd  = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
@@ -342,7 +355,7 @@ function smoothing(
         int2real!(tmpdata,tmpload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
         close(ds)
 
-        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",spatiallon))x$(@sprintf("%.2f",spatiallat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+        @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         for idt = 1 : ndt
             ishift = 0
             for ishiftlat = -shiftlat : shiftlat, ishiftlon = -shiftlon : shiftlon
@@ -382,7 +395,7 @@ function smoothing(
 
         save(
             smthdata, dt, e5ds, evar, ereg, lsd,
-            smooth=true, smoothlon=spatiallon, smoothlat=spatiallat
+            smooth=true, smoothlon=smoothlon, smoothlat=smoothlat
         )
 
         flush(stderr)
