@@ -28,7 +28,7 @@ function hourly2daily(
         of  = ds[evar.ID].attrib["add_offset"]
         mv  = ds[evar.ID].attrib["missing_value"]
         fv  = ds[evar.ID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:(ndy*24)),:,:,it)
+        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:(ndy*24)),:,:,:)
         close(ds)
 
         if verbose

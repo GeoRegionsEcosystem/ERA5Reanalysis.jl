@@ -30,7 +30,7 @@ function hourly2monthlyhour(
             of  = ds[evar.ID].attrib["add_offset"]
             mv  = ds[evar.ID].attrib["missing_value"]
             fv  = ds[evar.ID].attrib["_FillValue"]
-            NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhr),:,:,it)
+            NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhr),:,:,:)
             close(ds)
 
             if verbose
