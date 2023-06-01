@@ -68,7 +68,6 @@ function e5dsmth(
     smoothtime :: Int
 )
 
-    dts = yr2str(dt)
     fol = joinpath(e5ds.path,ereg.string,evar.ID)
     fnc = e5ds.ID * "-" * ereg.string * "-" * "smooth" * "_" *
           @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *
@@ -89,7 +88,6 @@ function e5dsmth(
 )
 
     evp = evar.ID * "-$(evar.hPa)hPa"
-    dts = yr2str(dt)
     fol = joinpath(e5ds.path,ereg.string,evar.ID,evp)
     fnc = e5ds.ID * "-" * ereg.string * "-" * "smooth" * "_" *
           @sprintf("%.2f",smoothlon) * "x" * @sprintf("%.2f",smoothlat) *

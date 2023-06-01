@@ -101,7 +101,7 @@ function smoothing(
             for ii = 0 : (buffer*2)
                 smthii[ii+1] = tmpdata[ilon,ilat,ihr+ii] * weights[ii+1]
             end
-            smthdata[ilon,ilat,ihr] = mean(smthii)
+            smthdata[ilon,ilat,ihr] = sum(smthii)
         end
 
         @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
@@ -256,7 +256,7 @@ function smoothing(
             for ii = 0 : (buffer*2)
                 smthii[ii+1] = tmpdata[ilon,ilat,idy+ii] * weights[ii+1]
             end
-            smthdata[ilon,ilat,idy] = mean(smthii)
+            smthdata[ilon,ilat,idy] = sum(smthii)
         end
 
         @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
