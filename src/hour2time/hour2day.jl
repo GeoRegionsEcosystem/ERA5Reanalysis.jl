@@ -11,6 +11,8 @@ function hourly2daily(
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
 
+    isaccumulate = checkaccumulate(evar)
+
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
     tmpload = zeros(Int16,nlon,nlat,ntimesteps(e5ds))
@@ -43,7 +45,11 @@ function hourly2daily(
                 scale=sc,offset=of,mvalue=mv,fvalue=fv
             )
             for ilat = 1 : nlat, ilon = 1 : nlon
-                dydata[ilon,ilat,idy] = mean(view(tmpdata,ilon,ilat,:))
+                if isaccumulate
+                    dydata[ilon,ilat,idy] = sum(view(tmpdata,ilon,ilat,:))
+                else
+                    dydata[ilon,ilat,idy] = mean(view(tmpdata,ilon,ilat,:))
+                end
             end
         end
 
