@@ -17,7 +17,7 @@ function smoothing(
     ereg :: ERA5Region;
     spatial  :: Bool = false,
     temporal :: Bool = false,
-    hours :: Int,
+    hours :: Int = 0,
     smoothlon :: Real = 0,
     smoothlat :: Real = 0,
     verbose :: Bool = false
@@ -186,7 +186,7 @@ function smoothing(
     ereg :: ERA5Region;
     spatial  :: Bool = false,
     temporal :: Bool = false,
-    days :: Int,
+    days :: Int = 0,
     smoothlon :: Real = 0,
     smoothlat :: Real = 0,
     verbose :: Bool = false
