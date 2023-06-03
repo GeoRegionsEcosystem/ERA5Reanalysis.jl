@@ -22,7 +22,7 @@ function extract(
 
     @info "$(modulelog()) - Creating RegionGrid for \"$(ereg.ID)\" based on the longitude and latitude vectors of the parent GeoRegion \"$(ereg.geo.parID)\""
 
-    rinfo = ERA5RegionGrid(ereg,plon,plat)
+    rinfo = RegionGrid(ereg,plon,plat)
     ilon  = rinfo.ilon; nlon = length(ilon)
     ilat  = rinfo.ilat; nlat = length(ilat)
     if typeof(rinfo) <: PolyGrid
@@ -99,7 +99,7 @@ function extract(
 
     @info "$(modulelog()) - Creating RegionGrid for \"$(sreg.ID)\" based on the longitude and latitude vectors of the parent GeoRegion \"$(ereg.ID)\""
 
-    rinfo = ERA5RegionGrid(sreg,plon,plat)
+    rinfo = RegionGrid(sreg,plon,plat)
     ilon  = rinfo.ilon; nlon = length(ilon)
     ilat  = rinfo.ilat; nlat = length(ilat)
     if typeof(rinfo) <: PolyGrid
@@ -190,7 +190,7 @@ function extract(
     nlat  = Vector{Int}(undef,ngeo)
     mask  = Vector{Array}(undef,ngeo)
     for igeo in 1 : ngeo
-        rinfo[igeo] = ERA5RegionGrid(sreg[igeo],plon,plat)
+        rinfo[igeo] = RegionGrid(sreg[igeo],plon,plat)
         ilon[igeo]  = rinfo[igeo].ilon; nlon[igeo] = length(ilon[igeo])
         ilat[igeo]  = rinfo[igeo].ilat; nlat[igeo] = length(ilat[igeo])
         if typeof(rinfo[igeo]) <: PolyGrid

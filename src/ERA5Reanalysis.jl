@@ -36,7 +36,7 @@ export
         resetERA5Variables, addERA5Variables, rmERA5Variable,  tableERA5Variables,
 
         ERA5Region,
-        isinERA5Region, coordERA5Region, ERA5RegionGrid,
+        isinERA5Region, coordERA5Region, RegionGrid,
 
         LandSea,
         getLandSea, downloadLandSea,

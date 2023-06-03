@@ -32,7 +32,7 @@ function getLandSea(
         goro = nomissing(gds["z"][:],NaN)
         close(gds)
 
-        rinfo = ERA5RegionGrid(ereg,glon,glat)
+        rinfo = RegionGrid(ereg,glon,glat)
         ilon  = rinfo.ilon; nlon = length(rinfo.ilon)
         ilat  = rinfo.ilat; nlat = length(rinfo.ilat)
         rlsm  = zeros(nlon,nlat)

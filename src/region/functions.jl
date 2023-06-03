@@ -68,7 +68,7 @@ function isinERA5Region(
 end
 
 """
-    ERA5RegionGrid(
+    RegionGrid(
         e5geo :: ERA5Region{ST,FT},
         lon   :: Vector{<:Real},
         lat   :: Vector{<:Real}
@@ -94,7 +94,7 @@ function RegionGrid(
 end
 
 """
-    ERA5RegionGrid(
+    RegionGrid(
         e5geo :: ERA5Region{ST,FT},
         lon   :: Array{<:Real},
         lat   :: Array{<:Real}
