@@ -1,13 +1,13 @@
 function calculatebufferweights(shiftsteps)
 
-    buffer_time = Int(ceil((shiftsteps-1)/2))
-    weights = ones(buffer_time*2+1)
-    if buffer_time >= (shiftsteps/2)
+    buffer = Int(ceil((shiftsteps-1)/2))
+    weights = ones(buffer*2+1)
+    if buffer >= (shiftsteps/2)
         weights[1] = 0.5
         weights[end] = 0.5
     end
     weights /= shiftsteps
-    return buffer_time,weights
+    return buffer,weights
 
 end
 
@@ -59,10 +59,12 @@ function smoothing(
 
     tmpload  = zeros(Int16,nlon,nlat,31*24)
     tmpdata  = zeros(nlon,nlat,31*24+buffer_time*2)
-    shfttmp  = zeros(nlon,nlat,(2*buffer_lon+1)*(2*buffer_lat+1))
+    shftlon  = zeros(nlon,nlat,(2*buffer_lon+1))
+    shftlat  = zeros(nlon,nlat,(2*buffer_lat+1))
     smthdata = zeros(nlon,nlat,31*24)
-    shftnan  = zeros(Bool,(2*buffer_lon+1)*(2*buffer_lat+1))
-    smthii = zeros(1+buffer_time*2)
+    nanlat   = zeros(Bool,(2*buffer_lat+1))
+    nanlon   = zeros(Bool,(2*buffer_lon+1))
+    smthii   = zeros(1+buffer_time*2)
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
@@ -120,30 +122,53 @@ function smoothing(
                 smthdata[ilon,ilat,ihr] = sum(smthii)
             end
 
+        else
+
+            for ihr = 1 : nhr, ilat = 1 : nlat, ilon = 1 : nlon
+                smthdata[ilon,ilat,ihr] = tmpdata[ilon,ilat,ihr]
+            end
+
         end
 
         if spatial
             @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
             for ihr = 1 : nhr
-                ishift = 0
-                for ilat = -buffer_lat : buffer_lat, ilon = -buffer_lon : buffer_lon
-                    ishift += 1
-                    circshift!(
-                        view(shfttmp,:,:,ishift),view(smthdata,:,:,ihr),
-                        (ilon,ilat)
-                    )
-                end
-                ishift = 0
-                for ilat = 1 : (2*buffer_lat+1), ilon = 1 : (2*buffer_lat+1)
-                    ishift += 1
-                    shfttmp[ilon,ilat,ishift] *= weights_lon[ilon] * weights_lat[ilat]
-                end
-                for ilat = 1 : nlat, ilon = 1 : nlon
-                    if !isnan(tmpdata[ilon,ilat,ihr])
-                        smthdata[ilon,ilat,ihr] = nansum(
-                            view(shfttmp,ilon,ilat,:),shftnan
+
+                if !iszero(buffer_lat)
+                    ishift = 0
+                    for ilat = -buffer_lat : buffer_lat
+                        ishift += 1
+                        circshift!(
+                            view(shftlat,:,:,ishift),view(smthdata,:,:,ihr),
+                            (0,ilat)
                         )
-                    else; smthdata[ilon,ilat,ihr] = NaN
+                    end
+                    for ilat = 1 : nlat, ilon = 1 : nlon
+                        if !isnan(tmpdata[ilon,ilat,ihr])
+                            smthdata[ilon,ilat,ihr] = nanmean(
+                                view(shftlat,ilon,ilat,:),nanlat,weights_lat
+                            )
+                        else; smthdata[ilon,ilat,ihr] = NaN
+                        end
+                    end
+                end
+
+                if !iszero(buffer_lon)
+                    ishift = 0
+                    for ilon = -buffer_lon : buffer_lon
+                        ishift += 1
+                        circshift!(
+                            view(shftlon,:,:,ishift),view(smthdata,:,:,ihr),
+                            (ilon,0)
+                        )
+                    end
+                    for ilat = 1 : nlat, ilon = 1 : nlon
+                        if !isnan(tmpdata[ilon,ilat,ihr])
+                            smthdata[ilon,ilat,ihr] = nanmean(
+                                view(shftlon,ilon,ilat,:),nanlon,weights_lon
+                            )
+                        else; smthdata[ilon,ilat,ihr] = NaN
+                        end
                     end
                 end
             end
@@ -171,7 +196,7 @@ function smoothing(
         end
 
         save(
-            view(spatialdata,:,:,1:nhr), dt, e5ds, evar, ereg, lsd,
+            view(smthdata,:,:,1:nhr), dt, e5ds, evar, ereg, lsd,
             smooth=true, smoothlon=smoothlon, smoothlat=smoothlat, smoothtime=hours
         )
 
@@ -229,10 +254,12 @@ function smoothing(
 
     tmpload  = zeros(Int16,nlon,nlat,31)
     tmpdata  = zeros(nlon,nlat,31+buffer_time*2)
-    shfttmp  = zeros(nlon,nlat,(2*buffer_lon+1)*(2*buffer_lat+1))
+    shftlon  = zeros(nlon,nlat,(2*buffer_lon+1))
+    shftlat  = zeros(nlon,nlat,(2*buffer_lat+1))
     smthdata = zeros(nlon,nlat,31)
-    shftnan  = zeros(Bool,(2*buffer_lon+1)*(2*buffer_lat+1))
-    smthii = zeros(1+buffer_time*2)
+    nanlat   = zeros(Bool,(2*buffer_lat+1))
+    nanlon   = zeros(Bool,(2*buffer_lon+1))
+    smthii   = zeros(1+buffer_time*2)
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
@@ -287,32 +314,54 @@ function smoothing(
                 end
                 smthdata[ilon,ilat,idy] = sum(smthii)
             end
+        else
+            for idy = 1 : ndy, ilat = 1 : nlat, ilon = 1 : nlon
+                smthdata[ilon,ilat,idy] = tmpdata[ilon,ilat,idy]
+            end
         end
 
         if spatial
             @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
             for idy = 1 : ndy
-                ishift = 0
-                for ilat = -buffer_lat : buffer_lat, ilon = -buffer_lon : buffer_lon
-                    ishift += 1
-                    circshift!(
-                        view(shfttmp,:,:,ishift),view(smthdata,:,:,idy),
-                        (ilon,ilat)
-                    )
-                end
-                ishift = 0
-                for ilat = 1 : (2*buffer_lat+1), ilon = 1 : (2*buffer_lat+1)
-                    ishift += 1
-                    shfttmp[ilon,ilat,ishift] *= weights_lon[ilon] * weights_lat[ilat]
-                end
-                for ilat = 1 : nlat, ilon = 1 : nlon
-                    if !isnan(tmpdata[ilon,ilat,idy])
-                        smthdata[ilon,ilat,idy] = nansum(
-                            view(shfttmp,ilon,ilat,:),shftnan
+
+                if !iszero(buffer_lat)
+                    ishift = 0
+                    for ilat = -buffer_lat : buffer_lat
+                        ishift += 1
+                        circshift!(
+                            view(shftlat,:,:,ishift),view(smthdata,:,:,idy),
+                            (0,ilat)
                         )
-                    else; smthdata[ilon,ilat,idy] = NaN
+                    end
+                    for ilat = 1 : nlat, ilon = 1 : nlon
+                        if !isnan(tmpdata[ilon,ilat,idy])
+                            smthdata[ilon,ilat,idy] = nanmean(
+                                view(shftlat,ilon,ilat,:),nanlat,weights_lat
+                            )
+                        else; smthdata[ilon,ilat,idy] = NaN
+                        end
                     end
                 end
+
+                if !iszero(buffer_lon)
+                    ishift = 0
+                    for ilon = -buffer_lon : buffer_lon
+                        ishift += 1
+                        circshift!(
+                            view(shftlon,:,:,ishift),view(smthdata,:,:,idy),
+                            (ilon,0)
+                        )
+                    end
+                    for ilat = 1 : nlat, ilon = 1 : nlon
+                        if !isnan(tmpdata[ilon,ilat,idy])
+                            smthdata[ilon,ilat,idy] = nanmean(
+                                view(shftlon,ilon,ilat,:),nanlon,weights_lon
+                            )
+                        else; smthdata[ilon,ilat,idy] = NaN
+                        end
+                    end
+                end
+                
             end
 
             if verbose
@@ -380,10 +429,11 @@ function smoothing(
 
     ndt = ntimesteps(e5ds)
     tmpload  = zeros(Int16,nlon,nlat,ndt)
-    tmpdata  = zeros(nlon,nlat,ndt)
     smthdata = zeros(nlon,nlat,ndt)
-    shfttmp  = zeros(nlon,nlat,(2*buffer_lon+1)*(2*buffer_lat+1))
-    shftnan  = zeros(Bool,(2*buffer_lon+1)*(2*buffer_lat+1))
+    shftlon  = zeros(nlon,nlat,(2*buffer_lon+1))
+    shftlat  = zeros(nlon,nlat,(2*buffer_lat+1))
+    nanlat   = zeros(Bool,(2*buffer_lat+1))
+    nanlon   = zeros(Bool,(2*buffer_lon+1))
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
@@ -394,31 +444,50 @@ function smoothing(
         mv  = ds[evar.ID].attrib["missing_value"]
         fv  = ds[evar.ID].attrib["_FillValue"]
         NCDatasets.load!(ds[evar.ID].var,tmpload,:,:,:)
-        int2real!(tmpdata,tmpload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
+        int2real!(smthdata,tmpload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
         close(ds)
 
         @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         for idt = 1 : ndt
-            ishift = 0
-            for ilat = -buffer_lat : buffer_lat, ilon = -buffer_lon : buffer_lon
-                ishift += 1
-                circshift!(
-                    view(shfttmp,:,:,ishift),view(smthdata,:,:,idy),
-                    (ilon,ilat)
-                )
-            end
-            for ilat = 1 : (2*buffer_lat+1), ilon = 1 : (2*buffer_lat+1)
-                ishift += 1
-                shfttmp[ilon,ilat,ishift] *= weights_lon[ilon] * weights_lat[ilat]
-            end
-            for ilat = 1 : nlat, ilon = 1 : nlon
-                if !isnan(tmpdata[ilon,ilat,idt])
-                    smthdata[ilon,ilat,idt] = nansum(
-                        view(shfttmp,ilon,ilat,:),shftnan
+
+            if !iszero(buffer_lat)
+                ishift = 0
+                for ilat = -buffer_lat : buffer_lat
+                    ishift += 1
+                    circshift!(
+                        view(shftlat,:,:,ishift),view(smthdata,:,:,idt),
+                        (0,ilat)
                     )
-                else; smthdata[ilon,ilat,idt] = NaN
+                end
+                for ilat = 1 : nlat, ilon = 1 : nlon
+                    if !isnan(tmpdata[ilon,ilat,idt])
+                        smthdata[ilon,ilat,idt] = nanmean(
+                            view(shftlat,ilon,ilat,:),nanlat,weights_lat
+                        )
+                    else; smthdata[ilon,ilat,idt] = NaN
+                    end
                 end
             end
+
+            if !iszero(buffer_lon)
+                ishift = 0
+                for ilon = -buffer_lon : buffer_lon
+                    ishift += 1
+                    circshift!(
+                        view(shftlon,:,:,ishift),view(smthdata,:,:,idt),
+                        (ilon,0)
+                    )
+                end
+                for ilat = 1 : nlat, ilon = 1 : nlon
+                    if !isnan(tmpdata[ilon,ilat,idt])
+                        smthdata[ilon,ilat,idt] = nanmean(
+                            view(shftlat,ilon,ilat,:),nanlon,weights_lon
+                        )
+                    else; smthdata[ilon,ilat,idt] = NaN
+                    end
+                end
+            end
+
         end
 
         if verbose

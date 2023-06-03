@@ -137,8 +137,8 @@ function nanmean(
     for iNaN in 1 : nNaN
         dNaN[iNaN] = !isnan(data[iNaN])
     end
-    dataii = @view data[dNaN]
-    wgtsii = @view wgts[dNaN]
+    dataii = view(data,dNaN) .* view(wgts,dNaN)
+    wgtsii = view(wgts,dNaN)
     if !isempty(dataii); return sum(dataii) / sum(wgtsii); else; return NaN; end
 end
 
