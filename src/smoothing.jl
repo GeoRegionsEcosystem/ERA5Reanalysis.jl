@@ -133,6 +133,7 @@ function smoothing(
                         (ilon,ilat)
                     )
                 end
+                ishift = 0
                 for ilat = 1 : (2*buffer_lat+1), ilon = 1 : (2*buffer_lat+1)
                     ishift += 1
                     shfttmp[ilon,ilat,ishift] *= weights_lon[ilon] * weights_lat[ilat]
@@ -299,13 +300,14 @@ function smoothing(
                         (ilon,ilat)
                     )
                 end
+                ishift = 0
                 for ilat = 1 : (2*buffer_lat+1), ilon = 1 : (2*buffer_lat+1)
                     ishift += 1
                     shfttmp[ilon,ilat,ishift] *= weights_lon[ilon] * weights_lat[ilat]
                 end
                 for ilat = 1 : nlat, ilon = 1 : nlon
                     if !isnan(tmpdata[ilon,ilat,idy])
-                        smthdata[ilon,ilat,ihr] = nansum(
+                        smthdata[ilon,ilat,idy] = nansum(
                             view(shfttmp,ilon,ilat,:),shftnan
                         )
                     else; smthdata[ilon,ilat,idy] = NaN
