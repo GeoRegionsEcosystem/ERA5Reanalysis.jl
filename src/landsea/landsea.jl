@@ -9,7 +9,8 @@ end
 function getLandSea(
     e5ds :: ERA5Dataset,
     ereg :: ERA5Region = ERA5Region(GeoRegion("GLB"));
-    returnlsd = true,
+    save :: Bool = true,
+    returnlsd :: Bool = true,
     FT = Float64
 )
 
@@ -55,11 +56,15 @@ function getLandSea(
             end
         end
 
-        saveLandSea(e5ds,ereg,rinfo.lon,rinfo.lat,rlsm,roro,Int16.(mask))
+        if isGeoRegion(ereg.ID,throw=false) && save
+            saveLandSea(e5ds,ereg,rinfo.lon,rinfo.lat,rlsm,roro,Int16.(mask))
+        else
+            return LandSea{FT}(rinfo.lon,rinfo.lat,rlsm,roro,Int16.(mask))
+        end
 
     end
 
-    if returnlsd
+    if isGeoRegion(ereg.ID,throw=false) && returnlsd
 
         lds = NCDataset(lsmfnc)
         lon = lds["longitude"][:]
