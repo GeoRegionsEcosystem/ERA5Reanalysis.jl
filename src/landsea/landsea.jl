@@ -11,10 +11,23 @@ function getLandSea(
     ereg :: ERA5Region = ERA5Region(GeoRegion("GLB"));
     save :: Bool = true,
     returnlsd :: Bool = true,
+    smooth    :: Bool = false,
+    σlon :: Int = 0,
+    σlat :: Int = 0,
+    iterations :: Int = 100,
     FT = Float64
 )
 
-    lsmfnc = joinpath(e5ds.emask,"emask-$(ereg.string).nc")
+    if smooth && (iszero(σlon) && iszero(σlat))
+        error("$(modulelog()) - Incomplete specification of smoothing parameters, at least one of σlon and σlat must be nonzero")
+    end
+
+    if !smooth
+        fid = "emask-$(ereg.string).nc"
+    else
+        fid = "emask-$(ereg.string)-smooth_$(σlon)x$(σlat).nc"
+    end
+    lsmfnc = joinpath(e5ds.emask,fid)
 
     if !isfile(lsmfnc)
 
@@ -22,7 +35,7 @@ function getLandSea(
 
         glbfnc = joinpath(e5ds.emask,"emask-GLBx$(@sprintf("%.2f",ereg.resolution)).nc")
         if !isfile(glbfnc)
-            @info "$(modulelog()) - The Global ERA5 Land-Sea mask dataset for the \"$(ereg.ID)\" ERA5Region is not available, downloading from the Climate Data Store ..."
+            @info "$(modulelog()) - The Global ERA5 Land-Sea mask dataset is not available, downloading from the Climate Data Store ..."
             downloadLandSea(e5ds,ereg)
         end
 
@@ -33,33 +46,30 @@ function getLandSea(
         goro = nomissing(gds["z"][:],NaN)
         close(gds)
 
-        rinfo = RegionGrid(ereg,glon,glat)
-        ilon  = rinfo.ilon; nlon = length(rinfo.ilon)
-        ilat  = rinfo.ilat; nlat = length(rinfo.ilat)
-        rlsm  = zeros(nlon,nlat)
-        roro  = zeros(nlon,nlat)
-        
-        if typeof(rinfo) <: PolyGrid
-              mask = rinfo.mask; mask[isnan.(mask)] .= 0
-        else; mask = ones(Int16,nlon,nlat)
+        if smooth
+            smooth!(glsm,σlon=σlon,σlat=σlat,iterations=iterations)
         end
 
-        @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region from the Global ERA5 Land-Sea mask dataset ..."
+        ggrd = RegionGrid(ereg,glon,glat)
+        nlon = length(ggrd.ilon)
+        nlat = length(ggrd.ilat)
 
-        for iglat = 1 : nlat, iglon = 1 : nlon
-            if isone(mask[iglon,iglat])
-                rlsm[iglon,iglat] = glsm[ilon[iglon],ilat[iglat]]
-                roro[iglon,iglat] = goro[ilon[iglon],ilat[iglat]]
-            else
-                rlsm[iglon,iglat] = NaN
-                roro[iglon,iglat] = NaN
-            end
+        @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region from the Global ERA5 Land-Sea mask dataset ..."
+        roro = extractGrid(goro,ggrd)
+        rlsm = extractGrid(glsm,ggrd)
+
+        if typeof(ggrd) <: PolyGrid
+              mask = ggrd.mask; mask[isnan.(mask)] .= 0
+        else; mask = ones(Int,nlon,nlat)
         end
 
         if isGeoRegion(ereg.ID,throw=false) && save
-            saveLandSea(e5ds,ereg,rinfo.lon,rinfo.lat,rlsm,roro,Int16.(mask))
+            saveLandSea(
+                e5ds, ereg, ggrd.lon, ggrd.lat, rlsm, roro, Int16.(mask),
+                smooth, σlon, σlat
+            )
         else
-            return LandSea{FT}(rinfo.lon,rinfo.lat,rlsm,roro,Int16.(mask))
+            return LandSea{FT}(ggrd.lon,ggrd.lat,rlsm,roro,Int16.(mask))
         end
 
     end
@@ -129,9 +139,16 @@ function saveLandSea(
     lsm  :: Array{<:Real,2},
     oro  :: Array{<:Real,2},
     mask :: Array{Int16,2},
+    smooth :: Bool = false,
+    σlon :: Int = 0,
+    σlat :: Int = 0,
 )
 
-    fnc = joinpath(e5ds.emask,"emask-$(ereg.string).nc")
+    if !smooth
+        fnc = joinpath(e5ds.emask,"emask-$(ereg.string).nc")
+    else
+        fnc = joinpath(e5ds.emask,"emask-$(ereg.string)-smooth_$(σlon)x$(σlat).nc")
+    end
     if isfile(fnc)
         rm(fnc,force=true)
     end
