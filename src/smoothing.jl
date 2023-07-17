@@ -66,11 +66,12 @@ function smoothing(
     nanlon   = zeros(Bool,(2*buffer_lon+1))
     smthii   = zeros(1+buffer_time*2)
 
+    flush(stderr)
+
     for dt in e5ds.start : Month(1) : e5ds.stop
 
-        @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         nhr = daysinmonth(dt) * 24
-        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
+        ds  = read(e5ds,evar,ereg,dt)
         sc  = ds[evar.ID].attrib["scale_factor"]
         of  = ds[evar.ID].attrib["add_offset"]
         mv  = ds[evar.ID].attrib["missing_value"]
@@ -84,9 +85,8 @@ function smoothing(
 
         if temporal
 
-            @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt-Month(1))) ..."
             nhb = daysinmonth(dt-Month(1)) * 24
-            ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt-Month(1)))
+            ds  = read(e5ds,evar,ereg,dt-Month(1))
             sc  = ds[evar.ID].attrib["scale_factor"]
             of  = ds[evar.ID].attrib["add_offset"]
             mv  = ds[evar.ID].attrib["missing_value"]
@@ -99,9 +99,10 @@ function smoothing(
             )
             close(ds)
 
-            @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt+Month(1))) ..."
+            flush(stderr)
+
             nhe = daysinmonth(dt+Month(1)) * 24
-            ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt+Month(1)))
+            ds  = read(e5ds,evar,ereg,dt+Month(1))
             sc  = ds[evar.ID].attrib["scale_factor"]
             of  = ds[evar.ID].attrib["add_offset"]
             mv  = ds[evar.ID].attrib["missing_value"]
@@ -114,6 +115,8 @@ function smoothing(
             )
             close(ds)
 
+            flush(stderr)
+
             @info "$(modulelog()) - Performing $hours-hour temporal smoothing on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
             for ihr = 1 : nhr, ilat = 1 : nlat, ilon = 1 : nlon
                 for ii = 0 : (buffer_time*2)
@@ -122,11 +125,15 @@ function smoothing(
                 smthdata[ilon,ilat,ihr] = sum(smthii)
             end
 
+            flush(stderr)
+
         else
 
             for ihr = 1 : nhr, ilat = 1 : nlat, ilon = 1 : nlon
                 smthdata[ilon,ilat,ihr] = tmpdata[ilon,ilat,ihr]
             end
+
+            flush(stderr)
 
         end
 
@@ -172,6 +179,8 @@ function smoothing(
                     end
                 end
             end
+
+            flush(stderr)
 
             if verbose
                 @info "$(modulelog()) - Setting edges to NaN because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
@@ -261,11 +270,12 @@ function smoothing(
     nanlon   = zeros(Bool,(2*buffer_lon+1))
     smthii   = zeros(1+buffer_time*2)
 
+    flush(stderr)
+
     for dt in e5ds.start : Month(1) : e5ds.stop
 
-        @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         ndy = daysinmonth(dt)
-        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
+        ds  = read(e5ds,evar,ereg,dt)
         sc  = ds[evar.ID].attrib["scale_factor"]
         of  = ds[evar.ID].attrib["add_offset"]
         mv  = ds[evar.ID].attrib["missing_value"]
@@ -277,10 +287,12 @@ function smoothing(
         )
         close(ds)
 
+        flush(stderr)
+
         if temporal
-            @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt-Month(1))) ..."
+            
             ndb = daysinmonth(dt-Month(1))
-            ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt-Month(1)))
+            ds  = read(e5ds,evar,ereg,dt-Month(1))
             sc  = ds[evar.ID].attrib["scale_factor"]
             of  = ds[evar.ID].attrib["add_offset"]
             mv  = ds[evar.ID].attrib["missing_value"]
@@ -292,9 +304,10 @@ function smoothing(
             )
             close(ds)
 
-            @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt+Month(1))) ..."
+            flush(stderr)
+
             nde = daysinmonth(dt+Month(1))
-            ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt+Month(1)))
+            ds  = read(e5ds,evar,ereg,dt+Month(1))
             sc  = ds[evar.ID].attrib["scale_factor"]
             of  = ds[evar.ID].attrib["add_offset"]
             mv  = ds[evar.ID].attrib["missing_value"]
@@ -307,6 +320,8 @@ function smoothing(
             )
             close(ds)
 
+            flush(stderr)
+
             @info "$(modulelog()) - Performing $days-day temporal smoothing on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
             for idy = 1 : ndy, ilat = 1 : nlat, ilon = 1 : nlon
                 for ii = 0 : (buffer_time*2)
@@ -314,10 +329,14 @@ function smoothing(
                 end
                 smthdata[ilon,ilat,idy] = sum(smthii)
             end
+
+            flush(stderr)
         else
             for idy = 1 : ndy, ilat = 1 : nlat, ilon = 1 : nlon
                 smthdata[ilon,ilat,idy] = tmpdata[ilon,ilat,idy]
             end
+
+            flush(stderr)
         end
 
         if spatial
@@ -363,6 +382,8 @@ function smoothing(
                 end
                 
             end
+
+            flush(stderr)
 
             if verbose
                 @info "$(modulelog()) - Setting edges to NaN because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
@@ -435,10 +456,11 @@ function smoothing(
     nanlat   = zeros(Bool,(2*buffer_lat+1))
     nanlon   = zeros(Bool,(2*buffer_lon+1))
 
+    flush(stderr)
+
     for dt in e5ds.start : Month(1) : e5ds.stop
 
-        @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
-        ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
+        ds  = read(e5ds,evar,ereg,dt)
         sc  = ds[evar.ID].attrib["scale_factor"]
         of  = ds[evar.ID].attrib["add_offset"]
         mv  = ds[evar.ID].attrib["missing_value"]
@@ -446,6 +468,8 @@ function smoothing(
         NCDatasets.load!(ds[evar.ID].var,tmpload,:,:,:)
         int2real!(smthdata,tmpload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
         close(ds)
+
+        flush(stderr)
 
         @info "$(modulelog()) - Performing spatial smoothing ($(@sprintf("%.2f",smoothlon))x$(@sprintf("%.2f",smoothlat))) on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
         for idt = 1 : ndt
@@ -489,6 +513,8 @@ function smoothing(
             end
 
         end
+
+        flush(stderr)
 
         if verbose
             @info "$(modulelog()) - Setting edges to NaN because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
