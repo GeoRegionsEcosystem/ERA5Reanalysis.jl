@@ -11,14 +11,14 @@ function split(
 
     ds = NCDataset(fnc)
     nt = ds.dim["time"]
-    sc = ds[evar.varID].attrib["scale_factor"]
-    of = ds[evar.varID].attrib["add_offset"]
-    mv = ds[evar.varID].attrib["missing_value"]
-    fv = ds[evar.varID].attrib["_FillValue"]
+    sc = ds[evar.ID].attrib["scale_factor"]
+    of = ds[evar.ID].attrib["add_offset"]
+    mv = ds[evar.ID].attrib["missing_value"]
+    fv = ds[evar.ID].attrib["_FillValue"]
     dataint = @view tmpd[:,:,1:nt]
 
     for ip in 1 : length(pvec)
-        NCDatasets.load!(ds[evar.varID].var,dataint,:,:,ip,:)
+        NCDatasets.load!(ds[evar.ID].var,dataint,:,:,ip,:)
 
         if mv != -32767
             for ii in eachindex(dataint)
@@ -39,7 +39,7 @@ function split(
         end
 
         p = pvec[ip]
-        evarii = PressureVariable(evar.varID,hPa=p)
+        evarii = PressureVariable(evar.ID,hPa=p)
         save(dataint,dt,e5ds,evarii,ereg,lsd,sc,of)
     end
 
@@ -63,12 +63,12 @@ function split(
     nt = ds.dim["time"]
     dataint = @view tmpd[:,:,1:nt]
     for evarii in evar
-        sc = ds[evarii.varID].attrib["scale_factor"]
-        of = ds[evarii.varID].attrib["add_offset"]
-        mv = ds[evarii.varID].attrib["missing_value"]
-        fv = ds[evarii.varID].attrib["_FillValue"]
+        sc = ds[evarii.ID].attrib["scale_factor"]
+        of = ds[evarii.ID].attrib["add_offset"]
+        mv = ds[evarii.ID].attrib["missing_value"]
+        fv = ds[evarii.ID].attrib["_FillValue"]
 
-        NCDatasets.load!(ds[evarii.varID].var,dataint,:,:,:)
+        NCDatasets.load!(ds[evarii.ID].var,dataint,:,:,:)
 
         if mv != -32767
             for ii in eachindex(dataint)
