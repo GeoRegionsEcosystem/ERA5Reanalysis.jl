@@ -44,9 +44,9 @@ function addERA5Variables(fname::AbstractString)
                 @warn "$(modulelog()) - The SingleVariable ID \"$(vlist[ivar])\" is already in use and thus cannot be added to singlevariable.txt, please use another ID"
             else
                 SingleVariable(
-                    varID = varray[ivar,1], lname = varray[ivar,2],
-                    vname = varray[ivar,3], units = varray[ivar,4],
-                    iscustom = false
+                    ID = varray[ivar,1], long = varray[ivar,2],
+                    name = varray[ivar,3], units = varray[ivar,4],
+                    inCDS = false
                 )
             end
         end
@@ -56,8 +56,8 @@ function addERA5Variables(fname::AbstractString)
                 @warn "$(modulelog()) - The SingleVariable ID \"$(vlist[ivar])\" is already in use and thus cannot be added to singlecustom.txt, please use another ID"
             else
                 SingleVariable(
-                    varID = varray[ivar,1], lname = varray[ivar,2],
-                    vname = varray[ivar,3], units = varray[ivar,4]
+                    ID = varray[ivar,1], long = varray[ivar,2],
+                    name = varray[ivar,3], units = varray[ivar,4]
                 )
             end
         end
@@ -67,8 +67,8 @@ function addERA5Variables(fname::AbstractString)
                 @warn "$(modulelog()) - The PressureVariable ID \"$(vlist[ivar])\" is already in use and thus cannot be added to pressurecustom.txt, please use another ID"
             else
                 PressureVariable(
-                    varID = varray[ivar,1], lname = varray[ivar,2],
-                    vname = varray[ivar,3], units = varray[ivar,4],
+                    ID = varray[ivar,1], long = varray[ivar,2],
+                    name = varray[ivar,3], units = varray[ivar,4],
                 )
             end
         end
@@ -103,7 +103,7 @@ function rmERA5Variable(
 
     open("tmp.txt","w") do io
         for iline = 1 : nlines
-            if !occursin("$(evar.varID),",flines[iline])
+            if !occursin("$(evar.ID),",flines[iline])
                 write(io,"$(flines[iline])\n")
             end
         end
