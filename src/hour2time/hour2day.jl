@@ -2,7 +2,8 @@ function hourly2daily(
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region;
-    verbose :: Bool = false
+    verbose :: Bool = false,
+    dosum   :: Bool = false
 )
 
     e5dsdy = ERA5Daily(start=e5ds.start,stop=e5ds.stop,path=dirname(e5ds.path))
@@ -16,6 +17,8 @@ function hourly2daily(
     tmpload = zeros(Int16,nlon,nlat,ntimesteps(e5ds))
     tmpdata = zeros(nlon,nlat,24)
     dydata  = zeros(nlon,nlat,ntimesteps(e5dsdy))
+
+    if !dosum; fac = 1; else; fac = 24 end
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
@@ -32,7 +35,11 @@ function hourly2daily(
         close(ds)
 
         if verbose
-            @info "$(modulelog()) - Performing daily-averaging on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+            if !dosum
+                @info "$(modulelog()) - Performing daily-averaging on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+            else
+                @info "$(modulelog()) - Performing daily summation on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(dt)) $(monthname(dt)) ..."
+            end
         end
 
         for idy = 1 : ndy
@@ -43,7 +50,7 @@ function hourly2daily(
                 scale=sc,offset=of,mvalue=mv,fvalue=fv
             )
             for ilat = 1 : nlat, ilon = 1 : nlon
-                dydata[ilon,ilat,idy] = mean(view(tmpdata,ilon,ilat,:))
+                dydata[ilon,ilat,idy] = mean(view(tmpdata,ilon,ilat,:)) * fac
             end
         end
 

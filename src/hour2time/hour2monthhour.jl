@@ -2,7 +2,8 @@ function hourly2monthlyhour(
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region;
-    verbose :: Bool = false
+    verbose :: Bool = false,
+    dosum   :: Bool = false
 )
 
     e5dsmo = ERA5Monthly(start=e5ds.start,stop=e5ds.stop,path=dirname(e5ds.path),hours=true)
@@ -24,7 +25,7 @@ function hourly2monthlyhour(
             if verbose
                 @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
             end
-            ndy = daysinmonth(idt)
+            ndy = daysinmonth(idt); if !dosum; fac = 1; else; fac = ndy end
             nhr = daysinmonth(idt) * 24
             sc  = ds[evar.ID].attrib["scale_factor"]
             of  = ds[evar.ID].attrib["add_offset"]
@@ -34,7 +35,12 @@ function hourly2monthlyhour(
             close(ds)
 
             if verbose
-                @info "$(modulelog()) - Performing daily-averaging on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
+                if !dosum
+                    @info "$(modulelog()) - Performing daily-averaging on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
+                else
+                    @info "$(modulelog()) - Performing daily summation on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
+                end
+                    
             end
 
             for ihr = 1 : 24
@@ -44,7 +50,7 @@ function hourly2monthlyhour(
                     scale=sc,offset=of,mvalue=mv,fvalue=fv
                 )
                 for ilat = 1 : nlat, ilon = 1 : nlon
-                    modata[ilon,ilat,it] = mean(view(tmpdata,ilon,ilat,1:ndy))
+                    modata[ilon,ilat,it] = mean(view(tmpdata,ilon,ilat,1:ndy)) * fac
                 end
             end
         end

@@ -2,7 +2,8 @@ function hourly2monthly(
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
     ereg :: ERA5Region;
-    verbose :: Bool = false
+    verbose :: Bool = false,
+    dosum   :: Bool = false
 )
 
     e5dsmo = ERA5Monthly(start=e5ds.start,stop=e5ds.stop,path=dirname(e5ds.path))
@@ -25,7 +26,7 @@ function hourly2monthly(
             if verbose
                 @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
             end
-            nhr = daysinmonth(idt) * 24
+            nhr = daysinmonth(idt) * 24; if !dosum; fac = 1; else; fac = nhr end
             ds  = NCDataset(e5dfnc(e5ds,evar,ereg,idt))
             sc  = ds[evar.ID].attrib["scale_factor"]
             of  = ds[evar.ID].attrib["add_offset"]
@@ -39,10 +40,14 @@ function hourly2monthly(
             close(ds)
 
             if verbose
-                @info "$(modulelog()) - Performing daily-averaging on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
+                if !dosum
+                    @info "$(modulelog()) - Performing daily-averaging on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
+                else
+                    @info "$(modulelog()) - Performing daily summation on $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
+                end
             end
             for ilat = 1 : nlat, ilon = 1 : nlon
-                modata[ilon,ilat,imo] = mean(view(tmpdata,ilon,ilat,1:nhr))
+                modata[ilon,ilat,imo] = mean(view(tmpdata,ilon,ilat,1:nhr)) * fac
             end
 
         end
