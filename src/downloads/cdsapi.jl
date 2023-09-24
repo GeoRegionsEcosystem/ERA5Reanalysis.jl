@@ -33,7 +33,7 @@ function retrieve(
     resp_dict = JSON.parse(String(response.body))
     data = Dict("state" => "queued")
 
-    @info "$(now()) - CDSAPI - Request is queued"
+    @info "$(now()) - CDSAPI - Request is queued"; flush(stderr)
     sleep_seconds = 1.
     while data["state"] == "queued"
         data = parserequest(ckeys,resp_dict,apikey)
@@ -41,7 +41,7 @@ function retrieve(
         sleep(sleep_seconds)
     end
 
-    @info "$(now()) - CDSAPI - Request is running"
+    @info "$(now()) - CDSAPI - Request is running"; flush(stderr)
     sleep_seconds = 1.
     while data["state"] == "running"
         data = parserequest(ckeys,resp_dict,apikey)
@@ -51,7 +51,7 @@ function retrieve(
 
     if data["state"] == "completed"
 
-        @info "$(now()) - CDSAPI - Request is completed"
+        @info "$(now()) - CDSAPI - Request is completed"; flush(stderr)
 
         sleep(10)
 
@@ -59,6 +59,7 @@ function retrieve(
           URL:         $(data["location"])
           Destination: $(fnc)
         """
+        flush(stderr)
 
         tries = 0
         while isinteger(tries) && (tries < 10)
@@ -72,6 +73,7 @@ function retrieve(
                 tries += 1
                 @info "$(now()) - CDSAPI - Failed to download on Attempt $(tries) of 10"
             end
+            flush(stderr)
         end
 
         if tries == 10
@@ -83,6 +85,8 @@ function retrieve(
         @error "$(now()) - CDSAPI - Request failed"
 
     end
+
+    flush(stderr)
 
     return
 
