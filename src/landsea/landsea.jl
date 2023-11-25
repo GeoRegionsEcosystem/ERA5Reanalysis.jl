@@ -42,8 +42,8 @@ function getLandSea(
         gds  = NCDataset(glbfnc)
         glon = gds["longitude"][:]
         glat = gds["latitude"][:]
-        glsm = nomissing(gds["lsm"][:],NaN)
-        goro = nomissing(gds["z"][:],NaN)
+        glsm = nomissing(gds["lsm"][:,:,1],NaN)
+        goro = nomissing(gds["z"][:,:,1],NaN)
         close(gds)
 
         if smooth
@@ -79,9 +79,9 @@ function getLandSea(
         lds = NCDataset(lsmfnc)
         lon = lds["longitude"][:]
         lat = lds["latitude"][:]
-        lsm = nomissing(lds["lsm"][:], NaN)
-        oro = nomissing(lds["z"][:],   NaN)
-        msk = lds["mask"][:]
+        lsm = nomissing(lds["lsm"][:,:], NaN)
+        oro = nomissing(lds["z"][:,:],   NaN)
+        msk = lds["mask"][:,:]
         close(lds)
 
         @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region ..."
@@ -191,9 +191,9 @@ function saveLandSea(
 
     nclon[:] = lon
     nclat[:] = lat
-    nclsm[:] = lsm
-    ncoro[:] = oro
-    ncmsk[:] = mask
+    nclsm[:,:] = lsm
+    ncoro[:,:] = oro
+    ncmsk[:,:] = mask
 
     close(ds)
 

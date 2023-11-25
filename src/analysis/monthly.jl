@@ -204,35 +204,35 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_monthly_mean_climatology",Int16,
         ("longitude","latitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,1:12),scale,offset)
+    ncvar.var[:,:,:] = real2int16(view(davg,:,:,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,13))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_mean_climatology",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = real2int16(view(davg,:,:,13),scale,offset)
+    ncvar.var[:,:] = real2int16(view(davg,:,:,13),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,14))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_std_climatology",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = real2int16(view(davg,:,:,14),scale,offset)
+    ncvar.var[:,:] = real2int16(view(davg,:,:,14),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,15))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_maximum_climatology",Int16,
         ("longitude","latitude"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,15),scale,offset)
+    ncvar.var[:,:] = real2int16(view(davg,:,:,15),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,16))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_minimum_climatology",Int16,
         ("longitude","latitude"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,16),scale,offset)
+    ncvar.var[:,:] = real2int16(view(davg,:,:,16),scale,offset)
 
     ## ZONAL-MEAN CLIMATOLOGY
 
@@ -241,7 +241,7 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"zonalavg_monthly_mean_climatology",Int16,
         ("latitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(zavg,:,1:12),scale,offset)
+    ncvar.var[:,:] = real2int16(view(zavg,:,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(zavg,:,13))
     attr_var["scale_factor"] = scale
@@ -278,7 +278,7 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"meridionalavg_monthly_mean_climatology",Int16,
         ("longitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(mavg,:,1:12),scale,offset)
+    ncvar.var[:,:] = real2int16(view(mavg,:,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(mavg,:,13))
     attr_var["scale_factor"] = scale
@@ -376,21 +376,21 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_monthly_mean_hourly",Int16,
         ("longitude","latitude","hour","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,1:24,1:12),scale,offset)
+    ncvar.var[:,:,:,:] = real2int16(view(davg,:,:,1:24,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(zavg,:,:,1:24,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"zonalavg_monthly_mean_hourly",Int16,
         ("longitude","latitude","hour","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(zavg,:,:,1:24,1:12),scale,offset)
+    ncvar.var[:,:,:,:] = real2int16(view(zavg,:,:,1:24,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(mavg,:,:,1:24,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"meridionalavg_monthly_mean_hourly",Int16,
         ("longitude","latitude","hour","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(mavg,:,:,1:24,1:12),scale,offset)
+    ncvar.var[:,:,:,:] = real2int16(view(mavg,:,:,1:24,1:12),scale,offset)
 
     ## DOMAIN YEARLY CLIMATOLOGY
 
@@ -399,28 +399,28 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_mean_climatology",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = real2int16(view(davg,:,:,25,13),scale,offset)
+    ncvar.var[:,:] = real2int16(view(davg,:,:,25,13),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,26,14))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_std_climatology",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = real2int16(view(davg,:,:,26,14),scale,offset)
+    ncvar.var[:,:] = real2int16(view(davg,:,:,26,14),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,27,15))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_maximum_climatology",Int16,
         ("longitude","latitude"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,27,15),scale,offset)
+    ncvar.var[:,:] = real2int16(view(davg,:,:,27,15),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,28,16))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_minimum_climatology",Int16,
         ("longitude","latitude"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,28,16),scale,offset)
+    ncvar.var[:,:] = real2int16(view(davg,:,:,28,16),scale,offset)
 
     ## DOMAIN YEARLY DIURNAL STATISTICS
 
@@ -429,28 +429,28 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_mean_hourly",Int16,
         ("longitude","latitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,1:24,13),scale,offset)
+    ncvar.var[:,:,:] = real2int16(view(davg,:,:,1:24,13),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,1:24,14))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_std_hourly",Int16,
     ("longitude","latitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,1:24,14),scale,offset)
+    ncvar.var[:,:,:] = real2int16(view(davg,:,:,1:24,14),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,1:24,15))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_maximum_hourly",Int16,
         ("longitude","latitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,1:24,15),scale,offset)
+    ncvar.var[:,:,:] = real2int16(view(davg,:,:,1:24,15),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,1:24,16))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_yearly_minimum_hourly",Int16,
         ("longitude","latitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,1:24,16),scale,offset)
+    ncvar.var[:,:,:] = real2int16(view(davg,:,:,1:24,16),scale,offset)
 
     ## DOMAIN MONTHLY CLIMATOLOGY
 
@@ -459,28 +459,28 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_monthly_mean_climatology",Int16,
         ("longitude","latitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,25,1:12),scale,offset)
+    ncvar.var[:,:,:] = real2int16(view(davg,:,:,25,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,26,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_monthly_std_climatology",Int16,
         ("longitude","latitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,26,1:12),scale,offset)
+    ncvar.var[:,:,:] = real2int16(view(davg,:,:,26,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,27,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_monthly_maximum_climatology",Int16,
         ("longitude","latitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,27,1:12),scale,offset)
+    ncvar.var[:,:,:] = real2int16(view(davg,:,:,27,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(davg,:,:,28,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"domain_monthly_minimum_climatology",Int16,
         ("longitude","latitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(davg,:,:,28,1:12),scale,offset)
+    ncvar.var[:,:,:] = real2int16(view(davg,:,:,28,1:12),scale,offset)
 
     ## ZONAL-MEAN YEARLY CLIMATOLOGY
 
@@ -519,28 +519,28 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"zonalavg_yearly_mean_hourly",Int16,
         ("latitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(zavg,:,1:24,13),scale,offset)
+    ncvar.var[:,:] = real2int16(view(zavg,:,1:24,13),scale,offset)
 
     scale,offset = ncoffsetscale(view(zavg,:,1:24,14))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"zonalavg_yearly_std_hourly",Int16,
     ("latitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(zavg,:,1:24,14),scale,offset)
+    ncvar.var[:,:] = real2int16(view(zavg,:,1:24,14),scale,offset)
 
     scale,offset = ncoffsetscale(view(zavg,:,1:24,15))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"zonalavg_yearly_maximum_hourly",Int16,
         ("latitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(zavg,:,1:24,15),scale,offset)
+    ncvar.var[:,:] = real2int16(view(zavg,:,1:24,15),scale,offset)
 
     scale,offset = ncoffsetscale(view(zavg,:,1:24,16))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"zonalavg_yearly_minimum_hourly",Int16,
         ("latitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(zavg,:,1:24,16),scale,offset)
+    ncvar.var[:,:] = real2int16(view(zavg,:,1:24,16),scale,offset)
 
     ## ZONAL-MEAN MONTHLY CLIMATOLOGY
 
@@ -549,28 +549,28 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"zonalavg_monthly_mean_climatology",Int16,
         ("latitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(zavg,:,25,1:12),scale,offset)
+    ncvar.var[:,:] = real2int16(view(zavg,:,25,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(zavg,:,26,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"zonalavg_monthly_std_climatology",Int16,
         ("latitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(zavg,:,26,1:12),scale,offset)
+    ncvar.var[:,:] = real2int16(view(zavg,:,26,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(zavg,:,27,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"zonalavg_monthly_maximum_climatology",Int16,
         ("latitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(zavg,:,27,1:12),scale,offset)
+    ncvar.var[:,:] = real2int16(view(zavg,:,27,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(zavg,:,28,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"zonalavg_monthly_minimum_climatology",Int16,
         ("latitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(zavg,:,28,1:12),scale,offset)
+    ncvar.var[:,:] = real2int16(view(zavg,:,28,1:12),scale,offset)
 
     ## MERIDIONAL-MEAN YEARLY CLIMATOLOGY
 
@@ -609,28 +609,28 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"meridionalavg_yearly_mean_hourly",Int16,
         ("longitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(mavg,:,1:24,13),scale,offset)
+    ncvar.var[:,:] = real2int16(view(mavg,:,1:24,13),scale,offset)
 
     scale,offset = ncoffsetscale(view(mavg,:,1:24,14))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"meridionalavg_yearly_std_hourly",Int16,
     ("longitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(mavg,:,1:24,14),scale,offset)
+    ncvar.var[:,:] = real2int16(view(mavg,:,1:24,14),scale,offset)
 
     scale,offset = ncoffsetscale(view(mavg,:,1:24,15))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"meridionalavg_yearly_maximum_hourly",Int16,
         ("longitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(mavg,:,1:24,15),scale,offset)
+    ncvar.var[:,:] = real2int16(view(mavg,:,1:24,15),scale,offset)
 
     scale,offset = ncoffsetscale(view(mavg,:,1:24,16))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"meridionalavg_yearly_minimum_hourly",Int16,
         ("longitude","hour"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(mavg,:,1:24,16),scale,offset)
+    ncvar.var[:,:] = real2int16(view(mavg,:,1:24,16),scale,offset)
 
     ## MERIDIONAL-MEAN MONTHLY CLIMATOLOGY
 
@@ -639,28 +639,28 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"meridionalavg_monthly_mean_climatology",Int16,
         ("longitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(mavg,:,25,1:12),scale,offset)
+    ncvar.var[:,:] = real2int16(view(mavg,:,25,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(mavg,:,26,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"meridionalavg_monthly_std_climatology",Int16,
         ("longitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(mavg,:,26,1:12),scale,offset)
+    ncvar.var[:,:] = real2int16(view(mavg,:,26,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(mavg,:,27,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"meridionalavg_monthly_maximum_climatology",Int16,
         ("longitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(mavg,:,27,1:12),scale,offset)
+    ncvar.var[:,:] = real2int16(view(mavg,:,27,1:12),scale,offset)
 
     scale,offset = ncoffsetscale(view(mavg,:,28,1:12))
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"meridionalavg_monthly_minimum_climatology",Int16,
         ("longitude","month"),attrib=attr_var);
-    ncvar.var[:] = real2int16(view(mavg,:,28,1:12),scale,offset)
+    ncvar.var[:,:] = real2int16(view(mavg,:,28,1:12),scale,offset)
 
     close(ds)
 

@@ -41,7 +41,7 @@ function save(
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
     nctime[:] = collect(1:nhr) .- 1
-    ncvar.var[:] = data
+    ncvar.var[:,:,:] = data
 
     close(ds)
 
@@ -92,7 +92,7 @@ function save(
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
     nctime[:] = collect(1:nhr) .- 1
-    ncvar.var[:] = data
+    ncvar.var[:,:,:] = data
 
     close(ds)
 
@@ -138,7 +138,7 @@ function save(
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
     nctime[:] = save_definetimes(e5ds,dt)
-    ncvar.var[:] = data
+    ncvar.var[:,:,:] = data
 
     close(ds)
 

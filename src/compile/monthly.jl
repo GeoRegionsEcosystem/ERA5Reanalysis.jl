@@ -170,28 +170,28 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"average",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = eavg
+    ncvar.var[:,:] = eavg
 
     scale,offset = ncoffsetscale(edhr)
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"variability_diurnal",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = edhr
+    ncvar.var[:,:] = edhr
 
     scale,offset = ncoffsetscale(esea)
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"variability_seasonal",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = esea
+    ncvar.var[:,:] = esea
 
     scale,offset = ncoffsetscale(eian)
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"variability_interannual",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = eian
+    ncvar.var[:,:] = eian
 
     close(ds)
 
@@ -252,21 +252,21 @@ function save(
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"average",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = eavg
+    ncvar.var[:,:] = eavg
 
     scale,offset = ncoffsetscale(esea)
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"variability_seasonal",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = esea
+    ncvar.var[:,:] = esea
 
     scale,offset = ncoffsetscale(eian)
     attr_var["scale_factor"] = scale
     attr_var["add_offset"]   = offset
     ncvar = defVar(ds,"variability_interannual",Int16,
         ("longitude","latitude"),attrib=attr_var)
-    ncvar.var[:] = eian
+    ncvar.var[:,:] = eian
 
     close(ds)
 

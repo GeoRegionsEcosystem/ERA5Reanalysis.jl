@@ -40,11 +40,11 @@ function save(
     nctime[:] = save_definetimes(e5ds,dt)
 
     if iszero(scale)
-        ncvar.var[:] = 0
+        ncvar.var[:,:,:] = 0
     else
         if iszero(sum(isnan.(data)))
-              ncvar[:] = data
-        else; ncvar.var[:] = real2int16(data,scale,offset)
+              ncvar[:,:,:] = data
+        else; ncvar.var[:,:,:] = real2int16(data,scale,offset)
         end
     end
 
@@ -96,11 +96,11 @@ function save(
     nctime[:] = save_definetimes(e5ds,dt)
     
     if iszero(scale)
-        ncvar.var[:] = 0
+        ncvar.var[:,:,:] = 0
     else
         if iszero(sum(isnan.(data)))
-              ncvar[:] = data
-        else; ncvar.var[:] = real2int16(data,scale,offset)
+              ncvar[:,:,:] = data
+        else; ncvar.var[:,:,:] = real2int16(data,scale,offset)
         end
     end
 
