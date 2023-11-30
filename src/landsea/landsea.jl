@@ -8,7 +8,7 @@ end
 
 function getLandSea(
     e5ds :: ERA5Dataset,
-    ereg :: ERA5Region = ERA5Region(GeoRegion("GLB"));
+    ereg :: ERA5Region = ERA5Region("GLB");
     save :: Bool = true,
     returnlsd :: Bool = true,
     smooth    :: Bool = false,
@@ -63,18 +63,18 @@ function getLandSea(
         else; mask = ones(Int,nlon,nlat)
         end
 
-        if isGeoRegion(ereg.ID,throw=false) && save
+        if save
             saveLandSea(
                 e5ds, ereg, ggrd.lon, ggrd.lat, rlsm, roro, Int16.(mask),
                 smooth, σlon, σlat
             )
         else
-            return LandSea{FT}(ggrd.lon,ggrd.lat,rlsm,roro,Int16.(mask))
+            return LandSea{FT}(ggrd.lon,ggrd.lat,rlsm,roro/9.80665,Int16.(mask))
         end
 
     end
 
-    if isGeoRegion(ereg.ID,throw=false) && returnlsd
+    if returnlsd
 
         lds = NCDataset(lsmfnc)
         lon = lds["longitude"][:]
@@ -86,7 +86,7 @@ function getLandSea(
 
         @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region ..."
 
-        return LandSea{FT}(lon,lat,lsm,oro,msk)
+        return LandSea{FT}(lon,lat,lsm,oro/9.80665,msk)
 
     else
 
@@ -118,7 +118,7 @@ function downloadLandSea(
     lon = tds["longitude"][:]; nlon = length(lon)
     lat = tds["latitude"][:];  nlat = length(lat)
     lsm = tds["lsm"][:,:,1] * 1
-    oro = tds["z"][:,:,1] / 9.80665
+    oro = tds["z"][:,:,1] * 1
     msk = ones(Int16,nlon,nlat)
     close(tds)
 
