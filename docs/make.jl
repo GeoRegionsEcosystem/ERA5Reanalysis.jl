@@ -8,10 +8,10 @@ DocMeta.setdocmeta!(ERA5Reanalysis, :DocTestSetup, :(using ERA5Reanalysis); recu
 makedocs(;
     modules  = [ERA5Reanalysis,GeoRegions],
     doctest  = false,
+    warnonly = true,
     format   = Documenter.HTML(;
-        prettyurls=get(ENV,"CI","false") == "true",
-        canonical="https://natgeo-wong.github.io/ERA5Reanalysis.jl",
-        assets=String[],
+        collapselevel = 1,
+        prettyurls    = false
     ),
     authors  = "Nathanael Wong <natgeo.wong@outlook.com>",
     sitename = "ERA5Reanalysis.jl",
