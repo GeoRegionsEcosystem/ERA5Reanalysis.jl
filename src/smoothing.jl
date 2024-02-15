@@ -27,6 +27,10 @@ function smoothing(
         error("$(modulelog()) - You need to specify at least one of the `spatial` and `temporal` keyword arguments")
     end
 
+    if !spatial && !iszero(smoothlon); smoothlon = 0 end
+    if !spatial && !iszero(smoothlat); smoothlat = 0 end
+    if !temporal && !iszero(hours); hours = 0 end
+
     if spatial && (iszero(smoothlon) && iszero(smoothlat))
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
     end
@@ -54,14 +58,15 @@ function smoothing(
     lsd  = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
+    ndt  = ntimesteps(e5ds)
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
-    tmpload  = zeros(Int16,nlon,nlat,31*24)
-    tmpdata  = zeros(nlon,nlat,31*24+buffer_time*2)
+    tmpload  = zeros(Int16,nlon,nlat,ndt)
+    tmpdata  = zeros(nlon,nlat,ndt+buffer_time*2)
     shftlon  = zeros(nlon,nlat,(2*buffer_lon+1))
     shftlat  = zeros(nlon,nlat,(2*buffer_lat+1))
-    smthdata = zeros(nlon,nlat,31*24)
+    smthdata = zeros(nlon,nlat,ndt)
     nanlat   = zeros(Bool,(2*buffer_lat+1))
     nanlon   = zeros(Bool,(2*buffer_lon+1))
     smthii   = zeros(1+buffer_time*2)
@@ -230,6 +235,10 @@ function smoothing(
     if !spatial && !temporal
         error("$(modulelog()) - You need to specify at least one of the `spatial` and `temporal` keyword arguments")
     end
+    
+    if !spatial && !iszero(smoothlon); smoothlon = 0 end
+    if !spatial && !iszero(smoothlat); smoothlat = 0 end
+    if !temporal && !iszero(hours); hours = 0 end
 
     if spatial && (iszero(smoothlon) && iszero(smoothlat))
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
@@ -258,14 +267,15 @@ function smoothing(
     lsd  = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
+    ndt  = ntimesteps(e5ds)
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
-    tmpload  = zeros(Int16,nlon,nlat,31)
-    tmpdata  = zeros(nlon,nlat,31+buffer_time*2)
+    tmpload  = zeros(Int16,nlon,nlat,ndt)
+    tmpdata  = zeros(nlon,nlat,ndt+buffer_time*2)
     shftlon  = zeros(nlon,nlat,(2*buffer_lon+1))
     shftlat  = zeros(nlon,nlat,(2*buffer_lat+1))
-    smthdata = zeros(nlon,nlat,31)
+    smthdata = zeros(nlon,nlat,ndt)
     nanlat   = zeros(Bool,(2*buffer_lat+1))
     nanlon   = zeros(Bool,(2*buffer_lon+1))
     smthii   = zeros(1+buffer_time*2)
@@ -445,10 +455,10 @@ function smoothing(
     lsd  = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
+    ndt  = ntimesteps(e5ds)
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
-    ndt = ntimesteps(e5ds)
     tmpload  = zeros(Int16,nlon,nlat,ndt)
     smthdata = zeros(nlon,nlat,ndt)
     shftlon  = zeros(nlon,nlat,(2*buffer_lon+1))
