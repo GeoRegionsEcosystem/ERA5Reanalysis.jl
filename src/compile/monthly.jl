@@ -128,7 +128,7 @@ function save(
 )
 
     @info "$(modulelog()) - Saving compiled $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) ..."
-    fnc = e5dcnc(e5ds,evar)
+    fnc = e5dcnc(e5ds,evar,ereg)
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
         @info "$(modulelog()) - Stale NetCDF file $(fnc) detected.  Overwriting ..."
@@ -210,7 +210,7 @@ function save(
 )
 
     @info "$(modulelog()) - Saving compiled $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) ..."
-    fnc = e5dcnc(e5ds,evar)
+    fnc = e5dcnc(e5ds,evar,ereg)
     fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
     if isfile(fnc)
         @info "$(modulelog()) - Stale NetCDF file $(fnc) detected.  Overwriting ..."
