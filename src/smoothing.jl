@@ -27,9 +27,9 @@ function smoothing(
         error("$(modulelog()) - You need to specify at least one of the `spatial` and `temporal` keyword arguments")
     end
 
-    if !spatial && !iszero(smoothlon); smoothlon = 0 end
-    if !spatial && !iszero(smoothlat); smoothlat = 0 end
-    if !temporal && !iszero(hours); hours = 0 end
+    if !spatial  && !iszero(smoothlon); smoothlon = 0 end
+    if !spatial  && !iszero(smoothlat); smoothlat = 0 end
+    if !temporal && !iszero(hours);     hours = 0     end
 
     if spatial && (iszero(smoothlon) && iszero(smoothlat))
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
@@ -39,8 +39,8 @@ function smoothing(
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
     end
 
-    if hours > 720
-        error("$(modulelog()) - Setting a hard cap to the maximum numbdder of days that can be included in the timeaveraging to 30 days (720 hours). This may expand in the future.")
+    if hours > 1344
+        error("$(modulelog()) - Setting a hard cap to the maximum numbdder of days that can be included in the timeaveraging to 1344 hours (56 days). This may expand in the future.")
     end
 
     gres = ereg.resolution
@@ -190,7 +190,7 @@ function smoothing(
             if verbose
                 @info "$(modulelog()) - Setting edges to NaN because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
             end
-            if !iszero(buffer_lon) && !ereg.is360
+            if !iszero(buffer_lon) && (mod(ereg.geo.E,360)!==mod(ereg.geo.W,360))
                 for ihr = 1 : nhr, ilat = 1 : nlat, ilon = 1 : buffer_lon
                     smthdata[ilon,ilat,ihr] = NaN
                 end
@@ -236,9 +236,9 @@ function smoothing(
         error("$(modulelog()) - You need to specify at least one of the `spatial` and `temporal` keyword arguments")
     end
     
-    if !spatial && !iszero(smoothlon); smoothlon = 0 end
-    if !spatial && !iszero(smoothlat); smoothlat = 0 end
-    if !temporal && !iszero(hours); hours = 0 end
+    if !spatial  && !iszero(smoothlon); smoothlon = 0 end
+    if !spatial  && !iszero(smoothlat); smoothlat = 0 end
+    if !temporal && !iszero(days);      days = 0      end
 
     if spatial && (iszero(smoothlon) && iszero(smoothlat))
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
@@ -248,8 +248,8 @@ function smoothing(
         error("$(modulelog()) - Incomplete specification of smoothing parameters in either the longitude or latitude directions")
     end
 
-    if days > 30
-        error("$(modulelog()) - Setting a hard cap to the maximum number of days that can be included in the timeaveraging to 30 days (720 hours). This may expand in the future.")
+    if days > 56
+        error("$(modulelog()) - Setting a hard cap to the maximum number of days that can be included in the timeaveraging to 56 days. This may expand in the future.")
     end
 
     gres = ereg.resolution
@@ -398,7 +398,7 @@ function smoothing(
             if verbose
                 @info "$(modulelog()) - Setting edges to NaN because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
             end
-            if !iszero(buffer_lon) && !ereg.is360
+            if !iszero(buffer_lon) && (mod(ereg.geo.E,360)!==mod(ereg.geo.W,360))
                 for idy = 1 : ndy, ilat = 1 : nlat, ilon = 1 : buffer_lon
                     smthdata[ilon,ilat,idy] = NaN
                 end
@@ -515,7 +515,7 @@ function smoothing(
                 for ilat = 1 : nlat, ilon = 1 : nlon
                     if !isnan(tmpdata[ilon,ilat,idt])
                         smthdata[ilon,ilat,idt] = nanmean(
-                            view(shftlat,ilon,ilat,:),nanlon,weights_lon
+                            view(shftlon,ilon,ilat,:),nanlon,weights_lon
                         )
                     else; smthdata[ilon,ilat,idt] = NaN
                     end
@@ -529,7 +529,7 @@ function smoothing(
         if verbose
             @info "$(modulelog()) - Setting edges to NaN because we used cyclical circshift to do spatial smoothing, which doesn't make sense if boundaries are not periodic ..."
         end
-        if !iszero(buffer_lon) && !ereg.is360
+        if !iszero(buffer_lon) && (mod(ereg.geo.E,360)!==mod(ereg.geo.W,360))
             for idt = 1 : ndt, ilat = 1 : nlat, ilon = 1 : buffer_lon
                 smthdata[ilon,ilat,idt] = NaN
             end
