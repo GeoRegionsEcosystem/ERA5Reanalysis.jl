@@ -145,6 +145,8 @@ include("downloads/pythonprint.jl")
 include("downloads/split.jl")
 
 include("hour2time/hour2day.jl")
+include("hour2time/hour2month.jl")
+include("hour2time/hour2monthhour.jl")
 
 include("analysis/hourly.jl")
 include("analysis/monthly.jl")
