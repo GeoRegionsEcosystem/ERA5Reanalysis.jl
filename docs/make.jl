@@ -24,25 +24,27 @@ makedocs(;
                 "Defining ERA5 Datasets"       => "components/datasets/define.md",
                 "Climate Data Store Datasets"  => "components/datasets/cds.md",
                 "Custom ERA5 Datasets"         => "components/datasets/custom.md",
+                "Dummy ERA5 Datasets"          => "components/datasets/dummy.md",
             ],
             "ERA5Variables" => [
                 "What is an ERA5 Variable"           => "components/variables/index.md",
                 "Retrieving Existing ERA5 Variables" => "components/variables/read.md",
-                "List of Existing ERA5 Variables"    => "components/variables/list.md",
                 "Creating Custom ERA5 Variables"     => "components/variables/custom.md",
                 "Resetting ERA5 Variables"           => "components/variables/reset.md",
+                "Predefined ERA5 Variables"          => "components/variables/list.md",
             ],
-            # "ERA5Regions" => [
-        #         "Integration with GeoRegions.jl" => "components/regions/georegions.md",
-        #         "A GeoRegion vs an ERA5Region"   => "components/regions/comparison.md",
-        #     ]
-        # ],
-        # "Using ERA5Reanalysis.jl" => [
-        #     "LandSea Datasets in ERA5"      => [
-        #         "What is a LandSea Dataset"    => "using/landsea/intro.md",
-        #         "Downloading LandSea Datasets" => "using/landsea/download.md",
-        #     ],
-        #     "Downloading and Reading Data"  => "using/download.md",
+            "ERA5Regions" => [
+                "What is an ERA5Region"             => "components/regions/index.md",
+                "Is it in an ERA5Region"            => "components/regions/isin.md",
+                "Extracting Data for an ERA5Region" => "components/regions/gridded.md",
+            ]
+        ],
+        "Using ERA5Reanalysis.jl" => [
+            "LandSea Datasets in ERA5"      => [
+                "What is a LandSea Dataset"    => "using/landsea/intro.md",
+                "Downloading LandSea Datasets" => "using/landsea/create.md",
+            ],
+            "Downloading and Reading Data"  => "using/download.md",
         #     "Extraction of subGeoRegions"   => "using/extract.md",
         #     "Analysis and Basic Statistics" => "using/analysis.md",
         #     "Spatialtemporal Smoothing"     => "using/smoothing.md",

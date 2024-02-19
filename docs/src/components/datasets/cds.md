@@ -9,6 +9,12 @@ ERA5Hourly
 ERA5Monthly
 ```
 
+There are other potential modules that could be incorporated into ERA5Reanalysis.jl, such as
+* ERA5-Land data
+* Ensemble model averages, individual members, and standard deviations
+
+They have not been added yet into ERA5Reanalysis.jl. If you are potentially interested in me adding these datasets to ERA5Reanalysis.jl, please [submit a pull request](https://github.com/natgeo-wong/ERA5Reanalysis.jl/pulls).
+
 ## API
 
 ```@docs

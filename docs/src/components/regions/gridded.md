@@ -5,8 +5,7 @@ Let's say that we have data on a rectilinear lon-lat grid, as ERA5 data tends to
 * is able to use a mask to extract data for a region's shape, if it is not rectilinear
 
 ```@docs
-RegionGrid
-ERA5RegionGrid(
+RegionGrid(
     e5geo :: ERA5Region,
     lon   :: Vector{<:Real},
     lat   :: Vector{<:Real}
