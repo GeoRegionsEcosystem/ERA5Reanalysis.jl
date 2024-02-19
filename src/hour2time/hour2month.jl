@@ -27,7 +27,7 @@ function hourly2monthly(
                 @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $(year(idt)) $(monthname(idt)) ..."
             end
             nhr = daysinmonth(idt) * 24; if !dosum; fac = 1; else; fac = nhr end
-            ds  = NCDataset(e5dfnc(e5ds,evar,ereg,idt))
+            ds  = read(e5ds,evar,ereg,idt,quiet=true)
             sc  = ds[evar.ID].attrib["scale_factor"]
             of  = ds[evar.ID].attrib["add_offset"]
             mv  = ds[evar.ID].attrib["missing_value"]
