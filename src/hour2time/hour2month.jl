@@ -49,10 +49,12 @@ function hourly2monthly(
             for ilat = 1 : nlat, ilon = 1 : nlon
                 modata[ilon,ilat,imo] = mean(view(tmpdata,ilon,ilat,1:nhr)) * fac
             end
+            flush(stderr)
 
         end
 
         save(modata, dt, e5dsmo, evar, ereg, lsd)
+        flush(stderr)
 
     end
 

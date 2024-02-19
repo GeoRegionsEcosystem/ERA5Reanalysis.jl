@@ -56,6 +56,7 @@ function hourly2monthlyhour(
         end
 
         save(modata, dt, e5dsmo, evar, ereg, lsd)
+        flush(stderr)
 
     end
 
