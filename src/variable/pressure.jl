@@ -301,10 +301,14 @@ era5Pressures() = [
     775,800,825,850,875,900,925,950,975,1000
 ]
 
-function tablePressures()
+function tablePressures(;custom::Bool=false)
 
     jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol);
-    fvar = ["PressureVariable","PressureCustom"]
+    if custom
+        fvar = ["PressureCustom"]
+    else
+        fvar = ["PressureVariable","PressureCustom"]
+    end
     fmat = []
     
     for fname in fvar
@@ -319,6 +323,11 @@ function tablePressures()
     end
 
     head = ["Variable Type","ID","Name","Units","ERA5 Long-Name"];
+
+    if isempty(fmat)
+        fmat  = Array{String,2}(undef,1,5)
+        fmat .= "N/A"
+    end
 
     pretty_table(
         fmat,header=head,

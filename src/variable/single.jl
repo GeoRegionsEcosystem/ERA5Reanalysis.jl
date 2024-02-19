@@ -65,8 +65,11 @@ function SingleVariable(
     ID,long,name,units = IDinfo[[1,2,3,4]]
 
     if vtype == "singlevariable"
-          return SingleVariable{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
-    else; return SingleCustom{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
+        @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleVariable type"
+        return SingleVariable{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
+    else
+        @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleCustom type"
+        return SingleCustom{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
     end
 
 end
@@ -77,11 +80,10 @@ end
         ID :: AbstractString,
         long :: AbstractString = "",
         name :: AbstractString,
-        units :: AbstractString,
-        inCDS :: Bool = true
+        units :: AbstractString
     ) -> evar :: SingleLevel
 
-Create a custom Single-Level variable that is not in the default list exported by ERA5Reanalysis.jl.  These variables are either available in the CDS store (whereby they can be both downloaded analyzed), or not (in which case means that they were separately calculated from other variables and analyzed).
+Create a custom Single-Level variable that is not in the default list exported by ERA5Reanalysis.jl.  These variables are not available in the CDS store, and so they must be separately calculated from other variables and analyzed.
 
 Keyword Arguments
 =================
@@ -97,8 +99,7 @@ function SingleVariable(
     ID :: AbstractString,
     long :: AbstractString = "",
     name :: AbstractString,
-    units :: AbstractString,
-    inCDS :: Bool = true
+    units :: AbstractString
 )
 
     if isSingle(ID,throw=false)
@@ -107,23 +108,11 @@ function SingleVariable(
         @info "$(modulelog()) - Adding the SingleVariable \"$(ID)\" to the list."
     end
 
-    if inCDS
-
-        open(joinpath(
-            DEPOT_PATH[1],"files","ERA5Reanalysis","singlevariable.txt"
-        ),"a") do io
-            write(io,"$ID,$long,$name,$units\n")
-        end
-        return SingleVariable{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
-
-    else
-
-        open(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","singlecustom.txt"),"a") do io
-            write(io,"$ID,$long,$name,$units\n")
-        end
-        return SingleCustom{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
-
+    open(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","singlecustom.txt"),"a") do io
+        write(io,"$ID,$long,$name,$units\n")
     end
+
+    return SingleCustom{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
 
 end
 
@@ -260,10 +249,14 @@ function resetSingles(;allfiles=false)
 
 end
 
-function tableSingles()
+function tableSingles(;custom::Bool=false)
 
-    jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol);
-    fvar = ["SingleVariable","SingleCustom"]
+    jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol)
+    if custom
+        fvar = ["SingleCustom"]
+    else
+        fvar = ["SingleVariable","SingleCustom"]
+    end
     fmat = []
     
     for fname in fvar
@@ -278,6 +271,11 @@ function tableSingles()
     end
 
     head = ["Variable Type","ID","Name","Units","ERA5 Long-Name"];
+
+    if isempty(fmat)
+        fmat  = Array{String,2}(undef,1,5)
+        fmat .= "N/A"
+    end
 
     pretty_table(
         fmat,header=head,

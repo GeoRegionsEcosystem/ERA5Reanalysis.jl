@@ -86,13 +86,11 @@ function rmERA5Variable(
     evar :: ERA5Variable
 )
 
-    if typeof(evar) <: PressureVariable
-        error("$(modulelog()) - Variables of the type PressureVariable cannot be removed")
+    if typeof(evar) <: Union{SingleVariable,PressureVariable}
+        error("$(modulelog()) - Variables of the types SingleVariable and PressureVariable cannot be removed")
     end
 
-    if typeof(evar) <: SingleVariable
-        fid = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","singlevariable.txt")
-    elseif typeof(evar) <: SingleCustom
+    if typeof(evar) <: SingleCustom
         fid = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","singlecustom.txt")
     elseif typeof(evar) <: PressureCustom
         fid = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","pressurecustom.txt")
@@ -115,10 +113,14 @@ function rmERA5Variable(
 
 end
 
-function tableERA5Variables()
+function tableERA5Variables(;custom::Bool=false)
 
     jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol);
-    fvar = ["SingleVariable","SingleCustom","PressureVariable","PressureCustom"]
+    if custom
+        fvar = ["SingleCustom","PressureCustom"]
+    else
+        fvar = ["SingleVariable","SingleCustom","PressureVariable","PressureCustom"]
+    end
     fmat = []
     
     for fname in fvar
@@ -134,11 +136,18 @@ function tableERA5Variables()
 
     head = ["Variable Type","ID","Name","Units","ERA5 Long-Name"];
 
+    if isempty(fmat)
+        fmat  = Array{String,2}(undef,1,5)
+        fmat .= "N/A"
+    end
+    
     pretty_table(
         fmat,header=head,
         alignment=[:c,:c,:l,:c,:l],
         crop = :none, tf = tf_compact
     );
+
+    
 
 end
 

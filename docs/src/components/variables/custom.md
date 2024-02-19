@@ -1,14 +1,17 @@
 # Creating Custom `ERA5Variables`
 
-While the list of available `ERA5Variable`s in the Climate Data Store is very extensive, they are not exhaustive.  Furthermore, due to the very large number of `SingleLevel` variables, we only predefine a small subset of the variables available on CDS in ERA5Reanalysis.jl.  There is therefore a need to define a list of custom `ERA5Variable`s that will be otherwise calculated (although this has to be done separately outside of ERA5Reanalysis.jl), and then can thus be saved and manipulated and analyzed in the same way that the default `ERA5Variable`s in ERA5Reanalysis.jl can be.  In this page, we break this down into the `SingleLevel` and `PressureLevel` components
+While the list of available `ERA5Variable`s in the Climate Data Store is very extensive, they are not exhaustive.  There is therefore a need to define a list of custom `ERA5Variable`s that will be otherwise calculated (although this has to be done separately outside of ERA5Reanalysis.jl), and then can thus be saved and manipulated and analyzed in the same way that the default `ERA5Variable`s in ERA5Reanalysis.jl can be.  In this page, we break this down into the `SingleLevel` and `PressureLevel` components
 
 ## Custom `SingleLevel` Variables
 
-We allow the user the option to define if the custom `SingleLevel` variable they are defining exists on the Climate Data Store, and store it as a `SingleVariable` type.  If a variable is not available on the Climate Data Store, they should be defined as a `SingleCustom` type.
+As of ERA5Reanalysis.jl v0.3, we have predefined all the single-level variables that are available directly from the CDS.  As such, all custom `SingleLevel` variables are defined under the `SingleCustom` type.
 
-### Defining a new `SingleVariable` or `SingleCustom`
+!!! compat "ERA5Reanalysis ≧ v0.3"
+    All Single-Level variables defined in the Climate Data Store are now available in ERA5Reanalysis.jl, but only for versions ≧ v0.3.
 
-To define both `SingleVariable` and `SingleCustom` variables, we use the funciton `SingleVariable()`.  To create a `SingleCustom` variable, the keyword argument `inCDS` must be set to false.
+### Defining a new `SingleCustom` variable
+
+To define a`SingleCustom` variables, we use the funciton `SingleVariable()`.
 
 ```@docs
 SingleVariable(
@@ -16,22 +19,20 @@ SingleVariable(
     varID :: AbstractString,
     lname :: AbstractString = "",
     vname :: AbstractString,
-    units :: AbstractString,
-    inCDS :: Bool = true
+    units :: AbstractString
 )
 ```
 
 ### Removing Custom `SingleLevel` Variables
 
-To remove a `SingleLevel` variable, we can use the `rmSingle()` function:
+To remove a `SingleCustom` variable, we can use the `rmSingle()` function:
 ```@docs
 rmSingle( varID :: AbstractString )
 ```
 
 ### An Example!
 
-In this example, we add two `SingleLevel` variables to the list:
-* `hvc`, for High Vegetation Cover, which is a downloadable variable in the CDS
+In this example, we add a `SingleLevel` variable to the list:
 * `eke`, for Eddy Kinetic Energy, which is not downloadable and must be calculated using other variables
 
 The Eddy Kinetic Energy is calculated by the following:
@@ -45,20 +46,13 @@ And it is often used as a measure of storm-track intensity.
 ```@repl
 using ERA5Reanalysis
 SingleVariable(
-    varID = "cvh",
-    units = "0-1",
-    vname = "High Vegetation Cover",
-    lname = "high_vegetation_cover",
-)
-SingleVariable(
-    varID = "eke",
+    ID = "eke",
     units = "J m**-2",
-    vname = "Eddy Kinetic Energy",
-    lname = "eddy_kinetic_energy",
-    inCDS = false
+    name = "Eddy Kinetic Energy",
+    long = "eddy_kinetic_energy"
 )
-tableSingles()
-rmSingle.(["eke","hvc"])
+tableSingles(custom=true)
+rmSingle("eke")
 isSingle("eke",throw=false) # don't throw error, just show warning
 ```
 
@@ -99,11 +93,11 @@ Virtual Temperature has the units "K", and for this example let us define the pr
 ```@repl
 using ERA5Reanalysis
 PressureVariable(
-    varID = "vt",
+    ID = "vt",
     units = "K",
     hPa   = 1000,
-    lname = "virtual_temperature",
-    vname = "Virtual Temperature"
+    long = "virtual_temperature",
+    name = "Virtual Temperature"
 )
 tablePressures()
 rmPressure("vt")
