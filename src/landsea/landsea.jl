@@ -178,9 +178,9 @@ function saveLandSea(
     ))
 
     ncoro = defVar(ds,"z",Float64,("longitude","latitude",),attrib = Dict(
-        "long_name"     => "height",
-        "full_name"     => "Surface Height",
-        "units"         => "m",
+        "long_name"     => "geopotential",
+        "full_name"     => "Geopotential",
+        "units"         => "m**2 s**-2",
     ))
 
     ncmsk = defVar(ds,"mask",Int16,("longitude","latitude",),attrib = Dict(
