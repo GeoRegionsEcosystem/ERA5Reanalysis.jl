@@ -91,7 +91,7 @@ function extract(
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(sgeo.ID)\", \"$(ereg.ID)\""
 
-    sreg = ERA5Region(sgeo,gres=ereg.resolution)
+    sreg = ERA5Region(sgeo,resolution=ereg.resolution)
     plsd = getLandSea(e5ds,ereg)
     rlsd = getLandSea(e5ds,sreg)
     plon = plsd.lon; nplon = length(plon)
@@ -114,7 +114,7 @@ function extract(
     for dt in extract_time(e5ds)
 
         pds  = read(
-            e5ds,evar,preg,dt,smooth=smooth,
+            e5ds,evar,ereg,dt,smooth=smooth,
             smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
         )
         pnc  = basename(path(pds))
@@ -175,7 +175,7 @@ function extract(
     rlsd = Vector{LandSea}(undef,ngeo)
     plsd = getLandSea(e5ds,ereg)
     for igeo in 1 : ngeo
-        sreg[igeo] = ERA5Region(geov[igeo],gres=ereg.resolution)
+        sreg[igeo] = ERA5Region(geov[igeo],resolution=ereg.resolution)
         rlsd[igeo] = getLandSea(e5ds,sreg[igeo])
     end
     plon = plsd.lon; nplon = length(plon)
@@ -209,7 +209,7 @@ function extract(
     for dt in extract_time(e5ds)
 
         pds  = read(
-            e5ds,evar,preg,dt,smooth=smooth,
+            e5ds,evar,ereg,dt,smooth=smooth,
             smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
         )
         pnc  = basename(path(pds))
