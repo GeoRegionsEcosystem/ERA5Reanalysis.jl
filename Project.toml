@@ -24,6 +24,7 @@ JSON = "0.21"
 NCDatasets = "0.13, 0.14"
 PrettyTables = "1, 2"
 Reexport = "1"
+Statistics = "1"
 julia = "1"
 
 [extras]
