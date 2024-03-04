@@ -96,3 +96,93 @@ function e5dfnc(
     return fol, fnc
 
 end
+
+function e5dgrib(
+    e5ds :: ERA5Hourly,
+	evar :: SingleLevel,
+	ereg :: ERA5Region,
+    dt   :: TimeType
+)
+
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,dts)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evar.ID * "-" * yrmo2str(dt) * ".grb"
+    return joinpath(fol,fnc)
+
+end
+
+function e5dgrib(
+    e5ds :: ERA5Hourly,
+	evar :: PressureLevel,
+	ereg :: ERA5Region,
+    dt   :: TimeType
+)
+
+    evp = evar.ID * "-$(evar.hPa)hPa"
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp,dts)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evp * "-" * yrmo2str(dt) * ".grb"
+    return joinpath(fol,fnc)
+
+end
+
+function e5dgrib(
+    e5ds :: ERA5Hourly,
+	evar :: PressureLevel,
+	ereg :: ERA5Region,
+    dt   :: TimeType,
+    pvec :: Vector{Int},
+)
+
+    evp = evar.ID * "-$(pvec[1])hPa_$(pvec[end])hPa"
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp,dts)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evp * "-" * yrmo2str(dt) * ".grb"
+    return joinpath(fol,fnc)
+
+end
+
+function e5dgrib(
+    e5ds :: ERA5Monthly,
+	evar :: SingleLevel,
+	ereg :: ERA5Region,
+    dt   :: TimeType
+)
+
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.path,ereg.string,evar.ID)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evar.ID * "-" * dts * ".grb"
+    return joinpath(fol,fnc)
+
+end
+
+function e5dgrib(
+    e5ds :: ERA5Monthly,
+	evar :: PressureLevel,
+	ereg :: ERA5Region,
+    dt   :: TimeType
+)
+
+    evp = evar.ID * "-$(evar.hPa)hPa"
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evp * "-" * dts * ".grb"
+    return joinpath(fol,fnc)
+
+end
+
+function e5dgrib(
+    e5ds :: ERA5Monthly,
+	evar :: PressureLevel,
+	ereg :: ERA5Region,
+    dt   :: TimeType,
+    pvec :: Vector{Int}
+)
+
+    evp = evar.ID * "-$(pvec[1])hPa_$(pvec[end])hPa"
+    dts = yr2str(dt)
+    fol = joinpath(e5ds.path,ereg.string,evar.ID,evp)
+    fnc = e5ds.ID * "-" * ereg.string * "-" * evp * "-" * dts * ".grb"
+    return joinpath(fol,fnc)
+
+end

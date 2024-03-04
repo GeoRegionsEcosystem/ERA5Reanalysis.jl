@@ -2,6 +2,7 @@ function cdsretrieve(
     e5ds :: ERA5CDStore,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
+    grib :: Bool,
     overwrite :: Bool
 )
 
@@ -12,8 +13,16 @@ function cdsretrieve(
 
     for dtii in dtvec
 
-        fnc = e5dfnc(e5ds,evar,ereg,dtii)
+        if !grib
+            format = "netcdf"
+            fnc = e5dfnc(e5ds,evar,ereg,dtii)
+        else
+            format = "grib"
+            fnc = e5dgrib(e5ds,evar,ereg,dtii)
+        end
         fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
+
+        
 
         e5dkey = Dict(
             "product_type" => e5ds.ptype,
@@ -22,7 +31,7 @@ function cdsretrieve(
             "variable"     => evar.long,
             "grid"         => [ereg.resolution, ereg.resolution],
             "time"         => cdsretrieve_time(e5ds),
-            "format"       => "netcdf",
+            "format"       => format,
         )
 
         if typeof(e5ds) <: ERA5Hourly
@@ -126,11 +135,71 @@ function cdsretrieve(
 
 end
 
+function cdsretrievegrib(
+    e5ds :: ERA5CDStore,
+    evar :: PressureVariable,
+    ereg :: ERA5Region,
+    pvec :: Vector{Int},
+    overwrite :: Bool
+)
+
+    dtvec = cdsretrieve_dtvec(e5ds)
+    ckeys = cdskey()
+
+    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.name)) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
+
+    for dtii in dtvec
+
+        fnc = e5dgrib(e5ds,evar,ereg,dtii,pvec)
+        fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
+
+        e5dkey = Dict(
+            "product_type" => e5ds.ptype,
+            "year"         => year(dtii),
+            "month"        => cdsretrieve_month(dtii,e5ds),
+            "variable"     => evar.long,
+            "grid"         => [ereg.resolution, ereg.resolution],
+            "time"         => cdsretrieve_time(e5ds),
+            "format"       => "grib",
+        )
+
+        if typeof(e5ds) <: ERA5Hourly
+            e5dkey["day"] = collect(1:31)
+        end
+
+        if typeof(evar) <: PressureVariable
+            e5dkey["pressure_level"] = pvec
+        end
+        
+        cdsretrieve_area!(e5dkey,ereg)
+
+        if !isfile(fnc) || overwrite
+            tryretrieve = 0
+            while isinteger(tryretrieve) && (tryretrieve < 20)
+                try
+                    retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
+                    tryretrieve += 0.5
+                catch
+                    tryretrieve += 1
+                    @info "$(modulelog()) - Failed to retrieve/request data from CDSAPI on Attempt $(tryretrieve) of 20"
+                end
+            end
+            if tryretrieve == 20
+                @warn "$(modulelog()) - Failed to retrieve/request data, skipping to next set of requests"
+            end
+        end
+
+        flush(stderr)
+
+    end
+
+end
+
 function cdsretrieve(
     e5ds :: ERA5CDStore,
     evar :: Vector{SingleVariable{ST}},
     ereg :: ERA5Region,
-    overwrite :: Bool
+    overwrite :: Bool,
 ) where ST <: AbstractString
 
     dtvec = cdsretrieve_dtvec(e5ds)

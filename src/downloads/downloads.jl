@@ -28,14 +28,13 @@ function download(
     evar :: SingleVariable,
     ereg :: ERA5Region;
     ispy :: Bool = false,
+    grib :: Bool = false,
     overwrite :: Bool = false
 )
 
-    downloadcheckevar(evar)
-
     if ispy
           pythonprint(e5ds,evar,ereg)
-    else; cdsretrieve(e5ds,evar,ereg,overwrite)
+    else; cdsretrieve(e5ds,evar,ereg,grib,overwrite)
     end
 
 end
@@ -69,10 +68,6 @@ function download(
     ereg :: ERA5Region;
     overwrite :: Bool = false
 )
-
-    for evarii in evar
-        downloadcheckevar(evarii)
-    end
 
     cdsretrieve(e5ds,evar,ereg,overwrite)
 
@@ -120,39 +115,36 @@ function download(
     ptop :: Int = 0,
     pbot :: Int = 0,
     pvec :: Vector{Int} = [0],
+    grib :: Bool,
     overwrite :: Bool = false
 )
-
-    downloadcheckevar(evar)
 
     if ispy
         pythonprint(e5ds,evar,ereg)
     else
-        if pvec == [0]
+        if pvec == [0] || iszero(evar.hPa)
             pvec = downloadcheckplvl(pall,ptop,pbot)
         end
         if pall
-            cdsretrieve(e5ds,evar,ereg,pvec,overwrite)
+            if !grib
+                cdsretrieve(e5ds,evar,ereg,pvec,overwrite)
+            else
+                cdsretrievegrib(e5ds,evar,ereg,pvec,overwrite)
+            end
         else
-            cdsretrieve(e5ds,evar,ereg,overwrite)
+            cdsretrieve(e5ds,evar,ereg,grib,overwrite)
         end
     end
 
 end
 
-function downloadcheckevar(
-    evar :: ERA5Variable
+function downloadcheckhPa(
+    evar :: PressureVariable
 )
 
-    if typeof(evar) <: Union{SingleVariable,PressureVariable}
+    if iszero(evar.hPa)
 
-        @info "$(modulelog()) - The ERA5Variable ID \"$(evar.ID)\" is a valid ERA5 Variable identifier and therefore can be used to download data from the Climate Data Store"
-
-        flush(stderr)
-
-    else
-
-        error("$(modulelog()) - The ERA5Variable ID \"$(evar.ID)\" is a custom ERA5 Variable identifier and therefore cannot be used to download data from the Climate Data Store, and can only be calculated/analyzed from preexisting valid ERA5 data")
+        error("$(modulelog()) - The PressureVariable Level is set to 0, so \"pall\" is set to `true` (i.e., we are downloading all pressure levels, or a range specified by the keyword arguments `ptop`, `pbot` and `pvec`).")
 
     end
 
