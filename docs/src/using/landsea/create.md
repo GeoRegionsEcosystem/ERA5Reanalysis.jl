@@ -27,7 +27,7 @@ egeo = ERA5Region(geo)
 
 Then, we retrieve the ERA5 Reanalysis LandSea Dataset
 ````@example landseamask
-lsd = getLandSea(e5ds,egeo)
+# lsd = getLandSea(e5ds,egeo)
 ````
 
 And we plot them below for comparison:
