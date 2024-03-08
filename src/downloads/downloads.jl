@@ -115,7 +115,7 @@ function download(
     ptop :: Int = 0,
     pbot :: Int = 0,
     pvec :: Vector{Int} = [0],
-    grib :: Bool,
+    grib :: Bool = false,
     overwrite :: Bool = false
 )
 
