@@ -21,14 +21,14 @@ nothing
 First, we must define the ERA5 datasets, and the GeoRegion of interest.
 ````@example landseamask
 e5ds = ERA5Dummy()
-geo  = RectRegion("JAV","GLB","Java",[-5.5,-9,115,105],savegeo=false)
+geo  = RectRegion("JAV","GLB","Java",[-5.5,-9,115,105],save=false)
 egeo = ERA5Region(geo)
 ````
 
 Then, we retrieve the ERA5 Reanalysis LandSea Dataset
-````@example landseamask
+<!-- ````@example landseamask
 # lsd = getLandSea(e5ds,egeo)
-````
+```` -->
 
 And we plot them below for comparison:
 ## API
