@@ -159,7 +159,7 @@ function downloadcheckereg(
     ereg :: ERA5Region
 )
 
-    if !(ereg.geo <: RectRegion)
+    if !(typeof(ereg.geo) <: RectRegion)
 
         error("$(modulelog()) - ERA5Reanalysis is not yet set up to download GeoRegions that are not RectRegions. Check back in a later update for more.")
 
