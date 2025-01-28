@@ -77,6 +77,7 @@ Keyword Argument
 """
 function ERA5Region(
     ID :: AbstractString;
+    path :: AbstractString = homedir(),
     resolution :: Real = 0,
     ST = String,
     FT = Float64
@@ -86,7 +87,7 @@ function ERA5Region(
     resolution = regionstep(ID,resolution)
     if ID == "GLB"; isglb = true; else; isglb = false end
 
-    return ERA5Region(GeoRegion(ID),resolution=resolution,ST=ST,FT=FT)
+    return ERA5Region(GeoRegion(ID,path=path),resolution=resolution,ST=ST,FT=FT)
 
 end
 
