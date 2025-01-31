@@ -22,8 +22,6 @@ function cdsretrieve(
         end
         fol = dirname(fnc); if !isdir(fol); mkpath(fol) end
 
-        
-
         e5dkey = Dict(
             "product_type" => e5ds.ptype,
             "year"         => year(dtii),
@@ -31,8 +29,11 @@ function cdsretrieve(
             "variable"     => evar.long,
             "grid"         => [ereg.resolution, ereg.resolution],
             "time"         => cdsretrieve_time(e5ds),
-            "format"       => format,
+            "data_format"  => format,
         )
+        if !grib
+            e5dkey["download_format"] = "unarchived"
+        end
 
         if typeof(e5ds) <: ERA5Hourly
             e5dkey["day"] = collect(1:31)
