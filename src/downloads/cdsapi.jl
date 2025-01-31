@@ -20,69 +20,79 @@ function retrieve(
     pause :: Real = 120.
 )
 
-    apikey = string("Basic ", base64encode(ckeys["key"]))
-
-    @info "$(now()) - CDSAPI - Sending request to https://cds.climate.copernicus.eu/api/v2/resources/$(dset) ..."
+    @info "$(now()) - CDSAPI - Sending request to https://cds.climate.copernicus.eu/api/retrieve/v1/processes/$dset/execute ..."
     response = HTTP.request(
-        "POST", ckeys["url"] * "/resources/$(dset)",
-        ["Authorization" => apikey],
-        body = JSON.json(dkeys),
+        "POST", ckeys["url"] * "/retrieve/v1/processes/$dset/execute",
+        ["PRIVATE-TOKEN" => ckeys["key"]],
+        body = JSON.json(Dict("inputs" => dkeys)),
         verbose = 0,
         retry = true, retries = 19
     )
     resp_dict = JSON.parse(String(response.body))
-    data = Dict("state" => "queued")
+    location  = Dict(response.headers)["location"]
+    data = Dict("status" => "queued")
 
     @info "$(now()) - CDSAPI - Request is queued"; flush(stderr)
     sleep_seconds = 1.
-    while data["state"] == "queued"
-        data = parserequest(ckeys,resp_dict,apikey)
+    while data["status"] == "queued"
+        data = parserequest(ckeys,resp_dict)
         sleep_seconds = min(1.5 * sleep_seconds,5)
         sleep(sleep_seconds)
     end
 
     @info "$(now()) - CDSAPI - Request is running"; flush(stderr)
     sleep_seconds = 1.
-    while data["state"] == "running"
-        data = parserequest(ckeys,resp_dict,apikey)
-        sleep_seconds = min(1.5 * sleep_seconds,pause)
+    while data["status"] != "successful"
+
+        data = parserequest(ckeys,resp_dict)
+        sleep_seconds = min(1.5 * sleep_seconds,5)
         sleep(sleep_seconds)
+
+        if data["status"] == "failed"
+            @error "$(now()) - CDSAPI - Request failed"
+        end
+
     end
 
-    if data["state"] == "completed"
+    if data["status"] == "successful"
 
-        @info "$(now()) - CDSAPI - Request is completed"; flush(stderr)
-
-        sleep(10)
+        response = HTTP.request(
+            "GET", location * "/results",
+            ["PRIVATE-TOKEN" => ckeys["key"]]
+        )
+        data = JSON.parse(String(response.body))["asset"]["value"]
+        fsize = data["file:size"]
+        url   = data["href"]
 
         @info """$(now()) - CDSAPI - Downloading $(uppercase(dset)) data ...
-          URL:         $(data["location"])
+          URL:         $(url)
           Destination: $(fnc)
         """
         flush(stderr)
 
-        tries = 0
-        while isinteger(tries) && (tries < 10)
-            try
-                dt1 = now()
-                HTTP.download(data["location"],fnc,update_period=Inf)
-                dt2 = now()
-                tries += 0.5
-                @info "$(now()) - CDSAPI - Downloaded $(@sprintf("%.1f",data["content_length"]/1e6)) MB in $(@sprintf("%.1f",Dates.value(dt2-dt1)/1000)) seconds (Rate: $(@sprintf("%.1f",data["content_length"]/1e3/Dates.value(dt2-dt1))) MB/s)"
-            catch
-                tries += 1
-                @info "$(now()) - CDSAPI - Failed to download on Attempt $(tries) of 10"
-            end
-            flush(stderr)
-        end
+        dt1 = now()
+        HTTP.download(url,fnc,update_period=Inf)
+        dt2 = now()
+        @info "$(now()) - CDSAPI - Downloaded $(@sprintf("%.1f",fsize/1024^2)) MB in $(@sprintf("%.1f",Dates.value(dt2-dt1)/1000)) seconds (Rate: $(@sprintf("%.1f",fsize/1024^2/Dates.value(dt2-dt1)*1000)) MB/s)"
 
-        if tries == 10
-            @warn "$(now()) - CDSAPI - Failed to download data, skipping to next request"
-        end
+        # tries = 0
+        # while isinteger(tries) && (tries < 10)
+        #     try
+        #         dt1 = now()
+        #         HTTP.download(url,fnc,update_period=Inf)
+        #         dt2 = now()
+        #         tries += 0.5
+        #         @info "$(now()) - CDSAPI - Downloaded $(@sprintf("%.1f",fsize/1024^2)) MB in $(@sprintf("%.1f",Dates.value(dt2-dt1)/1000)) seconds (Rate: $(@sprintf("%.1f",fsize/1024^2/Dates.value(dt2-dt1)*1000)) MB/s)"
+        #     catch
+        #         tries += 1
+        #         @info "$(now()) - CDSAPI - Failed to download on Attempt $(tries) of 10"
+        #     end
+        #     flush(stderr)
+        # end
 
-    elseif data["state"] == "failed"
-
-        @error "$(now()) - CDSAPI - Request failed"
+        # if tries == 10
+        #     @warn "$(now()) - CDSAPI - Failed to download data, skipping to next request"
+        # end
 
     end
 
@@ -129,12 +139,11 @@ Arguments
 function parserequest(
     ckeys :: AbstractDict,
     resp  :: AbstractDict,
-    api   :: AbstractString
 )
 
     data = HTTP.request(
-        "GET", ckeys["url"] * "/tasks/" * string(resp["request_id"]),
-        ["Authorization" => api]
+        "GET", ckeys["url"] * "/retrieve/v1/jobs/" * string(resp["jobID"]),
+        ["PRIVATE-TOKEN" => ckeys["key"]]
     )
     data = JSON.parse(String(data.body))
 
@@ -164,7 +173,7 @@ Keyword Arguments
 """
 function addCDSAPIkey(
     key  :: AbstractString;
-    url  :: AbstractString = "https://cds.climate.copernicus.eu/api/v2",
+    url  :: AbstractString = "https://cds.climate.copernicus.eu/api",
     path :: AbstractString = homedir(),
     filename  :: AbstractString = ".cdsapirc",
     overwrite :: Bool = false
