@@ -32,7 +32,7 @@ function retrieve(
     location  = Dict(response.headers)["location"]
     data = Dict("status" => "queued")
 
-    @info "$(now()) - CDSAPI - Request is queued"; flush(stderr)
+    @info "$(now()) - CDSAPI - Request is queued ..."; flush(stderr)
     sleep_seconds = 1.
     while data["status"] == "queued"
         data = parserequest(ckeys,resp_dict)
@@ -40,7 +40,7 @@ function retrieve(
         sleep(sleep_seconds)
     end
 
-    @info "$(now()) - CDSAPI - Request is running"; flush(stderr)
+    @info "$(now()) - CDSAPI - Request is running ..."; flush(stderr)
     sleep_seconds = 1.
     while data["status"] != "successful"
 
@@ -55,6 +55,8 @@ function retrieve(
     end
 
     if data["status"] == "successful"
+
+        @info "$(now()) - CDSAPI - Request is now completed, downloading ..."; flush(stderr)
 
         response = HTTP.request(
             "GET", location * "/results",
