@@ -273,7 +273,7 @@ function cdsretrieve_area!(
 
     if !(ereg.isglb)
         geo = ereg.geo
-        dkeys["area"] = [geo.N,geo.W,geo.S,geo.E]
+        dkeys["area"] = geo.bound[1,4,2,3]
     end
 
     return
