@@ -57,7 +57,7 @@ function SingleVariable(
     verbose :: Bool = false
 )
 
-    isSingle(ID,path=path)
+    isSingleID(ID,path=path)
 
     if verbose; @info "$(modulelog()) - Retrieving information for the SingleVariable defined by the ID \"$ID\"" end
     vlist,flist,dlist = listSingles(path); ind = findall(ID.==vlist)[1]
@@ -108,7 +108,7 @@ function SingleVariable(
     verbose :: Bool = false,
 )
 
-    if isSingle(ID,path=path,throw=false)
+    if isSingleID(ID,path=path,throw=false)
         error("$(modulelog()) - The SingleVariable \"$(ID)\" has already been defined,please use another identifier.")
     elseif verbose
         @info "$(modulelog()) - Adding the SingleVariable \"$(ID)\" to the list."

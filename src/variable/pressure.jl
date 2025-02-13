@@ -68,7 +68,7 @@ function PressureVariable(
     verbose :: Bool = false
 )
 
-    isPressure(ID,path=path)
+    isPressureID(ID,path=path)
 
     if verbose; @info "$(modulelog()) - Retrieving information for the PressureVariable defined by the ID \"$ID\"" end
     vlist,flist,plist = listPressures(path); ind = findall(ID.==vlist)[1]
@@ -132,7 +132,7 @@ function PressureVariable(
     verbose :: Bool = false
 )
 
-    if isPressure(ID,path=path,throw=false)
+    if isPressureID(ID,path=path,throw=false)
         error("$(modulelog()) - The PressureVariable \"$(ID)\" has already been defined, please use another identifier.")
     elseif verbose
         @info "$(modulelog()) - Adding the PressureVariable \"$(ID)\" to the list."
