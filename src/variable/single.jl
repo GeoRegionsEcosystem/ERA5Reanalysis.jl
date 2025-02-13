@@ -17,7 +17,8 @@ struct SingleVariable{ST<:AbstractString} <: SingleLevel
     ID      :: ST
     long    :: ST
     name    :: ST
-    units   :: ST
+    units   :: Unitful.Units
+    path    :: ST
     dataset :: ST
 end
 
@@ -31,7 +32,8 @@ struct SingleCustom{ST<:AbstractString} <: SingleLevel
     ID      :: ST
     long    :: ST
     name    :: ST
-    units   :: ST
+    units   :: Unitful.Units
+    path    :: ST
     dataset :: ST
 end
 
@@ -49,27 +51,28 @@ Arguments
 - `ID` : variable ID (in string format) used in the NetCDF file
 """
 function SingleVariable(
-    ID :: AbstractString,
-    ST = String,
+    ID   :: AbstractString,
+    ST = String;
+    path :: AbstractString = pwd(),
+    verbose :: Bool = false
 )
 
-    isSingle(ID)
+    isSingle(ID,path=path)
 
-    @info "$(modulelog()) - Retrieving information for the SingleVariable defined by the ID \"$ID\""
-    vlist,flist = listSingles();      ind = findall(ID.==vlist)[1]
+    if verbose; @info "$(modulelog()) - Retrieving information for the SingleVariable defined by the ID \"$ID\"" end
+    vlist,flist,dlist = listSingles(path); ind = findall(ID.==vlist)[1]
     vtype = replace(flist[ind],".txt"=>"")
-    fname = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis",flist[ind])
+    fname = joinpath(dlist[ind],flist[ind])
     vlist = listera5variables(fname); ind = findall(ID.==vlist)[1]
 
-    IDinfo = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
-    ID,long,name,units = IDinfo[[1,2,3,4]]
+    ID,long,name,ustr = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
 
     if vtype == "singlevariable"
-        @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleVariable type"
-        return SingleVariable{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
+        if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleVariable type" end
+        return SingleVariable{ST}(ID,long,name,string2unit(ustr),fname,"reanalysis-era5-single-levels")
     else
-        @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleCustom type"
-        return SingleCustom{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
+        if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleCustom type" end
+        return SingleCustom{ST}(ID,long,name,string2unit(ustr),fname,"reanalysis-era5-single-levels")
     end
 
 end
@@ -99,20 +102,28 @@ function SingleVariable(
     ID :: AbstractString,
     long :: AbstractString = "",
     name :: AbstractString,
-    units :: AbstractString
+    units :: AbstractString,
+    path  :: AbstractString = pwd(),
+    save  :: Bool = false,
+    verbose :: Bool = false,
 )
 
-    if isSingle(ID,throw=false)
+    if isSingle(ID,path=path,throw=false)
         error("$(modulelog()) - The SingleVariable \"$(ID)\" has already been defined,please use another identifier.")
-    else
+    elseif verbose
         @info "$(modulelog()) - Adding the SingleVariable \"$(ID)\" to the list."
     end
 
-    open(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis","singlecustom.txt"),"a") do io
-        write(io,"$ID,$long,$name,$units\n")
+    if save
+        open(joinpath(path,"singlecustom.txt"),"a") do io
+            write(io,"$ID,$long,$name,$units\n")
+        end
     end
 
-    return SingleCustom{ST}(ID,long,name,units,"reanalysis-era5-single-levels")
+    return SingleCustom{ST}(
+        ID,long,name,string2unit(units),joinpath(path,"singlecustom.txt"),
+        "reanalysis-era5-single-levels"
+    )
 
 end
 
@@ -127,97 +138,23 @@ Output
 - `varlist` : List of all the Single-Level Variable IDs
 - `fidlist` : List of the files that the Single-Level Variable information is stored in
 """
-function listSingles()
+function listSingles(path :: AbstractString)
 
-    flist   = ["singlevariable.txt","singlecustom.txt"]
     varlist = []
     fidlist = []
+    dirlist = []
 
-    for fname in flist
-        copyera5variables(fname)
-        vvec = listera5variables(joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis",fname))
-        varlist = vcat(varlist,vvec); fvec = fill(fname,length(vvec))
-        fidlist = vcat(fidlist,fvec)
-    end
+    vvec = listera5variables(joinpath(eradir,"singlevariable.txt"))
+    varlist = vcat(varlist,vvec);
+    fvec = fill("singlevariable.txt",length(vvec)); fidlist = vcat(fidlist,fvec)
+    dvec = fill(path,length(vvec)); dirlist = vcat(dirlist,dvec)
 
-    return varlist,fidlist
+    vvec = listera5variables(joinpath(path,"singlecustom.txt"))
+    varlist = vcat(varlist,vvec);
+    fvec = fill("singlecustom.txt",length(vvec)); fidlist = vcat(fidlist,fvec)
+    dvec = fill(path,length(vvec)); dirlist = vcat(dirlist,dvec)
 
-end
-
-"""
-    isSingle(
-        ID :: AbstractString;
-        throw :: Bool = true,
-        dolog :: Bool = false
-    ) -> tf :: Bool
-
-Extracts information of the Single-Level Variable with the ID `ID`.  If no Single-Level Variable with this ID exists, an error is thrown.
-
-Arguments
-=========
-
-- `RegID` : The keyword ID that will be used to identify the Single-Level Variable.
-        If the ID is not valid (i.e. not being used), then an error will be thrown.
-- `throw` : If `true`, then throws an error if `RegID` is not a valid Single-Level Variable identifier instead of returning the Boolean `tf`
-- `dolog` : If `true`, then return logging to screen along with results
-
-Returns
-=======
-
-- `tf` : True / False
-"""
-function isSingle(
-    ID :: AbstractString;
-    throw :: Bool = true,
-    dolog :: Bool = false
-)
-
-    if dolog
-        @info "$(modulelog()) - Checking if the SingleVariable ID \"$ID\" is in use"
-    else
-        @debug "$(modulelog()) - Checking if the SingleVariable ID \"$ID\" is in use"
-    end
-
-    vlist,_ = listSingles()
-
-    if sum(vlist.==ID) == 0
-        if throw
-            error("$(modulelog()) - \"$(ID)\" is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list.")
-        else
-            @warn "$(modulelog()) - \"$(ID)\" is not a valid SingleVariable identifier, use the function SingleVariable() or SingleCustom() to add this ERA5Variable to the list."
-            return false
-        end
-    else
-        if dolog
-            @info "$(modulelog()) - The SingleVariable ID \"$ID\" is already in use"
-        end
-        return true
-    end
-
-end
-
-"""
-    rmSingle( ID :: AbstractString ) -> nothing
-
-Remove the Single-Level Variable with the ID `ID` from the lists.
-
-Arguments
-=========
-
-- `RegID` : The keyword ID that will be used to identify the Single-Level Variable that is to be removed
-"""
-function rmSingle(ID::AbstractString)
-
-    if isSingle(ID,throw=false)
-        disable_logging(Logging.Warn)
-        rmERA5Variable(SingleVariable(ID))
-        disable_logging(Logging.Debug)
-        @info "$(modulelog()) - Successfully removed the Single-Level variable defined by \"$(ID)\""
-    else
-        @warn "$(modulelog()) - No Single-Level variable defined by \"$(ID)\" exists, please make sure you specified the correct variable ID"
-    end
-
-    return nothing
+    return varlist,fidlist,dirlist
 
 end
 
@@ -231,56 +168,18 @@ Arguments
 
 - `allfiles` : If false, only get rid of all the SingleCustom variables, but if true, then the SingleVariable list will be reset back to the default for ERA5Reanalysis.jl
 """
-function resetSingles(;allfiles=false)
+function resetSingles(path :: AbstractString = pwd())
 
-    if allfiles
-        @info "$(modulelog()) - Resetting both the master and custom lists of ERA5 SingleVariables back to the default"
-        flist = ["singlevariable.txt","singlecustom.txt"]
-    else
-        @info "$(modulelog()) - Resetting the custom lists of ERA5 variables back to the default"
-        flist = ["singlecustom.txt"]
-    end
+    @info "$(modulelog()) - Resetting the custom list of ERA5 SingleVariables back to the default"
 
-    for fname in flist
-        copyera5variables(fname,overwrite=true)
-    end
-
-    return nothing
-
-end
-
-function tableSingles(;custom::Bool=false)
-
-    jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol)
-    if custom
-        fvar = ["SingleCustom"]
-    else
-        fvar = ["SingleVariable","SingleCustom"]
-    end
-    fmat = []
-    
-    for fname in fvar
-        fid  = joinpath(jfol,"$(lowercase(fname)).txt")
-        try
-            vmat = readdlm(fid,',',comments=true,comment_char='#')
-            nvar = size(vmat,1); ff = fill(fname,nvar)
-            vmat = cat(ff,vmat[:,[1,3,4,2]],dims=2)
-            fmat = cat(fmat,vmat,dims=1)
-        catch
+    open(joinpath(path,"singlecustom.txt"),"w") do io
+        open(joinpath(eradir,"singlecustom.txt")) do f
+            for line in readlines(f)
+                write(io,"$line\n")
+            end
         end
     end
 
-    head = ["Variable Type","ID","Name","Units","ERA5 Long-Name"];
-
-    if isempty(fmat)
-        fmat  = Array{String,2}(undef,1,5)
-        fmat .= "N/A"
-    end
-
-    pretty_table(
-        fmat,header=head,
-        alignment=[:c,:c,:l,:c,:l],
-        crop = :none, tf = tf_compact
-    );
+    return nothing
 
 end
