@@ -173,7 +173,7 @@ function listPressures(path :: AbstractString)
     vvec = listera5variables(joinpath(eradir,"pressurevariable.txt"))
     varlist = vcat(varlist,vvec);
     fvec = fill("pressurevariable.txt",length(vvec)); fidlist = vcat(fidlist,fvec)
-    dvec = fill(path,length(vvec)); dirlist = vcat(dirlist,dvec)
+    dvec = fill(eradir,length(vvec)); dirlist = vcat(dirlist,dvec)
 
     vvec = listera5variables(joinpath(path,"pressurecustom.txt"))
     varlist = vcat(varlist,vvec);

@@ -72,11 +72,11 @@ function save(
     lsd = getLandSea(e5ds,ereg)
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
-    ds.dim["time"] = ndy
+    ds.dim["valid_time"] = ndy
 
     nclon,nclat = save_definelonlat!(ds)
 
-    nctime = defVar(ds,"time",Int32,("time",),attrib = Dict(
+    nctime = defVar(ds,"valid_time",Int32,("valid_time",),attrib = Dict(
         "units"     => "days since $(dt) 00:00:00.0",
         "long_name" => "time",
         "calendar"  => "gregorian",

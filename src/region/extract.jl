@@ -100,7 +100,7 @@ function extract(
             smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
         )
         pnc  = basename(path(pds))
-        nt   = pds.dim["time"]
+        nt   = pds.dim["valid_time"]
         tmat = @view pmat[:,:,1:nt]
         NCDatasets.load!(pds[evar.ID].var,tmat,:,:,1:nt)
         close(pds)

@@ -187,27 +187,27 @@ function save_timeseries(
     end
 
     nhr = length(totts)
-    ds.dim["time"] = nhr
+    ds.dim["valid_time"] = nhr
 
-    nctime = defVar(ds,"time",Int32,("time",),attrib = Dict(
+    nctime = defVar(ds,"valid_time",Int32,("valid_time",),attrib = Dict(
         "units"     => "hours since $(e5ds.start) 00:00:00.0",
         "long_name" => "time",
         "calendar"  => "gregorian",
     ))
 
-    nctot = defVar(ds,"$(evar.ID)_domain",Float32,("time",),attrib = Dict(
+    nctot = defVar(ds,"$(evar.ID)_domain",Float32,("valid_time",),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
         "units"         => evar.unit2string(evar.units),
     ))
 
-    nclnd = defVar(ds,"$(evar.ID)_land",Float32,("time",),attrib = Dict(
+    nclnd = defVar(ds,"$(evar.ID)_land",Float32,("valid_time",),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
         "units"         => evar.unit2string(evar.units),
     ))
 
-    ncocn = defVar(ds,"$(evar.ID)_ocean",Float32,("time",),attrib = Dict(
+    ncocn = defVar(ds,"$(evar.ID)_ocean",Float32,("valid_time",),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
         "units"         => evar.unit2string(evar.units),

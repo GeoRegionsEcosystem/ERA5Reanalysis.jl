@@ -10,7 +10,7 @@ function split(
 )
 
     ds = NCDataset(fnc)
-    nt = ds.dim["time"]
+    nt = ds.dim["valid_time"]
     dataint = @view tmpd[:,:,1:nt]
 
     for ip in 1 : length(pvec)
@@ -36,7 +36,7 @@ function split(
 ) where ST <: AbstractString
 
     ds = NCDataset(fnc)
-    nt = ds.dim["time"]
+    nt = ds.dim["valid_time"]
     data = @view tmpd[:,:,1:nt]
 
     for evarii in evar
