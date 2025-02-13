@@ -33,7 +33,6 @@ function getLandSea(
     ereg :: ERA5Region = ERA5Region("GLB");
     save :: Bool = true,
     returnlsd :: Bool = true,
-    FT = Float32
 )
 
     fid = "emask-$(ereg.string).nc"
@@ -56,19 +55,16 @@ function getLandSea(
         goro = nomissing(gds["z"][:,:,1])
         close(gds)
 
-        ggrd = RegionGrid(ereg,glon,glat)
+        ggrd = RegionGrid(ereg,glon,glat); ggrd.mask[isnan.(ggrd.mask)] .= 0
 
         @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region from the Global ERA5 Land-Sea mask dataset ..."
         roro = extract(goro,ggrd)
         rlsm = extract(glsm,ggrd)
 
         if save
-            saveLandSea(
-                e5ds, ereg, ggrd.lon, ggrd.lat, rlsm, roro, ggrd.mask,
-                smooth, σlon, σlat
-            )
+            saveLandSea(e5ds,ereg,ggrd.lon,ggrd.lat,rlsm,roro,Int16.(ggrd.mask))
         else
-            return LandSeaTopo{FT,FT}(ggrd.lon,ggrd.lat,rlsm,roro/9.80665)
+            return LandSeaTopo{Float64,Float32}(ggrd.lon,ggrd.lat,rlsm,roro/9.80665)
         end
 
     end
@@ -84,7 +80,7 @@ function getLandSea(
 
         @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region ..."
 
-        return LandSeaTopo{FT,FT}(lon,lat,lsm,oro/9.80665)
+        return LandSeaTopo{Float64,Float32}(lon,lat,lsm,oro/9.80665)
 
     else
 
@@ -105,7 +101,8 @@ function downloadLandSea(
             "product_type" => "monthly_averaged_reanalysis",
             "year" => 2021,
             "month" => 12,
-            "format" => "netcdf",
+            "data_format" => "netcdf",
+            "download_format" => "unarchived",
             "variable" => ["geopotential", "land_sea_mask"],
             "grid" => [ereg.resolution, ereg.resolution],
             "time" => "00:00"
@@ -113,10 +110,10 @@ function downloadLandSea(
     )
 
     tds = NCDataset(tmpfnc)
-    lon = tds["longitude"][:]; nlon = length(lon)
-    lat = tds["latitude"][:];  nlat = length(lat)
-    lsm = tds["lsm"][:,:,1]
-    oro = tds["z"][:,:,1]
+    lon = tds["longitude"].var[:]; nlon = length(lon)
+    lat = tds["latitude"].var[:];  nlat = length(lat)
+    lsm = tds["lsm"].var[:,:,1]
+    oro = tds["z"].var[:,:,1]
     msk = ones(Int16,nlon,nlat)
     close(tds)
 
@@ -137,16 +134,9 @@ function saveLandSea(
     lsm  :: Array{<:Real,2},
     oro  :: Array{<:Real,2},
     mask :: Array{Int16,2},
-    smooth :: Bool = false,
-    σlon :: Int = 0,
-    σlat :: Int = 0,
 )
 
-    if !smooth
-        fnc = joinpath(e5ds.emask,"emask-$(ereg.string).nc")
-    else
-        fnc = joinpath(e5ds.emask,"emask-$(ereg.string)-smooth_$(σlon)x$(σlat).nc")
-    end
+    fnc = joinpath(e5ds.emask,"emask-$(ereg.string).nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end
@@ -159,12 +149,12 @@ function saveLandSea(
     ds.dim["longitude"] = length(lon)
     ds.dim["latitude"]  = length(lat)
 
-    nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
+    nclon = defVar(ds,"longitude",Float64,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
         "long_name" => "longitude",
     ))
 
-    nclat = defVar(ds,"latitude",Float32,("latitude",),attrib = Dict(
+    nclat = defVar(ds,"latitude",Float64,("latitude",),attrib = Dict(
         "units"     => "degrees_north",
         "long_name" => "latitude",
     ))
