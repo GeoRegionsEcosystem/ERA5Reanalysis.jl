@@ -48,7 +48,7 @@ function ERA5Region(
     @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(geo.ID)\""
     resolution = regionstep(geo.ID,resolution)
     if geo.ID == "GLB"; isglb = true; else; isglb = false end
-    if mod(geo.E,360) == mod(geo.W,360); is360 = true; else; is360 = false end
+    if mod(geo.bound[3],360) == mod(geo.bound[4],360); is360 = true; else; is360 = false end
 
     return ERA5Region{ST,FT}(
         geo, geo.ID, resolution,
@@ -133,9 +133,9 @@ function show(io::IO, ereg::ERA5Region)
             "    Name         (geo.name) : ", ereg.geo.name,  '\n',
             "    Resolution (resolution) : ", ereg.resolution,  '\n',
             "    Folder ID      (string) : ", ereg.string, '\n',
-            "    Bounds  (geo.[N,S,E,W]) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
+            "    Bounds  (geo.[N,S,E,W]) : ", geo.bound, '\n',
             "    Shape       (geo.shape) : ", geo.shape, '\n',
-            "        (geo.[is180,is360]) : ",(geo.is180,geo.is360),"\n",
+            "        (geo.[isglb,is360]) : ",(ereg.isglb,ereg.is360),"\n",
         )
     else
         print(
@@ -145,8 +145,8 @@ function show(io::IO, ereg::ERA5Region)
             "    Name         (geo.name) : ", ereg.geo.name,  '\n',
             "    Resolution (resolution) : ", ereg.resolution,  '\n',
             "    Folder ID      (string) : ", ereg.string, '\n',
-            "    Bounds  (geo.[N,S,E,W]) : ",[geo.N,geo.S,geo.E,geo.W], '\n',
-            "        (geo.[is180,is360]) : ",(geo.is180,geo.is360),"\n",
+            "    Bounds  (geo.[N,S,E,W]) : ", geo.bound, '\n',
+            "        (geo.[isglb,is360]) : ",(ereg.isglb,ereg.is360),"\n",
         )
     end
 
