@@ -147,7 +147,7 @@ function listSingles(path :: AbstractString)
     vvec = listera5variables(joinpath(eradir,"singlevariable.txt"))
     varlist = vcat(varlist,vvec);
     fvec = fill("singlevariable.txt",length(vvec)); fidlist = vcat(fidlist,fvec)
-    dvec = fill(path,length(vvec)); dirlist = vcat(dirlist,dvec)
+    dvec = fill(eradir,length(vvec)); dirlist = vcat(dirlist,dvec)
 
     vvec = listera5variables(joinpath(path,"singlecustom.txt"))
     varlist = vcat(varlist,vvec);
