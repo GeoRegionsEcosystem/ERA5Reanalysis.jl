@@ -1,19 +1,22 @@
 module ERA5Reanalysis
 
 ## Base Modules Used
-using Base64
 using DelimitedFiles
 using Logging
 using Printf
 
 ## Modules Used
 using HTTP
-using JSON
+using JSON3
+using LandSea
 using PrettyTables
+using RegionGrids
 using Statistics
+using Unitful
 
-import Base: show, read, split, download
-import GeoRegions: RegionGrid, getLandSea
+import Base: show, read, split, download, rm
+import RegionGrids: RegionGrid, extract
+import LandSea: getLandSea
 
 ## Reexporting exported functions within these modules
 using Reexport
@@ -31,8 +34,8 @@ export
         ERA5Variable,
         SingleLevel,   SingleVariable,   SingleCustom,
         PressureLevel, PressureVariable, PressureCustom,
-        listSingles,   isSingle,   rmSingle,   resetSingles,   tableSingles,
-        listPressures, isPressure, rmPressure, resetPressures, tablePressures,
+        listSingles,   isSingleID,   rmSingleID,   resetSingles,   tableSingles,
+        listPressures, isPressureID, rmPressureID, resetPressures, tablePressures,
         resetERA5Variables, addERA5Variables, rmERA5Variable,  tableERA5Variables,
 
         ERA5Region,
@@ -41,7 +44,7 @@ export
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read, save,
+        download, read, save, rm, is,
         addCDSAPIkey,
         
         extract, analysis, timeseries, smoothing, hourly2daily, hourly2monthly,
@@ -103,17 +106,9 @@ abstract type ERA5Variable end
 ## ERA5Reanalysis.jl logging preface
 
 modulelog() = "$(now()) - ERA5Reanalysis.jl"
+eradir = joinpath(@__DIR__,".files")
 
 function __init__()
-    
-    jfol = joinpath(DEPOT_PATH[1],"files","ERA5Reanalysis"); mkpath(jfol);
-    fvar = ["singlevariable.txt","singlecustom.txt","pressurevariable.txt","pressurecustom.txt"]
-    for fname in fvar
-        if !isfile(joinpath(jfol,fname))
-            copyera5variables(fname)
-            @info "$(modulelog()) - $(fname) does not exist in $(jfol), copying ..."
-        end
-    end
 
     fcdsapi = joinpath(homedir(),".cdsapirc")
     if !isfile(fcdsapi)
