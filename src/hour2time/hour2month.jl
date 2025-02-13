@@ -14,8 +14,7 @@ function hourly2monthly(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
-    tmpload = zeros(Int16,nlon,nlat,ntimesteps(e5ds))
-    tmpdata = zeros(nlon,nlat,ntimesteps(e5ds))
+    tmpload = zeros(Float32,nlon,nlat,ntimesteps(e5ds))
     modata  = zeros(nlon,nlat,ntimesteps(e5dsmo))
 
     for dt in e5ds.start : Year(1) : e5ds.stop
@@ -28,16 +27,7 @@ function hourly2monthly(
             end
             nhr = daysinmonth(idt) * 24; if !dosum; fac = 1; else; fac = nhr end
             ds  = read(e5ds,evar,ereg,idt,quiet=true)
-            sc  = ds[evar.ID].attrib["scale_factor"]
-            of  = ds[evar.ID].attrib["add_offset"]
-            mv  = ds[evar.ID].attrib["missing_value"]
-            fv  = ds[evar.ID].attrib["_FillValue"]
             NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhr),:,:,:)
-            int2real!(
-                view(tmpdata,:,:,1:nhr),view(tmpload,:,:,1:nhr),
-                scale=sc,offset=of,mvalue=mv,fvalue=fv
-            )
-            close(ds)
 
             if verbose
                 if !dosum
@@ -47,7 +37,7 @@ function hourly2monthly(
                 end
             end
             for ilat = 1 : nlat, ilon = 1 : nlon
-                modata[ilon,ilat,imo] = mean(view(tmpdata,ilon,ilat,1:nhr)) * fac
+                modata[ilon,ilat,imo] = mean(view(tmpload,ilon,ilat,1:nhr)) * fac
             end
             flush(stderr)
 

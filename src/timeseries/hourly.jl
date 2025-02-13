@@ -19,11 +19,10 @@ function timeseries(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
-    tmpload = zeros(Int16,nlon,nlat,744)
-    tmpdata = zeros(nlon,nlat,744)
-    totts = zeros(ndt)
-    lndts = zeros(ndt)
-    ocnts = zeros(ndt)
+    tmpdata = zeros(Float32,nlon,nlat,744)
+    totts = zeros(Float32,ndt)
+    lndts = zeros(Float32,ndt)
+    ocnts = zeros(Float32,ndt)
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
@@ -33,15 +32,8 @@ function timeseries(
         ndy = daysinmonth(dt)
         nt  = ndy * 24
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
-        sc  = ds[evar.ID].attrib["scale_factor"]
-        of  = ds[evar.ID].attrib["add_offset"]
-        mv  = ds[evar.ID].attrib["missing_value"]
-        fv  = ds[evar.ID].attrib["_FillValue"]
-
-        iiload = @view tmpload[:,:,1:nt]
         iidata = @view tmpdata[:,:,1:nt]
-        NCDatasets.load!(ds[evar.ID].var,iiload,:,:,:)
-        int2real!(iidata,iiload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
+        NCDatasets.load!(ds[evar.ID].var,iidata,:,:,:)
         close(ds)
 
         if verbose
@@ -108,11 +100,10 @@ function timeseries(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
-    tmpload = zeros(Int16,nlon,nlat,744)
-    tmpdata = zeros(nlon,nlat,744)
-    totts = zeros(ndt)
-    lndts = zeros(ndt)
-    ocnts = zeros(ndt)
+    tmpdata = zeros(Float32,nlon,nlat,744)
+    totts = zeros(Float32,ndt)
+    lndts = zeros(Float32,ndt)
+    ocnts = zeros(Float32,ndt)
 
     for dt in e5ds.start : Month(1) : e5ds.stop
 
@@ -122,15 +113,7 @@ function timeseries(
         ndy = daysinmonth(dt)
         nt  = ndy * 24
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
-        sc  = ds[evar.ID].attrib["scale_factor"]
-        of  = ds[evar.ID].attrib["add_offset"]
-        mv  = ds[evar.ID].attrib["missing_value"]
-        fv  = ds[evar.ID].attrib["_FillValue"]
-
-        iiload = @view tmpload[:,:,1:nt]
-        iidata = @view tmpdata[:,:,1:nt]
-        NCDatasets.load!(ds[evar.ID].var,iiload,:,:,:)
-        int2real!(iidata,iiload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
+        NCDatasets.load!(ds[evar.ID].var,iidata,:,:,:)
         close(ds)
 
         if verbose
@@ -175,9 +158,9 @@ function timeseries(
 end
 
 function save_timeseries(
-    totts :: Vector{<:Real},
-    lndts :: Vector{<:Real},
-    ocnts :: Vector{<:Real},
+    totts :: Vector{Float32},
+    lndts :: Vector{Float32},
+    ocnts :: Vector{Float32},
     e5ds  :: ERA5Hourly,
     evar  :: ERA5Variable,
     ereg  :: ERA5Region
@@ -212,19 +195,19 @@ function save_timeseries(
         "calendar"  => "gregorian",
     ))
 
-    nctot = defVar(ds,"$(evar.ID)_domain",Float64,("time",),attrib = Dict(
+    nctot = defVar(ds,"$(evar.ID)_domain",Float32,("time",),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
         "units"         => evar.units,
     ))
 
-    nclnd = defVar(ds,"$(evar.ID)_land",Float64,("time",),attrib = Dict(
+    nclnd = defVar(ds,"$(evar.ID)_land",Float32,("time",),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
         "units"         => evar.units,
     ))
 
-    ncocn = defVar(ds,"$(evar.ID)_ocean",Float64,("time",),attrib = Dict(
+    ncocn = defVar(ds,"$(evar.ID)_ocean",Float32,("time",),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
         "units"         => evar.units,

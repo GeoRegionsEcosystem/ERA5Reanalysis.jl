@@ -58,18 +58,12 @@ end
 function save_definevar!(
     ds     :: NCDataset,
     evar   :: ERA5Variable,
-    scale  :: Real,
-    offset :: Real
 )
 
-    ncvar = defVar(ds,evar.ID,Int16,("longitude","latitude","time"),attrib = Dict(
+    ncvar = defVar(ds,evar.ID,Float32,("longitude","latitude","time"),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
-        "units"         => evar.units,
-        "scale_factor"  => scale,
-        "add_offset"    => offset,
-        "_FillValue"    => Int16(-32767),
-        "missing_value" => Int16(-32767),
+        "units"         => unitstring(evar.units),
     ))
 
     return ncvar

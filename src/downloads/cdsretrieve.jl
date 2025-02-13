@@ -212,7 +212,7 @@ function cdsretrieve(
     lsd  = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
     nlat = length(lsd.lat)
-    tmpd = zeros(Int16,nlon,nlat,31*24)
+    tmpd = zeros(Float32,nlon,nlat,31*24)
 
     for dtii in dtvec
 

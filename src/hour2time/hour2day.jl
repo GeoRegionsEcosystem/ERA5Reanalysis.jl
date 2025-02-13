@@ -14,8 +14,7 @@ function hourly2daily(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
-    tmpload = zeros(Int16,nlon,nlat,ntimesteps(e5ds))
-    tmpdata = zeros(nlon,nlat,24)
+    tmpload = zeros(Float32,nlon,nlat,ntimesteps(e5ds))
     dydata  = zeros(nlon,nlat,ntimesteps(e5dsdy))
 
     if !dosum; fac = 1; else; fac = 24 end
@@ -27,10 +26,6 @@ function hourly2daily(
         end
         ndy = daysinmonth(dt)
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
-        sc  = ds[evar.ID].attrib["scale_factor"]
-        of  = ds[evar.ID].attrib["add_offset"]
-        mv  = ds[evar.ID].attrib["missing_value"]
-        fv  = ds[evar.ID].attrib["_FillValue"]
         NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:(ndy*24)),:,:,:)
         close(ds)
 
@@ -45,12 +40,8 @@ function hourly2daily(
         for idy = 1 : ndy
             ibeg = 24 * (idy-1) + 1
             iend = 24 *  idy
-            int2real!(
-                tmpdata,view(tmpload,:,:,ibeg:iend),
-                scale=sc,offset=of,mvalue=mv,fvalue=fv
-            )
             for ilat = 1 : nlat, ilon = 1 : nlon
-                dydata[ilon,ilat,idy] = mean(view(tmpdata,ilon,ilat,:)) * fac
+                dydata[ilon,ilat,idy] = mean(view(tmpload,ilon,ilat,ibeg:iend)) * fac
             end
         end
 

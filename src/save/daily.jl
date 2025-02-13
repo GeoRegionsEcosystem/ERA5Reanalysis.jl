@@ -21,7 +21,6 @@ function save(
     )
 
     ndy = daysinmonth(dt)
-    scale,offset = ncoffsetscale(data)
 
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
@@ -35,20 +34,12 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = save_definevar!(ds,evar,scale,offset)
+    ncvar = save_definevar!(ds,evar)
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
     nctime[:] = collect(1:ndy) .- 1
-
-    if iszero(scale)
-        ncvar.var[:,:,:] = 0
-    else
-        if iszero(sum(isnan.(data)))
-              ncvar[:,:,:] = data
-        else; ncvar.var[:,:,:] = real2int16(data,scale,offset)
-        end
-    end
+    ncvar[:,:,:] = data
 
     close(ds)
 
@@ -77,7 +68,6 @@ function save(
     )
 
     ndy = daysinmonth(dt)
-    scale,offset = ncoffsetscale(data)
 
     lsd = getLandSea(e5ds,ereg)
     ds.dim["longitude"] = length(lsd.lon)
@@ -92,20 +82,12 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = save_definevar!(ds,evar,scale,offset)
+    ncvar = save_definevar!(ds,evar)
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
     nctime[:] = collect(1:ndy) .- 1
-    
-    if iszero(scale)
-        ncvar.var[:,:,:] = 0
-    else
-        if iszero(sum(isnan.(data)))
-              ncvar[:,:,:] = data
-        else; ncvar.var[:,:,:] = real2int16(data,scale,offset)
-        end
-    end
+    ncvar[:,:,:] = data
 
     close(ds)
 

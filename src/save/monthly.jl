@@ -33,20 +33,12 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = save_definevar!(ds,evar,scale,offset)
+    ncvar = save_definevar!(ds,evar)
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
     nctime[:] = save_definetimes(e5ds,dt)
-
-    if iszero(scale)
-        ncvar.var[:,:,:] = 0
-    else
-        if iszero(sum(isnan.(data)))
-              ncvar[:,:,:] = data
-        else; ncvar.var[:,:,:] = real2int16(data,scale,offset)
-        end
-    end
+    ncvar[:,:,:] = data
 
     close(ds)
 
@@ -74,8 +66,6 @@ function save(
         extractnc,smoothlon,smoothlat
     )
 
-    scale,offset = ncoffsetscale(data)
-
     lsd = getLandSea(e5ds,ereg)
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
@@ -89,20 +79,12 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = save_definevar!(ds,evar,scale,offset)
+    ncvar = save_definevar!(ds,evar)
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
     nctime[:] = save_definetimes(e5ds,dt)
-    
-    if iszero(scale)
-        ncvar.var[:,:,:] = 0
-    else
-        if iszero(sum(isnan.(data)))
-              ncvar[:,:,:] = data
-        else; ncvar.var[:,:,:] = real2int16(data,scale,offset)
-        end
-    end
+    ncvar[:,:,:] = data
 
     close(ds)
 

@@ -62,11 +62,10 @@ function smoothing(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
-    tmpload  = zeros(Int16,nlon,nlat,ndt)
-    tmpdata  = zeros(nlon,nlat,ndt+buffer_time*2)
-    shftlon  = zeros(nlon,nlat,(2*buffer_lon+1))
-    shftlat  = zeros(nlon,nlat,(2*buffer_lat+1))
-    smthdata = zeros(nlon,nlat,ndt)
+    tmpdata  = zeros(Float32,nlon,nlat,ndt+buffer_time*2)
+    shftlon  = zeros(Float32,nlon,nlat,(2*buffer_lon+1))
+    shftlat  = zeros(Float32,nlon,nlat,(2*buffer_lat+1))
+    smthdata = zeros(Float32,nlon,nlat,ndt)
     nanlat   = zeros(Bool,(2*buffer_lat+1))
     nanlon   = zeros(Bool,(2*buffer_lon+1))
     smthii   = zeros(1+buffer_time*2)
@@ -77,46 +76,21 @@ function smoothing(
 
         nhr = daysinmonth(dt) * 24
         ds  = read(e5ds,evar,ereg,dt)
-        sc  = ds[evar.ID].attrib["scale_factor"]
-        of  = ds[evar.ID].attrib["add_offset"]
-        mv  = ds[evar.ID].attrib["missing_value"]
-        fv  = ds[evar.ID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhr),:,:,:)
-        int2real!(
-            view(tmpdata,:,:,(1:nhr).+buffer_time), view(tmpload,:,:,1:nhr),
-            scale=sc, offset=of, mvalue=mv, fvalue=fv
-        )
+        NCDatasets.load!(ds[evar.ID].var,view(tmpdata,:,:,(1:nhr).+buffer_time),:,:,:)
         close(ds)
 
         if temporal
 
-            nhb = daysinmonth(dt-Month(1)) * 24
             ds  = read(e5ds,evar,ereg,dt-Month(1))
-            sc  = ds[evar.ID].attrib["scale_factor"]
-            of  = ds[evar.ID].attrib["add_offset"]
-            mv  = ds[evar.ID].attrib["missing_value"]
-            fv  = ds[evar.ID].attrib["_FillValue"]
-            NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhb),:,:,:)
-            int2real!(
-                view(tmpdata,:,:,(1:buffer_time)),
-                view(tmpload,:,:,(nhb+1-buffer_time):nhb),
-                scale=sc, offset=of, mvalue=mv, fvalue=fv
-            )
+            NCDatasets.load!(ds[evar.ID].var,tmpdata,:,:,(1:buffer_time),:,:,:)
             close(ds)
 
             flush(stderr)
 
-            nhe = daysinmonth(dt+Month(1)) * 24
             ds  = read(e5ds,evar,ereg,dt+Month(1))
-            sc  = ds[evar.ID].attrib["scale_factor"]
-            of  = ds[evar.ID].attrib["add_offset"]
-            mv  = ds[evar.ID].attrib["missing_value"]
-            fv  = ds[evar.ID].attrib["_FillValue"]
-            NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhe),:,:,:)
-            int2real!(
-                view(tmpdata,:,:,(1:buffer_time).+(nhr+buffer_time)),
-                view(tmpload,:,:,1:buffer_time),
-                scale=sc, offset=of, mvalue=mv, fvalue=fv
+            NCDatasets.load!(
+                ds[evar.ID].var,
+                view(tmpdata,:,:,(1:buffer_time).+(nhr+buffer_time)),:,:,:
             )
             close(ds)
 
@@ -271,11 +245,10 @@ function smoothing(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
-    tmpload  = zeros(Int16,nlon,nlat,ndt)
-    tmpdata  = zeros(nlon,nlat,ndt+buffer_time*2)
-    shftlon  = zeros(nlon,nlat,(2*buffer_lon+1))
-    shftlat  = zeros(nlon,nlat,(2*buffer_lat+1))
-    smthdata = zeros(nlon,nlat,ndt)
+    tmpdata  = zeros(Float32,nlon,nlat,ndt+buffer_time*2)
+    shftlon  = zeros(Float32,nlon,nlat,(2*buffer_lon+1))
+    shftlat  = zeros(Float32,nlon,nlat,(2*buffer_lat+1))
+    smthdata = zeros(Float32,nlon,nlat,ndt)
     nanlat   = zeros(Bool,(2*buffer_lat+1))
     nanlon   = zeros(Bool,(2*buffer_lon+1))
     smthii   = zeros(1+buffer_time*2)
@@ -286,47 +259,23 @@ function smoothing(
 
         ndy = daysinmonth(dt)
         ds  = read(e5ds,evar,ereg,dt)
-        sc  = ds[evar.ID].attrib["scale_factor"]
-        of  = ds[evar.ID].attrib["add_offset"]
-        mv  = ds[evar.ID].attrib["missing_value"]
-        fv  = ds[evar.ID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:ndy),:,:,:)
-        int2real!(
-            view(tmpdata,:,:,(1:ndy).+buffer_time), view(tmpload,:,:,1:ndy),
-            scale=sc, offset=of, mvalue=mv, fvalue=fv
-        )
+        NCDatasets.load!(ds[evar.ID].var,view(tmpdata,:,:,(1:ndy).+buffer_time),:,:,:)
         close(ds)
 
         flush(stderr)
 
         if temporal
             
-            ndb = daysinmonth(dt-Month(1))
             ds  = read(e5ds,evar,ereg,dt-Month(1))
-            sc  = ds[evar.ID].attrib["scale_factor"]
-            of  = ds[evar.ID].attrib["add_offset"]
-            mv  = ds[evar.ID].attrib["missing_value"]
-            fv  = ds[evar.ID].attrib["_FillValue"]
-            NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:ndb),:,:,:)
-            int2real!(
-                view(tmpdata,:,:,(1:buffer_time)), view(tmpload,:,:,(ndb+1-buffer_time):ndb),
-                scale=sc, offset=of, mvalue=mv, fvalue=fv
-            )
+            NCDatasets.load!(ds[evar.ID].var,view(tmpdata,:,:,(1:buffer_time)),:,:,:)
             close(ds)
 
             flush(stderr)
 
-            nde = daysinmonth(dt+Month(1))
             ds  = read(e5ds,evar,ereg,dt+Month(1))
-            sc  = ds[evar.ID].attrib["scale_factor"]
-            of  = ds[evar.ID].attrib["add_offset"]
-            mv  = ds[evar.ID].attrib["missing_value"]
-            fv  = ds[evar.ID].attrib["_FillValue"]
-            NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nde),:,:,:)
-            int2real!(
-                view(tmpdata,:,:,(1:buffer_time).+(ndy+buffer_time)),
-                view(tmpload,:,:,1:buffer_time),
-                scale=sc, offset=of, mvalue=mv, fvalue=fv
+            NCDatasets.load!(
+                ds[evar.ID].var,
+                view(tmpdata,:,:,(1:buffer_time).+(ndy+buffer_time)),:,:,:
             )
             close(ds)
 
@@ -459,10 +408,9 @@ function smoothing(
 
     @info "$(modulelog()) - Preallocating data arrays for the analysis of data in the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) Region ..."
 
-    tmpload  = zeros(Int16,nlon,nlat,ndt)
-    smthdata = zeros(nlon,nlat,ndt)
-    shftlon  = zeros(nlon,nlat,(2*buffer_lon+1))
-    shftlat  = zeros(nlon,nlat,(2*buffer_lat+1))
+    smthdata = zeros(Float32,nlon,nlat,ndt)
+    shftlon  = zeros(Float32,nlon,nlat,(2*buffer_lon+1))
+    shftlat  = zeros(Float32,nlon,nlat,(2*buffer_lat+1))
     nanlat   = zeros(Bool,(2*buffer_lat+1))
     nanlon   = zeros(Bool,(2*buffer_lon+1))
 
@@ -471,12 +419,7 @@ function smoothing(
     for dt in e5ds.start : Month(1) : e5ds.stop
 
         ds  = read(e5ds,evar,ereg,dt)
-        sc  = ds[evar.ID].attrib["scale_factor"]
-        of  = ds[evar.ID].attrib["add_offset"]
-        mv  = ds[evar.ID].attrib["missing_value"]
-        fv  = ds[evar.ID].attrib["_FillValue"]
-        NCDatasets.load!(ds[evar.ID].var,tmpload,:,:,:)
-        int2real!(smthdata,tmpload,scale=sc,offset=of,mvalue=mv,fvalue=fv)
+        NCDatasets.load!(ds[evar.ID].var,smthdata,:,:,:)
         close(ds)
 
         flush(stderr)

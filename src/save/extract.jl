@@ -1,5 +1,5 @@
 function save(
-    data :: AbstractArray{Int16,3},
+    data :: AbstractArray{Float32,3},
     dt   :: Date,
     e5ds :: ERA5Hourly,
     evar :: ERA5Variable,
@@ -36,7 +36,7 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = save_definevar!(ds,evar,scale,offset)
+    ncvar = save_definevar!(ds,evar)
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
@@ -50,7 +50,7 @@ function save(
 end
 
 function save(
-    data :: AbstractArray{Int16,3},
+    data :: AbstractArray{Float32,3},
     dt   :: Date,
     e5ds :: ERA5Daily,
     evar :: ERA5Variable,
@@ -87,7 +87,7 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = save_definevar!(ds,evar,scale,offset)
+    ncvar = save_definevar!(ds,evar)
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
@@ -101,7 +101,7 @@ function save(
 end
 
 function save(
-    data :: AbstractArray{Int16,3},
+    data :: AbstractArray{Float32,3},
     dt   :: Date,
     e5ds :: ERA5Monthly,
     evar :: ERA5Variable,
@@ -133,7 +133,7 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = save_definevar!(ds,evar,scale,offset)
+    ncvar = save_definevar!(ds,evar)
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat

@@ -46,22 +46,10 @@ function getLandSea(
     ereg :: ERA5Region = ERA5Region("GLB");
     save :: Bool = true,
     returnlsd :: Bool = true,
-    smooth    :: Bool = false,
-    σlon :: Int = 0,
-    σlat :: Int = 0,
-    iterations :: Int = 100,
-    FT = Float64
+    FT = Float32
 )
 
-    if smooth && (iszero(σlon) && iszero(σlat))
-        error("$(modulelog()) - Incomplete specification of smoothing parameters, at least one of σlon and σlat must be nonzero")
-    end
-
-    if !smooth
-        fid = "emask-$(ereg.string).nc"
-    else
-        fid = "emask-$(ereg.string)-smooth_$(σlon)x$(σlat).nc"
-    end
+    fid = "emask-$(ereg.string).nc"
     lsmfnc = joinpath(e5ds.emask,fid)
 
     if !isfile(lsmfnc)
@@ -77,34 +65,23 @@ function getLandSea(
         gds  = NCDataset(glbfnc)
         glon = gds["longitude"][:]
         glat = gds["latitude"][:]
-        glsm = nomissing(gds["lsm"][:,:,1],NaN)
-        goro = nomissing(gds["z"][:,:,1],NaN)
+        glsm = nomissing(gds["lsm"][:,:,1])
+        goro = nomissing(gds["z"][:,:,1])
         close(gds)
 
-        if smooth
-            smooth!(glsm,σlon=σlon,σlat=σlat,iterations=iterations)
-        end
-
         ggrd = RegionGrid(ereg,glon,glat)
-        nlon = length(ggrd.ilon)
-        nlat = length(ggrd.ilat)
 
         @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region from the Global ERA5 Land-Sea mask dataset ..."
-        roro = extractGrid(goro,ggrd)
-        rlsm = extractGrid(glsm,ggrd)
-
-        if typeof(ggrd) <: PolyGrid
-              mask = ggrd.mask; mask[isnan.(mask)] .= 0
-        else; mask = ones(Int,nlon,nlat)
-        end
+        roro = extract(goro,ggrd)
+        rlsm = extract(glsm,ggrd)
 
         if save
             saveLandSea(
-                e5ds, ereg, ggrd.lon, ggrd.lat, rlsm, roro, Int16.(mask),
+                e5ds, ereg, ggrd.lon, ggrd.lat, rlsm, roro, ggrd.mask,
                 smooth, σlon, σlat
             )
         else
-            return LandSea{FT}(ggrd.lon,ggrd.lat,rlsm,roro/9.80665,Int16.(mask))
+            return LandSeaTopo{FT,FT}(ggrd.lon,ggrd.lat,rlsm,roro/9.80665)
         end
 
     end
@@ -114,14 +91,13 @@ function getLandSea(
         lds = NCDataset(lsmfnc)
         lon = lds["longitude"][:]
         lat = lds["latitude"][:]
-        lsm = nomissing(lds["lsm"][:,:], NaN)
-        oro = nomissing(lds["z"][:,:],   NaN)
-        msk = lds["mask"][:,:]
+        lsm = nomissing(lds["lsm"][:,:])
+        oro = nomissing(lds["z"][:,:])
         close(lds)
 
         @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region ..."
 
-        return LandSea{FT}(lon,lat,lsm,oro/9.80665,msk)
+        return LandSeaTopo{FT,FT}(lon,lat,lsm,oro/9.80665)
 
     else
 
@@ -152,8 +128,8 @@ function downloadLandSea(
     tds = NCDataset(tmpfnc)
     lon = tds["longitude"][:]; nlon = length(lon)
     lat = tds["latitude"][:];  nlat = length(lat)
-    lsm = tds["lsm"][:,:,1] * 1
-    oro = tds["z"][:,:,1] * 1
+    lsm = tds["lsm"][:,:,1]
+    oro = tds["z"][:,:,1]
     msk = ones(Int16,nlon,nlat)
     close(tds)
 
@@ -206,13 +182,13 @@ function saveLandSea(
         "long_name" => "latitude",
     ))
 
-    nclsm = defVar(ds,"lsm",Float64,("longitude","latitude",),attrib = Dict(
+    nclsm = defVar(ds,"lsm",Float32,("longitude","latitude",),attrib = Dict(
         "long_name"     => "land_sea_mask",
         "full_name"     => "Land-Sea Mask",
         "units"         => "0-1",
     ))
 
-    ncoro = defVar(ds,"z",Float64,("longitude","latitude",),attrib = Dict(
+    ncoro = defVar(ds,"z",Float32,("longitude","latitude",),attrib = Dict(
         "long_name"     => "geopotential",
         "full_name"     => "Geopotential",
         "units"         => "m**2 s**-2",
@@ -232,16 +208,4 @@ function saveLandSea(
 
     close(ds)
 
-end
-
-function show(io::IO, lsd::LandSea)
-	nlon = length(lsd.lon)
-	nlat = length(lsd.lat)
-    print(
-		io,
-		"The Land-Sea Mask Dataset has the following properties:\n",
-		"    Longitude Points    (lon) : ", lsd.lon,  '\n',
-		"    Latitude Points     (lat) : ", lsd.lat,  '\n',
-		"    Region Size (nlon * nlat) : $(nlon) lon points x $(nlat) lat points\n",
-	)
 end
