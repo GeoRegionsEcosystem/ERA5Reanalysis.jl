@@ -197,19 +197,19 @@ function save_timeseries(
     nctot = defVar(ds,"$(evar.ID)_domain",Float32,("time",),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
-        "units"         => evar.units,
+        "units"         => evar.unitstring(evar.units),
     ))
 
     nclnd = defVar(ds,"$(evar.ID)_land",Float32,("time",),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
-        "units"         => evar.units,
+        "units"         => evar.unitstring(evar.units),
     ))
 
     ncocn = defVar(ds,"$(evar.ID)_ocean",Float32,("time",),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
-        "units"         => evar.units,
+        "units"         => evar.unitstring(evar.units),
     ))
     
     nctime[:] = collect(1:nhr) .- 1

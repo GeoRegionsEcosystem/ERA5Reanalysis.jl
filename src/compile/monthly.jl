@@ -160,7 +160,7 @@ function save(
     attr_var = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
-        "units"         => evar.units,
+        "units"         => unitstring(evar.units),
         "_FillValue"    => Int16(-32767),
         "missing_value" => Int16(-32767),
     )
@@ -242,7 +242,7 @@ function save(
     attr_var = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
-        "units"         => evar.units,
+        "units"         => unitstring(evar.units),
         "_FillValue"    => Int16(-32767),
         "missing_value" => Int16(-32767),
     )
