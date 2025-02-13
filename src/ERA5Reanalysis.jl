@@ -15,6 +15,7 @@ using Statistics
 using Unitful
 
 import Base: show, read, split, download, rm, ==, !==, isequal
+import GeoRegions: ==, !==, isequal
 import RegionGrids: RegionGrid, extract
 import LandSea: getLandSea
 
