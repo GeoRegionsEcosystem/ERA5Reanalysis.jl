@@ -4,7 +4,7 @@ function save(
     e5ds :: ERA5Monthly,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
-    lsd  :: LandSea;
+    lsd  :: LandSeaTopo;
     extract :: Bool = false,
     smooth  :: Bool = false,
     extractnc :: AbstractString = "",

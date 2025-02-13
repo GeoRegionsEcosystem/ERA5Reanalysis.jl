@@ -160,7 +160,7 @@ function save(
     e5ds :: ERA5Hourly,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
-    lsd  :: LandSea
+    lsd  :: LandSeaTopo
 )
 
     @info "$(modulelog()) - Saving analyzed $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) for $(year(date)) ..."

@@ -4,9 +4,7 @@ function save(
     e5ds :: ERA5Hourly,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
-    lsd  :: LandSea,
-    scale  :: Real,
-    offset :: Real;
+    lsd  :: LandSeaTopo;
     extract :: Bool = false,
     smooth  :: Bool = false,
     extractnc  :: AbstractString = "",
@@ -55,9 +53,7 @@ function save(
     e5ds :: ERA5Daily,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
-    lsd  :: LandSea,
-    scale  :: Real,
-    offset :: Real;
+    lsd  :: LandSeaTopo;
     extract :: Bool = false,
     smooth  :: Bool = false,
     extractnc :: AbstractString = "",
@@ -106,9 +102,7 @@ function save(
     e5ds :: ERA5Monthly,
     evar :: ERA5Variable,
     ereg :: ERA5Region,
-    lsd  :: LandSea,
-    scale  :: Real,
-    offset :: Real;
+    lsd  :: LandSeaTopo;
     extract :: Bool = false,
     smooth  :: Bool = false,
     extractnc :: AbstractString = "",

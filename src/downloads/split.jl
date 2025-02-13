@@ -2,7 +2,7 @@ function split(
     e5ds :: ERA5CDStore,
     evar :: PressureVariable,
     ereg :: ERA5Region,
-    lsd  :: LandSea,
+    lsd  :: LandSeaTopo,
     dt   :: Date,
     pvec :: Vector{Int},
     fnc  :: AbstractString,
@@ -29,7 +29,7 @@ function split(
     e5ds :: ERA5CDStore,
     evar :: Vector{SingleVariable{ST}},
     ereg :: ERA5Region,
-    lsd  :: LandSea,
+    lsd  :: LandSeaTopo,
     dt   :: Date,
     fnc  :: AbstractString,
     tmpd :: Array{Float32,3}

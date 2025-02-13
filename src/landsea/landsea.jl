@@ -1,17 +1,4 @@
 """
-    ERA5Reanalysis.LandSea <: GeoRegions.LandSeaTopo
-
-Object containing information on the Land Sea mask for ERA5, a subType extension of the `GeoRegions.LandSeaTopo` superType
-"""
-struct LandSea{FT<:Real} <: GeoRegions.LandSeaTopo
-    lon  :: Vector{Float32}
-    lat  :: Vector{Float32}
-    lsm  :: Array{FT,2}
-    z    :: Array{FT,2}
-    mask :: Array{Int,2}
-end
-
-"""
     getLandSea(
         e5ds :: ERA5Dataset,
         ereg :: ERA5Region = ERA5Region("GLB");
