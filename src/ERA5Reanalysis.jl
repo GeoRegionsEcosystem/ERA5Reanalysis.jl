@@ -14,7 +14,7 @@ using RegionGrids
 using Statistics
 using Unitful
 
-import Base: show, read, split, download, rm
+import Base: show, read, split, download, rm, ==, !==, isequal
 import RegionGrids: RegionGrid, extract
 import LandSea: getLandSea
 
