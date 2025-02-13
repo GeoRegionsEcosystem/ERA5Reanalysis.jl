@@ -139,7 +139,11 @@ function PressureVariable(
     end
 
     if save
-        open(joinpath(path,"pressurecustom.txt"),"a") do io
+        varfile = joinpath(path,"pressurecustom.txt")
+        if !isfile(varfile)
+            cp(joinpath(eradir,"pressurecustom.txt"),varfile)
+        end
+        open(varfile,"a") do io
             write(io,"$ID,$long,$name,$units\n")
         end
     end

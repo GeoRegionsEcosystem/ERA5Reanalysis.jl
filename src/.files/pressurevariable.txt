@@ -1,5 +1,5 @@
 # PressureVariable
-# List of ERA5 Pressue-Level Variables (v0.1)
+# List of ERA5 Pressure-Level Variables available in the CDS
 # (1)ID, (2)era5, (3)Full, (4)Units
 
 u,u_component_of_wind,Zonal Wind,m s**-1

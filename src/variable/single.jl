@@ -115,7 +115,11 @@ function SingleVariable(
     end
 
     if save
-        open(joinpath(path,"singlecustom.txt"),"a") do io
+        varfile = joinpath(path,"singlecustom.txt")
+        if !isfile(varfile)
+            cp(joinpath(eradir,"singlecustom.txt"),varfile)
+        end
+        open(varfile,"a") do io
             write(io,"$ID,$long,$name,$units\n")
         end
     end

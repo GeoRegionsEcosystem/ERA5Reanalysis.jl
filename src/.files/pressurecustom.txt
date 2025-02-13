@@ -1,3 +1,4 @@
 # PressureCustom
-# List of User-Defined Custom Pressue-Level Variables
+# List of User-Defined Custom Pressure-Level Variables
 # (1)ID, (2)era5, (3)Full, (4)Units
+

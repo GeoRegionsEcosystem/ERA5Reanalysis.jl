@@ -1,3 +1,4 @@
 # SingleCustom
-# List of User-Defined Custom Single-Level Variables (v0.1)
+# List of User-Defined Custom Single-Level Variables
 # (1)ID, (2)era5, (3)Full, (4)Units
+

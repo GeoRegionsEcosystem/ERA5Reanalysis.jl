@@ -1,5 +1,5 @@
 # SingleVariable
-# List of ERA5 Single-Level Variables (v0.1)
+# List of ERA5 Single-Level Variables available in the CDS
 # (1)ID, (2)era5, (3)Full, (4)Units
 
 alnid,near_ir_albedo_for_diffuse_radiation,Near Ir Albedo For Diffuse Radiation,(0 - 1)
