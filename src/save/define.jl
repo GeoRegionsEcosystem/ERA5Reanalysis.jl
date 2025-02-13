@@ -63,7 +63,7 @@ function save_definevar!(
     ncvar = defVar(ds,evar.ID,Float32,("longitude","latitude","time"),attrib = Dict(
         "long_name"     => evar.long,
         "full_name"     => evar.name,
-        "units"         => unitstring(evar.units),
+        "units"         => unit2string(evar.units),
     ))
 
     return ncvar

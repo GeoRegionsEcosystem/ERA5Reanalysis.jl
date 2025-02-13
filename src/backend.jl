@@ -56,4 +56,4 @@ function unit2string(eunit :: Unitful.Units)
 
 end
 
-string2unit(ustr :: String) = uparse(replace(replace(ustr," "=>"*"),"**"=>"^"))
+string2unit(ustr :: AbstractString) = uparse(replace(replace(ustr," "=>"*"),"**"=>"^"))
