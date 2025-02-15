@@ -53,6 +53,6 @@ makedocs(;
 )
 
 deploydocs(
-    repo = "github.com/natgeo-wong/ERA5Reanalysis.jl.git",
+    repo = "github.com/GeoRegionsEcosystem/ERA5Reanalysis.jl.git",
     devbranch = "main"
 )
