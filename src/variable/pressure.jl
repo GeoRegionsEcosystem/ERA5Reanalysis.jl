@@ -17,7 +17,7 @@ struct PressureVariable{ST<:AbstractString} <: PressureLevel
     ID      :: ST
     long    :: ST
     name    :: ST
-    units   :: Unitful.Units
+    units   :: ST
     hPa     :: Int
     path    :: ST
     dataset :: ST
@@ -32,7 +32,7 @@ struct PressureCustom{ST<:AbstractString} <: PressureLevel
     ID      :: ST
     long    :: ST
     name    :: ST
-    units   :: Unitful.Units
+    units   :: ST
     hPa     :: Int
     path    :: ST
     dataset :: ST
@@ -76,20 +76,20 @@ function PressureVariable(
     fname = joinpath(plist[ind],flist[ind])
     vlist = listera5variables(fname); ind = findall(ID.==vlist)[1]
 
-    ID,long,name,ustr = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
+    ID,long,name,units = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
 
     hPa = checkPressure(hPa,throw=throw)
 
     if vtype == "pressurevariable"
         if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the PressureVariable type" end
         return PressureVariable{ST}(
-            ID,long,name * " ($(hPa) hPa)",string2unit(ustr),hPa,fname,
+            ID,long,name * " ($(hPa) hPa)",units,hPa,fname,
             "reanalysis-era5-pressure-levels"
         )
     else
         if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the PressureCustom type" end
         return PressureCustom{ST}(
-            ID,long,name * " ($(hPa) hPa)",string2unit(ustr),hPa,fname,
+            ID,long,name * " ($(hPa) hPa)",units,hPa,fname,
             "reanalysis-era5-pressure-levels"
         )
     end
@@ -151,7 +151,7 @@ function PressureVariable(
     hPa = checkPressure(hPa,throw=throw)
 
     return PressureCustom{ST}(
-        ID,long,name,string2unit(units),hPa,joinpath(path,"pressurecustom.txt"),
+        ID,long,name,units,hPa,joinpath(path,"pressurecustom.txt"),
         "reanalysis-era5-pressure-levels"
     )
 

@@ -13,6 +13,7 @@ using PrettyTables
 using RegionGrids
 using Statistics
 using Unitful
+using UnitfulParsableString
 
 import Base: show, read, split, download, rm, ==, !==, isequal
 import GeoRegions: ==, !==, isequal

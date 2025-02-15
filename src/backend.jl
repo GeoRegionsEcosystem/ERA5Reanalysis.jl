@@ -49,11 +49,28 @@ ntimesteps(e5ds :: ERA5Monthly) = if e5ds.hours; return 12 * 24; else; return 12
 function unit2string(eunit :: Unitful.Units)
 
     # UnitfulParsableString.slashnotation(false)
-    str = replace(replace(string(eunit),"*"=>" "),"^"=>"**")
+    str = replace(replace(replace(replace(
+        string(eunit),
+        "*"=>" "),"^"=>"**"),"percent"=>"%"),"°"=>"degrees")
     # UnitfulParsableString.slashnotation()
+
+    str = str == "" ? "(0 - 1)" : nothing
 
     return str
 
 end
 
-string2unit(ustr :: AbstractString) = uparse(replace(replace(ustr," "=>"*"),"**"=>"^"))
+function string2unit(ustr :: AbstractString)
+    
+    units = ustr
+    try
+        units = uparse(replace(replace(replace(replace(replace(replace(
+            ustr,
+            "(0 - 1)"=>"NoUnits"),"**"=>"^")," "=>"*"),"%"=>"percent"),"radians"=>"rad"),"degrees"=>"°"))
+    catch
+        units = String(ustr)
+    end
+    
+    return units
+
+end

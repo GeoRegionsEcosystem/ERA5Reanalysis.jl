@@ -39,8 +39,6 @@ function tableERA5Variables(;
     if isempty(fmat)
         fmat  = Array{String,2}(undef,1,5)
         fmat .= "N/A"
-    else
-        fmat[:,4] = string2unit.(fmat[:,4])
     end
 
     if !crop
@@ -64,13 +62,14 @@ end
 function tableSingles(;
     path :: AbstractString = homedir(),
     predefined :: Bool = true,
-    custom     :: Bool = false
+    custom     :: Bool = false,
+    crop       :: Bool = false
 )
 
     fmat = []
         
     if custom
-        fid  = joinpath(path,"SingleCustom.txt")
+        fid  = joinpath(path,"singlecustom.txt")
         if isfile(fid)
             vmat = readdlm(fid,',',comments=true,comment_char='#')
             nvar = size(vmat,1); ff = fill("SingleCustom",nvar)
@@ -78,14 +77,14 @@ function tableSingles(;
             fmat = cat(fmat,vmat,dims=1)
         else
             if warn
-                @warn "$(modulelog()) - The custom file does \"SingleCustom.txt\" does not exist in $path, use `setupERA5Variables()` to copy templates and empty custom lists to $path."
+                @warn "$(modulelog()) - The custom file does \"singlecustom.txt\" does not exist in $path, use `setupERA5Variables()` to copy templates and empty custom lists to $path."
             end
         end
     end
 
     if predefined
         vmat = readdlm(
-            joinpath(eradir,"SingleVariable.txt"),
+            joinpath(eradir,"singlevariable.txt"),
             ',',comments=true,comment_char='#'
         )
         nvar = size(vmat,1); ff = fill("SingleVariable",nvar)
@@ -98,8 +97,6 @@ function tableSingles(;
     if isempty(fmat)
         fmat  = Array{String,2}(undef,1,5)
         fmat .= "N/A"
-    else
-        fmat[:,4] = string2unit.(fmat[:,4])
     end
 
     if !crop
@@ -120,12 +117,17 @@ function tableSingles(;
 
 end
 
-function tablePressures(;custom::Bool=false)
+function tablePressures(;
+    path :: AbstractString = homedir(),
+    predefined :: Bool = true,
+    custom     :: Bool = false,
+    crop       :: Bool = false
+)
 
     fmat = []
         
     if custom
-        fid  = joinpath(path,"PressureCustom.txt")
+        fid  = joinpath(path,"pressurecustom.txt")
         if isfile(fid)
             vmat = readdlm(fid,',',comments=true,comment_char='#')
             nvar = size(vmat,1); ff = fill("PressureCustom",nvar)
@@ -133,17 +135,17 @@ function tablePressures(;custom::Bool=false)
             fmat = cat(fmat,vmat,dims=1)
         else
             if warn
-                @warn "$(modulelog()) - The custom file does \"PressureCustom.txt\" does not exist in $path, use `setupERA5Variables()` to copy templates and empty custom lists to $path."
+                @warn "$(modulelog()) - The custom file does \"pressurecustom.txt\" does not exist in $path, use `setupERA5Variables()` to copy templates and empty custom lists to $path."
             end
         end
     end
 
     if predefined
         vmat = readdlm(
-            joinpath(eradir,"PressureVariable.txt"),
+            joinpath(eradir,"pressurevariable.txt"),
             ',',comments=true,comment_char='#'
         )
-        nvar = size(vmat,1); ff = fill("PressureVariable",nvar)
+        nvar = size(vmat,1); ff = fill("pressurevariable",nvar)
         vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2]],dims=2)
         fmat = cat(fmat,vmat,dims=1)
     end
@@ -153,8 +155,6 @@ function tablePressures(;custom::Bool=false)
     if isempty(fmat)
         fmat  = Array{String,2}(undef,1,5)
         fmat .= "N/A"
-    else
-        fmat[:,4] = string2unit.(fmat[:,4])
     end
 
     if !crop
