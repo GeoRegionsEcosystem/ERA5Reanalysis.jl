@@ -14,7 +14,7 @@ function extract(
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion of \"$(ereg.ID)\", \"$(ereg.geo.parID)\""
 
-    preg = ERA5Region(GeoRegion(ereg.geo.parID))
+    preg = ERA5Region(GeoRegion(ereg.geo.parID),resolution=ereg.resolution)
     plsd = getLandSea(e5ds,preg);
     rlsd = getLandSea(e5ds,ereg);
     plon = plsd.lon; nplon = length(plon)
