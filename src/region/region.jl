@@ -124,30 +124,19 @@ end
 
 function show(io::IO, ereg::ERA5Region)
     geo = ereg.geo
+    shape = geo.geometry.shape
 
-    if typeof(geo) <: PolyRegion
-        print(
-            io,
-            "The ERA5Region wrapper for the \"$(ereg.ID)\" GeoRegion has the following properties:\n",
-            "    Region ID          (ID) : ", ereg.ID, '\n',
-            "    Name         (geo.name) : ", ereg.geo.name,  '\n',
-            "    Resolution (resolution) : ", ereg.resolution,  '\n',
-            "    Folder ID      (string) : ", ereg.string, '\n',
-            "    Bounds  (geo.[N,S,E,W]) : ", geo.N, ", ", geo.S, ", ", geo.E, ", ", geo.W, '\n',
-            "    Shape       (geo.shape) : ", geo.shape, '\n',
-            "        (geo.[isglb,is360]) : ",(ereg.isglb,ereg.is360),"\n",
-        )
-    else
-        print(
-            io,
-            "The ERA5Region wrapper for the \"$(ereg.ID)\" GeoRegion has the following properties:\n",
-            "    Region ID          (ID) : ", ereg.ID, '\n',
-            "    Name         (geo.name) : ", ereg.geo.name,  '\n',
-            "    Resolution (resolution) : ", ereg.resolution,  '\n',
-            "    Folder ID      (string) : ", ereg.string, '\n',
-            "    Bounds  (geo.[N,S,E,W]) : ", geo.N, ", ", geo.S, ", ", geo.E, ", ", geo.W, '\n',
-            "        (geo.[isglb,is360]) : ",(ereg.isglb,ereg.is360),"\n",
-        )
-    end
+    print(
+        io,
+        "The ERA5Region wrapper for the \"$(ereg.ID)\" GeoRegion has the following properties:\n",
+        "    Region ID             (ID) : ", ereg.ID, '\n',
+        "    Name            (geo.name) : ", geo.name,  '\n',
+        "    Resolution    (resolution) : ", ereg.resolution,  '\n',
+        "    Folder ID         (string) : ", ereg.string, '\n',
+        "    Bounds     (geo.[N,S,E,W]) : ", geo.N, ", ", geo.S, ", ", geo.E, ", ", geo.W, '\n',
+		"    Rotation           (geo.θ) : ", geo.θ, 	'\n',
+		"    File Path       (geo.path) : ", geo.path, '\n',
+        "    Shape (geo.geometry.shape) : ", typeof(shape), "($(length(shape)))", '\n',
+    )
 
 end
