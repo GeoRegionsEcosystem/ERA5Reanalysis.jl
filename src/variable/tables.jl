@@ -63,7 +63,8 @@ function tableSingles(;
     path :: AbstractString = homedir(),
     predefined :: Bool = true,
     custom     :: Bool = false,
-    crop       :: Bool = false
+    warn :: Bool = true,
+    crop :: Bool = false
 )
 
     fmat = []
@@ -121,7 +122,8 @@ function tablePressures(;
     path :: AbstractString = homedir(),
     predefined :: Bool = true,
     custom     :: Bool = false,
-    crop       :: Bool = false
+    warn :: Bool = true,
+    crop :: Bool = false
 )
 
     fmat = []
