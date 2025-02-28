@@ -41,12 +41,12 @@ end
 
 function save_definelonlat!(ds::NCDataset)
 
-    nclon = defVar(ds,"longitude",Float32,("longitude",),attrib = Dict(
+    nclon = defVar(ds,"longitude",Float64,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
         "long_name" => "longitude",
     ))
 
-    nclat = defVar(ds,"latitude",Float32,("latitude",),attrib = Dict(
+    nclat = defVar(ds,"latitude",Float64,("latitude",),attrib = Dict(
         "units"     => "degrees_north",
         "long_name" => "latitude",
     ))

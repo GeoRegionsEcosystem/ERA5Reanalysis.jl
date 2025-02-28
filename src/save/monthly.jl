@@ -19,15 +19,13 @@ function save(
         extractnc,smoothlon,smoothlat
     )
 
-    scale,offset = ncoffsetscale(data)
-
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
-    ds.dim["time"] = ntimesteps(e5ds)
+    ds.dim["valid_time"] = ntimesteps(e5ds)
 
     nclon,nclat = save_definelonlat!(ds)
 
-    nctime = defVar(ds,"time",Int32,("time",),attrib = Dict(
+    nctime = defVar(ds,"valid_time",Int64,("valid_time",),attrib = Dict(
         "units"     => "hours since $(dt) 00:00:00.0",
         "long_name" => "time",
         "calendar"  => "gregorian",
@@ -73,7 +71,7 @@ function save(
 
     nclon,nclat = save_definelonlat!(ds)
 
-    nctime = defVar(ds,"valid_time",Int32,("valid_time",),attrib = Dict(
+    nctime = defVar(ds,"valid_time",Int64,("valid_time",),attrib = Dict(
         "units"     => "hours since $(dt) 00:00:00.0",
         "long_name" => "time",
         "calendar"  => "gregorian",

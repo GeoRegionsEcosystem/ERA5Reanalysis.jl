@@ -24,11 +24,11 @@ function save(
 
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
-    ds.dim["time"] = nhr
+    ds.dim["valid_time"] = nhr
 
     nclon,nclat = save_definelonlat!(ds)
 
-    nctime = defVar(ds,"time",Int32,("time",),attrib = Dict(
+    nctime = defVar(ds,"valid_time",Int64,("valid_time",),attrib = Dict(
         "units"     => "hours since $(dt) 00:00:00.0",
         "long_name" => "time",
         "calendar"  => "gregorian",
@@ -76,7 +76,7 @@ function save(
 
     nclon,nclat = save_definelonlat!(ds)
 
-    nctime = defVar(ds,"valid_time",Int32,("valid_time",),attrib = Dict(
+    nctime = defVar(ds,"valid_time",Int64,("valid_time",),attrib = Dict(
         "units"     => "hours since $(dt) 00:00:00.0",
         "long_name" => "time",
         "calendar"  => "gregorian",

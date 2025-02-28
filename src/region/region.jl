@@ -48,7 +48,7 @@ function ERA5Region(
     @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(geo.ID)\""
     resolution = regionstep(geo.ID,resolution)
     if geo.ID == "GLB"; isglb = true; else; isglb = false end
-    if mod(geo.bound[3],360) == mod(geo.bound[4],360); is360 = true; else; is360 = false end
+    if mod(geo.E,360) == mod(geo.W,360); is360 = true; else; is360 = false end
 
     return ERA5Region{ST,FT}(
         geo, geo.ID, resolution,
@@ -124,30 +124,19 @@ end
 
 function show(io::IO, ereg::ERA5Region)
     geo = ereg.geo
+    shape = geo.geometry.shape
 
-    if typeof(geo) <: PolyRegion
-        print(
-            io,
-            "The ERA5Region wrapper for the \"$(ereg.ID)\" GeoRegion has the following properties:\n",
-            "    Region ID          (ID) : ", ereg.ID, '\n',
-            "    Name         (geo.name) : ", ereg.geo.name,  '\n',
-            "    Resolution (resolution) : ", ereg.resolution,  '\n',
-            "    Folder ID      (string) : ", ereg.string, '\n',
-            "    Bounds  (geo.[N,S,E,W]) : ", geo.bound, '\n',
-            "    Shape       (geo.shape) : ", geo.shape, '\n',
-            "        (geo.[isglb,is360]) : ",(ereg.isglb,ereg.is360),"\n",
-        )
-    else
-        print(
-            io,
-            "The ERA5Region wrapper for the \"$(ereg.ID)\" GeoRegion has the following properties:\n",
-            "    Region ID          (ID) : ", ereg.ID, '\n',
-            "    Name         (geo.name) : ", ereg.geo.name,  '\n',
-            "    Resolution (resolution) : ", ereg.resolution,  '\n',
-            "    Folder ID      (string) : ", ereg.string, '\n',
-            "    Bounds  (geo.[N,S,E,W]) : ", geo.bound, '\n',
-            "        (geo.[isglb,is360]) : ",(ereg.isglb,ereg.is360),"\n",
-        )
-    end
+    print(
+        io,
+        "The ERA5Region wrapper for the \"$(ereg.ID)\" GeoRegion has the following properties:\n",
+        "    Region ID             (ID) : ", ereg.ID, '\n',
+        "    Name            (geo.name) : ", geo.name,  '\n',
+        "    Resolution    (resolution) : ", ereg.resolution,  '\n',
+        "    Folder ID         (string) : ", ereg.string, '\n',
+        "    Bounds     (geo.[N,S,E,W]) : ", geo.N, ", ", geo.S, ", ", geo.E, ", ", geo.W, '\n',
+		"    Rotation           (geo.θ) : ", geo.θ, 	'\n',
+		"    File Path       (geo.path) : ", geo.path, '\n',
+        "    Shape (geo.geometry.shape) : ", typeof(shape), "($(length(shape)))", '\n',
+    )
 
 end
