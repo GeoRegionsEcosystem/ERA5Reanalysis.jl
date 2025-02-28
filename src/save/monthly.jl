@@ -19,8 +19,6 @@ function save(
         extractnc,smoothlon,smoothlat
     )
 
-    scale,offset = ncoffsetscale(data)
-
     ds.dim["longitude"] = length(lsd.lon)
     ds.dim["latitude"]  = length(lsd.lat)
     ds.dim["valid_time"] = ntimesteps(e5ds)
