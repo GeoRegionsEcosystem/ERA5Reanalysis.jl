@@ -27,17 +27,11 @@ function download(
     e5ds :: ERA5CDStore,
     evar :: SingleVariable,
     ereg :: ERA5Region;
-    ispy :: Bool = false,
     grib :: Bool = false,
     overwrite :: Bool = false
 )
 
-    downloadcheckereg(ereg)
-
-    if ispy
-          pythonprint(e5ds,evar,ereg)
-    else; cdsretrieve(e5ds,evar,ereg,grib,overwrite)
-    end
+    cdsretrieve(e5ds,evar,ereg,grib,overwrite)
 
 end
 
@@ -71,7 +65,6 @@ function download(
     overwrite :: Bool = false
 )
 
-    downloadcheckereg(ereg)
     cdsretrieve(e5ds,evar,ereg,overwrite)
 
 end
@@ -113,7 +106,6 @@ function download(
     e5ds :: ERA5CDStore,
     evar :: PressureVariable,
     ereg :: ERA5Region;
-    ispy :: Bool = false,
     pall :: Bool = false,
     ptop :: Int = 0,
     pbot :: Int = 0,
@@ -122,23 +114,17 @@ function download(
     overwrite :: Bool = false
 )
 
-    downloadcheckereg(ereg)
-
-    if ispy
-        pythonprint(e5ds,evar,ereg)
-    else
-        if pvec == [0] || iszero(evar.hPa)
-            pvec = downloadcheckplvl(pall,ptop,pbot)
-        end
-        if pall
-            if !grib
-                cdsretrieve(e5ds,evar,ereg,pvec,overwrite)
-            else
-                cdsretrievegrib(e5ds,evar,ereg,pvec,overwrite)
-            end
+    if pvec == [0] || iszero(evar.hPa)
+        pvec = downloadcheckplvl(pall,ptop,pbot)
+    end
+    if pall
+        if !grib
+            cdsretrieve(e5ds,evar,ereg,pvec,overwrite)
         else
-            cdsretrieve(e5ds,evar,ereg,grib,overwrite)
+            cdsretrievegrib(e5ds,evar,ereg,pvec,overwrite)
         end
+    else
+        cdsretrieve(e5ds,evar,ereg,grib,overwrite)
     end
 
 end
@@ -150,18 +136,6 @@ function downloadcheckhPa(
     if iszero(evar.hPa)
 
         error("$(modulelog()) - The PressureVariable Level is set to 0, so \"pall\" is set to `true` (i.e., we are downloading all pressure levels, or a range specified by the keyword arguments `ptop`, `pbot` and `pvec`).")
-
-    end
-
-end
-
-function downloadcheckereg(
-    ereg :: ERA5Region
-)
-
-    if !(typeof(ereg.geo) <: RectRegion)
-
-        error("$(modulelog()) - ERA5Reanalysis is not yet set up to download GeoRegions that are not RectRegions. Check back in a later update for more.")
 
     end
 
