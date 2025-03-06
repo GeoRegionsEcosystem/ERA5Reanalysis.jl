@@ -1,5 +1,5 @@
 function save(
-    data :: AbstractArray{<:Real,3},
+    data :: AbstractArray{Float32,3},
     dt   :: Date,
     e5ds :: ERA5Daily,
     evar :: ERA5Variable,
@@ -48,7 +48,7 @@ function save(
 end
 
 function save(
-    data :: AbstractArray{<:Real,3},
+    data :: AbstractArray{Float32,3},
     dt   :: Date,
     e5ds :: ERA5Daily,
     evar :: ERA5Variable,
