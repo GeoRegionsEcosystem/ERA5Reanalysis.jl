@@ -7,9 +7,10 @@ function save(
     lsd  :: LandSeaTopo;
     extract :: Bool = false,
     smooth  :: Bool = false,
-    extractnc :: AbstractString = "",
-    smoothlon :: Real = 0,
-    smoothlat :: Real = 0,
+    extractnc  :: AbstractString = "",
+    smoothlon  :: Real = 0,
+    smoothlat  :: Real = 0,
+    smoothtime :: Int = 0
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) for $(year(dt)) ..."
@@ -52,9 +53,10 @@ function save(
     ereg :: ERA5Region;
     extract :: Bool = false,
     smooth  :: Bool = false,
-    extractnc :: AbstractString = "",
-    smoothlon :: Real = 0,
-    smoothlat :: Real = 0,
+    extractnc  :: AbstractString = "",
+    smoothlon  :: Real = 0,
+    smoothlat  :: Real = 0,
+    smoothtime :: Int = 0,
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) for $(year(dt)) ..."
