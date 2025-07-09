@@ -60,10 +60,10 @@ Arguments
 """
 function download(
     e5ds :: ERA5CDStore,
-    evar :: Vector{SingleVariable},
+    evar :: Vector{SingleVariable{ST}},
     ereg :: ERA5Region;
     overwrite :: Bool = false
-)
+) where ST <: AbstractString
 
     cdsretrieve(e5ds,evar,ereg,overwrite)
 
