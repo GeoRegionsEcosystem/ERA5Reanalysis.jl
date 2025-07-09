@@ -182,7 +182,7 @@ function cdsretrieve(
     dtvec = cdsretrieve_dtvec(e5ds)
     ckeys = cdskey()
 
-    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.name)) $([evarii.lname for evarii in evar]) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
+    @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.name)) $([evarii.name for evarii in evar]) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
     lsd  = getLandSea(e5ds,ereg)
     nlon = length(lsd.lon)
@@ -199,7 +199,7 @@ function cdsretrieve(
             "product_type" => e5ds.ptype,
             "year"         => year(dtii),
             "month"        => cdsretrieve_month(dtii,e5ds),
-            "variable"     => [evarii.lname for evarii in evar],
+            "variable"     => [evarii.long for evarii in evar],
             "grid"         => [ereg.resolution, ereg.resolution],
             "time"         => cdsretrieve_time(e5ds),
             "format"       => "netcdf",
