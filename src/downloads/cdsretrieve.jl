@@ -229,6 +229,9 @@ cdsretrieve_dtvec(e5ds::ERA5Monthly) = e5ds.start : Year(1)  : e5ds.stop
 cdsretrieve_dataset(evar::ERA5Variable,::ERA5Hourly)  = evar.dataset
 cdsretrieve_dataset(evar::ERA5Variable,::ERA5Monthly) = evar.dataset * "-monthly-means"
 
+cdsretrieve_dataset(evar::Vector{<:ERA5Variable},::ERA5Hourly)  = evar[1].dataset
+cdsretrieve_dataset(evar::Vector{<:ERA5Variable},::ERA5Monthly) = evar[1].dataset * "-monthly-means"
+
 function cdsretrieve_area!(
     dkeys :: AbstractDict,
     ereg  :: ERA5Region
