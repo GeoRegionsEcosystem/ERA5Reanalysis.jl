@@ -12,8 +12,12 @@ The `ERA5Region` Type contain the following fields:
 - `is360` : True if it spans 360º longitude
 """
 struct ERA5Region{ST<:AbstractString, FT<:Real}
-    geo        :: GeoRegion
-    ID         :: ST
+    geo :: GeoRegion
+     ID :: ST
+      N :: FT
+      S :: FT
+      E :: FT
+      W :: FT
     resolution :: FT
     string     :: ST
     isglb :: Bool
@@ -50,8 +54,19 @@ function ERA5Region(
     if geo.ID == "GLB"; isglb = true; else; isglb = false end
     if mod(geo.E,360) == mod(geo.W,360); is360 = true; else; is360 = false end
 
+    if is360
+        W = geo.W
+        E = geo.E
+    else
+        W =  ceil(geo.W / resolution) * resolution
+        E = floor(geo.E / resolution) * resolution
+    end
+    if (E - W ) > 360; E = 360; W = 0; end
+    S =  ceil(geo.S / resolution) * resolution
+    N = floor(geo.N / resolution) * resolution
+
     return ERA5Region{ST,FT}(
-        geo, geo.ID, resolution,
+        geo, geo.ID, N, S, E, W, resolution,
         "$(geo.ID)x$(@sprintf("%.2f",resolution))", isglb, is360
     )
 

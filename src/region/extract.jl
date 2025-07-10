@@ -207,3 +207,77 @@ end
 
 extract_time(e5ds::Union{ERA5Hourly,ERA5Daily}) = e5ds.start : Month(1) : e5ds.stop
 extract_time(e5ds::ERA5Monthly) = e5ds.start : Year(1)  : e5ds.stop
+
+
+
+function extract!(
+    data :: AbstractArray{Float32,3},
+    e5ds :: ERA5Dataset,
+	evar :: SingleLevel,
+	ereg :: ERA5Region,
+    elsd :: LandSeaTopo,
+    ggrd :: RegionGrid,
+    dt   :: Date
+
+)
+
+    ds  = read(e5ds,evar,ereg,dt,quiet=true)
+    pnc = basename(path(ds))
+    var = nomissing(ds[evar.ID][:,:,:],NaN)
+    close(ds)
+
+    extract!(data,var,ggrd)
+
+    save(data,dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
+
+    flush(stderr)
+
+end
+
+function extract!(
+    data :: AbstractArray{Float32,3},
+    e5ds :: ERA5Dataset,
+	evar :: PressureLevel,
+	ereg :: ERA5Region,
+    elsd :: LandSeaTopo,
+    ggrd :: RegionGrid,
+    dt   :: Date
+
+)
+
+    ds  = read(e5ds,evar,ereg,dt,quiet=true)
+    pnc = basename(path(ds))
+    var = nomissing(ds[evar.ID][:,:,1,:],NaN)
+    close(ds)
+
+    extract!(data,var,ggrd)
+
+    save(data,dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
+
+    flush(stderr)
+
+end
+
+function extractsplit!(
+    data :: AbstractArray{Float32,3},
+    e5ds :: ERA5Dataset,
+	evar :: ERA5Variable,
+	ereg :: ERA5Region,
+    elsd :: LandSeaTopo,
+    ggrd :: RegionGrid,
+    dt   :: Date
+
+)
+
+    ds  = read(e5ds,evar,ereg,dt,quiet=true)
+    pnc = basename(path(ds))
+    var = nomissing(ds[evar.ID][:,:,:],NaN)
+    close(ds)
+
+    extract!(data,var,ggrd)
+
+    save(data,dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
+
+    flush(stderr)
+
+end

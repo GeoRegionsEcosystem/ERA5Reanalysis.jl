@@ -9,6 +9,11 @@ function cdsretrieve(
     dtvec = cdsretrieve_dtvec(e5ds)
     ckeys = cdskey()
 
+    elsd = getLandSea(e5ds,ereg); ggrd = RegionGrid(ereg,elsd.lon,elsd.lat)
+    nlon = length(elsd.lon)
+    nlat = length(elsd.lat)
+    tmpd = zeros(Float32,nlon,nlat,31*24)
+
     @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.name)) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
     for dtii in dtvec
@@ -47,6 +52,7 @@ function cdsretrieve(
         
         if !isfile(fnc) || overwrite
             retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
+            extract!(tmpd,e5ds,evar,ereg,elsd,ggrd,dtii)
         end
 
         flush(stderr)
@@ -68,10 +74,10 @@ function cdsretrieve(
 
     @info "$(modulelog()) - Preallocation of temporary data arrays to split downloaded data into their respective pressure levels ..."
 
-    lsd  = getLandSea(e5ds,ereg)
-    nlon = length(lsd.lon)
-    nlat = length(lsd.lat)
-    tmpd = zeros(Int16,nlon,nlat,31*24)
+    elsd = getLandSea(e5ds,ereg); ggrd = RegionGrid(ereg,elsd.lon,elsd.lat)
+    nlon = length(elsd.lon)
+    nlat = length(elsd.lat)
+    tmpd = zeros(Float32,nlon,nlat,31*24)
 
     @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.name)) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
@@ -88,34 +94,20 @@ function cdsretrieve(
             "variable"     => evar.long,
             "grid"         => [ereg.resolution, ereg.resolution],
             "time"         => cdsretrieve_time(e5ds),
-            "format"       => "netcdf",
+            "data_format"  => "netcdf",
+            "download_format" => "unarchived",
+            "pressure_level"  => pvec
         )
 
         if typeof(e5ds) <: ERA5Hourly
             e5dkey["day"] = collect(1:31)
         end
-
-        if typeof(evar) <: PressureVariable
-            e5dkey["pressure_level"] = pvec
-        end
         
         cdsretrieve_area!(e5dkey,ereg)
 
         if !isfile(inc) || overwrite
-            tryretrieve = 0
-            while isinteger(tryretrieve) && (tryretrieve < 20)
-                try
-                    retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
-                    tryretrieve += 0.5
-                catch
-                    tryretrieve += 1
-                    @info "$(modulelog()) - Failed to retrieve/request data from CDSAPI on Attempt $(tryretrieve) of 20"
-                end
-            end
-            if tryretrieve == 20
-                @warn "$(modulelog()) - Failed to retrieve/request data, skipping to next set of requests"
-            end
-            split(e5ds,evar,ereg,lsd,dtii,pvec,fnc,tmpd)
+            retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
+            split(e5ds,evar,ereg,elsd,ggrd,dtii,pvec,fnc,tmpd)
         end
 
         flush(stderr)
@@ -149,15 +141,12 @@ function cdsretrievegrib(
             "variable"     => evar.long,
             "grid"         => [ereg.resolution, ereg.resolution],
             "time"         => cdsretrieve_time(e5ds),
-            "format"       => "grib",
+            "data_format"  => "grib",
+            "pressure_level"  => pvec
         )
 
         if typeof(e5ds) <: ERA5Hourly
             e5dkey["day"] = collect(1:31)
-        end
-
-        if typeof(evar) <: PressureVariable
-            e5dkey["pressure_level"] = pvec
         end
         
         cdsretrieve_area!(e5dkey,ereg)
@@ -184,14 +173,14 @@ function cdsretrieve(
 
     @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.name)) $([evarii.name for evarii in evar]) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
-    lsd  = getLandSea(e5ds,ereg)
-    nlon = length(lsd.lon)
-    nlat = length(lsd.lat)
+    elsd = getLandSea(e5ds,ereg); ggrd = RegionGrid(ereg,elsd.lon,elsd.lat)
+    nlon = length(elsd.lon)
+    nlat = length(elsd.lat)
     tmpd = zeros(Float32,nlon,nlat,31*24)
 
     for dtii in dtvec
 
-        inc = e5dfnc(e5ds,evar[1],ereg,dtii)
+        inc = [e5dfnc(e5ds,evarii,ereg,dtii) for evarii in evar]
         fnc = "tmp-$(Dates.now()).nc"
         fol = dirname(inc); if !isdir(fol); mkpath(fol) end
 
@@ -202,7 +191,8 @@ function cdsretrieve(
             "variable"     => [evarii.long for evarii in evar],
             "grid"         => [ereg.resolution, ereg.resolution],
             "time"         => cdsretrieve_time(e5ds),
-            "format"       => "netcdf",
+            "data_format"  => "netcdf",
+            "download_format" => "unarchived"
         )
 
         if typeof(e5ds) <: ERA5Hourly
@@ -211,9 +201,9 @@ function cdsretrieve(
         
         cdsretrieve_area!(e5dkey,ereg)
         
-        if !isfile(inc) || overwrite
+        if !iszero(sum(.!isfile.(inc))) || overwrite
             retrieve(cdsretrieve_dataset(evar,e5ds),e5dkey,fnc,ckeys)
-            split(e5ds,evar,ereg,lsd,dtii,fnc,tmpd)
+            split(e5ds,evar,ereg,elsd,ggrd,dtii,fnc,tmpd)
         end
 
         flush(stderr)
@@ -238,8 +228,7 @@ function cdsretrieve_area!(
 )
 
     if !(ereg.isglb)
-        geo = ereg.geo
-        dkeys["area"] = [geo.N, geo.W, geo.S, geo.E]
+        dkeys["area"] = [ereg.N, ereg.W, ereg.S, ereg.E]
     end
 
     return

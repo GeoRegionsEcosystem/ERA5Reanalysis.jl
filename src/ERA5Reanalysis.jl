@@ -17,7 +17,7 @@ using UnitfulParsableString
 
 import Base: show, read, split, download, rm, ==, !==, isequal
 import GeoRegions: ==, !==, isequal
-import RegionGrids: RegionGrid, extract
+import RegionGrids: RegionGrid, extract, extract!
 import LandSea: getLandSea
 
 ## Reexporting exported functions within these modules

@@ -120,8 +120,8 @@ function download(
     if pall
         if !grib
             cdsretrieve(e5ds,evar,ereg,pvec,overwrite)
-        else
-            cdsretrievegrib(e5ds,evar,ereg,pvec,overwrite)
+        # else
+        #     cdsretrievegrib(e5ds,evar,ereg,pvec,overwrite)
         end
     else
         cdsretrieve(e5ds,evar,ereg,grib,overwrite)
