@@ -55,11 +55,13 @@ function getLandSea(
         goro = nomissing(gds["z"][:,:,1])
         close(gds)
 
-        ggrd = RegionGrid(ereg,glon,glat); ggrd.mask[isnan.(ggrd.mask)] .= 0
+        ggrd = RegionGrid(ereg,glon,glat)
 
         @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region from the Global ERA5 Land-Sea mask dataset ..."
         roro = extract(goro,ggrd)
         rlsm = extract(glsm,ggrd)
+        
+        ggrd.mask[isnan.(ggrd.mask)] .= 0
 
         if save
             saveLandSea(e5ds,ereg,ggrd.lon,ggrd.lat,rlsm,roro,Int16.(ggrd.mask))
