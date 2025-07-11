@@ -182,7 +182,7 @@ function cdsretrieve(
 
         inc = [e5dfnc(e5ds,evarii,ereg,dtii) for evarii in evar]
         fnc = "tmp-$(Dates.now()).nc"
-        fol = dirname(inc); if !isdir(fol); mkpath(fol) end
+        fol = dirname(inc[1]); if !isdir(fol); mkpath(fol) end
 
         e5dkey = Dict(
             "product_type" => e5ds.ptype,
