@@ -46,7 +46,7 @@ export
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read, save, rm, is,
+        download, read, save, rm, is, dkrz,
         addCDSAPIkey,
         
         extract, analysis, timeseries, smoothing, hourly2daily, hourly2monthly,
@@ -143,6 +143,8 @@ include("downloads/downloads.jl")
 include("downloads/cdsretrieve.jl")
 include("downloads/pythonprint.jl")
 include("downloads/split.jl")
+
+include("dkrz/dkrz.jl")
 
 include("hour2time/hour2day.jl")
 include("hour2time/hour2month.jl")

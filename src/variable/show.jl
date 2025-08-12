@@ -6,6 +6,7 @@ function show(io::IO, evar::SingleLevel)
 		"    Long Name       (long) : ", evar.long,  '\n',
 		"    Variable Name   (name) : ", evar.name,  '\n',
 		"    Variable Units (units) : ", evar.units, '\n',
+		"    DRKZ ID         (dkrz) : ", evar.dkrz,  '\n',
 	)
 end
 
@@ -18,5 +19,6 @@ function show(io::IO, evar::PressureLevel)
 		"    Variable Name   (name) : ", evar.name,  '\n',
 		"    Variable Units (units) : ", evar.units, '\n',
 		"    Pressure Level   (hPa) : ", evar.hPa,   '\n',
+		"    DRKZ ID         (dkrz) : ", evar.dkrz,  '\n',
 	)
 end

@@ -20,6 +20,8 @@ struct SingleVariable{ST<:AbstractString} <: SingleLevel
     units   :: ST
     path    :: ST
     dataset :: ST
+    dkrz      :: Union{Int,Missing}
+    invariant :: Union{Bool,Missing}
 end
 
 
@@ -65,14 +67,15 @@ function SingleVariable(
     fname = joinpath(dlist[ind],flist[ind])
     vlist = listera5variables(fname); ind = findall(ID.==vlist)[1]
 
-    ID,long,name,units = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
+    ID,long,name,units = readdlm(fname,',',comments=true,comment_char='#')[ind,1:4]
 
     if vtype == "singlevariable"
         if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleVariable type" end
-        return SingleVariable{ST}(ID,long,name,units,fname,"reanalysis-era5-single-levels")
+        dkrz,invariant = readdlm(fname,',',comments=true,comment_char='#')[ind,5:6]
+        iszero(dkrz) ? (return SingleVariable{ST}(ID,long,name,units,fname,"reanalysis-era5-single-levels",missing,missing)) : (return SingleVariable{ST}(ID,long,name,units,fname,"reanalysis-era5-single-levels",dkrz,invariant))
     else
         if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleCustom type" end
-        return SingleCustom{ST}(ID,long,name,units,fname,"reanalysis-era5-single-levels")
+        return SingleCustom{ST}(ID,long,name,units,fname,"reanalysis-era5-single-levels",missing,missing)
     end
 
 end
@@ -125,7 +128,7 @@ function SingleVariable(
     end
 
     return SingleCustom{ST}(
-        ID,long,name,units,joinpath(path,"singlecustom.txt"),
+        ID,long,name,units,joinpath(path,"singlecustom.txt"),missing,missing,
         "reanalysis-era5-single-levels"
     )
 
