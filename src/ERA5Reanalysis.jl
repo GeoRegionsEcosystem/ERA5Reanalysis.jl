@@ -25,6 +25,7 @@ using Reexport
 @reexport using Dates
 @reexport using GeoRegions
 @reexport using NCDatasets
+@reexport using GRIBDatasets
 
 ## Exporting the following functions:
 export
