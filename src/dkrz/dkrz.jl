@@ -57,3 +57,67 @@ checkdkrztres(::ERA5Monthly,::PressureVariable) = "1M"
 checkdkrztres(::ERA5Hourly,evar::SingleVariable)  = evar.invariant ? "IV" : "1H"
 checkdkrztres(::ERA5Daily,evar::SingleVariable)   = evar.invariant ? "IV" : "1D"
 checkdkrztres(::ERA5Monthly,evar::SingleVariable) = evar.invariant ? "IV" : "1M"
+
+function nativelonlat()
+
+    fname = joinpath(eradir,"dkrzlonlat.txt")
+    data = readdlm(fname,',')[:,:]; nlon = Int.(data[:,1]); lat = data[:,2]
+    npnt = sum(nlon); nrow = length(lat)
+    elon = zeros(npnt)
+    elat = zeros(npnt)
+
+    ibeg = Int(0)
+    iend = Int(0)
+    for irow = 1 : nrow
+        ilon  = nlon[irow]
+        ibeg  = iend + 1
+        iend += ilon
+        elon[ibeg:iend] = (0:(ilon-1)) * 360 / ilon
+        elat[ibeg:iend] .= lat[irow]
+    end
+
+    return elon,elat
+
+end
+
+function closestnativelonlat(
+    pnt :: Point2
+)
+
+    elon,elat = nativelonlat()
+    ex = cosd.(elon) .* cosd.(elat)
+    ey = sind.(elon) .* cosd.(elat)
+    ez = sind.(elat)
+
+    plon,plat = pnt[1],pnt[2]
+    px = cosd.(plon) * cosd.(plat)
+    py = sind.(plon) * cosd.(plat)
+    pz = sind.(plat)
+
+    return argmin(abs.((ex.-px).^2 .+ (ey.-py).^2 .+ (ez.-pz).^2))
+
+end
+
+function closestnativelonlat(
+    pnts :: Vector{Point2}
+)
+
+    elon,elat = nativelonlat()
+    ex = cosd.(elon) .* cosd.(elat)
+    ey = sind.(elon) .* cosd.(elat)
+    ez = sind.(elat)
+
+    npnts = length(pnts)
+    iarg  = zeros(Int,npnts)
+    for ii in 1 : npnts
+        ipnt = pnts[ii]
+        plon,plat = ipnt[1],ipnt[2]
+        px = cosd.(plon) * cosd.(plat)
+        py = sind.(plon) * cosd.(plat)
+        pz = sind.(plat)
+        iarg[ipnt] = argmin(abs.((ex.-px).^2 .+ (ey.-py).^2 .+ (ez.-pz).^2))
+    end
+
+    return iarg
+
+end

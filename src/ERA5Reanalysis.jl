@@ -51,7 +51,7 @@ export
         addCDSAPIkey,
         
         extract, analysis, timeseries, smoothing, hourly2daily, hourly2monthly,
-        hourly2monthlyhour,
+        hourly2monthlyhour, nativelonlat, closestnativelonlat,
 
         era5Pressures
 
