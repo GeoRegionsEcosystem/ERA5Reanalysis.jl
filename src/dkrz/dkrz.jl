@@ -41,7 +41,7 @@ function dkrz(
         fgrb = "E5$(level)00_$(tres)_2001-01-01_$(@sprintf("%03d",evar.dkrz)).grb"
     end
 
-    return GRIBDataset(path,fgrb)
+    return GRIBDataset(joinpath(path,fgrb))
 
 end
 
