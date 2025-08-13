@@ -25,8 +25,8 @@ Arguments
 """
 function dkrz(
     e5ds :: ERA5CDStore,
-    evar :: ERA5Variable;
-    date :: Date,
+    evar :: ERA5Variable,
+    date :: Date;
     domodellevel :: Bool = false
 )
 
