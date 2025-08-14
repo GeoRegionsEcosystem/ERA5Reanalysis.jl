@@ -1,6 +1,6 @@
 # PressureVariable
 # List of ERA5 Pressure-Level Variables available in the CDS
-# (1) ERA5 ID, (2) CDS Name, (3) Full Name, (4) Units, (5) DKRZ ID, (6) DKRZ Invariant
+# (1) ERA5 ID, (2) Full Name, (3) Units, (4) Analysis, (5) Forecast, (6) Invariant, (7) CDS Name, (8) NetCDF ID, (9) MARS ID, (10) DKRZ ID
 
 u,u_component_of_wind,Zonal Wind,m s**-1,131,false
 v,v_component_of_wind,Meridional Wind,m s**-1,132,false

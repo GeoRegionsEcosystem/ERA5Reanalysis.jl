@@ -1,4 +1,4 @@
 # SingleCustom
 # List of User-Defined Custom Single-Level Variables
-# (1)ID, (2)era5, (3)Full, (4)Units
+# (1) ERA5 ID, (2) Full Name, (3) Units, (4) Analysis, (5) Forecast, (6) Invariant, (7) CDS Name, (8) NetCDF ID, (9) MARS ID, (10) DKRZ ID
 
