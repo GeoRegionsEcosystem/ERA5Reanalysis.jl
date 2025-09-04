@@ -125,7 +125,7 @@ function read(
     
     if !timeseries
           return eds
-    else; return eds, eds["time"][:]
+    else; return eds, eds["valid_time"][:]
     end
 
 end
