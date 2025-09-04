@@ -209,14 +209,14 @@ ttr,Top net thermal radiation,J m**-2,false,true,false,top_net_thermal_radiation
 ttrc,"Top net thermal radiation, clear sky",J m**-2,false,true,false,top_net_thermal_radiation_clear_sky,ttrc,209,209
 tvh,Type of high vegetation,~,true,false,true,type_of_high_vegetation,tvh,30,30
 tvl,Type of low vegetation,~,true,false,true,type_of_low_vegetation,tvl,29,29
-u10,10 metre U wind component,m s**-1,true,true,false,10m_u_component_of_wind,u10,165,0
+u10,10 metre U wind component,m s**-1,true,true,false,10m_u_component_of_wind,u10,165,165
 u100,100 metre U wind component,m s**-1,true,true,false,100m_u_component_of_wind,u100,228246,502
-u10n,Neutral wind at 10 m u-component,m s**-1,true,true,false,10m_u_component_of_neutral_wind,u10n,228131,165
+u10n,Neutral wind at 10 m u-component,m s**-1,true,true,false,10m_u_component_of_neutral_wind,u10n,228131,0
 ust,U-component stokes drift,m s**-1,true,true,false,u_component_stokes_drift,ust,140215,0
 uvb,Downward UV radiation at the surface,J m**-2,false,true,false,downward_uv_radiation_at_the_surface,uvb,57,57
-v10,10 metre V wind component,m s**-1,true,true,false,10m_v_component_of_wind,v10,166,0
+v10,10 metre V wind component,m s**-1,true,true,false,10m_v_component_of_wind,v10,166,166
 v100,100 metre V wind component,m s**-1,true,true,false,100m_v_component_of_wind,v100,228247,503
-v10n,Neutral wind at 10 m v-component,m s**-1,true,true,false,10m_v_component_of_neutral_wind,v10n,228132,166
+v10n,Neutral wind at 10 m v-component,m s**-1,true,true,false,10m_v_component_of_neutral_wind,v10n,228132,0
 viec,Vertical integral of energy conversion,W m**-2,true,true,false,vertical_integral_of_energy_conversion,p64.162,162064,0
 vigd,Vertical integral of divergence of geopotential flux,W m**-2,true,true,false,vertical_integral_of_divergence_of_geopotential_flux,p85.162,162085,0
 vige,Vertical integral of eastward geopotential flux,W m**-1,true,true,false,vertical_integral_of_eastward_geopotential_flux,p73.162,162073,0

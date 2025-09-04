@@ -76,7 +76,7 @@ function SingleVariable(
     if vtype == "singlevariable"
         if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleVariable type" end
         an,fc,iv,nc,mars,dkrz = readdlm(fname,',',comments=true,comment_char='#')[ind,[4,5,6,8,9,10]]
-        if iszero(dkrz); dkrz = missingend end
+        if iszero(dkrz); dkrz = missing end
         return SingleVariable{ST}(
             ID,long,name,units,fname,
             "reanalysis-era5-single-levels",an,fc,iv,nc,mars,dkrz
