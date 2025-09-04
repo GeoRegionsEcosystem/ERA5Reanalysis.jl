@@ -26,7 +26,7 @@ function hourly2monthlyhour(
             end
             ndy = daysinmonth(idt); if !dosum; fac = 1; else; fac = ndy end
             nhr = daysinmonth(idt) * 24
-            NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhr),:,:,:)
+            NCDatasets.load!(ds[evar.ncID].var,view(tmpload,:,:,1:nhr),:,:,:)
             close(ds)
 
             if verbose

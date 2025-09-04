@@ -33,7 +33,7 @@ function timeseries(
         nt  = ndy * 24
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
         iidata = @view tmpdata[:,:,1:nt]
-        NCDatasets.load!(ds[evar.ID].var,iidata,:,:,:)
+        NCDatasets.load!(ds[evar.ncID].var,iidata,:,:,:)
         close(ds)
 
         if verbose
@@ -113,7 +113,7 @@ function timeseries(
         ndy = daysinmonth(dt)
         nt  = ndy * 24
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
-        NCDatasets.load!(ds[evar.ID].var,iidata,:,:,:)
+        NCDatasets.load!(ds[evar.ncID].var,iidata,:,:,:)
         close(ds)
 
         if verbose

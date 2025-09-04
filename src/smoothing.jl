@@ -76,20 +76,20 @@ function smoothing(
 
         nhr = daysinmonth(dt) * 24
         ds  = read(e5ds,evar,ereg,dt)
-        NCDatasets.load!(ds[evar.ID].var,view(tmpdata,:,:,(1:nhr).+buffer_time),:,:,:)
+        NCDatasets.load!(ds[evar.ncID].var,view(tmpdata,:,:,(1:nhr).+buffer_time),:,:,:)
         close(ds)
 
         if temporal
 
             ds  = read(e5ds,evar,ereg,dt-Month(1))
-            NCDatasets.load!(ds[evar.ID].var,tmpdata,:,:,(1:buffer_time),:,:,:)
+            NCDatasets.load!(ds[evar.ncID].var,tmpdata,:,:,(1:buffer_time),:,:,:)
             close(ds)
 
             flush(stderr)
 
             ds  = read(e5ds,evar,ereg,dt+Month(1))
             NCDatasets.load!(
-                ds[evar.ID].var,
+                ds[evar.ncID].var,
                 view(tmpdata,:,:,(1:buffer_time).+(nhr+buffer_time)),:,:,:
             )
             close(ds)
@@ -259,7 +259,7 @@ function smoothing(
 
         ndy = daysinmonth(dt)
         ds  = read(e5ds,evar,ereg,dt)
-        NCDatasets.load!(ds[evar.ID].var,view(tmpdata,:,:,(1:ndy).+buffer_time),:,:,:)
+        NCDatasets.load!(ds[evar.ncID].var,view(tmpdata,:,:,(1:ndy).+buffer_time),:,:,:)
         close(ds)
 
         flush(stderr)
@@ -267,14 +267,14 @@ function smoothing(
         if temporal
             
             ds  = read(e5ds,evar,ereg,dt-Month(1))
-            NCDatasets.load!(ds[evar.ID].var,view(tmpdata,:,:,(1:buffer_time)),:,:,:)
+            NCDatasets.load!(ds[evar.ncID].var,view(tmpdata,:,:,(1:buffer_time)),:,:,:)
             close(ds)
 
             flush(stderr)
 
             ds  = read(e5ds,evar,ereg,dt+Month(1))
             NCDatasets.load!(
-                ds[evar.ID].var,
+                ds[evar.ncID].var,
                 view(tmpdata,:,:,(1:buffer_time).+(ndy+buffer_time)),:,:,:
             )
             close(ds)
@@ -419,7 +419,7 @@ function smoothing(
     for dt in e5ds.start : Month(1) : e5ds.stop
 
         ds  = read(e5ds,evar,ereg,dt)
-        NCDatasets.load!(ds[evar.ID].var,smthdata,:,:,:)
+        NCDatasets.load!(ds[evar.ncID].var,smthdata,:,:,:)
         close(ds)
 
         flush(stderr)

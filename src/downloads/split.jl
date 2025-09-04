@@ -15,7 +15,7 @@ function split(
     data = @view tmpd[:,:,1:nt]
 
     for ip in 1 : length(pvec)
-        NCDatasets.load!(ds[evar.ID].var,data,:,:,ip,:)
+        NCDatasets.load!(ds[evar.ncID].var,data,:,:,ip,:)
         evarii = PressureVariable(evar.ID,hPa=pvec[ip])
         save(data,dt,e5ds,evarii,ereg,elsd)
         extractsplit!(data,e5ds,evarii,ereg,elsd,ggrd,dt)

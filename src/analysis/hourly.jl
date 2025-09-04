@@ -47,14 +47,14 @@ function analysis(
             end
             ndy = daysinmonth(Date(yr,mo))
             ds  = NCDataset(e5dfnc(e5ds,evar,ereg,Date(yr,mo)))
-            sc  = ds[evar.ID].attrib["scale_factor"]
-            of  = ds[evar.ID].attrib["add_offset"]
-            mv  = ds[evar.ID].attrib["missing_value"]
-            fv  = ds[evar.ID].attrib["_FillValue"]
+            sc  = ds[evar.ncID].attrib["scale_factor"]
+            of  = ds[evar.ncID].attrib["add_offset"]
+            mv  = ds[evar.ncID].attrib["missing_value"]
+            fv  = ds[evar.ncID].attrib["_FillValue"]
             for idy = 1 : ndy, ihr = 1 : 24
                 it = ihr + (idy-1) * 24
                 tvr = view(tvar,:,:,ihr,idy)
-                NCDatasets.load!(ds[evar.ID].var,tvr,:,:,it)
+                NCDatasets.load!(ds[evar.ncID].var,tvr,:,:,it)
             end
             int2real!(
                 view(rvar,:,:,:,1:ndy), view(tvar,:,:,:,1:ndy),

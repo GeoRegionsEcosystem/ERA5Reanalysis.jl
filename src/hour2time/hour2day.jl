@@ -26,7 +26,7 @@ function hourly2daily(
         end
         ndy = daysinmonth(dt)
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,dt))
-        NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:(ndy*24)),:,:,:)
+        NCDatasets.load!(ds[evar.ncID].var,view(tmpload,:,:,1:(ndy*24)),:,:,:)
         close(ds)
 
         if verbose

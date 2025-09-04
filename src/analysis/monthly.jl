@@ -36,13 +36,13 @@ function analysis(
         @info "$(modulelog()) - Calculating monthly climatology and diurnal statistics for $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
 
         ds  = NCDataset(e5dfnc(e5ds,evar,ereg,Date(yr)))
-        sc  = ds[evar.ID].attrib["scale_factor"]
-        of  = ds[evar.ID].attrib["add_offset"]
-        mv  = ds[evar.ID].attrib["missing_value"]
-        fv  = ds[evar.ID].attrib["_FillValue"]
+        sc  = ds[evar.ncID].attrib["scale_factor"]
+        of  = ds[evar.ncID].attrib["add_offset"]
+        mv  = ds[evar.ncID].attrib["missing_value"]
+        fv  = ds[evar.ncID].attrib["_FillValue"]
 
         if iseramohr
-            NCDatasets.load!(ds[evar.ID].var,traw,:,:,:,:)
+            NCDatasets.load!(ds[evar.ncID].var,traw,:,:,:,:)
             for imo = 1 : 12, ihr = 1 : 24, ilat = 1 : nlat, ilon = 1 : nlon
                 tint[ilon,ilat,ihr,imo] = traw[ilon,ilat,ihr + (imo-1)*24]
             end
@@ -56,7 +56,7 @@ function analysis(
                 end
             end
         else
-            NCDatasets.load!(ds[evar.ID].var,tvar,:,:,:)
+            NCDatasets.load!(ds[evar.ncID].var,tvar,:,:,:)
             int2real!(
                 view(davg,:,:,1:12), tvar,
                 scale=sc, offset=of, mvalue=mv, fvalue=fv

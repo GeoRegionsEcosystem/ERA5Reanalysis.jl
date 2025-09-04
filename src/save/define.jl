@@ -60,11 +60,14 @@ function save_definevar!(
     evar   :: ERA5Variable,
 )
 
-    ncvar = defVar(ds,evar.ID,Float32,("longitude","latitude","valid_time"),attrib = Dict(
-        "long_name"     => evar.long,
-        "full_name"     => evar.name,
-        "units"         => evar.units,
-    ))
+    ncvar = defVar(
+        ds,evar.ncID,Float32,("longitude","latitude","valid_time"),
+        attrib = Dict(
+            "long_name"     => evar.long,
+            "full_name"     => evar.name,
+            "units"         => evar.units,
+        )
+    )
 
     return ncvar
 

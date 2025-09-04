@@ -42,7 +42,7 @@ function extract(
         pnc  = basename(path(pds))
         nt   = pds.dim["time"]
         tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds[evar.ID].var,tmat,:,:,1:nt)
+        NCDatasets.load!(pds[evar.ncID].var,tmat,:,:,1:nt)
         close(pds)
 
         @info "$(modulelog()) - Extracting the $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion from the $(preg.geo.name) (Horizontal Resolution: $(preg.resolution)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
@@ -105,7 +105,7 @@ function extract(
         pnc  = basename(path(pds))
         nt   = pds.dim["valid_time"]
         tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds[evar.ID].var,tmat,:,:,1:nt)
+        NCDatasets.load!(pds[evar.ncID].var,tmat,:,:,1:nt)
         close(pds)
 
         @info "$(modulelog()) - Extracting the $(e5ds.name) $(evar.name) data in $(sreg.geo.name) (Horizontal Resolution: $(sreg.resolution)) GeoRegion from the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
@@ -181,7 +181,7 @@ function extract(
         pnc  = basename(path(pds))
         nt   = pds.dim["time"]
         tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds[evar.ID].var,tmat,:,:,1:nt)
+        NCDatasets.load!(pds[evar.ncID].var,tmat,:,:,1:nt)
 
         for igeo = 1 : ngeo
 
@@ -223,7 +223,7 @@ function extract!(
 
     ds  = read(e5ds,evar,ereg,dt,quiet=true)
     pnc = basename(path(ds))
-    var = nomissing(ds[evar.ID][:,:,:],NaN)
+    var = nomissing(ds[evar.ncID][:,:,:],NaN)
     close(ds)
 
     extract!(data,var,ggrd)
@@ -247,7 +247,7 @@ function extract!(
 
     ds  = read(e5ds,evar,ereg,dt,quiet=true)
     pnc = basename(path(ds))
-    var = nomissing(ds[evar.ID][:,:,1,:],NaN)
+    var = nomissing(ds[evar.ncID][:,:,1,:],NaN)
     close(ds)
 
     extract!(data,var,ggrd)
@@ -271,7 +271,7 @@ function extractsplit!(
 
     ds  = read(e5ds,evar,ereg,dt,quiet=true)
     pnc = basename(path(ds))
-    var = nomissing(ds[evar.ID][:,:,:],NaN)
+    var = nomissing(ds[evar.ncID][:,:,:],NaN)
     close(ds)
 
     extract!(data,var,ggrd)
