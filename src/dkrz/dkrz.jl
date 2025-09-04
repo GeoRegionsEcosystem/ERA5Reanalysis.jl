@@ -27,18 +27,20 @@ function dkrz(
     e5ds :: ERA5CDStore,
     evar :: ERA5Variable,
     date :: Date;
-    domodellevel :: Bool = false
+    domodellevel :: Bool = false,
+    doforecast   :: Bool = false
 )
 
     checkdkrzvariable(evar)
     level = checkdkrzlevel(evar,domodellevel)
     tres  = checkdkrztres(e5ds,evar)
+    type,typeID = checkanfc(evar,doforecast)
 
-    path = "/pool/data/ERA5/E5/$(level)/an/$(tres)/$(@sprintf("%03d",evar.dkrz))"
+    path = "/pool/data/ERA5/E5/$(level)/$(type)/$(tres)/$(@sprintf("%03d",evar.dkrz))"
     if !evar.invariant
-        fgrb = "E5$(level)00_$(tres)_$(date)_$(@sprintf("%03d",evar.dkrz)).grb"
+        fgrb = "E5$(level)$(typeID)_$(tres)_$(date)_$(@sprintf("%03d",evar.dkrz)).grb"
     else
-        fgrb = "E5$(level)00_$(tres)_2001-01-01_$(@sprintf("%03d",evar.dkrz)).grb"
+        fgrb = "E5$(level)$(typeID)_$(tres)_2001-01-01_$(@sprintf("%03d",evar.dkrz)).grb"
     end
 
     return GRIBDataset(joinpath(path,fgrb))
@@ -57,6 +59,30 @@ checkdkrztres(::ERA5Monthly,::PressureVariable) = "1M"
 checkdkrztres(::ERA5Hourly,evar::SingleVariable)  = evar.invariant ? "IV" : "1H"
 checkdkrztres(::ERA5Daily,evar::SingleVariable)   = evar.invariant ? "IV" : "1D"
 checkdkrztres(::ERA5Monthly,evar::SingleVariable) = evar.invariant ? "IV" : "1M"
+
+function checkanfc(evar::SingleVariable,doforecast::Bool)
+
+    if evar.analysis && evar.forecast
+        if doforecast; return "fc", "12" else; return "an", "00" end
+    elseif evar.analysis
+        return "an", "00"
+    elseif evar.forecast
+        return "fc", "12"
+    else
+        error("$(modulelog()) - This ERA5Variable is neither an analysis or forecast variable, please contact natgeo-wong to see if he knows what's going on")
+    end
+
+end
+
+function checkanfc(::PressureVariable,doforecast::Bool)
+
+    if doforecast
+        return "fc", "12"
+    else
+        return "an", "00"
+    end
+
+end
 
 function nativelonlat()
 
