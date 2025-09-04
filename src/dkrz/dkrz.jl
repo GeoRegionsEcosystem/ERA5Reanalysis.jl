@@ -38,12 +38,26 @@ function dkrz(
 
     path = "/pool/data/ERA5/E5/$(level)/$(type)/$(tres)/$(@sprintf("%03d",evar.dkrz))"
     if !evar.invariant
-        fgrb = "E5$(level)$(typeID)_$(tres)_$(date)_$(@sprintf("%03d",evar.dkrz)).grb"
+        fID = "E5$(level)$(typeID)_$(tres)_$(date)_$(@sprintf("%03d",evar.dkrz)).grb"
     else
-        fgrb = "E5$(level)$(typeID)_$(tres)_2001-01-01_$(@sprintf("%03d",evar.dkrz)).grb"
+        fID = "E5$(level)$(typeID)_$(tres)_2001-01-01_$(@sprintf("%03d",evar.dkrz)).grb"
     end
 
-    return GRIBDataset(joinpath(path,fgrb))
+    fgrb = joinpath(path,fID)
+
+    if !isfile(fgrb)
+        if !doforecast
+            path = "/pool/data/ERA5/E5/$(level)/fc/$(tres)/$(@sprintf("%03d",evar.dkrz))"
+            fID = "E5$(level)12_$(tres)_$(date)_$(@sprintf("%03d",evar.dkrz)).grb"
+        elseif doforecast
+            path = "/pool/data/ERA5/E5/$(level)/an/$(tres)/$(@sprintf("%03d",evar.dkrz))"
+            fID = "E5$(level)00_$(tres)_$(date)_$(@sprintf("%03d",evar.dkrz)).grb"
+        end
+    end
+
+    fgrb = joinpath(path,fID)
+
+    return GRIBDataset(fgrb)
 
 end
 
