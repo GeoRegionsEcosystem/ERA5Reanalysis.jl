@@ -46,19 +46,20 @@ function dkrz(
 
     fgrb = joinpath(path,fID)
 
-    if !isfile(fgrb) && doothertype
-        if !doforecast
-            path = "/pool/data/ERA5/E5/$(level)/fc/$(tres)/$(@sprintf("%03d",evar.dkrz))"
-            fID = "E5$(level)12_$(tres)_$(date)_$(@sprintf("%03d",evar.dkrz)).grb"
-        elseif doforecast
-            path = "/pool/data/ERA5/E5/$(level)/an/$(tres)/$(@sprintf("%03d",evar.dkrz))"
-            fID = "E5$(level)00_$(tres)_$(date)_$(@sprintf("%03d",evar.dkrz)).grb"
+    if !isfile(fgrb)
+        if doothertype
+            if !doforecast
+                path = "/pool/data/ERA5/E5/$(level)/fc/$(tres)/$(@sprintf("%03d",evar.dkrz))"
+                fID = "E5$(level)12_$(tres)_$(date)_$(@sprintf("%03d",evar.dkrz)).grb"
+            elseif doforecast
+                path = "/pool/data/ERA5/E5/$(level)/an/$(tres)/$(@sprintf("%03d",evar.dkrz))"
+                fID = "E5$(level)00_$(tres)_$(date)_$(@sprintf("%03d",evar.dkrz)).grb"
+            end
+        else
+            error("$(modulelog()) - The file $(fgrb) does not exist, likely you need to set doothertype to `true` because DKRZ has it as a forecast variable instead of an analysis variable or vice versa")
         end
-    else
-        error("$(modulelog()) - The file $(fgrb) does not exist, likely you need to set doothertype to `true` because DKRZ has it as a forecast variable instead of an analysis variable or vice versa")
+        fgrb = joinpath(path,fID)
     end
-
-    fgrb = joinpath(path,fID)
 
     return GRIBDataset(fgrb)
 
