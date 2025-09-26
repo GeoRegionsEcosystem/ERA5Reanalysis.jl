@@ -159,7 +159,7 @@ function closestnativelonlat(
         px = cosd.(plon) * cosd.(plat)
         py = sind.(plon) * cosd.(plat)
         pz = sind.(plat)
-        iarg[ipnt] = argmin(abs.((ex.-px).^2 .+ (ey.-py).^2 .+ (ez.-pz).^2))
+        iarg[ii] = argmin(abs.((ex.-px).^2 .+ (ey.-py).^2 .+ (ez.-pz).^2))
     end
 
     return iarg
