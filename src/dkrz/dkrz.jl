@@ -143,8 +143,8 @@ function closestnativelonlat(
 end
 
 function closestnativelonlat(
-    pnts :: Vector{Point2}
-)
+    pnts :: Vector{Point2{FT}}
+) where FT <: Real
 
     elon,elat = nativelonlat()
     ex = cosd.(elon) .* cosd.(elat)
