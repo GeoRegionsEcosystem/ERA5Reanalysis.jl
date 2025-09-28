@@ -1,7 +1,7 @@
 function hourly2daily(
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
-    ereg :: ERA5Region;
+    ereg :: ERA5LonLat;
     verbose :: Bool = false,
     dosum   :: Bool = false
 )

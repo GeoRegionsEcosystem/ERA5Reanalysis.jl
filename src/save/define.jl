@@ -39,7 +39,7 @@ function save_createds(
 
 end
 
-function save_definelonlat!(ds::NCDataset)
+function save_definelonlat!(ds::NCDataset,::ERA5LonLat)
 
     nclon = defVar(ds,"longitude",Float64,("longitude",),attrib = Dict(
         "units"     => "degrees_east",
@@ -58,6 +58,7 @@ end
 function save_definevar!(
     ds     :: NCDataset,
     evar   :: ERA5Variable,
+           :: ERA5LonLat
 )
 
     ncvar = defVar(

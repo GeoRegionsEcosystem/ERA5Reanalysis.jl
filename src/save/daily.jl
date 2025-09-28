@@ -3,7 +3,7 @@ function save(
     dt   :: Date,
     e5ds :: ERA5Daily,
     evar :: ERA5Variable,
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
     lsd  :: LandSeaTopo;
     extract :: Bool = false,
     smooth  :: Bool = false,
@@ -26,7 +26,7 @@ function save(
     ds.dim["latitude"]  = length(lsd.lat)
     ds.dim["valid_time"] = ndy
 
-    nclon,nclat = save_definelonlat!(ds)
+    nclon,nclat = save_definelonlat!(ds,ereg)
 
     nctime = defVar(ds,"valid_time",Int64,("valid_time",),attrib = Dict(
         "units"     => "days since $(dt) 00:00:00.0",
@@ -34,7 +34,7 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = save_definevar!(ds,evar)
+    ncvar = save_definevar!(ds,evar,ereg)
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat
@@ -52,7 +52,7 @@ function save(
     dt   :: Date,
     e5ds :: ERA5Daily,
     evar :: ERA5Variable,
-    ereg :: ERA5Region;
+    ereg :: ERA5LonLat;
     extract :: Bool = false,
     smooth  :: Bool = false,
     extractnc :: AbstractString = "",
@@ -74,7 +74,7 @@ function save(
     ds.dim["latitude"]  = length(lsd.lat)
     ds.dim["valid_time"] = ndy
 
-    nclon,nclat = save_definelonlat!(ds)
+    nclon,nclat = save_definelonlat!(ds,ereg)
 
     nctime = defVar(ds,"valid_time",Int64,("valid_time",),attrib = Dict(
         "units"     => "days since $(dt) 00:00:00.0",
@@ -82,7 +82,7 @@ function save(
         "calendar"  => "gregorian",
     ))
 
-    ncvar = save_definevar!(ds,evar)
+    ncvar = save_definevar!(ds,evar,ereg)
 
     nclon[:]  = lsd.lon
     nclat[:]  = lsd.lat

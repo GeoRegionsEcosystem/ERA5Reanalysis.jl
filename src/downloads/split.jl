@@ -1,7 +1,7 @@
 function split(
     e5ds :: ERA5CDStore,
     evar :: PressureVariable,
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
     elsd :: LandSeaTopo,
     ggrd :: RegionGrid,
     dt   :: Date,
@@ -30,7 +30,7 @@ end
 function split(
     e5ds :: ERA5CDStore,
     evar :: Vector{SingleVariable{ST}},
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
     elsd :: LandSeaTopo,
     ggrd :: RegionGrid,
     dt   :: Date,

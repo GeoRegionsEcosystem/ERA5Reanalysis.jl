@@ -31,6 +31,7 @@ function download(
     overwrite :: Bool = false
 )
 
+    downloadcheckgrid(ereg)
     cdsretrieve(e5ds,evar,ereg,grib,overwrite)
 
 end
@@ -65,6 +66,7 @@ function download(
     overwrite :: Bool = false
 ) where ST <: AbstractString
 
+    downloadcheckgrid(ereg)
     cdsretrieve(e5ds,evar,ereg,overwrite)
 
 end
@@ -114,6 +116,7 @@ function download(
     overwrite :: Bool = false
 )
 
+    downloadcheckgrid(ereg)
     if pvec == [0] || iszero(evar.hPa)
         pvec = downloadcheckplvl(pall,ptop,pbot)
     end
@@ -177,3 +180,6 @@ function downloadcheckplvl(
     return pvec
 
 end
+
+downloadcheckgrid(::ERA5LonLat) = nothing
+downloadcheckgrid(::ERA5Native) = error("$(modulelog()) - The `download()` series of functions is currently unable to process native-grid requests, please get DKRZ acces and use the `dkrz()` set of functions instead")

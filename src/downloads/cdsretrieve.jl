@@ -1,7 +1,7 @@
 function cdsretrieve(
     e5ds :: ERA5CDStore,
     evar :: ERA5Variable,
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
     grib :: Bool,
     overwrite :: Bool
 )
@@ -64,7 +64,7 @@ end
 function cdsretrieve(
     e5ds :: ERA5CDStore,
     evar :: PressureVariable,
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
     pvec :: Vector{Int},
     overwrite :: Bool
 )
@@ -119,7 +119,7 @@ end
 function cdsretrievegrib(
     e5ds :: ERA5CDStore,
     evar :: PressureVariable,
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
     pvec :: Vector{Int},
     overwrite :: Bool
 )
@@ -164,7 +164,7 @@ end
 function cdsretrieve(
     e5ds :: ERA5CDStore,
     evar :: Vector{SingleVariable{ST}},
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
     overwrite :: Bool,
 ) where ST <: AbstractString
 
@@ -224,7 +224,7 @@ cdsretrieve_dataset(evar::Vector{<:ERA5Variable},::ERA5Monthly) = evar[1].datase
 
 function cdsretrieve_area!(
     dkeys :: AbstractDict,
-    ereg  :: ERA5Region
+    ereg  :: ERA5LonLat
 )
 
     if !(ereg.isglb)

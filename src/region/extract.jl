@@ -1,7 +1,7 @@
 function extract(
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
-	ereg :: ERA5Region;
+	ereg :: ERA5LonLat;
     smooth     :: Bool = false,
     smoothlon  :: Real = 0,
     smoothlat  :: Real = 0,
@@ -65,7 +65,7 @@ function extract(
 	sgeo :: GeoRegion,
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
-	ereg :: ERA5Region;
+	ereg :: ERA5LonLat;
     smooth     :: Bool = false,
     smoothlon  :: Real = 0,
     smoothlat  :: Real = 0,
@@ -128,7 +128,7 @@ function extract(
 	geov :: Vector{<:GeoRegion},
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
-	ereg :: ERA5Region;
+	ereg :: ERA5LonLat;
     smooth     :: Bool = false,
     smoothlon  :: Real = 0,
     smoothlat  :: Real = 0,
@@ -146,7 +146,7 @@ function extract(
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion, \"$(ereg.ID)\""
 
-    sreg = Vector{ERA5Region}(undef,ngeo)
+    sreg = Vector{ERA5LonLat}(undef,ngeo)
     rlsd = Vector{LandSea}(undef,ngeo)
     plsd = getLandSea(e5ds,ereg)
     for igeo in 1 : ngeo
@@ -214,7 +214,7 @@ function extract!(
     data :: AbstractArray{Float32,3},
     e5ds :: ERA5Dataset,
 	evar :: SingleLevel,
-	ereg :: ERA5Region,
+	ereg :: ERA5LonLat,
     elsd :: LandSeaTopo,
     ggrd :: RegionGrid,
     dt   :: Date
@@ -238,7 +238,7 @@ function extract!(
     data :: AbstractArray{Float32,3},
     e5ds :: ERA5Dataset,
 	evar :: PressureLevel,
-	ereg :: ERA5Region,
+	ereg :: ERA5LonLat,
     elsd :: LandSeaTopo,
     ggrd :: RegionGrid,
     dt   :: Date
@@ -262,7 +262,7 @@ function extractsplit!(
     data :: AbstractArray{Float32,3},
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
-	ereg :: ERA5Region,
+	ereg :: ERA5LonLat,
     elsd :: LandSeaTopo,
     ggrd :: RegionGrid,
     dt   :: Date

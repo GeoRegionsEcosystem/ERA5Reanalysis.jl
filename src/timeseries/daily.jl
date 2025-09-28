@@ -1,7 +1,7 @@
 function timeseries(
     e5ds :: ERA5Daily,
 	evar :: ERA5Variable,
-    ereg :: ERA5Region;
+    ereg :: ERA5LonLat;
     verbose :: Bool = false
 )
 
@@ -79,7 +79,7 @@ function timeseries(
     sgeo :: GeoRegion,
     e5ds :: ERA5Daily,
 	evar :: ERA5Variable,
-    ereg :: ERA5Region;
+    ereg :: ERA5LonLat;
     verbose :: Bool = false
 )
 
@@ -162,7 +162,7 @@ function save_timeseries(
     ocnts :: Vector{Float32},
     e5ds  :: ERA5Daily,
     evar  :: ERA5Variable,
-    ereg  :: ERA5Region
+    ereg  :: ERA5LonLat
 )
 
     @info "$(modulelog()) - Saving domain-mean timeseries of $(uppercase(e5ds.name)) $(evar.name) in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(year(e5ds.start)) $(Dates.monthname(e5ds.start)) to $(year(e5ds.stop)) $(Dates.monthname(e5ds.stop)) ..."

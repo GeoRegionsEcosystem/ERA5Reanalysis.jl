@@ -14,7 +14,7 @@ end
 function smoothing(
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
-    ereg :: ERA5Region;
+    ereg :: ERA5LonLat;
     spatial  :: Bool = false,
     temporal :: Bool = false,
     hours :: Int = 0,
@@ -197,7 +197,7 @@ end
 function smoothing(
     e5ds :: ERA5Daily,
 	evar :: ERA5Variable,
-    ereg :: ERA5Region;
+    ereg :: ERA5LonLat;
     spatial  :: Bool = false,
     temporal :: Bool = false,
     days :: Int = 0,
@@ -380,7 +380,7 @@ end
 function smoothing(
     e5ds :: ERA5Monthly,
 	evar :: ERA5Variable,
-    ereg :: ERA5Region;
+    ereg :: ERA5LonLat;
     smoothlon :: Real = 0,
     smoothlat :: Real = 0,
     verbose :: Bool = false

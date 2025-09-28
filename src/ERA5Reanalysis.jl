@@ -42,6 +42,7 @@ export
         resetERA5Variables, addERA5Variables, rmERA5Variable,  tableERA5Variables,
 
         ERA5Region,
+        ERA5LonLat, ERA5Native,
         isinERA5Region, coordERA5Region, RegionGrid,
 
         LandSea,
@@ -105,6 +106,24 @@ All `PressureLevel` Types contain the following fields:
 - `hPa` : The pressure level (in hPa) of the pressure-variable of interest
 """
 abstract type ERA5Variable end
+
+"""
+    ERA5Region
+
+Abstract supertype for ERA5 Regions, with the following subtypes
+
+    ERA5LonLatGrid <: ERA5Region
+    ERA5NativeGrid <: ERA5Region
+
+All `ERA5Region` Types contain the following fields:
+- `geo` : The `GeoRegion` containing the geographical information
+- `ID` : The ID used to specify the `GeoRegion`
+- `resolution` : The resolution of the gridded data to be downloaded/analysed
+- `string` : Specification of folder and file name, mostly for backend usage
+- `isglb` : A Bool, true if spans the globe, false if no
+- `is360` : True if it spans 360º longitude
+"""
+abstract type ERA5Region end
 
 ## ERA5Reanalysis.jl logging preface
 
