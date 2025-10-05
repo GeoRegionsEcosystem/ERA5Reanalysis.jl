@@ -30,7 +30,7 @@ Keyword Arguments
 """
 function getLandSea(
     e5ds :: ERA5Dataset,
-    ereg :: ERA5LonLat = ERA5Region("GLB");
+    ereg :: ERA5LonLat;
     save :: Bool = true,
     returnlsd :: Bool = true,
 )

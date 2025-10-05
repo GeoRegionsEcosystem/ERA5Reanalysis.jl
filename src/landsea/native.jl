@@ -30,7 +30,7 @@ Keyword Arguments
 """
 function getLandSea(
     e5ds :: ERA5Dataset,
-    ereg :: ERA5Native = ERA5Region("GLB",native=true);
+    ereg :: ERA5Native;
     save :: Bool = true,
     returnlsd :: Bool = true,
 )
