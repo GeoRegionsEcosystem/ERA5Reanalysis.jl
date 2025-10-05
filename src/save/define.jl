@@ -74,6 +74,41 @@ function save_definevar!(
 
 end
 
+function save_definelonlat!(ds::NCDataset,::ERA5Native)
+
+    nclon = defVar(ds,"longitude",Float64,("values",),attrib = Dict(
+        "units"     => "degrees_east",
+        "long_name" => "longitude",
+    ))
+
+    nclat = defVar(ds,"latitude",Float64,("values",),attrib = Dict(
+        "units"     => "degrees_north",
+        "long_name" => "latitude",
+    ))
+
+    return nclon,nclat
+
+end
+
+function save_definevar!(
+    ds     :: NCDataset,
+    evar   :: ERA5Variable,
+           :: ERA5Native
+)
+
+    ncvar = defVar(
+        ds,evar.ncID,Float32,("values","valid_time"),
+        attrib = Dict(
+            "long_name"     => evar.long,
+            "full_name"     => evar.name,
+            "units"         => evar.units,
+        )
+    )
+
+    return ncvar
+
+end
+
 function save_definetimes(
     e5ds :: ERA5Monthly,
     dt   :: Date
