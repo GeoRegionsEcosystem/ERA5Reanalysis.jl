@@ -24,13 +24,13 @@ Keyword Arguments
 """
 function isinERA5Region(
     point :: Point2{<:Real},
-    e5geo :: ERA5Region;
+    egeo  :: ERA5Region;
     tlon  :: Real = 0,
     tlat  :: Real = 0,
     throw :: Bool = true
 )
 
-    return isinGeoRegion(point,e5geo.geo,tlon=tlon,tlat=tlat,throw=throw)
+    return isinGeoRegion(point,egeo.geo,tlon=tlon,tlat=tlat,throw=throw)
 
 end
 
@@ -57,13 +57,13 @@ Keyword Arguments
 - `domask` : If `throw` is `false` and `domask` is `true`, return a mask (with bounds defined by the `geo` GeoRegion) showing the region where `geo` and `e5geo` do not overlap
 """
 function isinERA5Region(
-    geo    :: GeoRegion,
-    e5geo  :: ERA5Region;
+    geo  :: GeoRegion,
+    egeo :: ERA5Region;
     domask :: Bool = false,
     throw  :: Bool = true
 )
 
-    return isinGeoRegion(geo,e5geo.geo,domask=domask,throw=throw)
+    return isinGeoRegion(geo,egeo.geo,domask=domask,throw=throw)
 
 end
 
@@ -84,12 +84,12 @@ Arguments
 - `lat`   : A vector containing the latitude points
 """
 function RegionGrid(
-    e5geo :: ERA5Region,
-    lon   :: Vector{<:Real},
-    lat   :: Vector{<:Real}
+    egeo :: ERA5Region,
+    lon  :: Vector{<:Real},
+    lat  :: Vector{<:Real}
 )
 
-    return RegionGrid(e5geo.geo,lon,lat)
+    return RegionGrid(egeo.geo,lon,lat)
 
 end
 
@@ -110,11 +110,11 @@ Arguments
 - `lat`   : An array containing the latitude points
 """
 function RegionGrid(
-    e5geo :: ERA5Region,
-    lon   :: Array{<:Real,2},
-    lat   :: Array{<:Real,2}
+    egeo :: ERA5Region,
+    lon  :: Array{<:Real,2},
+    lat  :: Array{<:Real,2}
 )
 
-    return RegionGrid(e5geo.geo,lon,lat)
+    return RegionGrid(egeo.geo,lon,lat)
 
 end
