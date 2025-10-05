@@ -23,8 +23,8 @@ Arguments
 - `ipsy` : Specifies whether to generate a python script that can be used to download the data instead of Julia
 - `overwrite` : `false` by default. If set to true, existing data will be overwritten.
 """
-function dkrz(
-    e5ds :: ERA5CDStore,
+function accessdkrz(
+    e5ds :: ERA5Hourly,
     evar :: ERA5Variable,
     date :: Date;
     domodellevel :: Bool = false,
@@ -62,6 +62,94 @@ function dkrz(
     end
 
     return GRIBDataset(fgrb)
+
+end
+
+function accessdkrz(
+    e5ds :: ERA5Monthly,
+    evar :: ERA5Variable,
+    date :: Date;
+    domodellevel :: Bool = false,
+    doforecast   :: Bool = false,
+    doothertype  :: Bool = true
+)
+
+    checkdkrzvariable(evar)
+    level = checkdkrzlevel(evar,domodellevel)
+    tres  = checkdkrztres(e5ds,evar)
+    type,typeID = checkanfc(evar,doforecast)
+
+    path = "/pool/data/ERA5/E5/$(level)/$(type)/$(tres)/$(@sprintf("%03d",evar.dkrz))"
+    if !evar.invariant
+        fID = "E5$(level)$(typeID)_$(tres)_$(year(date))_$(@sprintf("%03d",evar.dkrz)).grb"
+    else
+        fID = "E5$(level)$(typeID)_$(tres)_2001_$(@sprintf("%03d",evar.dkrz)).grb"
+    end
+
+    fgrb = joinpath(path,fID)
+
+    if !isfile(fgrb)
+        if doothertype
+            if !doforecast
+                path = "/pool/data/ERA5/E5/$(level)/fc/$(tres)/$(@sprintf("%03d",evar.dkrz))"
+                fID = "E5$(level)12_$(tres)_$(year(date))_$(@sprintf("%03d",evar.dkrz)).grb"
+            elseif doforecast
+                path = "/pool/data/ERA5/E5/$(level)/an/$(tres)/$(@sprintf("%03d",evar.dkrz))"
+                fID = "E5$(level)00_$(tres)_$(year(date))_$(@sprintf("%03d",evar.dkrz)).grb"
+            end
+        else
+            error("$(modulelog()) - The file $(fgrb) does not exist, likely you need to set doothertype to `true` because DKRZ has it as a forecast variable instead of an analysis variable or vice versa")
+        end
+        fgrb = joinpath(path,fID)
+    end
+
+    return GRIBDataset(fgrb)
+
+end
+
+function dkrz(
+    e5ds :: ERA5CDStore,
+    evar :: SingleVariable,
+    egeo :: ERA5Region;
+    domodellevel :: Bool = false,
+    doforecast   :: Bool = false,
+    doothertype  :: Bool = true
+)
+
+    dtvec = e5ds.start : Month(1) : e5ds.stop; ndt = length(dtvec)
+    geo = egeo.geo
+    elon,elat = ERA5Reanalysis.nativelonlat()
+    ggrd = RegionGrid(geo,Point2.(elon,elat)); npnts = length(ggrd.ipoint)
+    vmat = zeros(npnts,24*ndt)
+
+    if isglb(egeo)
+        ipnts = minimum(ggrd.ipoint) : maximum(ggrd.ipoint)
+    else
+        ipnts = ggrd.ipoint
+    end
+
+    for idt in dtvec
+
+        yr = year(idt)
+        mo = month(idt)
+        
+        for iday in 1 : daysinmonth(idt)
+
+            @info "$(now()) - S2DExploration - Extraction point data $(evar.name) for ($(lon),$(lat)) from the DKRZ servers for $(dtvec[idt])"
+            ibeg = (iday-1) * 24 + 1
+            iend = iday * 24
+            gds = accessdkrz(
+                e5ds,evar,Date(yr,mo,iday),
+                domodellevel=domodellevel,doforecast=doforecast,doothertype=doothertype
+            )
+            vmat[:,ibeg:iend] .= nomissing(gds[evar.ID][ipnts,:],NaN)
+            close(gds)
+
+        end
+
+        save(view(vmat,:,1:nt),idt,e5ds,evar,egeo,ggrd)
+
+    end
 
 end
 
