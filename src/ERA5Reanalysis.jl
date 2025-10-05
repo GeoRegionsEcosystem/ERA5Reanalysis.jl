@@ -48,7 +48,7 @@ export
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read, save, rm, is, dkrz,
+        download, read, save, rm, is, dkrz, accessdkrz,
         addCDSAPIkey,
         
         extract, analysis, timeseries, smoothing, hourly2daily, hourly2monthly,
