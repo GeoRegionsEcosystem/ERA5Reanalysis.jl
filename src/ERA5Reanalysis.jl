@@ -156,7 +156,8 @@ include("region/region.jl")
 include("region/functions.jl")
 include("region/extract.jl")
 
-include("landsea/landsea.jl")
+include("landsea/lonlat.jl")
+include("landsea/native.jl")
 
 include("downloads/cdsapi.jl")
 include("downloads/downloads.jl")
