@@ -79,12 +79,12 @@ function ERA5Region(
     if !native
         return ERA5LonLat{ST,FT}(
             geo, geo.ID, N, S, E, W, resolution,
-            "$(geo.ID)x$(@sprintf("%.2f",resolution))", isglb, is360, native
+            "$(geo.ID)x$(@sprintf("%.2f",resolution))", isglb, is360
         )
     else
         return ERA5Native{ST,FT}(
             geo, geo.ID, N, S, E, W, 0,
-            "$(geo.ID)xT639", isglb, is360, native
+            "$(geo.ID)xT639", isglb, is360
         )
     end
 
@@ -119,7 +119,6 @@ function ERA5Region(
 
     @info "$(modulelog()) - Creating an ERA5Region based on the GeoRegion \"$(ID)\""
     resolution = regionstep(ID,resolution)
-    if ID == "GLB"; isglb = true; else; isglb = false end
 
     return ERA5Region(
         GeoRegion(ID,path=path),resolution=resolution,native=native,
@@ -135,18 +134,14 @@ function regionstep(
 
     @debug "$(modulelog()) - Determining spacing between grid points in the GeoRegion ..."
     if resolution == 0
-        @info "$(modulelog()) - No grid resolution specified, defaulting to the module default (1.0º for global GeoRegion, 0.25º for all others)"
-        if ID == "GLB";
-              resolution = 1.0;
-        else; resolution = 0.25;
-        end
+        @info "$(modulelog()) - No grid resolution specified, defaulting to the default of 0.25º"
+        return 0.25
     else
         if !checkegrid(resolution)
             error("$(modulelog()) - The grid resolution $(resolution)º is not valid as it does not divide 360º without remainder")
         end
+        return resolution
     end
-
-    return resolution
 
 end
 
