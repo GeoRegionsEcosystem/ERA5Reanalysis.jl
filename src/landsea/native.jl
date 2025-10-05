@@ -126,9 +126,9 @@ function saveLandSea(
     ereg :: ERA5Native,
     lon  :: Vector{<:Real},
     lat  :: Vector{<:Real},
-    lsm  :: Vector{<:Real,2},
-    oro  :: Vector{<:Real,2},
-    mask :: Vector{Int16,2},
+    lsm  :: Vector{<:Real},
+    oro  :: Vector{<:Real},
+    mask :: Vector{Int16},
 )
 
     fnc = joinpath(e5ds.emask,"emask-$(ereg.string).nc")
