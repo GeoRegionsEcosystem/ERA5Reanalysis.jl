@@ -44,6 +44,7 @@ export
         ERA5Region,
         ERA5LonLat, ERA5Native,
         isinERA5Region, coordERA5Region, RegionGrid,
+        RegridGrid, native2lonlat, native2lonlat!,
 
         LandSea,
         getLandSea, downloadLandSea,
@@ -155,6 +156,7 @@ include("variable/show.jl")
 include("region/region.jl")
 include("region/functions.jl")
 include("region/extract.jl")
+include("region/regrid.jl")
 
 include("landsea/lonlat.jl")
 include("landsea/native.jl")
