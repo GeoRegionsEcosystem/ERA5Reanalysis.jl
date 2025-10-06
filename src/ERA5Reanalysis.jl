@@ -17,7 +17,7 @@ using UnitfulParsableString
 
 import Base: show, read, split, download, rm, ==, !==, isequal
 import GeoRegions: ==, !==, isequal
-import RegionGrids: RegionGrid, extract
+import RegionGrids: RegionGrid, extract, extract!
 import LandSea: getLandSea
 
 ## Reexporting exported functions within these modules
@@ -25,6 +25,7 @@ using Reexport
 @reexport using Dates
 @reexport using GeoRegions
 @reexport using NCDatasets
+@reexport using GRIBDatasets
 
 ## Exporting the following functions:
 export
@@ -41,16 +42,17 @@ export
         resetERA5Variables, addERA5Variables, rmERA5Variable,  tableERA5Variables,
 
         ERA5Region,
+        ERA5LonLat, ERA5Native,
         isinERA5Region, coordERA5Region, RegionGrid,
 
         LandSea,
         getLandSea, downloadLandSea,
 
-        download, read, save, rm, is,
+        download, read, save, rm, is, dkrz, accessdkrz,
         addCDSAPIkey,
         
         extract, analysis, timeseries, smoothing, hourly2daily, hourly2monthly,
-        hourly2monthlyhour,
+        hourly2monthlyhour, nativelonlat, closestnativelonlat,
 
         era5Pressures
 
@@ -105,6 +107,24 @@ All `PressureLevel` Types contain the following fields:
 """
 abstract type ERA5Variable end
 
+"""
+    ERA5Region
+
+Abstract supertype for ERA5 Regions, with the following subtypes
+
+    ERA5LonLatGrid <: ERA5Region
+    ERA5NativeGrid <: ERA5Region
+
+All `ERA5Region` Types contain the following fields:
+- `geo` : The `GeoRegion` containing the geographical information
+- `ID` : The ID used to specify the `GeoRegion`
+- `resolution` : The resolution of the gridded data to be downloaded/analysed
+- `string` : Specification of folder and file name, mostly for backend usage
+- `isglb` : A Bool, true if spans the globe, false if no
+- `is360` : True if it spans 360º longitude
+"""
+abstract type ERA5Region end
+
 ## ERA5Reanalysis.jl logging preface
 
 modulelog() = "$(now()) - ERA5Reanalysis.jl"
@@ -136,13 +156,16 @@ include("region/region.jl")
 include("region/functions.jl")
 include("region/extract.jl")
 
-include("landsea/landsea.jl")
+include("landsea/lonlat.jl")
+include("landsea/native.jl")
 
 include("downloads/cdsapi.jl")
 include("downloads/downloads.jl")
 include("downloads/cdsretrieve.jl")
 include("downloads/pythonprint.jl")
 include("downloads/split.jl")
+
+include("dkrz/dkrz.jl")
 
 include("hour2time/hour2day.jl")
 include("hour2time/hour2month.jl")
@@ -172,6 +195,5 @@ include("save/define.jl")
 include("save/hourly.jl")
 include("save/daily.jl")
 include("save/monthly.jl")
-include("save/extract.jl")
 
 end

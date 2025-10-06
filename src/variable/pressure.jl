@@ -14,13 +14,19 @@ abstract type PressureLevel <: ERA5Variable end
 Subtype for Pressure-Level variables that can be directly retrieved from the Climate Data Store.
 """
 struct PressureVariable{ST<:AbstractString} <: PressureLevel
-    ID      :: ST
-    long    :: ST
-    name    :: ST
-    units   :: ST
-    hPa     :: Int
-    path    :: ST
-    dataset :: ST
+    ID    :: ST
+    long  :: ST
+    name  :: ST
+    units :: ST
+    hPa   :: Int
+    path  :: ST
+    dataset   :: ST
+    analysis  :: Bool
+    forecast  :: Bool
+    invariant :: Bool
+    ncID :: ST
+    mars :: Int
+    dkrz :: Union{Int,Missing}
 end
 
 """
@@ -29,13 +35,13 @@ end
 Subtype for custom user-defined Pressure-Level variables which can only be calculated and not downloaded from the Climate Data Store.
 """
 struct PressureCustom{ST<:AbstractString} <: PressureLevel
-    ID      :: ST
-    long    :: ST
-    name    :: ST
-    units   :: ST
-    hPa     :: Int
-    path    :: ST
-    dataset :: ST
+    ID    :: ST
+    long  :: ST
+    name  :: ST
+    units :: ST
+    hPa   :: Int
+    path  :: ST
+    ncID  :: ST
 end
 
 """
@@ -76,22 +82,20 @@ function PressureVariable(
     fname = joinpath(plist[ind],flist[ind])
     vlist = listera5variables(fname); ind = findall(ID.==vlist)[1]
 
-    ID,long,name,units = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
+    ID,name,units,long = readdlm(fname,',',comments=true,comment_char='#')[ind,[1,2,3,7]]
 
     hPa = checkPressure(hPa,throw=throw)
 
     if vtype == "pressurevariable"
         if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the PressureVariable type" end
+        an,fc,iv,nc,mars,dkrz = readdlm(fname,',',comments=true,comment_char='#')[ind,[4,5,6,8,9,10]]
         return PressureVariable{ST}(
             ID,long,name * " ($(hPa) hPa)",units,hPa,fname,
-            "reanalysis-era5-pressure-levels"
+            "reanalysis-era5-pressure-levels",an,fc,iv,nc,mars,dkrz
         )
     else
         if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the PressureCustom type" end
-        return PressureCustom{ST}(
-            ID,long,name * " ($(hPa) hPa)",units,hPa,fname,
-            "reanalysis-era5-pressure-levels"
-        )
+        return PressureCustom{ST}(ID,long,name * " ($(hPa) hPa)",units,hPa,fname,ID)
     end
 
 end
@@ -144,15 +148,14 @@ function PressureVariable(
             cp(joinpath(eradir,"pressurecustom.txt"),varfile)
         end
         open(varfile,"a") do io
-            write(io,"$ID,$long,$name,$units\n")
+            write(io,"$ID,$name,$units,false,false,false,$long,$ID,missing,missing\n")
         end
     end
 
     hPa = checkPressure(hPa,throw=throw)
 
     return PressureCustom{ST}(
-        ID,long,name,units,hPa,joinpath(path,"pressurecustom.txt"),
-        "reanalysis-era5-pressure-levels"
+        ID,long,name * " ($(hPa) hPa)",units,hPa,joinpath(path,"pressurecustom.txt"),ID
     )
 
 end

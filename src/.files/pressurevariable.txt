@@ -1,20 +1,20 @@
 # PressureVariable
 # List of ERA5 Pressure-Level Variables available in the CDS
-# (1)ID, (2)era5, (3)Full, (4)Units
+# (1) ERA5 ID, (2) Full Name, (3) Units, (4) Analysis, (5) Forecast, (6) Invariant, (7) CDS Name, (8) NetCDF ID, (9) MARS ID, (10) DKRZ ID
 
-u,u_component_of_wind,Zonal Wind,m s**-1
-v,v_component_of_wind,Meridional Wind,m s**-1
-w,vertical_velocity,Vertical Wind,Pa s**-1
-t,temperature,Temperature,K
-z,geopotential,Pressure Level Geopotential,m**2 s**-2
-d,divergence,Divergence,s**-1
-vo,vorticity,Vorticity (Relative),s**-1
-pv,potential_vorticity,Potential Vorticity,K m**-2 kg**-1 s**-1
-r,relative_humidity,Relative Humidity,%
-q,specific_humidity,Specific Humidity,kg kg**-1
-cc,fraction_of_cloud_cover,Cloud Cover Fraction,%
-ciwc,specific_cloud_ice_water_content,Specific Cloud Ice Water Content,kg kg**-1
-clwc,specific_cloud_liquid_water_content,Specific Cloud Liquid Water Content,kg kg**-1
-crwc,specific_rain_water_content,Specific Rain Water Content,kg kg**-1
-cswc,specific_snow_water_content,Specific Snow Water Contnet,kg kg**-1
-o3,ozone_mass_mixing_ratio,Ozone Mass Mixing Ration,kg kg**-1
+u,Zonal Wind,m s**-1,true,true,false,u_component_of_wind,u,131,131
+v,Meridional Wind,m s**-1,true,true,false,v_component_of_wind,v,132,132
+w,Vertical Wind,Pa s**-1,true,true,false,vertical_velocity,w,135,135
+t,Temperature,K,true,true,false,temperature,t,130,130
+z,Pressure Level Geopotential,m**2 s**-2,true,true,false,geopotential,z,129,129
+d,Divergence,s**-1,true,true,false,divergence,d,155,155
+vo,Vorticity (Relative),s**-1,true,true,false,vorticity,vo,138,138
+pv,Potential Vorticity,K m**-2 kg**-1 s**-1,true,true,false,potential_vorticity,pv,60,60
+r,Relative Humidity,%,true,true,false,relative_humidity,r,157,157
+q,Specific Humidity,kg kg**-1,true,true,false,specific_humidity,q,133,133
+cc,Cloud Cover Fraction,%,true,true,false,fraction_of_cloud_cover,cc,248,248
+ciwc,Specific Cloud Ice Water Content,kg kg**-1,true,true,false,specific_cloud_ice_water_content,ciwc,247,247
+clwc,Specific Cloud Liquid Water Content,kg kg**-1,true,true,false,specific_cloud_liquid_water_content,clwc,246,246
+crwc,Specific Rain Water Content,kg kg**-1,true,true,false,specific_rain_water_content,crwc,75,75
+cswc,Specific Snow Water Contnet,kg kg**-1,true,true,false,specific_snow_water_content,cswc,76,76
+o3,Ozone Mass Mixing Ration,kg kg**-1,true,true,false,ozone_mass_mixing_ratio,o3,203,203

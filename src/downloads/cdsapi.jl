@@ -77,25 +77,6 @@ function retrieve(
         dt2 = now()
         @info "$(now()) - CDSAPI - Downloaded $(@sprintf("%.1f",fsize/1024^2)) MB in $(@sprintf("%.1f",Dates.value(dt2-dt1)/1000)) seconds (Rate: $(@sprintf("%.1f",fsize/1024^2/Dates.value(dt2-dt1)*1000)) MB/s)"
 
-        # tries = 0
-        # while isinteger(tries) && (tries < 10)
-        #     try
-        #         dt1 = now()
-        #         HTTP.download(url,fnc,update_period=Inf)
-        #         dt2 = now()
-        #         tries += 0.5
-        #         @info "$(now()) - CDSAPI - Downloaded $(@sprintf("%.1f",fsize/1024^2)) MB in $(@sprintf("%.1f",Dates.value(dt2-dt1)/1000)) seconds (Rate: $(@sprintf("%.1f",fsize/1024^2/Dates.value(dt2-dt1)*1000)) MB/s)"
-        #     catch
-        #         tries += 1
-        #         @info "$(now()) - CDSAPI - Failed to download on Attempt $(tries) of 10"
-        #     end
-        #     flush(stderr)
-        # end
-
-        # if tries == 10
-        #     @warn "$(now()) - CDSAPI - Failed to download data, skipping to next request"
-        # end
-
     end
 
     flush(stderr)

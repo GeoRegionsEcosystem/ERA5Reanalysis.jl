@@ -1,7 +1,7 @@
 """
     getLandSea(
         e5ds :: ERA5Dataset,
-        ereg :: ERA5Region = ERA5Region("GLB");
+        ereg :: ERA5LonLat = ERA5Region("GLB");
         save :: Bool = true,
         returnlsd :: Bool = true,
         smooth    :: Bool = false,
@@ -16,7 +16,7 @@ Retrieve the Land-Sea Mask data for the `ERA5Dataset` specified.
 Arguments
 =========
 - `e5ds` : The `ERA5Dataset` specified, which downloads the LandSea data into the path specified in `e5ds`.
-- `ereg` : The ERA5Region of interest, each LandSea dataset is different depending on the resolution specified
+- `ereg` : The ERA5LonLat of interest, each LandSea dataset is different depending on the resolution specified
 
 
 Keyword Arguments
@@ -30,7 +30,7 @@ Keyword Arguments
 """
 function getLandSea(
     e5ds :: ERA5Dataset,
-    ereg :: ERA5Region = ERA5Region("GLB");
+    ereg :: ERA5LonLat;
     save :: Bool = true,
     returnlsd :: Bool = true,
 )
@@ -40,7 +40,7 @@ function getLandSea(
 
     if !isfile(lsmfnc)
 
-        @info "$(modulelog()) - The ERA5 Land-Sea mask dataset for the \"$(ereg.ID)\" ERA5Region is not available, extracting from Global ERA5 Land-Sea mask dataset ..."
+        @info "$(modulelog()) - The ERA5 Land-Sea mask dataset for the \"$(ereg.ID)\" ERA5LonLat is not available, extracting from Global ERA5 Land-Sea mask dataset ..."
 
         glbfnc = joinpath(e5ds.emask,"emask-GLBx$(@sprintf("%.2f",ereg.resolution)).nc")
         if !isfile(glbfnc)
@@ -55,11 +55,13 @@ function getLandSea(
         goro = nomissing(gds["z"][:,:,1])
         close(gds)
 
-        ggrd = RegionGrid(ereg,glon,glat); ggrd.mask[isnan.(ggrd.mask)] .= 0
+        ggrd = RegionGrid(ereg,glon,glat)
 
-        @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region from the Global ERA5 Land-Sea mask dataset ..."
+        @info "$(modulelog()) - Extracting regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5LonLat from the Global ERA5 Land-Sea mask dataset ..."
         roro = extract(goro,ggrd)
         rlsm = extract(glsm,ggrd)
+        
+        ggrd.mask[isnan.(ggrd.mask)] .= 0
 
         if save
             saveLandSea(e5ds,ereg,ggrd.lon,ggrd.lat,rlsm,roro,Int16.(ggrd.mask))
@@ -78,7 +80,7 @@ function getLandSea(
         oro = nomissing(lds["z"][:,:])
         close(lds)
 
-        @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5Region ..."
+        @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5LonLat ..."
 
         return LandSeaTopo{Float64,Float32}(lon,lat,lsm,oro/9.80665)
 
@@ -92,7 +94,7 @@ end
 
 function downloadLandSea(
     e5ds :: ERA5Dataset,
-    ereg :: ERA5Region
+    ereg :: ERA5LonLat
 )
 
     tmpfnc = joinpath(e5ds.emask,"tmp.nc")
@@ -128,7 +130,7 @@ end
 
 function saveLandSea(
     e5ds :: ERA5Dataset,
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
     lon  :: Vector{<:Real},
     lat  :: Vector{<:Real},
     lsm  :: Array{<:Real,2},

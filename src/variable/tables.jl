@@ -13,8 +13,8 @@ function tableERA5Variables(;
             fid  = joinpath(path,"$(lowercase(fname)).txt")
             if isfile(fid)
                 vmat = readdlm(fid,',',comments=true,comment_char='#')
-                nvar = size(vmat,1); ff = fill(fname,nvar)
-                vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2]],dims=2)
+                nvar = size(vmat,1); ff = fill(fname,nvar); mm = fill(missing,nvar)
+                vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2]],mm,mm,dims=2)
                 fmat = cat(fmat,vmat,dims=1)
             else
                 if warn
@@ -29,28 +29,30 @@ function tableERA5Variables(;
             fid  = joinpath(eradir,"$(lowercase(fname)).txt")
             vmat = readdlm(fid,',',comments=true,comment_char='#')
             nvar = size(vmat,1); ff = fill(fname,nvar)
-            vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2]],dims=2)
+            vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2,5,6]],dims=2)
             fmat = cat(fmat,vmat,dims=1)
         end
     end
 
-    head = ["ID","Variable Type","Name","Units","ERA5 Long-Name"];
+    fmat[iszero.(fmat[:,6]),6:7] .= missing
+
+    head = ["ID","Variable Type","Name","Units","ERA5 Long-Name","DKRZ ID","DKRZ Invariant"]
 
     if isempty(fmat)
-        fmat  = Array{String,2}(undef,1,5)
+        fmat  = Array{String,2}(undef,1,7)
         fmat .= "N/A"
     end
 
     if !crop
         pretty_table(
             fmat,header=head,
-            alignment=[:c,:c,:l,:c,:l],
+            alignment=[:c,:c,:l,:c,:l,:c,:c],
             crop = :none, tf = tf_compact
         );
     else
         pretty_table(
             fmat,header=head,
-            alignment=[:c,:c,:l,:c,:l],
+            alignment=[:c,:c,:l,:c,:l,:c,:c],
             crop = :vertical, tf = tf_compact
         );
     end
@@ -63,7 +65,8 @@ function tableSingles(;
     path :: AbstractString = homedir(),
     predefined :: Bool = true,
     custom     :: Bool = false,
-    crop       :: Bool = false
+    warn :: Bool = true,
+    crop :: Bool = false
 )
 
     fmat = []
@@ -72,8 +75,8 @@ function tableSingles(;
         fid  = joinpath(path,"singlecustom.txt")
         if isfile(fid)
             vmat = readdlm(fid,',',comments=true,comment_char='#')
-            nvar = size(vmat,1); ff = fill("SingleCustom",nvar)
-            vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2]],dims=2)
+            nvar = size(vmat,1); ff = fill("SingleCustom",nvar); mm = fill(missing,nvar)
+            vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2]],mm,mm,dims=2)
             fmat = cat(fmat,vmat,dims=1)
         else
             if warn
@@ -88,27 +91,29 @@ function tableSingles(;
             ',',comments=true,comment_char='#'
         )
         nvar = size(vmat,1); ff = fill("SingleVariable",nvar)
-        vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2]],dims=2)
+        vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2,5,6]],dims=2)
         fmat = cat(fmat,vmat,dims=1)
     end
 
-    head = ["ID","Variable Type","Name","Units","ERA5 Long-Name"];
+    fmat[iszero.(fmat[:,6]),6:7] .= missing
+
+    head = ["ID","Variable Type","Name","Units","ERA5 Long-Name","DKRZ ID","DKRZ Invariant"]
 
     if isempty(fmat)
-        fmat  = Array{String,2}(undef,1,5)
+        fmat  = Array{String,2}(undef,1,7)
         fmat .= "N/A"
     end
 
     if !crop
         pretty_table(
             fmat,header=head,
-            alignment=[:c,:c,:l,:c,:l],
+            alignment=[:c,:c,:l,:c,:l,:c,:c],
             crop = :none, tf = tf_compact
         );
     else
         pretty_table(
             fmat,header=head,
-            alignment=[:c,:c,:l,:c,:l],
+            alignment=[:c,:c,:l,:c,:l,:c,:c],
             crop = :vertical, tf = tf_compact
         );
     end
@@ -121,7 +126,8 @@ function tablePressures(;
     path :: AbstractString = homedir(),
     predefined :: Bool = true,
     custom     :: Bool = false,
-    crop       :: Bool = false
+    warn :: Bool = true,
+    crop :: Bool = false
 )
 
     fmat = []
@@ -130,8 +136,8 @@ function tablePressures(;
         fid  = joinpath(path,"pressurecustom.txt")
         if isfile(fid)
             vmat = readdlm(fid,',',comments=true,comment_char='#')
-            nvar = size(vmat,1); ff = fill("PressureCustom",nvar)
-            vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2]],dims=2)
+            nvar = size(vmat,1); ff = fill("PressureCustom",nvar); mm = fill(missing,nvar)
+            vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2]],mm,mm,dims=2)
             fmat = cat(fmat,vmat,dims=1)
         else
             if warn
@@ -146,7 +152,7 @@ function tablePressures(;
             ',',comments=true,comment_char='#'
         )
         nvar = size(vmat,1); ff = fill("pressurevariable",nvar)
-        vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2]],dims=2)
+        vmat = cat(vmat[:,1],ff,vmat[:,[3,4,2,5,6]],dims=2)
         fmat = cat(fmat,vmat,dims=1)
     end
 

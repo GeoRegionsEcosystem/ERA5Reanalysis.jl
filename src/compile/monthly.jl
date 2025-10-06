@@ -39,14 +39,14 @@ function compile(
         @info "$(modulelog()) - Loading $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) during $yr ..."
 
         eds = NCDataset(e5danc(e5ds,evar,date))
-        sc = eds[evar.ID].attrib["scale_factor"]
-        of = eds[evar.ID].attrib["add_offset"]
-        mv = eds[evar.ID].attrib["missing_value"]
-        fv = eds[evar.ID].attrib["_FillValue"]
+        sc = eds[evar.ncID].attrib["scale_factor"]
+        of = eds[evar.ncID].attrib["add_offset"]
+        mv = eds[evar.ncID].attrib["missing_value"]
+        fv = eds[evar.ncID].attrib["_FillValue"]
 
         if iseramohr
 
-            NCDatasets.load!(eds[evar.ID].var,eint,:,:,:,:)
+            NCDatasets.load!(eds[evar.ncID].var,eint,:,:,:,:)
             int2real!(eflt,eint,scale=sc,offset=of,mvalue=mv,fvalue=fv)
             for imo = 1 : 12, ihr = 1 : 24, ilat = 1 : nlat, ilon = 1 : nlon
                 if iszero(mask[ilon,ilat])
@@ -74,7 +74,7 @@ function compile(
 
         else
 
-            NCDatasets.load!(eds[evar.ID].var,eint,:,:,:)
+            NCDatasets.load!(eds[evar.ncID].var,eint,:,:,:)
             int2real!(earr,eint,scale=sc,offset=of,mvalue=mv,fvalue=fv)
             for imo = 1 : 12, ilat = 1 : nlat, ilon = 1 : nlon
                 if iszero(mask[ilon,ilat])

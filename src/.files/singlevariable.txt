@@ -1,266 +1,266 @@
 # SingleVariable
 # List of ERA5 Single-Level Variables available in the CDS
-# (1)ID, (2)era5, (3)Full, (4)Units
+# (1) ERA5 ID, (2) Full Name, (3) Units, (4) Analysis, (5) Forecast, (6) Invariant, (7) CDS Name, (8) NetCDF ID, (9) MARS ID, (10) DKRZ ID
 
-alnid,near_ir_albedo_for_diffuse_radiation,Near Ir Albedo For Diffuse Radiation,(0 - 1)
-alnip,near_ir_albedo_for_direct_radiation,Near Ir Albedo For Direct Radiation,(0 - 1)
-aluvd,uv_visible_albedo_for_diffuse_radiation,UV Visible Albedo For Diffuse Radiation,(0 - 1)
-aluvp,uv_visible_albedo_for_direct_radiation,UV Visible Albedo For Direct Radiation,(0 - 1)
-anor,angle_of_sub_gridscale_orography,Angle Of Sub-Gridscale Orography,radians
-asn,snow_albedo,Snow Albedo,(0 - 1)
-bfi,benjamin_feir_index,Benjamin-Feir Index,N/A
-bld,boundary_layer_dissipation,Boundary Layer Dissipation,J m**-2
-blh,boundary_layer_height,Boundary Layer Height,m
-cape,convective_available_potential_energy,Convective Available Potential Energy,J kg**-1
-cbh,cloud_base_height,Cloud Base Height,m
-cdir,clear_sky_direct_solar_radiation_at_surface,Clear-Sky Direct Solar Radiation At Surface,J m**-2
-cdww,coefficient_of_drag_with_waves,Coefficient Of Drag With Waves,N/A
-chnk,charnock,Charnock,N/A
-cin,convective_inhibition,Convective Inhibition,J kg**-1
-cl,lake_cover,Lake Cover,(0 - 1)
-cp,convective_precipitation,Convective Precipitation,m
-crr,convective_rain_rate,Convective Rain Rate,kg m**-2 s**-1
-csf,convective_snowfall,Convective Snowfall,m of water equivalent
-csfr,convective_snowfall_rate_water_equivalent,Convective Snowfall Rate Water Equivalent,kg m**-2 s**-1
-cvh,high_vegetation_cover,High Vegetation Cover,(0 - 1)
-cvl,low_vegetation_cover,Low Vegetation Cover,(0 - 1)
-d2m,2m_dewpoint_temperature,2 Metre Dewpoint Temperature,K
-dctb,duct_base_height,Duct Base Height,m
-deg0l,zero_degree_level,0 Degrees C Isothermal Level (Atm),m
-dl,lake_depth,Lake Total Depth,m
-dndza,mean_vertical_gradient_of_refractivity_inside_trapping_layer,Mean Vertical Gradient Of Refractivity Inside Trapping Layer,m**-1
-dndzn,minimum_vertical_gradient_of_refractivity_inside_trapping_layer,Minimum Vertical Gradient Of Refractivity Inside Trapping Layer,m**-1
-dwi,ocean_surface_stress_equivalent_10m_neutral_wind_direction,10 Metre Wind Direction,degrees
-dwps,wave_spectral_directional_width_for_swell,Wave Spectral Directional Width For Swell,radians
-dwww,wave_spectral_directional_width_for_wind_waves,Wave Spectral Directional Width For Wind Waves,radians
-e,evaporation,Evaporation,m of water equivalent
-es,snow_evaporation,Snow Evaporation,m of water equivalent
-ewss,eastward_turbulent_surface_stress,Eastward Turbulent Surface Stress,N m**-2 s
-fal,forecast_albedo,Forecast Albedo,(0 - 1)
-fdir,total_sky_direct_solar_radiation_at_surface,Total Sky Direct Solar Radiation At Surface,J m**-2
-fg10,10m_wind_gust_since_previous_post_processing,10 Metre Wind Gust Since Previous Post-Processing,m s**-1
-flsr,forecast_logarithm_of_surface_roughness_for_heat,Forecast Logarithm Of Surface Roughness For Heat,N/A
-fsr,forecast_surface_roughness,Forecast Surface Roughness,m
-gwd,gravity_wave_dissipation,Gravity Wave Dissipation,J m**-2
-hcc,high_cloud_cover,High Cloud Cover,(0 - 1)
-hmax,maximum_individual_wave_height,Maximum Individual Wave Height,m
-i10fg,instantaneous_10m_wind_gust,Instantaneous 10 Metre Wind Gust,m s**-1
-ie,instantaneous_moisture_flux,Instantaneous Moisture Flux,kg m**-2 s**-1
-iews,instantaneous_eastward_turbulent_surface_stress,Instantaneous Eastward Turbulent Surface Stress,N m**-2
-ilspf,instantaneous_large_scale_surface_precipitation_fraction,Instantaneous Large-Scale Surface Precipitation Fraction,(0 - 1)
-inss,instantaneous_northward_turbulent_surface_stress,Instantaneous Northward Turbulent Surface Stress,N m**-2
-ishf,,Instantaneous Surface Sensible Heat Flux,W m**-2
-isor,anisotropy_of_sub_gridscale_orography,Anisotropy Of Sub-Gridscale Orography,N/A
-istl1,ice_temperature_layer_1,Ice Temperature Layer 1,K
-istl2,ice_temperature_layer_2,Ice Temperature Layer 2,K
-istl3,ice_temperature_layer_3,Ice Temperature Layer 3,K
-istl4,ice_temperature_layer_4,Ice Temperature Layer 4,K
-kx,k_index,K Index,K
-lai_hv,leaf_area_index_high_vegetation,Leaf Area Index (High Vegetation),m**2 m**-2
-lai_lv,leaf_area_index_low_vegetation,Leaf Area Index (Low Vegetation),m**2 m**-2
-lblt,lake_bottom_temperature,Lake Bottom Temperature,K
-lcc,low_cloud_cover,Low Cloud Cover,(0 - 1)
-lgws,eastward_gravity_wave_surface_stress,Eastward Gravity Wave Surface Stress,N m**-2 s
-licd,lake_ice_depth,Lake Ice Total Depth,m
-lict,lake_ice_temperature,Lake Ice Surface Temperature,K
-lmld,lake_mix_layer_depth,Lake Mix-Layer Depth,m
-lmlt,lake_mix_layer_temperature,Lake Mix-Layer Temperature,K
-lsf,large_scale_snowfall,Large-Scale Snowfall,m of water equivalent
-lshf,lake_shape_factor,Lake Shape Factor,N/A
-lsm,land_sea_mask,Land-Sea Mask,(0 - 1)
-lsp,large_scale_precipitation,Large-Scale Precipitation,m
-lspf,large_scale_precipitation_fraction,Large-Scale Precipitation Fraction,s
-lsrr,large_scale_rain_rate,Large Scale Rain Rate,kg m**-2 s**-1
-lssfr,large_scale_snowfall_rate_water_equivalent,Large Scale Snowfall Rate Water Equivalent,kg m**-2 s**-1
-ltlt,lake_total_layer_temperature,Lake Total Layer Temperature,K
-mbld,mean_boundary_layer_dissipation,Mean Boundary Layer Dissipation,W m**-2
-mcc,medium_cloud_cover,Medium Cloud Cover,(0 - 1)
-mcpr,mean_convective_precipitation_rate,Mean Convective Precipitation Rate,kg m**-2 s**-1
-mcsr,mean_convective_snowfall_rate,Mean Convective Snowfall Rate,kg m**-2 s**-1
-mdts,mean_direction_of_total_swell,Mean Direction Of Total Swell,degrees
-mdww,mean_direction_of_wind_waves,Mean Direction Of Wind Waves,degrees
-megwss,mean_eastward_gravity_wave_surface_stress,Mean Eastward Gravity Wave Surface Stress,N m**-2
-mer,mean_evaporation_rate,Mean Evaporation Rate,kg m**-2 s**-1
-metss,mean_eastward_turbulent_surface_stress,Mean Eastward Turbulent Surface Stress,N m**-2
-mgwd,mean_gravity_wave_dissipation,Mean Gravity Wave Dissipation,W m**-2
-mgws,northward_gravity_wave_surface_stress,Northward Gravity Wave Surface Stress,N m**-2 s
-mlspf,mean_large_scale_precipitation_fraction,Mean Large-Scale Precipitation Fraction,Proportion
-mlspr,mean_large_scale_precipitation_rate,Mean Large-Scale Precipitation Rate,kg m**-2 s**-1
-mlssr,mean_large_scale_snowfall_rate,Mean Large-Scale Snowfall Rate,kg m**-2 s**-1
-mn2t,minimum_2m_temperature_since_previous_post_processing,Minimum Temperature At 2 Metres Since Previous Post-Processing,K
-mngwss,mean_northward_gravity_wave_surface_stress,Mean Northward Gravity Wave Surface Stress,N m**-2
-mntpr,minimum_total_precipitation_rate_since_previous_post_processing,Minimum Total Precipitation Rate Since Previous Post-Processing,kg m**-2 s**-1
-mntss,mean_northward_turbulent_surface_stress,Mean Northward Turbulent Surface Stress,N m**-2
-mp1,mean_wave_period_based_on_first_moment,Mean Wave Period Based On First Moment,s
-mp2,mean_zero_crossing_wave_period,Mean Zero-Crossing Wave Period,s
-mper,mean_potential_evaporation_rate,Mean Potential Evaporation Rate,kg m**-2 s**-1
-mpts,mean_period_of_total_swell,Mean Period Of Total Swell,s
-mpww,mean_period_of_wind_waves,Mean Period Of Wind Waves,s
-mror,mean_runoff_rate,Mean Runoff Rate,kg m**-2 s**-1
-msdrswrf,mean_surface_direct_short_wave_radiation_flux,Mean Surface Direct Short-Wave Radiation Flux,W m**-2
-msdrswrfcs,mean_surface_direct_short_wave_radiation_flux_clear_sky,Mean Surface Direct Short-Wave Radiation Flux (Clear Sky),W m**-2
-msdwlwrf,mean_surface_downward_long_wave_radiation_flux,Mean Surface Downward Long-Wave Radiation Flux,W m**-2
-msdwlwrfcs,mean_surface_downward_long_wave_radiation_flux_clear_sky,Mean Surface Downward Long-Wave Radiation Flux (Clear Sky),W m**-2
-msdwswrf,mean_surface_downward_short_wave_radiation_flux,Mean Surface Downward Short-Wave Radiation Flux,W m**-2
-msdwswrfcs,mean_surface_downward_short_wave_radiation_flux_clear_sky,Mean Surface Downward Short-Wave Radiation Flux (Clear Sky),W m**-2
-msdwuvrf,mean_surface_downward_uv_radiation_flux,Mean Surface Downward Uv Radiation Flux,W m**-2
-mser,mean_snow_evaporation_rate,Mean Snow Evaporation Rate,kg m**-2 s**-1
-msl,mean_sea_level_pressure,Mean Sea Level Pressure,Pa
-mslhf,mean_surface_latent_heat_flux,Mean Surface Latent Heat Flux,W m**-2
-msmr,mean_snowmelt_rate,Mean Snowmelt Rate,kg m**-2 s**-1
-msnlwrf,mean_surface_net_long_wave_radiation_flux,Mean Surface Net Long-Wave Radiation Flux,W m**-2
-msnlwrfcs,mean_surface_net_long_wave_radiation_flux_clear_sky,Mean Surface Net Long-Wave Radiation Flux (Clear Sky),W m**-2
-msnswrf,mean_surface_net_short_wave_radiation_flux,Mean Surface Net Short-Wave Radiation Flux,W m**-2
-msnswrfcs,mean_surface_net_short_wave_radiation_flux_clear_sky,Mean Surface Net Short-Wave Radiation Flux (Clear Sky),W m**-2
-msqs,mean_square_slope_of_waves,Mean Square Slope Of Waves,N/A
-msr,mean_snowfall_rate,Mean Snowfall Rate,kg m**-2 s**-1
-msror,mean_surface_runoff_rate,Mean Surface Runoff Rate,kg m**-2 s**-1
-msshf,mean_surface_sensible_heat_flux,Mean Surface Sensible Heat Flux,W m**-2
-mssror,mean_sub_surface_runoff_rate,Mean Sub-Surface Runoff Rate,kg m**-2 s**-1
-mtdwswrf,mean_top_downward_short_wave_radiation_flux,Mean Top Downward Short-Wave Radiation Flux,W m**-2
-mtnlwrf,mean_top_net_long_wave_radiation_flux,Mean Top Net Long-Wave Radiation Flux,W m**-2
-mtnlwrfcs,mean_top_net_long_wave_radiation_flux_clear_sky,Mean Top Net Long-Wave Radiation Flux (Clear Sky),W m**-2
-mtnswrf,mean_top_net_short_wave_radiation_flux,Mean Top Net Short-Wave Radiation Flux,W m**-2
-mtnswrfcs,mean_top_net_short_wave_radiation_flux_clear_sky,Mean Top Net Short-Wave Radiation Flux (Clear Sky),W m**-2
-mtpr,mean_total_precipitation_rate,Mean Total Precipitation Rate,kg m**-2 s**-1
-mvimd,mean_vertically_integrated_moisture_divergence,Mean Vertically Integrated Moisture Divergence,kg m**-2 s**-1
-mwd,mean_wave_direction,Mean Wave Direction,Degree true
-mwp,mean_wave_period,Mean Wave Period,s
-mx2t,maximum_2m_temperature_since_previous_post_processing,Maximum Temperature At 2 Metres Since Previous Post-Processing,K
-mxtpr,maximum_total_precipitation_rate_since_previous_post_processing,Maximum Total Precipitation Rate Since Previous Post-Processing,kg m**-2 s**-1
-nsss,northward_turbulent_surface_stress,Northward Turbulent Surface Stress,N m**-2 s
-p140121,significant_wave_height_of_first_swell_partition,Significant Wave Height Of First Swell Partition,m
-p140122,mean_wave_direction_of_first_swell_partition,Mean Wave Direction Of First Swell Partition,degrees
-p140123,mean_wave_period_of_first_swell_partition,Mean Wave Period Of First Swell Partition,s
-p140124,significant_wave_height_of_second_swell_partition,Significant Wave Height Of Second Swell Partition,m
-p140125,mean_wave_direction_of_second_swell_partition,Mean Wave Direction Of Second Swell Partition,degrees
-p140126,mean_wave_period_of_second_swell_partition,Mean Wave Period Of Second Swell Partition,s
-p140127,significant_wave_height_of_third_swell_partition,Significant Wave Height Of Third Swell Partition,m
-p140128,mean_wave_direction_of_third_swell_partition,Mean Wave Direction Of Third Swell Partition,degrees
-p140129,mean_wave_period_of_third_swell_partition,Mean Wave Period Of Third Swell Partition,s
-p140208,free_convective_velocity_over_the_oceans,Free Convective Velocity Over The Oceans,m s**-1
-p140209,air_density_over_the_oceans,Air Density Over The Oceans,kg m**-3
-p1ps,mean_wave_period_based_on_first_moment_for_swell,Mean Wave Period Based On First Moment For Swell,s
-p1ww,mean_wave_period_based_on_first_moment_for_wind_waves,Mean Wave Period Based On First Moment For Wind Waves,s
-p2ps,mean_wave_period_based_on_second_moment_for_swell,Mean Wave Period Based On Second Moment For Swell,s
-p2ww,mean_wave_period_based_on_second_moment_for_wind_waves,Mean Wave Period Based On Second Moment For Wind Waves,s
-p53.162,vertical_integral_of_mass_of_atmosphere,Vertical Integral Of Mass Of Atmosphere,kg m**-2
-p54.162,vertical_integral_of_temperature,Vertical Integral Of Temperature,K kg m**-2
-p59.162,vertical_integral_of_kinetic_energy,Vertical Integral Of Kinetic Energy,J m**-2
-p60.162,vertical_integral_of_thermal_energy,Vertical Integral Of Thermal Energy,J m**-2
-p61.162,vertical_integral_of_potential_and_internal_energy,Vertical Integral Of Potential+Internal Energy,J m**-2
-p62.162,vertical_integral_of_potential_internal_and_latent_energy,Vertical Integral Of Potential+Internal+Latent Energy,J m**-2
-p63.162,vertical_integral_of_total_energy,Vertical Integral Of Total Energy,J m**-2
-p64.162,vertical_integral_of_energy_conversion,Vertical Integral Of Energy Conversion,W m**-2
-p65.162,vertical_integral_of_eastward_mass_flux,Vertical Integral Of Eastward Mass Flux,kg m**-1 s**-1
-p66.162,vertical_integral_of_northward_mass_flux,Vertical Integral Of Northward Mass Flux,kg m**-1 s**-1
-p67.162,vertical_integral_of_eastward_kinetic_energy_flux,Vertical Integral Of Eastward Kinetic Energy Flux,W m**-1
-p68.162,vertical_integral_of_northward_kinetic_energy_flux,Vertical Integral Of Northward Kinetic Energy Flux,W m**-1
-p69.162,vertical_integral_of_eastward_heat_flux,Vertical Integral Of Eastward Heat Flux,W m**-1
-p70.162,vertical_integral_of_northward_heat_flux,Vertical Integral Of Northward Heat Flux,W m**-1
-p71.162,vertical_integral_of_eastward_water_vapour_flux,Vertical Integral Of Eastward Water Vapour Flux,kg m**-1 s**-1
-p72.162,vertical_integral_of_northward_water_vapour_flux,Vertical Integral Of Northward Water Vapour Flux,kg m**-1 s**-1
-p73.162,vertical_integral_of_eastward_geopotential_flux,Vertical Integral Of Eastward Geopotential Flux,W m**-1
-p74.162,vertical_integral_of_northward_geopotential_flux,Vertical Integral Of Northward Geopotential Flux,W m**-1
-p75.162,vertical_integral_of_eastward_total_energy_flux,Vertical Integral Of Eastward Total Energy Flux,W m**-1
-p76.162,vertical_integral_of_northward_total_energy_flux,Vertical Integral Of Northward Total Energy Flux,W m**-1
-p77.162,vertical_integral_of_eastward_ozone_flux,Vertical Integral Of Eastward Ozone Flux,kg m**-1 s**-1
-p78.162,vertical_integral_of_northward_ozone_flux,Vertical Integral Of Northward Ozone Flux,kg m**-1 s**-1
-p79.162,vertical_integral_of_divergence_of_cloud_liquid_water_flux,Vertical Integral Of Divergence Of Cloud Liquid Water Flux,kg m**-2 s**-1
-p80.162,vertical_integral_of_divergence_of_cloud_frozen_water_flux,Vertical Integral Of Divergence Of Cloud Frozen Water Flux,kg m**-2 s**-1
-p81.162,vertical_integral_of_divergence_of_mass_flux,Vertical Integral Of Divergence Of Mass Flux,kg m**-2 s**-1
-p82.162,vertical_integral_of_divergence_of_kinetic_energy_flux,Vertical Integral Of Divergence Of Kinetic Energy Flux,W m**-2
-p83.162,vertical_integral_of_divergence_of_thermal_energy_flux,Vertical Integral Of Divergence Of Thermal Energy Flux,W m**-2
-p84.162,vertical_integral_of_divergence_of_moisture_flux,Vertical Integral Of Divergence Of Moisture Flux,kg m**-2 s**-1
-p85.162,vertical_integral_of_divergence_of_geopotential_flux,Vertical Integral Of Divergence Of Geopotential Flux,W m**-2
-p86.162,vertical_integral_of_divergence_of_total_energy_flux,Vertical Integral Of Divergence Of Total Energy Flux,W m**-2
-p87.162,vertical_integral_of_divergence_of_ozone_flux,Vertical Integral Of Divergence Of Ozone Flux,kg m**-2 s**-1
-p88.162,vertical_integral_of_eastward_cloud_liquid_water_flux,Vertical Integral Of Eastward Cloud Liquid Water Flux,kg m**-1 s**-1
-p89.162,vertical_integral_of_northward_cloud_liquid_water_flux,Vertical Integral Of Northward Cloud Liquid Water Flux,kg m**-1 s**-1
-p90.162,vertical_integral_of_eastward_cloud_frozen_water_flux,Vertical Integral Of Eastward Cloud Frozen Water Flux,kg m**-1 s**-1
-p91.162,vertical_integral_of_northward_cloud_frozen_water_flux,Vertical Integral Of Northward Cloud Frozen Water Flux ,kg m**-1 s**-1
-p92.162,vertical_integral_of_mass_tendency,Vertical Integral Of Mass Tendency,kg m**-2 s**-1
-pev,potential_evaporation,Potential Evaporation,m
-phiaw,normalized_energy_flux_into_waves,Normalized Energy Flux Into Waves,N/A
-phioc,normalized_energy_flux_into_ocean,Normalized Energy Flux Into Ocean,N/A
-pp1d,peak_wave_period,Peak Wave Period,s
-ptype,precipitation_type,Precipitation Type,code table (4.201)
-ro,runoff,Runoff,m
-rsn,snow_density,Snow Density,kg m**-3
-sd,snow_depth,Snow Depth,m of water equivalent
-sdfor,standard_deviation_of_filtered_subgrid_orography,Standard Deviation Of Filtered Subgrid Orography,m
-sdor,standard_deviation_of_orography,Standard Deviation Of Orography,m
-sf,snowfall,Snowfall,m of water equivalent
-shts,significant_height_of_total_swell,Significant Height Of Total Swell,m
-shww,significant_height_of_wind_waves,Significant Height Of Wind Waves,m
-siconc,sea_ice_cover,Sea Ice Area Fraction,(0 - 1)
-skt,skin_temperature,Skin Temperature,K
-slhf,surface_latent_heat_flux,Surface Latent Heat Flux,J m**-2
-slor,slope_of_sub_gridscale_orography,Slope Of Sub-Gridscale Orography,N/A
-slt,soil_type,Soil Type,N/A
-smlt,snowmelt,Snowmelt,m of water equivalent
-sp,surface_pressure,Surface Pressure,Pa
-src,skin_reservoir_content,Skin Reservoir Content,m of water equivalent
-sro,surface_runoff,Surface Runoff,m
-sshf,surface_sensible_heat_flux,Surface Sensible Heat Flux,J m**-2
-ssr,surface_net_solar_radiation,Surface Net Short-Wave (Solar) Radiation,J m**-2
-ssrc,surface_net_solar_radiation_clear_sky,Surface Net Short-Wave (Solar) Radiation (Clear Sky),J m**-2
-ssrd,surface_solar_radiation_downwards,Surface Short-Wave (Solar) Radiation Downwards,J m**-2
-ssrdc,surface_solar_radiation_downward_clear_sky,Surface Solar Radiation Downward Clear-Sky,J m**-2
-ssro,sub_surface_runoff,Sub-Surface Runoff,m
-sst,sea_surface_temperature,Sea Surface Temperature,K
-stl1,soil_temperature_level_1,Soil Temperature Level 1,K
-stl2,soil_temperature_level_2,Soil Temperature Level 2,K
-stl3,soil_temperature_level_3,Soil Temperature Level 3,K
-stl4,soil_temperature_level_4,Soil Temperature Level 4,K
-str,surface_net_thermal_radiation,Surface Net Long-Wave (Thermal) Radiation,J m**-2
-strc,surface_net_thermal_radiation_clear_sky,Surface Net Long-Wave (Thermal) Radiation (Clear Sky),J m**-2
-strd,surface_thermal_radiation_downwards,Surface Long-Wave (Thermal) Radiation Downwards,J m**-2
-strdc,surface_thermal_radiation_downward_clear_sky,Surface Thermal Radiation Downward Clear-Sky,J m**-2
-swh,significant_height_of_combined_wind_waves_and_swell,Significant Height Of Combined Wind Waves And Swell,m
-swvl1,volumetric_soil_water_layer_1,Volumetric Soil Water Layer 1,m**3 m**-3
-swvl2,volumetric_soil_water_layer_2,Volumetric Soil Water Layer 2,m**3 m**-3
-swvl3,volumetric_soil_water_layer_3,Volumetric Soil Water Layer 3,m**3 m**-3
-swvl4,volumetric_soil_water_layer_4,Volumetric Soil Water Layer 4,m**3 m**-3
-t2m,2m_temperature,2 Metre Temperature,K
-tauoc,normalized_stress_into_ocean,Normalized Stress Into Ocean,N/A
-tcc,total_cloud_cover,Total Cloud Cover,(0 - 1)
-tciw,total_column_cloud_ice_water,Total Column Cloud Ice Water,kg m**-2
-tclw,total_column_cloud_liquid_water,Total Column Cloud Liquid Water,kg m**-2
-tco3,total_column_ozone,Total Column Ozone,kg m**-2
-tcrw,total_column_rain_water,Total Column Rain Water,kg m**-2
-tcslw,total_column_supercooled_liquid_water,Total Column Supercooled Liquid Water,kg m**-2
-tcsw,total_column_snow_water,Total Column Snow Water,kg m**-2
-tcw,total_column_water,Total Column Water,kg m**-2
-tcwv,total_column_water_vapour,Total Column Vertically-Integrated Water Vapour,kg m**-2
-tisr,toa_incident_solar_radiation,Toa Incident Solar Radiation,J m**-2
-tmax,period_corresponding_to_maximum_individual_wave_height,Period Corresponding To Maximum Individual Wave Height,s
-totalx,total_totals_index,Total Totals Index,K
-tp,total_precipitation,Total Precipitation,m
-tplb,trapping_layer_base_height,Trapping Layer Base Height,m
-tplt,trapping_layer_top_height,Trapping Layer Top Height,m
-tsn,temperature_of_snow_layer,Temperature Of Snow Layer,K
-tsr,top_net_solar_radiation,Top Net Short-Wave (Solar) Radiation,J m**-2
-tsrc,top_net_solar_radiation_clear_sky,Top Net Solar Radiation (Clear Sky),J m**-2
-ttr,top_net_thermal_radiation,Top Net Long-Wave (Thermal) Radiation,J m**-2
-ttrc,top_net_thermal_radiation_clear_sky,Top Net Thermal Radiation (Clear Sky),J m**-2
-tvh,type_of_high_vegetation,Type Of High Vegetation,N/A
-tvl,type_of_low_vegetation,Type Of Low Vegetation,N/A
-u10,10m_u_component_of_wind,10 Metre U Wind Component,m s**-1
-u100,100m_u_component_of_wind,100 Metre U Wind Component,m s**-1
-u10n,10m_u_component_of_neutral_wind,Neutral Wind At 10 M U-Component,m s**-1
-ust,u_component_stokes_drift,U-Component Stokes Drift,m s**-1
-uvb,downward_uv_radiation_at_the_surface,Downward Uv Radiation At The Surface,J m**-2
-v10,10m_v_component_of_wind,10 Metre V Wind Component,m s**-1
-v100,100m_v_component_of_wind,100 Metre V Wind Component,m s**-1
-v10n,10m_v_component_of_neutral_wind,Neutral Wind At 10 M V-Component,m s**-1
-vimd,vertically_integrated_moisture_divergence,Vertically Integrated Moisture Divergence,kg m**-2
-vst,v_component_stokes_drift,V-Component Stokes Drift,m s**-1
-wdw,wave_spectral_directional_width,Wave Spectral Directional Width,radians
-wind,ocean_surface_stress_equivalent_10m_neutral_wind_speed,10 Metre Wind Speed,m s**-1
-wmb,model_bathymetry,Model Bathymetry,m
-wsk,wave_spectral_kurtosis,Wave Spectral Kurtosis,N/A
-wsp,wave_spectral_peakedness,Wave Spectral Peakedness,N/A
-wss,wave_spectral_skewness,Wave Spectral Skewness,N/A
-z,geopotential,Geopotential,m**2 s**-2
-zust,friction_velocity,Friction Velocity,m s**-1
+alnid,Near IR albedo for diffuse radiation,(0 - 1),true,true,false,near_ir_albedo_for_diffuse_radiation,alnid,18,0
+alnip,Near IR albedo for direct radiation,(0 - 1),true,true,false,near_ir_albedo_for_direct_radiation,alnip,17,0
+aluvd,UV visible albedo for diffuse radiation,(0 - 1),true,true,false,uv_visible_albedo_for_diffuse_radiation,aluvd,16,0
+aluvp,UV visible albedo for direct radiation,(0 - 1),true,true,false,uv_visible_albedo_for_direct_radiation,aluvp,15,0
+anor,Angle of sub-gridscale orography,radians,true,false,true,angle_of_sub_gridscale_orography,anor,162,162
+asn,Snow albedo,(0 - 1),true,true,false,snow_albedo,asn,32,32
+bfi,Benjamin-Feir index,dimensionless,true,true,false,benjamin_feir_index,bfi,140253,0
+bld,Boundary layer dissipation,J m**-2,false,true,false,boundary_layer_dissipation,bld,145,145
+blh,Boundary layer height,m,true,true,false,boundary_layer_height,blh,159,159
+cape,Convective available potential energy,J kg**-1,true,true,false,convective_available_potential_energy,cape,59,59
+cbh,Cloud base height,m,false,true,false,cloud_base_height,cbh,228023,279
+cdir,Clear-sky direct solar radiation at surface,J m**-2,false,true,false,clear_sky_direct_solar_radiation_at_surface,cdir,228022,278
+cdww,Coefficient of drag with waves,dimensionless,true,true,false,coefficient_of_drag_with_waves,cdww,140233,0
+chnk,Charnock,~,true,true,false,charnock,chnk,148,0
+ci,Sea ice area fraction,(0 - 1),true,true,false,sea_ice_cover,siconc,31,34
+cin,Convective inhibition,J kg**-1,false,true,false,convective_inhibition,cin,228001,0
+cl,Lake cover,(0 - 1),true,true,true,lake_cover,cl,26,26
+cp,Convective precipitation,m,false,true,false,convective_precipitation,cp,143,143
+crr,Convective rain rate,kg m**-2 s**-1,false,true,false,convective_rain_rate,crr,228218,474
+csf,Convective snowfall,m of water equivalent,false,true,false,convective_snowfall,csf,239,239
+csfr,Convective snowfall rate water equivalent,kg m**-2 s**-1,false,true,false,convective_snowfall_rate_water_equivalent,csfr,228220,476
+cvh,High vegetation cover,(0 - 1),true,false,true,high_vegetation_cover,cvh,28,28
+cvl,Low vegetation cover,(0 - 1),true,false,true,low_vegetation_cover,cvl,27,27
+d2m,2 metre dewpoint temperature,K,true,true,false,2m_dewpoint_temperature,d2m,168,168
+dctb,Duct base height,m,false,true,false,duct_base_height,dctb,228017,0
+deg0l,Zero degree level,m,false,true,false,zero_degree_level,deg0l,228024,0
+dl,Lake depth,m,true,true,true,lake_depth,dl,228007,263
+dndza,Mean vertical gradient of refractivity inside trapping layer,m**-1,false,true,false,mean_vertical_gradient_of_refractivity_inside_trapping_layer,dndza,228016,0
+dndzn,Minimum vertical gradient of refractivity inside trapping layer,m**-1,false,true,false,minimum_vertical_gradient_of_refractivity_inside_trapping_layer,dndzn,228015,0
+dwi,10 metre wind direction,degrees,true,true,false,ocean_surface_stress_equivalent_10m_neutral_wind_direction,dwi,140249,0
+dwps,Wave spectral directional width for swell,Radians,true,true,false,wave_spectral_directional_width_for_swell,dwps,140228,0
+dwww,Wave spectral directional width for wind waves,Radians,true,true,false,wave_spectral_directional_width_for_wind_waves,dwww,140225,0
+e,Evaporation,m of water equivalent,false,true,false,evaporation,e,182,182
+es,Snow evaporation,m of water equivalent,false,true,false,snow_evaporation,es,44,44
+ewss,Eastward turbulent surface stress,N m**-2 s,false,true,false,eastward_turbulent_surface_stress,ewss,180,180
+fal,Forecast albedo,(0 - 1),true,true,false,forecast_albedo,fal,243,277
+fdir,Total sky direct solar radiation at surface,J m**-2,false,true,false,total_sky_direct_solar_radiation_at_surface,fdir,228021,0
+fg10,10 metre wind gust since previous post-processing,m s**-1,false,true,false,10m_wind_gust_since_previous_post_processing,fg10,49,49
+flsr,Forecast logarithm of surface roughness for heat,~,true,true,false,forecast_logarithm_of_surface_roughness_for_heat,flsr,245,245
+fsr,Forecast surface roughness,m,true,true,false,forecast_surface_roughness,fsr,244,244
+gwd,Gravity wave dissipation,J m**-2,false,true,false,gravity_wave_dissipation,gwd,197,197
+hcc,High cloud cover,(0 - 1),true,true,false,high_cloud_cover,hcc,188,188
+hmax,Maximum individual wave height,m,true,true,false,maximum_individual_wave_height,hmax,140218,0
+i10fg,Instantaneous 10 metre wind gust,m s**-1,false,true,false,instantaneous_10m_wind_gust,i10fg,228029,285
+ie,Instantaneous moisture flux,kg m**-2 s**-1,true,true,false,instantaneous_moisture_flux,ie,232,232
+iews,Instantaneous eastward turbulent surface stress,N m**-2,true,true,false,instantaneous_eastward_turbulent_surface_stress,iews,229,0
+ilspf,Instantaneous large-scale surface precipitation fraction,(0 - 1),false,true,false,instantaneous_large_scale_surface_precipitation_fraction,ilspf,228217,0
+inss,Instantaneous northward turbulent surface stress,N m**-2,true,true,false,instantaneous_northward_turbulent_surface_stress,inss,230,0
+ishf,Instantaneous surface sensible heat flux,W m**-2,true,true,false,instantaneous_surface_sensible_heat_flux,,231,
+isor,Anisotropy of sub-gridscale orography,~,true,false,true,anisotropy_of_sub_gridscale_orography,isor,161,161
+istl1,Ice temperature layer 1,K,true,true,false,ice_temperature_layer_1,istl1,35,35
+istl2,Ice temperature layer 2,K,true,true,false,ice_temperature_layer_2,istl2,36,36
+istl3,Ice temperature layer 3,K,true,true,false,ice_temperature_layer_3,istl3,37,37
+istl4,Ice temperature layer 4,K,true,true,false,ice_temperature_layer_4,istl4,38,38
+kx,K index2,K,false,true,false,k_index,kx,260121,0
+lai_hv,"Leaf area index, high vegetation3",m**2 m**-2,true,true,false,leaf_area_index_high_vegetation,lai_hv,67,67
+lai_lv,"Leaf area index, low vegetation3",m**2 m**-2,true,true,false,leaf_area_index_low_vegetation,lai_lv,66,66
+lblt,Lake bottom temperature,K,true,true,false,lake_bottom_temperature,lblt,228010,0
+lcc,Low cloud cover,(0 - 1),true,true,false,low_cloud_cover,lcc,186,186
+lgws,Eastward gravity wave surface stress,N m**-2 s,false,true,false,eastward_gravity_wave_surface_stress,lgws,195,195
+licd,Lake ice depth,m,true,true,false,lake_ice_depth,licd,228014,0
+lict,Lake ice temperature,K,true,true,false,lake_ice_temperature,lict,228013,0
+lmld,Lake mix-layer depth,m,true,true,false,lake_mix_layer_depth,lmld,228009,0
+lmlt,Lake mix-layer temperature,K,true,true,false,lake_mix_layer_temperature,lmlt,228008,0
+lsf,Large-scale snowfall,m of water equivalent,false,true,false,large_scale_snowfall,lsf,240,240
+lshf,Lake shape factor,dimensionless,true,true,false,lake_shape_factor,lshf,228012,0
+lsm,Land-sea mask,(0 - 1),true,true,true,land_sea_mask,lsm,172,172
+lsp,Large-scale precipitation,m,false,true,false,large_scale_precipitation,lsp,142,142
+lspf,Large-scale precipitation fraction,s,false,true,false,large_scale_precipitation_fraction,lspf,50,50
+lsrr,Large scale rain rate,kg m**-2 s**-1,false,true,false,large_scale_rain_rate,lsrr,228219,475
+lssfr,Large scale snowfall rate water equivalent,kg m**-2 s**-1,false,true,false,large_scale_snowfall_rate_water_equivalent,lssfr,228221,477
+ltlt,Lake total layer temperature,K,true,true,false,lake_total_layer_temperature,ltlt,228011,0
+mbld,Mean boundary layer dissipation,W m**-2,false,true,false,mean_boundary_layer_dissipation,mbld,235032,0
+mcc,Medium cloud cover,(0 - 1),true,true,false,medium_cloud_cover,mcc,187,187
+mcpr,Mean convective precipitation rate,kg m**-2 s**-1,false,true,false,mean_convective_precipitation_rate,mcpr,235030,0
+mcsr,Mean convective snowfall rate,kg m**-2 s**-1,false,true,false,mean_convective_snowfall_rate,mcsr,235056,0
+mdts,Mean direction of total swell,degrees,true,true,false,mean_direction_of_total_swell,mdts,140238,0
+mdww,Mean direction of wind waves,degrees,true,true,false,mean_direction_of_wind_waves,mdww,140235,0
+megwss,Mean eastward gravity wave surface stress,N m**-2,false,true,false,mean_eastward_gravity_wave_surface_stress,megwss,235045,0
+mer,Mean evaporation rate,kg m**-2 s**-1,false,true,false,mean_evaporation_rate,mer,235043,0
+metss,Mean eastward turbulent surface stress,N m**-2,false,true,false,mean_eastward_turbulent_surface_stress,metss,235041,0
+mgwd,Mean gravity wave dissipation,W m**-2,false,true,false,mean_gravity_wave_dissipation,mgwd,235047,0
+mgws,Northward gravity wave surface stress,N m**-2 s,false,true,false,northward_gravity_wave_surface_stress,mgws,196,196
+mlspf,Mean large-scale precipitation fraction,Proportion,false,true,false,mean_large_scale_precipitation_fraction,mlspf,235026,0
+mlspr,Mean large-scale precipitation rate,kg m**-2 s**-1,false,true,false,mean_large_scale_precipitation_rate,mlspr,235029,0
+mlssr,Mean large-scale snowfall rate,kg m**-2 s**-1,false,true,false,mean_large_scale_snowfall_rate,mlssr,235057,0
+mn2t,Minimum temperature at 2 metres since previous post-processing,K,false,true,false,minimum_2m_temperature_since_previous_post_processing,mn2t,202,202
+mngwss,Mean northward gravity wave surface stress,N m**-2,false,true,false,mean_northward_gravity_wave_surface_stress,mngwss,235046,0
+mntpr,Minimum total precipitation rate since previous post-processing,kg m**-2 s**-1,false,true,false,minimum_total_precipitation_rate_since_previous_post_processing,mntpr,228227,0
+mntss,Mean northward turbulent surface stress,N m**-2,false,true,false,mean_northward_turbulent_surface_stress,mntss,235042,0
+mp1,Mean wave period based on first moment,s,true,true,false,mean_wave_period_based_on_first_moment,mp1,140220,0
+mp2,Mean zero-crossing wave period,s,true,true,false,mean_zero_crossing_wave_period,mp2,140221,0
+mper,Mean potential evaporation rate,kg m**-2 s**-1,false,true,false,mean_potential_evaporation_rate,mper,235070,0
+mpts,Mean period of total swell,s,true,true,false,mean_period_of_total_swell,mpts,140239,0
+mpww,Mean period of wind waves,s,true,true,false,mean_period_of_wind_waves,mpww,140236,0
+mror,Mean runoff rate,kg m**-2 s**-1,false,true,false,mean_runoff_rate,mror,235048,0
+msdrswrf,Mean surface direct short-wave radiation flux,W m**-2,false,true,false,mean_surface_direct_short_wave_radiation_flux,msdrswrf,235058,0
+msdrswrfcs,"Mean surface direct short-wave radiation flux, clear sky",W m**-2,false,true,false,mean_surface_direct_short_wave_radiation_flux_clear_sky,msdrswrfcs,235059,0
+msdwlwrf,Mean surface downward long-wave radiation flux,W m**-2,false,true,false,mean_surface_downward_long_wave_radiation_flux,msdwlwrf,235036,0
+msdwlwrfcs,"Mean surface downward long-wave radiation flux, clear sky",W m**-2,false,true,false,mean_surface_downward_long_wave_radiation_flux_clear_sky,msdwlwrfcs,235069,0
+msdwswrf,Mean surface downward short-wave radiation flux,W m**-2,false,true,false,mean_surface_downward_short_wave_radiation_flux,msdwswrf,235035,0
+msdwswrfcs,"Mean surface downward short-wave radiation flux, clear sky",W m**-2,false,true,false,mean_surface_downward_short_wave_radiation_flux_clear_sky,msdwswrfcs,235068,0
+msdwuvrf,Mean surface downward UV radiation flux,W m**-2,false,true,false,mean_surface_downward_uv_radiation_flux,msdwuvrf,235027,0
+mser,Mean snow evaporation rate,kg m**-2 s**-1,false,true,false,mean_snow_evaporation_rate,mser,235023,0
+msl,Mean sea level pressure,Pa,true,true,false,mean_sea_level_pressure,msl,151,151
+mslhf,Mean surface latent heat flux,W m**-2,false,true,false,mean_surface_latent_heat_flux,mslhf,235034,0
+msmr,Mean snowmelt rate,kg m**-2 s**-1,false,true,false,mean_snowmelt_rate,msmr,235024,0
+msnlwrf,Mean surface net long-wave radiation flux,W m**-2,false,true,false,mean_surface_net_long_wave_radiation_flux,msnlwrf,235038,0
+msnlwrfcs,"Mean surface net long-wave radiation flux, clear sky",W m**-2,false,true,false,mean_surface_net_long_wave_radiation_flux_clear_sky,msnlwrfcs,235052,0
+msnswrf,Mean surface net short-wave radiation flux,W m**-2,false,true,false,mean_surface_net_short_wave_radiation_flux,msnswrf,235037,0
+msnswrfcs,"Mean surface net short-wave radiation flux, clear sky",W m**-2,false,true,false,mean_surface_net_short_wave_radiation_flux_clear_sky,msnswrfcs,235051,0
+msqs,Mean square slope of waves,dimensionless,true,true,false,mean_square_slope_of_waves,msqs,140244,0
+msr,Mean snowfall rate,kg m**-2 s**-1,false,true,false,mean_snowfall_rate,msr,235031,0
+msror,Mean surface runoff rate,kg m**-2 s**-1,false,true,false,mean_surface_runoff_rate,msror,235020,0
+msshf,Mean surface sensible heat flux,W m**-2,false,true,false,mean_surface_sensible_heat_flux,msshf,235033,0
+mssror,Mean sub-surface runoff rate,kg m**-2 s**-1,false,true,false,mean_sub_surface_runoff_rate,mssror,235021,0
+mtdwswrf,Mean top downward short-wave radiation flux,W m**-2,false,true,false,mean_top_downward_short_wave_radiation_flux,mtdwswrf,235053,0
+mtnlwrf,Mean top net long-wave radiation flux,W m**-2,false,true,false,mean_top_net_long_wave_radiation_flux,mtnlwrf,235040,0
+mtnlwrfcs,"Mean top net long-wave radiation flux, clear sky",W m**-2,false,true,false,mean_top_net_long_wave_radiation_flux_clear_sky,mtnlwrfcs,235050,0
+mtnswrf,Mean top net short-wave radiation flux,W m**-2,false,true,false,mean_top_net_short_wave_radiation_flux,mtnswrf,235039,0
+mtnswrfcs,"Mean top net short-wave radiation flux, clear sky",W m**-2,false,true,false,mean_top_net_short_wave_radiation_flux_clear_sky,mtnswrfcs,235049,0
+mtpr,Mean total precipitation rate,kg m**-2 s**-1,false,true,false,mean_total_precipitation_rate,mtpr,235055,0
+mvimd,Mean vertically integrated moisture divergence,kg m**-2 s**-1,false,true,false,mean_vertically_integrated_moisture_divergence,mvimd,235054,0
+mwd,Mean wave direction,degrees,true,true,false,mean_wave_direction,mwd,140230,0
+mwd1,Mean wave direction of first swell partition,degrees,true,true,false,mean_wave_direction_of_first_swell_partition,p140122,140122,0
+mwd2,Mean wave direction of second swell partition,degrees,true,true,false,mean_wave_direction_of_second_swell_partition,p140125,140125,0
+mwd3,Mean wave direction of third swell partition,degrees,true,true,false,mean_wave_direction_of_third_swell_partition,p140128,140128,0
+mwp,Mean wave period,s,true,true,false,mean_wave_period,mwp,140232,0
+mwp1,Mean wave period of first swell partition,s,true,true,false,mean_wave_period_of_first_swell_partition,p140123,140123,0
+mwp2,Mean wave period of second swell partition,s,true,true,false,mean_wave_period_of_second_swell_partition,p140126,140126,0
+mwp3,Mean wave period of third swell partition,s,true,true,false,mean_wave_period_of_third_swell_partition,p140129,140129,0
+mx2t,Maximum temperature at 2 metres since previous post-processing,K,false,true,false,maximum_2m_temperature_since_previous_post_processing,mx2t,201,201
+mxtpr,Maximum total precipitation rate since previous post-processing,kg m**-2 s**-1,false,true,false,maximum_total_precipitation_rate_since_previous_post_processing,mxtpr,228226,0
+nsss,Northward turbulent surface stress,N m**-2 s,false,true,false,northward_turbulent_surface_stress,nsss,181,181
+p1ps,Mean wave period based on first moment for swell,s,true,true,false,mean_wave_period_based_on_first_moment_for_swell,p1ps,140226,0
+p1ww,Mean wave period based on first moment for wind waves,s,true,true,false,mean_wave_period_based_on_first_moment_for_wind_waves,p1ww,140223,0
+p2ps,Mean wave period based on second moment for swell,s,true,true,false,mean_wave_period_based_on_second_moment_for_swell,p2ps,140227,0
+p2ww,Mean wave period based on second moment for wind waves,s,true,true,false,mean_wave_period_based_on_second_moment_for_wind_waves,p2ww,140224,0
+pev,Potential evaporation,m,false,true,false,potential_evaporation,pev,228251,507
+phiaw,Normalized energy flux into waves,dimensionless,true,true,false,normalized_energy_flux_into_waves,phiaw,140211,0
+phioc,Normalized energy flux into ocean,dimensionless,true,true,false,normalized_energy_flux_into_ocean,phioc,140212,0
+pp1d,Peak wave period,s,true,true,false,peak_wave_period,pp1d,140231,0
+ptype,Precipitation type,code table (4.201),false,true,false,precipitation_type,ptype,260015,0
+rhoao,Air density over the oceans,kg m**-3,true,true,false,air_density_over_the_oceans,p140209,140209,0
+ro,Runoff,m,false,true,false,runoff,ro,205,205
+rsn,Snow density,kg m**-3,true,true,false,snow_density,rsn,33,33
+sd,Snow depth,m of water equivalent,true,true,false,snow_depth,sd,141,141
+sdfor,Standard deviation of filtered subgrid orography,m,true,false,true,standard_deviation_of_filtered_subgrid_orography,sdfor,74,74
+sdor,Standard deviation of sub-gridscale orography,~,true,false,true,standard_deviation_of_orography,sdor,160,160
+sf,Snowfall,m of water equivalent,false,true,false,snowfall,sf,144,144
+shts,Significant height of total swell,m,true,true,false,significant_height_of_total_swell,shts,140237,0
+shww,Significant height of wind waves,m,true,true,false,significant_height_of_wind_waves,shww,140234,0
+skt,Skin temperature,K,true,true,false,skin_temperature,skt,235,235
+slhf,Surface latent heat flux,J m**-2,false,true,false,surface_latent_heat_flux,slhf,147,147
+slor,Slope of sub-gridscale orography,~,true,false,true,slope_of_sub_gridscale_orography,slor,163,163
+slt,Soil type1,~,true,false,true,soil_type,slt,43,43
+smlt,Snowmelt,m of water equivalent,false,true,false,snowmelt,smlt,45,45
+sp,Surface pressure,Pa,true,true,false,surface_pressure,sp,134,134
+src,Skin reservoir content,m of water equivalent,true,true,false,skin_reservoir_content,src,198,198
+sro,Surface runoff,m,false,true,false,surface_runoff,sro,8,8
+sshf,Surface sensible heat flux,J m**-2,false,true,false,surface_sensible_heat_flux,sshf,146,146
+ssr,Surface net solar radiation,J m**-2,false,true,false,surface_net_solar_radiation,ssr,176,176
+ssrc,"Surface net solar radiation, clear sky",J m**-2,false,true,false,surface_net_solar_radiation_clear_sky,ssrc,210,210
+ssrd,Surface solar radiation downwards,J m**-2,false,true,false,surface_solar_radiation_downwards,ssrd,169,169
+ssrdc,Surface solar radiation downward clear-sky,J m**-2,false,true,false,surface_solar_radiation_downward_clear_sky,ssrdc,228129,385
+ssro,Sub-surface runoff,m,false,true,false,sub_surface_runoff,ssro,9,0
+sst,Sea surface temperature,K,true,true,false,sea_surface_temperature,sst,34,0
+stl1,Soil temperature level 11,K,true,true,false,soil_temperature_level_1,stl1,139,139
+stl2,Soil temperature level 21,K,true,true,false,soil_temperature_level_2,stl2,170,170
+stl3,Soil temperature level 31,K,true,true,false,soil_temperature_level_3,stl3,183,183
+stl4,Soil temperature level 41,K,true,true,false,soil_temperature_level_4,stl4,236,236
+str,Surface net thermal radiation,J m**-2,false,true,false,surface_net_thermal_radiation,str,177,177
+strc,"Surface net thermal radiation, clear sky",J m**-2,false,true,false,surface_net_thermal_radiation_clear_sky,strc,211,211
+strd,Surface thermal radiation downwards,J m**-2,false,true,false,surface_thermal_radiation_downwards,strd,175,175
+strdc,Surface thermal radiation downward clear-sky,J m**-2,false,true,false,surface_thermal_radiation_downward_clear_sky,strdc,228130,386
+swh,Significant height of combined wind waves and swell,m,true,true,false,significant_height_of_combined_wind_waves_and_swell,swh,140229,0
+swh1,Significant wave height of first swell partition,m,true,true,false,significant_wave_height_of_first_swell_partition,p140121,140121,0
+swh2,Significant wave height of second swell partition,m,true,true,false,significant_wave_height_of_second_swell_partition,p140124,140124,0
+swh3,Significant wave height of third swell partition,m,true,true,false,significant_wave_height_of_third_swell_partition,p140127,140127,0
+swvl1,Volumetric soil water layer 11,m**3 m**-3,true,true,false,volumetric_soil_water_layer_1,swvl1,39,39
+swvl2,Volumetric soil water layer 21,m**3 m**-3,true,true,false,volumetric_soil_water_layer_2,swvl2,40,40
+swvl3,Volumetric soil water layer 31,m**3 m**-3,true,true,false,volumetric_soil_water_layer_3,swvl3,41,41
+swvl4,Volumetric soil water layer 41,m**3 m**-3,true,true,false,volumetric_soil_water_layer_4,swvl4,42,42
+t2m,2 metre temperature,K,true,true,false,2m_temperature,t2m,167,167
+tauoc,Normalized stress into ocean,dimensionless,true,true,false,normalized_stress_into_ocean,tauoc,140214,0
+tcc,Total cloud cover,(0 - 1),true,true,false,total_cloud_cover,tcc,164,164
+tciw,Total column cloud ice water,kg m**-2,true,true,false,total_column_cloud_ice_water,tciw,79,79
+tclw,Total column cloud liquid water,kg m**-2,true,true,false,total_column_cloud_liquid_water,tclw,78,78
+tco3,Total column ozone,kg m**-2,true,true,false,total_column_ozone,tco3,206,206
+tcrw,Total column rain water,kg m**-2,true,true,false,total_column_rain_water,tcrw,228089,345
+tcslw,Total column supercooled liquid water,kg m**-2,false,true,false,total_column_supercooled_liquid_water,tcslw,228088,0
+tcsw,Total column snow water,kg m**-2,true,true,false,total_column_snow_water,tcsw,228090,346
+tcw,Total column water,kg m**-2,true,true,false,total_column_water,tcw,136,136
+tcwv,Total column water vapour,kg m**-2,true,true,false,total_column_water_vapour,tcwv,137,137
+tisr,TOA incident solar radiation,J m**-2,false,true,false,toa_incident_solar_radiation,tisr,212,212
+tmax,Period corresponding to maximum individual wave height,s,true,true,false,period_corresponding_to_maximum_individual_wave_height,tmax,140217,0
+totalx,Total totals index2,K,false,true,false,total_totals_index,totalx,260123,0
+tp,Total precipitation,m,false,true,false,total_precipitation,tp,228,228
+tplb,Trapping layer base height,m,false,true,false,trapping_layer_base_height,tplb,228018,0
+tplt,Trapping layer top height,m,false,true,false,trapping_layer_top_height,tplt,228019,0
+tsn,Temperature of snow layer,K,true,true,false,temperature_of_snow_layer,tsn,238,238
+tsr,Top net solar radiation,J m**-2,false,true,false,top_net_solar_radiation,tsr,178,178
+tsrc,"Top net solar radiation, clear sky",J m**-2,false,true,false,top_net_solar_radiation_clear_sky,tsrc,208,208
+ttr,Top net thermal radiation,J m**-2,false,true,false,top_net_thermal_radiation,ttr,179,179
+ttrc,"Top net thermal radiation, clear sky",J m**-2,false,true,false,top_net_thermal_radiation_clear_sky,ttrc,209,209
+tvh,Type of high vegetation,~,true,false,true,type_of_high_vegetation,tvh,30,30
+tvl,Type of low vegetation,~,true,false,true,type_of_low_vegetation,tvl,29,29
+u10,10 metre U wind component,m s**-1,true,true,false,10m_u_component_of_wind,u10,165,165
+u100,100 metre U wind component,m s**-1,true,true,false,100m_u_component_of_wind,u100,228246,502
+u10n,Neutral wind at 10 m u-component,m s**-1,true,true,false,10m_u_component_of_neutral_wind,u10n,228131,0
+ust,U-component stokes drift,m s**-1,true,true,false,u_component_stokes_drift,ust,140215,0
+uvb,Downward UV radiation at the surface,J m**-2,false,true,false,downward_uv_radiation_at_the_surface,uvb,57,57
+v10,10 metre V wind component,m s**-1,true,true,false,10m_v_component_of_wind,v10,166,166
+v100,100 metre V wind component,m s**-1,true,true,false,100m_v_component_of_wind,v100,228247,503
+v10n,Neutral wind at 10 m v-component,m s**-1,true,true,false,10m_v_component_of_neutral_wind,v10n,228132,0
+viec,Vertical integral of energy conversion,W m**-2,true,true,false,vertical_integral_of_energy_conversion,p64.162,162064,0
+vigd,Vertical integral of divergence of geopotential flux,W m**-2,true,true,false,vertical_integral_of_divergence_of_geopotential_flux,p85.162,162085,0
+vige,Vertical integral of eastward geopotential flux,W m**-1,true,true,false,vertical_integral_of_eastward_geopotential_flux,p73.162,162073,0
+vign,Vertical integral of northward geopotential flux,W m**-1,true,true,false,vertical_integral_of_northward_geopotential_flux,p74.162,162074,0
+viiwd,Vertical integral of divergence of cloud frozen water flux,kg m**-2 s**-1,true,true,false,vertical_integral_of_divergence_of_cloud_frozen_water_flux,p80.162,162080,0
+viiwe,Vertical integral of eastward cloud frozen water flux,kg m**-1 s**-1,true,true,false,vertical_integral_of_eastward_cloud_frozen_water_flux,p90.162,162090,0
+viiwn,Vertical integral of northward cloud frozen water flux,kg m**-1 s**-1,true,true,false,vertical_integral_of_northward_cloud_frozen_water_flux,p91.162,162091,0
+vike,Vertical integral of kinetic energy,J m**-2,true,true,false,vertical_integral_of_kinetic_energy,p59.162,162059,0
+viked,Vertical integral of divergence of kinetic energy flux,W m**-2,true,true,false,vertical_integral_of_divergence_of_kinetic_energy_flux,p82.162,162082,0
+vikee,Vertical integral of eastward kinetic energy flux,W m**-1,true,true,false,vertical_integral_of_eastward_kinetic_energy_flux,p67.162,162067,0
+viken,Vertical integral of northward kinetic energy flux,W m**-1,true,true,false,vertical_integral_of_northward_kinetic_energy_flux,p68.162,162068,0
+vilwd,Vertical integral of divergence of cloud liquid water flux,kg m**-2 s**-1,true,true,false,vertical_integral_of_divergence_of_cloud_liquid_water_flux,p79.162,162079,0
+vilwe,Vertical integral of eastward cloud liquid water flux,kg m**-1 s**-1,true,true,false,vertical_integral_of_eastward_cloud_liquid_water_flux,p88.162,162088,0
+vilwn,Vertical integral of northward cloud liquid water flux,kg m**-1 s**-1,true,true,false,vertical_integral_of_northward_cloud_liquid_water_flux,p89.162,162089,0
+vima,Vertical integral of mass of atmosphere,kg m**-2,true,true,false,vertical_integral_of_mass_of_atmosphere,p53.162,162053,0
+vimad,Vertical integral of divergence of mass flux,kg m**-2 s**-1,true,true,false,vertical_integral_of_divergence_of_mass_flux,p81.162,162081,0
+vimae,Vertical integral of eastward mass flux,kg m**-1 s**-1,true,true,false,vertical_integral_of_eastward_mass_flux,p65.162,162065,0
+viman,Vertical integral of northward mass flux,kg m**-1 s**-1,true,true,false,vertical_integral_of_northward_mass_flux,p66.162,162066,0
+vimat,Vertical integral of mass tendency,kg m**-2 s**-1,true,false,false,vertical_integral_of_mass_tendency,p92.162,162092,0
+vimd,Vertically integrated moisture divergence,kg m**-2,false,true,false,vertically_integrated_moisture_divergence,vimd,213,0
+viozd,Vertical integral of divergence of ozone flux,kg m**-2 s**-1,true,true,false,vertical_integral_of_divergence_of_ozone_flux,p87.162,162087,0
+vioze,Vertical integral of eastward ozone flux,kg m**-1 s**-1,true,true,false,vertical_integral_of_eastward_ozone_flux,p77.162,162077,0
+viozn,Vertical integral of northward ozone flux,kg m**-1 s**-1,true,true,false,vertical_integral_of_northward_ozone_flux,p78.162,162078,0
+vipie,Vertical integral of potential+internal energy,J m**-2,true,true,false,vertical_integral_of_potential_and_internal_energy,p61.162,162061,0
+vipile,Vertical integral of potential+internal+latent energy,J m**-2,true,true,false,vertical_integral_of_potential_internal_and_latent_energy,p62.162,162062,0
+vit,Vertical integral of temperature,K kg m**-2,true,true,false,vertical_integral_of_temperature,p54.162,162054,0
+vithe,Vertical integral of thermal energy,J m**-2,true,true,false,vertical_integral_of_thermal_energy,p60.162,162060,0
+vithed,Vertical integral of divergence of thermal energy flux,W m**-2,true,true,false,vertical_integral_of_divergence_of_thermal_energy_flux,p83.162,162083,0
+vithee,Vertical integral of eastward heat flux,W m**-1,true,true,false,vertical_integral_of_eastward_heat_flux,p69.162,162069,0
+vithen,Vertical integral of northward heat flux,W m**-1,true,true,false,vertical_integral_of_northward_heat_flux,p70.162,162070,0
+vitoe,Vertical integral of total energy,J m**-2,true,true,false,vertical_integral_of_total_energy,p63.162,162063,0
+vitoed,Vertical integral of divergence of total energy flux,W m**-2,true,true,false,vertical_integral_of_divergence_of_total_energy_flux,p86.162,162086,0
+vitoee,Vertical integral of eastward total energy flux,W m**-1,true,true,false,vertical_integral_of_eastward_total_energy_flux,p75.162,162075,0
+vitoen,Vertical integral of northward total energy flux,W m**-1,true,true,false,vertical_integral_of_northward_total_energy_flux,p76.162,162076,0
+viwvd,Vertical integral of divergence of moisture flux,kg m**-2 s**-1,true,true,false,vertical_integral_of_divergence_of_moisture_flux,p84.162,162084,0
+viwve,Vertical integral of eastward water vapour flux,kg m**-1 s**-1,true,true,false,vertical_integral_of_eastward_water_vapour_flux,p71.162,162071,0
+viwvn,Vertical integral of northward water vapour flux,kg m**-1 s**-1,true,true,false,vertical_integral_of_northward_water_vapour_flux,p72.162,162072,0
+vst,V-component stokes drift,m s**-1,true,true,false,v_component_stokes_drift,vst,140216,0
+wdw,Wave spectral directional width,Radians,true,true,false,wave_spectral_directional_width,wdw,140222,0
+wind,10 metre wind direction,m s**-1,true,true,false,ocean_surface_stress_equivalent_10m_neutral_wind_speed,wind,140245,0
+wmb,Model bathymetry,m,true,true,false,model_bathymetry,wmb,140219,0
+wsk,Wave spectral kurtosis,dimensionless,true,true,false,wave_spectral_kurtosis,wsk,140252,0
+wsp,Wave spectral peakedness,dimensionless,true,true,false,wave_spectral_peakedness,wsp,140254,0
+wss,Wave Spectral Skewness,dimensionless,true,true,false,wave_spectral_skewness,wss,140207,0
+wstar,Free convective velocity over the oceans,m s**-1,true,true,false,free_convective_velocity_over_the_oceans,p140208,140208,0
+z,Geopotential,m**2 s**-2,true,true,true,geopotential,z,129,129
+zust,Friction velocity,m s**-1,false,true,false,friction_velocity,zust,228003,259

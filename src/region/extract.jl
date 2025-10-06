@@ -1,7 +1,7 @@
 function extract(
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
-	ereg :: ERA5Region;
+	ereg :: ERA5LonLat;
     smooth     :: Bool = false,
     smoothlon  :: Real = 0,
     smoothlat  :: Real = 0,
@@ -42,7 +42,7 @@ function extract(
         pnc  = basename(path(pds))
         nt   = pds.dim["time"]
         tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds[evar.ID].var,tmat,:,:,1:nt)
+        NCDatasets.load!(pds[evar.ncID].var,tmat,:,:,1:nt)
         close(pds)
 
         @info "$(modulelog()) - Extracting the $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion from the $(preg.geo.name) (Horizontal Resolution: $(preg.resolution)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
@@ -65,7 +65,7 @@ function extract(
 	sgeo :: GeoRegion,
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
-	ereg :: ERA5Region;
+	ereg :: ERA5LonLat;
     smooth     :: Bool = false,
     smoothlon  :: Real = 0,
     smoothlat  :: Real = 0,
@@ -105,7 +105,7 @@ function extract(
         pnc  = basename(path(pds))
         nt   = pds.dim["valid_time"]
         tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds[evar.ID].var,tmat,:,:,1:nt)
+        NCDatasets.load!(pds[evar.ncID].var,tmat,:,:,1:nt)
         close(pds)
 
         @info "$(modulelog()) - Extracting the $(e5ds.name) $(evar.name) data in $(sreg.geo.name) (Horizontal Resolution: $(sreg.resolution)) GeoRegion from the $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) GeoRegion for $(year(dt)) $(Dates.monthname(dt))"
@@ -128,7 +128,7 @@ function extract(
 	geov :: Vector{<:GeoRegion},
     e5ds :: ERA5Dataset,
 	evar :: ERA5Variable,
-	ereg :: ERA5Region;
+	ereg :: ERA5LonLat;
     smooth     :: Bool = false,
     smoothlon  :: Real = 0,
     smoothlat  :: Real = 0,
@@ -146,7 +146,7 @@ function extract(
 
     @info "$(modulelog()) - Retrieving GeoRegion and LandSea Dataset information for the parent GeoRegion, \"$(ereg.ID)\""
 
-    sreg = Vector{ERA5Region}(undef,ngeo)
+    sreg = Vector{ERA5LonLat}(undef,ngeo)
     rlsd = Vector{LandSea}(undef,ngeo)
     plsd = getLandSea(e5ds,ereg)
     for igeo in 1 : ngeo
@@ -181,7 +181,7 @@ function extract(
         pnc  = basename(path(pds))
         nt   = pds.dim["time"]
         tmat = @view pmat[:,:,1:nt]
-        NCDatasets.load!(pds[evar.ID].var,tmat,:,:,1:nt)
+        NCDatasets.load!(pds[evar.ncID].var,tmat,:,:,1:nt)
 
         for igeo = 1 : ngeo
 
@@ -207,3 +207,77 @@ end
 
 extract_time(e5ds::Union{ERA5Hourly,ERA5Daily}) = e5ds.start : Month(1) : e5ds.stop
 extract_time(e5ds::ERA5Monthly) = e5ds.start : Year(1)  : e5ds.stop
+
+
+
+function extract!(
+    data :: AbstractArray{Float32,3},
+    e5ds :: ERA5Dataset,
+	evar :: SingleLevel,
+	ereg :: ERA5LonLat,
+    elsd :: LandSeaTopo,
+    ggrd :: RegionGrid,
+    dt   :: Date
+
+)
+
+    ds  = read(e5ds,evar,ereg,dt,quiet=true)
+    pnc = basename(path(ds))
+    var = nomissing(ds[evar.ncID][:,:,:],NaN)
+    close(ds)
+
+    extract!(data,var,ggrd)
+
+    save(data,dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
+
+    flush(stderr)
+
+end
+
+function extract!(
+    data :: AbstractArray{Float32,3},
+    e5ds :: ERA5Dataset,
+	evar :: PressureLevel,
+	ereg :: ERA5LonLat,
+    elsd :: LandSeaTopo,
+    ggrd :: RegionGrid,
+    dt   :: Date
+
+)
+
+    ds  = read(e5ds,evar,ereg,dt,quiet=true)
+    pnc = basename(path(ds))
+    var = nomissing(ds[evar.ncID][:,:,1,:],NaN)
+    close(ds)
+
+    extract!(data,var,ggrd)
+
+    save(data,dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
+
+    flush(stderr)
+
+end
+
+function extractsplit!(
+    data :: AbstractArray{Float32,3},
+    e5ds :: ERA5Dataset,
+	evar :: ERA5Variable,
+	ereg :: ERA5LonLat,
+    elsd :: LandSeaTopo,
+    ggrd :: RegionGrid,
+    dt   :: Date
+
+)
+
+    ds  = read(e5ds,evar,ereg,dt,quiet=true)
+    pnc = basename(path(ds))
+    var = nomissing(ds[evar.ncID][:,:,:],NaN)
+    close(ds)
+
+    extract!(data,var,ggrd)
+
+    save(data,dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
+
+    flush(stderr)
+
+end

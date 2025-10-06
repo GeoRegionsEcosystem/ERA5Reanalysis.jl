@@ -1,7 +1,7 @@
 function pythonprint(
     e5ds :: ERA5CDStore,
     evar :: ERA5Variable,
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
 )
     
     if typeof(evar) <: PressureVariable
@@ -77,7 +77,7 @@ function pythonprint_body(
     fID, fol :: AbstractString, fnc :: AbstractString,
     e5ds :: ERA5CDStore,
     evar :: ERA5Variable,
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
 )
 
     pythonprint_body_producttype(fID,e5ds,evar)
@@ -152,7 +152,7 @@ end
 
 function pythonprint_body_regiongrid(
     fID, :: ERA5Hourly,
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
 )
 
     if !(ereg.isglb)
@@ -165,7 +165,7 @@ end
 
 function pythonprint_body_regiongrid(
     fID, :: ERA5Monthly,
-    ereg :: ERA5Region,
+    ereg :: ERA5LonLat,
 )
 
     if !(ereg.isglb)

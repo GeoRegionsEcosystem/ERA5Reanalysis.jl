@@ -14,12 +14,18 @@ abstract type SingleLevel <: ERA5Variable end
 Subtype for Single-Level variables that can be directly retrieved from the Climate Data Store.
 """
 struct SingleVariable{ST<:AbstractString} <: SingleLevel
-    ID      :: ST
-    long    :: ST
-    name    :: ST
-    units   :: ST
-    path    :: ST
-    dataset :: ST
+    ID    :: ST
+    long  :: ST
+    name  :: ST
+    units :: ST
+    path  :: ST
+    dataset   :: ST
+    analysis  :: Bool
+    forecast  :: Bool
+    invariant :: Bool
+    ncID :: ST
+    mars :: Int
+    dkrz :: Union{Int,Missing}
 end
 
 
@@ -29,12 +35,12 @@ end
 Subtype for custom user-defined Single-Level variables, which can only be calculated and not downloaded from the Climate Data Store.
 """
 struct SingleCustom{ST<:AbstractString} <: SingleLevel
-    ID      :: ST
-    long    :: ST
-    name    :: ST
-    units   :: ST
-    path    :: ST
-    dataset :: ST
+    ID    :: ST
+    long  :: ST
+    name  :: ST
+    units :: ST
+    path  :: ST
+    ncID  :: ST
 end
 
 """
@@ -65,14 +71,19 @@ function SingleVariable(
     fname = joinpath(dlist[ind],flist[ind])
     vlist = listera5variables(fname); ind = findall(ID.==vlist)[1]
 
-    ID,long,name,units = readdlm(fname,',',comments=true,comment_char='#')[ind,:]
+    ID,name,units,long = readdlm(fname,',',comments=true,comment_char='#')[ind,[1,2,3,7]]
 
     if vtype == "singlevariable"
         if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleVariable type" end
-        return SingleVariable{ST}(ID,long,name,units,fname,"reanalysis-era5-single-levels")
+        an,fc,iv,nc,mars,dkrz = readdlm(fname,',',comments=true,comment_char='#')[ind,[4,5,6,8,9,10]]
+        if iszero(dkrz); dkrz = missing end
+        return SingleVariable{ST}(
+            ID,long,name,units,fname,
+            "reanalysis-era5-single-levels",an,fc,iv,nc,mars,dkrz
+        )
     else
         if verbose; @info "$(modulelog()) - The ERA5Variable defined by \"$ID\" is of the SingleCustom type" end
-        return SingleCustom{ST}(ID,long,name,units,fname,"reanalysis-era5-single-levels")
+        return SingleCustom{ST}(ID,long,name,units,fname,ID)
     end
 
 end
@@ -120,13 +131,12 @@ function SingleVariable(
             cp(joinpath(eradir,"singlecustom.txt"),varfile)
         end
         open(varfile,"a") do io
-            write(io,"$ID,$long,$name,$units\n")
+            write(io,"$ID,$name,$units,false,false,false,$long,$ID,missing,missing\n")
         end
     end
 
     return SingleCustom{ST}(
-        ID,long,name,units,joinpath(path,"singlecustom.txt"),
-        "reanalysis-era5-single-levels"
+        ID,long,name,units,joinpath(path,"singlecustom.txt"),ID
     )
 
 end

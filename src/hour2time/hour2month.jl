@@ -1,7 +1,7 @@
 function hourly2monthly(
     e5ds :: ERA5Hourly,
 	evar :: ERA5Variable,
-    ereg :: ERA5Region;
+    ereg :: ERA5LonLat;
     verbose :: Bool = false,
     dosum   :: Bool = false
 )
@@ -27,7 +27,7 @@ function hourly2monthly(
             end
             nhr = daysinmonth(idt) * 24; if !dosum; fac = 1; else; fac = nhr end
             ds  = read(e5ds,evar,ereg,idt,quiet=true)
-            NCDatasets.load!(ds[evar.ID].var,view(tmpload,:,:,1:nhr),:,:,:)
+            NCDatasets.load!(ds[evar.ncID].var,view(tmpload,:,:,1:nhr),:,:,:)
 
             if verbose
                 if !dosum
