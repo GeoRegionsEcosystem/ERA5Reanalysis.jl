@@ -1,288 +1,269 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Predefined ERA5 Variables · ERA5Reanalysis.jl</title><meta name="title" content="Predefined ERA5 Variables · ERA5Reanalysis.jl"/><meta property="og:title" content="Predefined ERA5 Variables · ERA5Reanalysis.jl"/><meta property="twitter:title" content="Predefined ERA5 Variables · ERA5Reanalysis.jl"/><meta name="description" content="Documentation for ERA5Reanalysis.jl."/><meta property="og:description" content="Documentation for ERA5Reanalysis.jl."/><meta property="twitter:description" content="Documentation for ERA5Reanalysis.jl."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../index.html">ERA5Reanalysis.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../index.html">Home</a></li><li><input class="collapse-toggle" id="menuitem-2" type="checkbox" checked/><label class="tocitem" for="menuitem-2"><span class="docs-label">Components</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../overview.html">Overview</a></li><li><input class="collapse-toggle" id="menuitem-2-2" type="checkbox"/><label class="tocitem" for="menuitem-2-2"><span class="docs-label">ERA5Datasets</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../datasets/overview.html">An Overview of ERA5 Datasets</a></li><li><a class="tocitem" href="../datasets/define.html">Defining ERA5 Datasets</a></li><li><a class="tocitem" href="../datasets/cds.html">Climate Data Store Datasets</a></li><li><a class="tocitem" href="../datasets/custom.html">Custom ERA5 Datasets</a></li><li><a class="tocitem" href="../datasets/dummy.html">Dummy ERA5 Datasets</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-2-3" type="checkbox" checked/><label class="tocitem" for="menuitem-2-3"><span class="docs-label">ERA5Variables</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="index.html">What is an ERA5 Variable</a></li><li><a class="tocitem" href="read.html">Retrieving Existing ERA5 Variables</a></li><li><a class="tocitem" href="custom.html">Creating Custom ERA5 Variables</a></li><li><a class="tocitem" href="reset.html">Resetting ERA5 Variables</a></li><li class="is-active"><a class="tocitem" href="list.html">Predefined ERA5 Variables</a><ul class="internal"><li><a class="tocitem" href="#List-of-Predefined-Single-Level-Variables"><span>List of Predefined Single-Level Variables</span></a></li><li><a class="tocitem" href="#List-of-Predefined-Pressure-Level-Variables"><span>List of Predefined Pressure-Level Variables</span></a></li></ul></li></ul></li><li><input class="collapse-toggle" id="menuitem-2-4" type="checkbox"/><label class="tocitem" for="menuitem-2-4"><span class="docs-label">ERA5Regions</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../regions/index.html">What is an ERA5Region</a></li><li><a class="tocitem" href="../regions/isin.html">Is it in an ERA5Region</a></li><li><a class="tocitem" href="../regions/gridded.html">Extracting Data for an ERA5Region</a></li></ul></li></ul></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Using ERA5Reanalysis.jl</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><input class="collapse-toggle" id="menuitem-3-1" type="checkbox"/><label class="tocitem" for="menuitem-3-1"><span class="docs-label">LandSea Datasets in ERA5</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../using/landsea/intro.html">What is a LandSea Dataset</a></li><li><a class="tocitem" href="../../using/landsea/create.html">Downloading LandSea Datasets</a></li></ul></li><li><a class="tocitem" href="../../using/download.html">Downloading and Reading Data</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Components</a></li><li><a class="is-disabled">ERA5Variables</a></li><li class="is-active"><a href="list.html">Predefined ERA5 Variables</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="list.html">Predefined ERA5 Variables</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/GeoRegionsEcosystem/ERA5Reanalysis.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/GeoRegionsEcosystem/ERA5Reanalysis.jl/blob/main/docs/src/components/variables/list.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="List-of-Predefined-ERA5Variables-in-ERA5Reanalysis.jl"><a class="docs-heading-anchor" href="#List-of-Predefined-ERA5Variables-in-ERA5Reanalysis.jl">List of Predefined <code>ERA5Variable</code>s in ERA5Reanalysis.jl</a><a id="List-of-Predefined-ERA5Variables-in-ERA5Reanalysis.jl-1"></a><a class="docs-heading-anchor-permalink" href="#List-of-Predefined-ERA5Variables-in-ERA5Reanalysis.jl" title="Permalink"></a></h1><p>In order to see a list of existing <code>ERA5Variable</code>s, we can use the function <code>tableERA5Variables()</code>.  Alternatively, if we only want to see <code>SingleLevel</code> or <code>PressureLevel</code> variables, we can use <code>tableSingles()</code> or <code>tablePressures()</code></p><div class="admonition is-compat"><header class="admonition-header">ERA5Reanalysis ≧ v0.3</header><div class="admonition-body"><p>All Single-Level variables defined in the Climate Data Store are now available in ERA5Reanalysis.jl, but only for versions ≧ v0.3. Otherwise, a small subset of the Single-Level variables are available, but the rest need to be user-defined.</p></div></div><h2 id="List-of-Predefined-Single-Level-Variables"><a class="docs-heading-anchor" href="#List-of-Predefined-Single-Level-Variables">List of Predefined Single-Level Variables</a><a id="List-of-Predefined-Single-Level-Variables-1"></a><a class="docs-heading-anchor-permalink" href="#List-of-Predefined-Single-Level-Variables" title="Permalink"></a></h2><pre><code class="language-julia hljs">using ERA5Reanalysis
-tableSingles()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"> ------------ ---------------- ----------------------------------------------------------------- ----------------------- -----------------------------------------------------------------
-      ID       Variable Type    Name                                                                      Units           ERA5 Long-Name
- ------------ ---------------- ----------------------------------------------------------------- ----------------------- -----------------------------------------------------------------
-    alnid      SingleVariable   Near Ir Albedo For Diffuse Radiation                                     (0 - 1)          near_ir_albedo_for_diffuse_radiation
-    alnip      SingleVariable   Near Ir Albedo For Direct Radiation                                      (0 - 1)          near_ir_albedo_for_direct_radiation
-    aluvd      SingleVariable   UV Visible Albedo For Diffuse Radiation                                  (0 - 1)          uv_visible_albedo_for_diffuse_radiation
-    aluvp      SingleVariable   UV Visible Albedo For Direct Radiation                                   (0 - 1)          uv_visible_albedo_for_direct_radiation
-     anor      SingleVariable   Angle Of Sub-Gridscale Orography                                         radians          angle_of_sub_gridscale_orography
-     asn       SingleVariable   Snow Albedo                                                              (0 - 1)          snow_albedo
-     bfi       SingleVariable   Benjamin-Feir Index                                                        N/A            benjamin_feir_index
-     bld       SingleVariable   Boundary Layer Dissipation                                               J m**-2          boundary_layer_dissipation
-     blh       SingleVariable   Boundary Layer Height                                                       m             boundary_layer_height
-     cape      SingleVariable   Convective Available Potential Energy                                   J kg**-1          convective_available_potential_energy
-     cbh       SingleVariable   Cloud Base Height                                                           m             cloud_base_height
-     cdir      SingleVariable   Clear-Sky Direct Solar Radiation At Surface                              J m**-2          clear_sky_direct_solar_radiation_at_surface
-     cdww      SingleVariable   Coefficient Of Drag With Waves                                             N/A            coefficient_of_drag_with_waves
-     chnk      SingleVariable   Charnock                                                                   N/A            charnock
-     cin       SingleVariable   Convective Inhibition                                                   J kg**-1          convective_inhibition
-      cl       SingleVariable   Lake Cover                                                               (0 - 1)          lake_cover
-      cp       SingleVariable   Convective Precipitation                                                    m             convective_precipitation
-     crr       SingleVariable   Convective Rain Rate                                                 kg m**-2 s**-1       convective_rain_rate
-     csf       SingleVariable   Convective Snowfall                                               m of water equivalent   convective_snowfall
-     csfr      SingleVariable   Convective Snowfall Rate Water Equivalent                            kg m**-2 s**-1       convective_snowfall_rate_water_equivalent
-     cvh       SingleVariable   High Vegetation Cover                                                    (0 - 1)          high_vegetation_cover
-     cvl       SingleVariable   Low Vegetation Cover                                                     (0 - 1)          low_vegetation_cover
-     d2m       SingleVariable   2 Metre Dewpoint Temperature                                                K             2m_dewpoint_temperature
-     dctb      SingleVariable   Duct Base Height                                                            m             duct_base_height
-    deg0l      SingleVariable   0 Degrees C Isothermal Level (Atm)                                          m             zero_degree_level
-      dl       SingleVariable   Lake Total Depth                                                            m             lake_depth
-    dndza      SingleVariable   Mean Vertical Gradient Of Refractivity Inside Trapping Layer              m**-1           mean_vertical_gradient_of_refractivity_inside_trapping_layer
-    dndzn      SingleVariable   Minimum Vertical Gradient Of Refractivity Inside Trapping Layer           m**-1           minimum_vertical_gradient_of_refractivity_inside_trapping_layer
-     dwi       SingleVariable   10 Metre Wind Direction                                                  degrees          ocean_surface_stress_equivalent_10m_neutral_wind_direction
-     dwps      SingleVariable   Wave Spectral Directional Width For Swell                                radians          wave_spectral_directional_width_for_swell
-     dwww      SingleVariable   Wave Spectral Directional Width For Wind Waves                           radians          wave_spectral_directional_width_for_wind_waves
-      e        SingleVariable   Evaporation                                                       m of water equivalent   evaporation
-      es       SingleVariable   Snow Evaporation                                                  m of water equivalent   snow_evaporation
-     ewss      SingleVariable   Eastward Turbulent Surface Stress                                       N m**-2 s         eastward_turbulent_surface_stress
-     fal       SingleVariable   Forecast Albedo                                                          (0 - 1)          forecast_albedo
-     fdir      SingleVariable   Total Sky Direct Solar Radiation At Surface                              J m**-2          total_sky_direct_solar_radiation_at_surface
-     fg10      SingleVariable   10 Metre Wind Gust Since Previous Post-Processing                        m s**-1          10m_wind_gust_since_previous_post_processing
-     flsr      SingleVariable   Forecast Logarithm Of Surface Roughness For Heat                           N/A            forecast_logarithm_of_surface_roughness_for_heat
-     fsr       SingleVariable   Forecast Surface Roughness                                                  m             forecast_surface_roughness
-     gwd       SingleVariable   Gravity Wave Dissipation                                                 J m**-2          gravity_wave_dissipation
-     hcc       SingleVariable   High Cloud Cover                                                         (0 - 1)          high_cloud_cover
-     hmax      SingleVariable   Maximum Individual Wave Height                                              m             maximum_individual_wave_height
-    i10fg      SingleVariable   Instantaneous 10 Metre Wind Gust                                         m s**-1          instantaneous_10m_wind_gust
-      ie       SingleVariable   Instantaneous Moisture Flux                                          kg m**-2 s**-1       instantaneous_moisture_flux
-     iews      SingleVariable   Instantaneous Eastward Turbulent Surface Stress                          N m**-2          instantaneous_eastward_turbulent_surface_stress
-    ilspf      SingleVariable   Instantaneous Large-Scale Surface Precipitation Fraction                 (0 - 1)          instantaneous_large_scale_surface_precipitation_fraction
-     inss      SingleVariable   Instantaneous Northward Turbulent Surface Stress                         N m**-2          instantaneous_northward_turbulent_surface_stress
-     ishf      SingleVariable   Instantaneous Surface Sensible Heat Flux                                 W m**-2
-     isor      SingleVariable   Anisotropy Of Sub-Gridscale Orography                                      N/A            anisotropy_of_sub_gridscale_orography
-    istl1      SingleVariable   Ice Temperature Layer 1                                                     K             ice_temperature_layer_1
-    istl2      SingleVariable   Ice Temperature Layer 2                                                     K             ice_temperature_layer_2
-    istl3      SingleVariable   Ice Temperature Layer 3                                                     K             ice_temperature_layer_3
-    istl4      SingleVariable   Ice Temperature Layer 4                                                     K             ice_temperature_layer_4
-      kx       SingleVariable   K Index                                                                     K             k_index
-    lai_hv     SingleVariable   Leaf Area Index (High Vegetation)                                      m**2 m**-2         leaf_area_index_high_vegetation
-    lai_lv     SingleVariable   Leaf Area Index (Low Vegetation)                                       m**2 m**-2         leaf_area_index_low_vegetation
-     lblt      SingleVariable   Lake Bottom Temperature                                                     K             lake_bottom_temperature
-     lcc       SingleVariable   Low Cloud Cover                                                          (0 - 1)          low_cloud_cover
-     lgws      SingleVariable   Eastward Gravity Wave Surface Stress                                    N m**-2 s         eastward_gravity_wave_surface_stress
-     licd      SingleVariable   Lake Ice Total Depth                                                        m             lake_ice_depth
-     lict      SingleVariable   Lake Ice Surface Temperature                                                K             lake_ice_temperature
-     lmld      SingleVariable   Lake Mix-Layer Depth                                                        m             lake_mix_layer_depth
-     lmlt      SingleVariable   Lake Mix-Layer Temperature                                                  K             lake_mix_layer_temperature
-     lsf       SingleVariable   Large-Scale Snowfall                                              m of water equivalent   large_scale_snowfall
-     lshf      SingleVariable   Lake Shape Factor                                                          N/A            lake_shape_factor
-     lsm       SingleVariable   Land-Sea Mask                                                            (0 - 1)          land_sea_mask
-     lsp       SingleVariable   Large-Scale Precipitation                                                   m             large_scale_precipitation
-     lspf      SingleVariable   Large-Scale Precipitation Fraction                                          s             large_scale_precipitation_fraction
-     lsrr      SingleVariable   Large Scale Rain Rate                                                kg m**-2 s**-1       large_scale_rain_rate
-    lssfr      SingleVariable   Large Scale Snowfall Rate Water Equivalent                           kg m**-2 s**-1       large_scale_snowfall_rate_water_equivalent
-     ltlt      SingleVariable   Lake Total Layer Temperature                                                K             lake_total_layer_temperature
-     mbld      SingleVariable   Mean Boundary Layer Dissipation                                          W m**-2          mean_boundary_layer_dissipation
-     mcc       SingleVariable   Medium Cloud Cover                                                       (0 - 1)          medium_cloud_cover
-     mcpr      SingleVariable   Mean Convective Precipitation Rate                                   kg m**-2 s**-1       mean_convective_precipitation_rate
-     mcsr      SingleVariable   Mean Convective Snowfall Rate                                        kg m**-2 s**-1       mean_convective_snowfall_rate
-     mdts      SingleVariable   Mean Direction Of Total Swell                                            degrees          mean_direction_of_total_swell
-     mdww      SingleVariable   Mean Direction Of Wind Waves                                             degrees          mean_direction_of_wind_waves
-    megwss     SingleVariable   Mean Eastward Gravity Wave Surface Stress                                N m**-2          mean_eastward_gravity_wave_surface_stress
-     mer       SingleVariable   Mean Evaporation Rate                                                kg m**-2 s**-1       mean_evaporation_rate
-    metss      SingleVariable   Mean Eastward Turbulent Surface Stress                                   N m**-2          mean_eastward_turbulent_surface_stress
-     mgwd      SingleVariable   Mean Gravity Wave Dissipation                                            W m**-2          mean_gravity_wave_dissipation
-     mgws      SingleVariable   Northward Gravity Wave Surface Stress                                   N m**-2 s         northward_gravity_wave_surface_stress
-    mlspf      SingleVariable   Mean Large-Scale Precipitation Fraction                                Proportion         mean_large_scale_precipitation_fraction
-    mlspr      SingleVariable   Mean Large-Scale Precipitation Rate                                  kg m**-2 s**-1       mean_large_scale_precipitation_rate
-    mlssr      SingleVariable   Mean Large-Scale Snowfall Rate                                       kg m**-2 s**-1       mean_large_scale_snowfall_rate
-     mn2t      SingleVariable   Minimum Temperature At 2 Metres Since Previous Post-Processing              K             minimum_2m_temperature_since_previous_post_processing
-    mngwss     SingleVariable   Mean Northward Gravity Wave Surface Stress                               N m**-2          mean_northward_gravity_wave_surface_stress
-    mntpr      SingleVariable   Minimum Total Precipitation Rate Since Previous Post-Processing      kg m**-2 s**-1       minimum_total_precipitation_rate_since_previous_post_processing
-    mntss      SingleVariable   Mean Northward Turbulent Surface Stress                                  N m**-2          mean_northward_turbulent_surface_stress
-     mp1       SingleVariable   Mean Wave Period Based On First Moment                                      s             mean_wave_period_based_on_first_moment
-     mp2       SingleVariable   Mean Zero-Crossing Wave Period                                              s             mean_zero_crossing_wave_period
-     mper      SingleVariable   Mean Potential Evaporation Rate                                      kg m**-2 s**-1       mean_potential_evaporation_rate
-     mpts      SingleVariable   Mean Period Of Total Swell                                                  s             mean_period_of_total_swell
-     mpww      SingleVariable   Mean Period Of Wind Waves                                                   s             mean_period_of_wind_waves
-     mror      SingleVariable   Mean Runoff Rate                                                     kg m**-2 s**-1       mean_runoff_rate
-   msdrswrf    SingleVariable   Mean Surface Direct Short-Wave Radiation Flux                            W m**-2          mean_surface_direct_short_wave_radiation_flux
-  msdrswrfcs   SingleVariable   Mean Surface Direct Short-Wave Radiation Flux (Clear Sky)                W m**-2          mean_surface_direct_short_wave_radiation_flux_clear_sky
-   msdwlwrf    SingleVariable   Mean Surface Downward Long-Wave Radiation Flux                           W m**-2          mean_surface_downward_long_wave_radiation_flux
-  msdwlwrfcs   SingleVariable   Mean Surface Downward Long-Wave Radiation Flux (Clear Sky)               W m**-2          mean_surface_downward_long_wave_radiation_flux_clear_sky
-   msdwswrf    SingleVariable   Mean Surface Downward Short-Wave Radiation Flux                          W m**-2          mean_surface_downward_short_wave_radiation_flux
-  msdwswrfcs   SingleVariable   Mean Surface Downward Short-Wave Radiation Flux (Clear Sky)              W m**-2          mean_surface_downward_short_wave_radiation_flux_clear_sky
-   msdwuvrf    SingleVariable   Mean Surface Downward Uv Radiation Flux                                  W m**-2          mean_surface_downward_uv_radiation_flux
-     mser      SingleVariable   Mean Snow Evaporation Rate                                           kg m**-2 s**-1       mean_snow_evaporation_rate
-     msl       SingleVariable   Mean Sea Level Pressure                                                    Pa             mean_sea_level_pressure
-    mslhf      SingleVariable   Mean Surface Latent Heat Flux                                            W m**-2          mean_surface_latent_heat_flux
-     msmr      SingleVariable   Mean Snowmelt Rate                                                   kg m**-2 s**-1       mean_snowmelt_rate
-   msnlwrf     SingleVariable   Mean Surface Net Long-Wave Radiation Flux                                W m**-2          mean_surface_net_long_wave_radiation_flux
-  msnlwrfcs    SingleVariable   Mean Surface Net Long-Wave Radiation Flux (Clear Sky)                    W m**-2          mean_surface_net_long_wave_radiation_flux_clear_sky
-   msnswrf     SingleVariable   Mean Surface Net Short-Wave Radiation Flux                               W m**-2          mean_surface_net_short_wave_radiation_flux
-  msnswrfcs    SingleVariable   Mean Surface Net Short-Wave Radiation Flux (Clear Sky)                   W m**-2          mean_surface_net_short_wave_radiation_flux_clear_sky
-     msqs      SingleVariable   Mean Square Slope Of Waves                                                 N/A            mean_square_slope_of_waves
-     msr       SingleVariable   Mean Snowfall Rate                                                   kg m**-2 s**-1       mean_snowfall_rate
-    msror      SingleVariable   Mean Surface Runoff Rate                                             kg m**-2 s**-1       mean_surface_runoff_rate
-    msshf      SingleVariable   Mean Surface Sensible Heat Flux                                          W m**-2          mean_surface_sensible_heat_flux
-    mssror     SingleVariable   Mean Sub-Surface Runoff Rate                                         kg m**-2 s**-1       mean_sub_surface_runoff_rate
-   mtdwswrf    SingleVariable   Mean Top Downward Short-Wave Radiation Flux                              W m**-2          mean_top_downward_short_wave_radiation_flux
-   mtnlwrf     SingleVariable   Mean Top Net Long-Wave Radiation Flux                                    W m**-2          mean_top_net_long_wave_radiation_flux
-  mtnlwrfcs    SingleVariable   Mean Top Net Long-Wave Radiation Flux (Clear Sky)                        W m**-2          mean_top_net_long_wave_radiation_flux_clear_sky
-   mtnswrf     SingleVariable   Mean Top Net Short-Wave Radiation Flux                                   W m**-2          mean_top_net_short_wave_radiation_flux
-  mtnswrfcs    SingleVariable   Mean Top Net Short-Wave Radiation Flux (Clear Sky)                       W m**-2          mean_top_net_short_wave_radiation_flux_clear_sky
-     mtpr      SingleVariable   Mean Total Precipitation Rate                                        kg m**-2 s**-1       mean_total_precipitation_rate
-    mvimd      SingleVariable   Mean Vertically Integrated Moisture Divergence                       kg m**-2 s**-1       mean_vertically_integrated_moisture_divergence
-     mwd       SingleVariable   Mean Wave Direction                                                    Degree true        mean_wave_direction
-     mwp       SingleVariable   Mean Wave Period                                                            s             mean_wave_period
-     mx2t      SingleVariable   Maximum Temperature At 2 Metres Since Previous Post-Processing              K             maximum_2m_temperature_since_previous_post_processing
-    mxtpr      SingleVariable   Maximum Total Precipitation Rate Since Previous Post-Processing      kg m**-2 s**-1       maximum_total_precipitation_rate_since_previous_post_processing
-     nsss      SingleVariable   Northward Turbulent Surface Stress                                      N m**-2 s         northward_turbulent_surface_stress
-   p140121     SingleVariable   Significant Wave Height Of First Swell Partition                            m             significant_wave_height_of_first_swell_partition
-   p140122     SingleVariable   Mean Wave Direction Of First Swell Partition                             degrees          mean_wave_direction_of_first_swell_partition
-   p140123     SingleVariable   Mean Wave Period Of First Swell Partition                                   s             mean_wave_period_of_first_swell_partition
-   p140124     SingleVariable   Significant Wave Height Of Second Swell Partition                           m             significant_wave_height_of_second_swell_partition
-   p140125     SingleVariable   Mean Wave Direction Of Second Swell Partition                            degrees          mean_wave_direction_of_second_swell_partition
-   p140126     SingleVariable   Mean Wave Period Of Second Swell Partition                                  s             mean_wave_period_of_second_swell_partition
-   p140127     SingleVariable   Significant Wave Height Of Third Swell Partition                            m             significant_wave_height_of_third_swell_partition
-   p140128     SingleVariable   Mean Wave Direction Of Third Swell Partition                             degrees          mean_wave_direction_of_third_swell_partition
-   p140129     SingleVariable   Mean Wave Period Of Third Swell Partition                                   s             mean_wave_period_of_third_swell_partition
-   p140208     SingleVariable   Free Convective Velocity Over The Oceans                                 m s**-1          free_convective_velocity_over_the_oceans
-   p140209     SingleVariable   Air Density Over The Oceans                                             kg m**-3          air_density_over_the_oceans
-     p1ps      SingleVariable   Mean Wave Period Based On First Moment For Swell                            s             mean_wave_period_based_on_first_moment_for_swell
-     p1ww      SingleVariable   Mean Wave Period Based On First Moment For Wind Waves                       s             mean_wave_period_based_on_first_moment_for_wind_waves
-     p2ps      SingleVariable   Mean Wave Period Based On Second Moment For Swell                           s             mean_wave_period_based_on_second_moment_for_swell
-     p2ww      SingleVariable   Mean Wave Period Based On Second Moment For Wind Waves                      s             mean_wave_period_based_on_second_moment_for_wind_waves
-   p53.162     SingleVariable   Vertical Integral Of Mass Of Atmosphere                                 kg m**-2          vertical_integral_of_mass_of_atmosphere
-   p54.162     SingleVariable   Vertical Integral Of Temperature                                       K kg m**-2         vertical_integral_of_temperature
-   p59.162     SingleVariable   Vertical Integral Of Kinetic Energy                                      J m**-2          vertical_integral_of_kinetic_energy
-   p60.162     SingleVariable   Vertical Integral Of Thermal Energy                                      J m**-2          vertical_integral_of_thermal_energy
-   p61.162     SingleVariable   Vertical Integral Of Potential+Internal Energy                           J m**-2          vertical_integral_of_potential_and_internal_energy
-   p62.162     SingleVariable   Vertical Integral Of Potential+Internal+Latent Energy                    J m**-2          vertical_integral_of_potential_internal_and_latent_energy
-   p63.162     SingleVariable   Vertical Integral Of Total Energy                                        J m**-2          vertical_integral_of_total_energy
-   p64.162     SingleVariable   Vertical Integral Of Energy Conversion                                   W m**-2          vertical_integral_of_energy_conversion
-   p65.162     SingleVariable   Vertical Integral Of Eastward Mass Flux                              kg m**-1 s**-1       vertical_integral_of_eastward_mass_flux
-   p66.162     SingleVariable   Vertical Integral Of Northward Mass Flux                             kg m**-1 s**-1       vertical_integral_of_northward_mass_flux
-   p67.162     SingleVariable   Vertical Integral Of Eastward Kinetic Energy Flux                        W m**-1          vertical_integral_of_eastward_kinetic_energy_flux
-   p68.162     SingleVariable   Vertical Integral Of Northward Kinetic Energy Flux                       W m**-1          vertical_integral_of_northward_kinetic_energy_flux
-   p69.162     SingleVariable   Vertical Integral Of Eastward Heat Flux                                  W m**-1          vertical_integral_of_eastward_heat_flux
-   p70.162     SingleVariable   Vertical Integral Of Northward Heat Flux                                 W m**-1          vertical_integral_of_northward_heat_flux
-   p71.162     SingleVariable   Vertical Integral Of Eastward Water Vapour Flux                      kg m**-1 s**-1       vertical_integral_of_eastward_water_vapour_flux
-   p72.162     SingleVariable   Vertical Integral Of Northward Water Vapour Flux                     kg m**-1 s**-1       vertical_integral_of_northward_water_vapour_flux
-   p73.162     SingleVariable   Vertical Integral Of Eastward Geopotential Flux                          W m**-1          vertical_integral_of_eastward_geopotential_flux
-   p74.162     SingleVariable   Vertical Integral Of Northward Geopotential Flux                         W m**-1          vertical_integral_of_northward_geopotential_flux
-   p75.162     SingleVariable   Vertical Integral Of Eastward Total Energy Flux                          W m**-1          vertical_integral_of_eastward_total_energy_flux
-   p76.162     SingleVariable   Vertical Integral Of Northward Total Energy Flux                         W m**-1          vertical_integral_of_northward_total_energy_flux
-   p77.162     SingleVariable   Vertical Integral Of Eastward Ozone Flux                             kg m**-1 s**-1       vertical_integral_of_eastward_ozone_flux
-   p78.162     SingleVariable   Vertical Integral Of Northward Ozone Flux                            kg m**-1 s**-1       vertical_integral_of_northward_ozone_flux
-   p79.162     SingleVariable   Vertical Integral Of Divergence Of Cloud Liquid Water Flux           kg m**-2 s**-1       vertical_integral_of_divergence_of_cloud_liquid_water_flux
-   p80.162     SingleVariable   Vertical Integral Of Divergence Of Cloud Frozen Water Flux           kg m**-2 s**-1       vertical_integral_of_divergence_of_cloud_frozen_water_flux
-   p81.162     SingleVariable   Vertical Integral Of Divergence Of Mass Flux                         kg m**-2 s**-1       vertical_integral_of_divergence_of_mass_flux
-   p82.162     SingleVariable   Vertical Integral Of Divergence Of Kinetic Energy Flux                   W m**-2          vertical_integral_of_divergence_of_kinetic_energy_flux
-   p83.162     SingleVariable   Vertical Integral Of Divergence Of Thermal Energy Flux                   W m**-2          vertical_integral_of_divergence_of_thermal_energy_flux
-   p84.162     SingleVariable   Vertical Integral Of Divergence Of Moisture Flux                     kg m**-2 s**-1       vertical_integral_of_divergence_of_moisture_flux
-   p85.162     SingleVariable   Vertical Integral Of Divergence Of Geopotential Flux                     W m**-2          vertical_integral_of_divergence_of_geopotential_flux
-   p86.162     SingleVariable   Vertical Integral Of Divergence Of Total Energy Flux                     W m**-2          vertical_integral_of_divergence_of_total_energy_flux
-   p87.162     SingleVariable   Vertical Integral Of Divergence Of Ozone Flux                        kg m**-2 s**-1       vertical_integral_of_divergence_of_ozone_flux
-   p88.162     SingleVariable   Vertical Integral Of Eastward Cloud Liquid Water Flux                kg m**-1 s**-1       vertical_integral_of_eastward_cloud_liquid_water_flux
-   p89.162     SingleVariable   Vertical Integral Of Northward Cloud Liquid Water Flux               kg m**-1 s**-1       vertical_integral_of_northward_cloud_liquid_water_flux
-   p90.162     SingleVariable   Vertical Integral Of Eastward Cloud Frozen Water Flux                kg m**-1 s**-1       vertical_integral_of_eastward_cloud_frozen_water_flux
-   p91.162     SingleVariable   Vertical Integral Of Northward Cloud Frozen Water Flux               kg m**-1 s**-1       vertical_integral_of_northward_cloud_frozen_water_flux
-   p92.162     SingleVariable   Vertical Integral Of Mass Tendency                                   kg m**-2 s**-1       vertical_integral_of_mass_tendency
-     pev       SingleVariable   Potential Evaporation                                                       m             potential_evaporation
-    phiaw      SingleVariable   Normalized Energy Flux Into Waves                                          N/A            normalized_energy_flux_into_waves
-    phioc      SingleVariable   Normalized Energy Flux Into Ocean                                          N/A            normalized_energy_flux_into_ocean
-     pp1d      SingleVariable   Peak Wave Period                                                            s             peak_wave_period
-    ptype      SingleVariable   Precipitation Type                                                 code table (4.201)     precipitation_type
-      ro       SingleVariable   Runoff                                                                      m             runoff
-     rsn       SingleVariable   Snow Density                                                            kg m**-3          snow_density
-      sd       SingleVariable   Snow Depth                                                        m of water equivalent   snow_depth
-    sdfor      SingleVariable   Standard Deviation Of Filtered Subgrid Orography                            m             standard_deviation_of_filtered_subgrid_orography
-     sdor      SingleVariable   Standard Deviation Of Orography                                             m             standard_deviation_of_orography
-      sf       SingleVariable   Snowfall                                                          m of water equivalent   snowfall
-     shts      SingleVariable   Significant Height Of Total Swell                                           m             significant_height_of_total_swell
-     shww      SingleVariable   Significant Height Of Wind Waves                                            m             significant_height_of_wind_waves
-    siconc     SingleVariable   Sea Ice Area Fraction                                                    (0 - 1)          sea_ice_cover
-     skt       SingleVariable   Skin Temperature                                                            K             skin_temperature
-     slhf      SingleVariable   Surface Latent Heat Flux                                                 J m**-2          surface_latent_heat_flux
-     slor      SingleVariable   Slope Of Sub-Gridscale Orography                                           N/A            slope_of_sub_gridscale_orography
-     slt       SingleVariable   Soil Type                                                                  N/A            soil_type
-     smlt      SingleVariable   Snowmelt                                                          m of water equivalent   snowmelt
-      sp       SingleVariable   Surface Pressure                                                           Pa             surface_pressure
-     src       SingleVariable   Skin Reservoir Content                                            m of water equivalent   skin_reservoir_content
-     sro       SingleVariable   Surface Runoff                                                              m             surface_runoff
-     sshf      SingleVariable   Surface Sensible Heat Flux                                               J m**-2          surface_sensible_heat_flux
-     ssr       SingleVariable   Surface Net Short-Wave (Solar) Radiation                                 J m**-2          surface_net_solar_radiation
-     ssrc      SingleVariable   Surface Net Short-Wave (Solar) Radiation (Clear Sky)                     J m**-2          surface_net_solar_radiation_clear_sky
-     ssrd      SingleVariable   Surface Short-Wave (Solar) Radiation Downwards                           J m**-2          surface_solar_radiation_downwards
-    ssrdc      SingleVariable   Surface Solar Radiation Downward Clear-Sky                               J m**-2          surface_solar_radiation_downward_clear_sky
-     ssro      SingleVariable   Sub-Surface Runoff                                                          m             sub_surface_runoff
-     sst       SingleVariable   Sea Surface Temperature                                                     K             sea_surface_temperature
-     stl1      SingleVariable   Soil Temperature Level 1                                                    K             soil_temperature_level_1
-     stl2      SingleVariable   Soil Temperature Level 2                                                    K             soil_temperature_level_2
-     stl3      SingleVariable   Soil Temperature Level 3                                                    K             soil_temperature_level_3
-     stl4      SingleVariable   Soil Temperature Level 4                                                    K             soil_temperature_level_4
-     str       SingleVariable   Surface Net Long-Wave (Thermal) Radiation                                J m**-2          surface_net_thermal_radiation
-     strc      SingleVariable   Surface Net Long-Wave (Thermal) Radiation (Clear Sky)                    J m**-2          surface_net_thermal_radiation_clear_sky
-     strd      SingleVariable   Surface Long-Wave (Thermal) Radiation Downwards                          J m**-2          surface_thermal_radiation_downwards
-    strdc      SingleVariable   Surface Thermal Radiation Downward Clear-Sky                             J m**-2          surface_thermal_radiation_downward_clear_sky
-     swh       SingleVariable   Significant Height Of Combined Wind Waves And Swell                         m             significant_height_of_combined_wind_waves_and_swell
-    swvl1      SingleVariable   Volumetric Soil Water Layer 1                                          m**3 m**-3         volumetric_soil_water_layer_1
-    swvl2      SingleVariable   Volumetric Soil Water Layer 2                                          m**3 m**-3         volumetric_soil_water_layer_2
-    swvl3      SingleVariable   Volumetric Soil Water Layer 3                                          m**3 m**-3         volumetric_soil_water_layer_3
-    swvl4      SingleVariable   Volumetric Soil Water Layer 4                                          m**3 m**-3         volumetric_soil_water_layer_4
-     t2m       SingleVariable   2 Metre Temperature                                                         K             2m_temperature
-    tauoc      SingleVariable   Normalized Stress Into Ocean                                               N/A            normalized_stress_into_ocean
-     tcc       SingleVariable   Total Cloud Cover                                                        (0 - 1)          total_cloud_cover
-     tciw      SingleVariable   Total Column Cloud Ice Water                                            kg m**-2          total_column_cloud_ice_water
-     tclw      SingleVariable   Total Column Cloud Liquid Water                                         kg m**-2          total_column_cloud_liquid_water
-     tco3      SingleVariable   Total Column Ozone                                                      kg m**-2          total_column_ozone
-     tcrw      SingleVariable   Total Column Rain Water                                                 kg m**-2          total_column_rain_water
-    tcslw      SingleVariable   Total Column Supercooled Liquid Water                                   kg m**-2          total_column_supercooled_liquid_water
-     tcsw      SingleVariable   Total Column Snow Water                                                 kg m**-2          total_column_snow_water
-     tcw       SingleVariable   Total Column Water                                                      kg m**-2          total_column_water
-     tcwv      SingleVariable   Total Column Vertically-Integrated Water Vapour                         kg m**-2          total_column_water_vapour
-     tisr      SingleVariable   Toa Incident Solar Radiation                                             J m**-2          toa_incident_solar_radiation
-     tmax      SingleVariable   Period Corresponding To Maximum Individual Wave Height                      s             period_corresponding_to_maximum_individual_wave_height
-    totalx     SingleVariable   Total Totals Index                                                          K             total_totals_index
-      tp       SingleVariable   Total Precipitation                                                         m             total_precipitation
-     tplb      SingleVariable   Trapping Layer Base Height                                                  m             trapping_layer_base_height
-     tplt      SingleVariable   Trapping Layer Top Height                                                   m             trapping_layer_top_height
-     tsn       SingleVariable   Temperature Of Snow Layer                                                   K             temperature_of_snow_layer
-     tsr       SingleVariable   Top Net Short-Wave (Solar) Radiation                                     J m**-2          top_net_solar_radiation
-     tsrc      SingleVariable   Top Net Solar Radiation (Clear Sky)                                      J m**-2          top_net_solar_radiation_clear_sky
-     ttr       SingleVariable   Top Net Long-Wave (Thermal) Radiation                                    J m**-2          top_net_thermal_radiation
-     ttrc      SingleVariable   Top Net Thermal Radiation (Clear Sky)                                    J m**-2          top_net_thermal_radiation_clear_sky
-     tvh       SingleVariable   Type Of High Vegetation                                                    N/A            type_of_high_vegetation
-     tvl       SingleVariable   Type Of Low Vegetation                                                     N/A            type_of_low_vegetation
-     u10       SingleVariable   10 Metre U Wind Component                                                m s**-1          10m_u_component_of_wind
-     u100      SingleVariable   100 Metre U Wind Component                                               m s**-1          100m_u_component_of_wind
-     u10n      SingleVariable   Neutral Wind At 10 M U-Component                                         m s**-1          10m_u_component_of_neutral_wind
-     ust       SingleVariable   U-Component Stokes Drift                                                 m s**-1          u_component_stokes_drift
-     uvb       SingleVariable   Downward Uv Radiation At The Surface                                     J m**-2          downward_uv_radiation_at_the_surface
-     v10       SingleVariable   10 Metre V Wind Component                                                m s**-1          10m_v_component_of_wind
-     v100      SingleVariable   100 Metre V Wind Component                                               m s**-1          100m_v_component_of_wind
-     v10n      SingleVariable   Neutral Wind At 10 M V-Component                                         m s**-1          10m_v_component_of_neutral_wind
-     vimd      SingleVariable   Vertically Integrated Moisture Divergence                               kg m**-2          vertically_integrated_moisture_divergence
-     vst       SingleVariable   V-Component Stokes Drift                                                 m s**-1          v_component_stokes_drift
-     wdw       SingleVariable   Wave Spectral Directional Width                                          radians          wave_spectral_directional_width
-     wind      SingleVariable   10 Metre Wind Speed                                                      m s**-1          ocean_surface_stress_equivalent_10m_neutral_wind_speed
-     wmb       SingleVariable   Model Bathymetry                                                            m             model_bathymetry
-     wsk       SingleVariable   Wave Spectral Kurtosis                                                     N/A            wave_spectral_kurtosis
-     wsp       SingleVariable   Wave Spectral Peakedness                                                   N/A            wave_spectral_peakedness
-     wss       SingleVariable   Wave Spectral Skewness                                                     N/A            wave_spectral_skewness
-      z        SingleVariable   Geopotential                                                           m**2 s**-2         geopotential
-     zust      SingleVariable   Friction Velocity                                                        m s**-1          friction_velocity
- ------------ ---------------- ----------------------------------------------------------------- ----------------------- -----------------------------------------------------------------</code></pre><h2 id="List-of-Predefined-Pressure-Level-Variables"><a class="docs-heading-anchor" href="#List-of-Predefined-Pressure-Level-Variables">List of Predefined Pressure-Level Variables</a><a id="List-of-Predefined-Pressure-Level-Variables-1"></a><a class="docs-heading-anchor-permalink" href="#List-of-Predefined-Pressure-Level-Variables" title="Permalink"></a></h2><pre><code class="language-julia hljs">using ERA5Reanalysis
-tablePressures()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"> ------ ------------------ ------------------------------------- ---------------------- -------------------------------------
-   ID     Variable Type     Name                                         Units           ERA5 Long-Name
- ------ ------------------ ------------------------------------- ---------------------- -------------------------------------
-   u     pressurevariable   Zonal Wind                                  m s**-1          u_component_of_wind
-   v     pressurevariable   Meridional Wind                             m s**-1          v_component_of_wind
-   w     pressurevariable   Vertical Wind                               Pa s**-1         vertical_velocity
-   t     pressurevariable   Temperature                                    K             temperature
-   z     pressurevariable   Pressure Level Geopotential                m**2 s**-2        geopotential
-   d     pressurevariable   Divergence                                   s**-1           divergence
-   vo    pressurevariable   Vorticity (Relative)                         s**-1           vorticity
-   pv    pressurevariable   Potential Vorticity                   K m**-2 kg**-1 s**-1   potential_vorticity
-   r     pressurevariable   Relative Humidity                              %             relative_humidity
-   q     pressurevariable   Specific Humidity                          kg kg**-1         specific_humidity
-   cc    pressurevariable   Cloud Cover Fraction                           %             fraction_of_cloud_cover
-  ciwc   pressurevariable   Specific Cloud Ice Water Content           kg kg**-1         specific_cloud_ice_water_content
-  clwc   pressurevariable   Specific Cloud Liquid Water Content        kg kg**-1         specific_cloud_liquid_water_content
-  crwc   pressurevariable   Specific Rain Water Content                kg kg**-1         specific_rain_water_content
-  cswc   pressurevariable   Specific Snow Water Contnet                kg kg**-1         specific_snow_water_content
-   o3    pressurevariable   Ozone Mass Mixing Ration                   kg kg**-1         ozone_mass_mixing_ratio
- ------ ------------------ ------------------------------------- ---------------------- -------------------------------------</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="reset.html">« Resetting ERA5 Variables</a><a class="docs-footer-nextpage" href="../regions/index.html">What is an ERA5Region »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.1 on <span class="colophon-date" title="Saturday 15 February 2025 23:51">Saturday 15 February 2025</span>. Using Julia version 1.11.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Predefined ERA5 Variables · ERA5Reanalysis.jl</title><meta name="title" content="Predefined ERA5 Variables · ERA5Reanalysis.jl"/><meta property="og:title" content="Predefined ERA5 Variables · ERA5Reanalysis.jl"/><meta property="twitter:title" content="Predefined ERA5 Variables · ERA5Reanalysis.jl"/><meta name="description" content="Documentation for ERA5Reanalysis.jl."/><meta property="og:description" content="Documentation for ERA5Reanalysis.jl."/><meta property="twitter:description" content="Documentation for ERA5Reanalysis.jl."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../index.html">ERA5Reanalysis.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../index.html">Home</a></li><li><input class="collapse-toggle" id="menuitem-2" type="checkbox" checked/><label class="tocitem" for="menuitem-2"><span class="docs-label">Components</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../overview.html">Overview</a></li><li><input class="collapse-toggle" id="menuitem-2-2" type="checkbox"/><label class="tocitem" for="menuitem-2-2"><span class="docs-label">ERA5Datasets</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../datasets/overview.html">An Overview of ERA5 Datasets</a></li><li><a class="tocitem" href="../datasets/define.html">Defining ERA5 Datasets</a></li><li><a class="tocitem" href="../datasets/cds.html">Climate Data Store Datasets</a></li><li><a class="tocitem" href="../datasets/custom.html">Custom ERA5 Datasets</a></li><li><a class="tocitem" href="../datasets/dummy.html">Dummy ERA5 Datasets</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-2-3" type="checkbox" checked/><label class="tocitem" for="menuitem-2-3"><span class="docs-label">ERA5Variables</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="index.html">What is an ERA5 Variable</a></li><li><a class="tocitem" href="read.html">Retrieving Existing ERA5 Variables</a></li><li><a class="tocitem" href="custom.html">Creating Custom ERA5 Variables</a></li><li><a class="tocitem" href="reset.html">Resetting ERA5 Variables</a></li><li class="is-active"><a class="tocitem" href="list.html">Predefined ERA5 Variables</a><ul class="internal"><li><a class="tocitem" href="#List-of-Predefined-Single-Level-Variables"><span>List of Predefined Single-Level Variables</span></a></li><li><a class="tocitem" href="#List-of-Predefined-Pressure-Level-Variables"><span>List of Predefined Pressure-Level Variables</span></a></li></ul></li></ul></li><li><input class="collapse-toggle" id="menuitem-2-4" type="checkbox"/><label class="tocitem" for="menuitem-2-4"><span class="docs-label">ERA5Regions</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../regions/index.html">What is an ERA5Region</a></li><li><a class="tocitem" href="../regions/isin.html">Is it in an ERA5Region</a></li><li><a class="tocitem" href="../regions/gridded.html">Extracting Data for an ERA5Region</a></li></ul></li></ul></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Using ERA5Reanalysis.jl</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><input class="collapse-toggle" id="menuitem-3-1" type="checkbox"/><label class="tocitem" for="menuitem-3-1"><span class="docs-label">LandSea Datasets in ERA5</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../using/landsea/intro.html">What is a LandSea Dataset</a></li><li><a class="tocitem" href="../../using/landsea/create.html">Downloading LandSea Datasets</a></li></ul></li><li><a class="tocitem" href="../../using/download.html">Downloading and Reading Data</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Components</a></li><li><a class="is-disabled">ERA5Variables</a></li><li class="is-active"><a href="list.html">Predefined ERA5 Variables</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="list.html">Predefined ERA5 Variables</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/GeoRegionsEcosystem/ERA5Reanalysis.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/GeoRegionsEcosystem/ERA5Reanalysis.jl/blob/main/docs/src/components/variables/list.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="List-of-Predefined-ERA5Variables-in-ERA5Reanalysis.jl"><a class="docs-heading-anchor" href="#List-of-Predefined-ERA5Variables-in-ERA5Reanalysis.jl">List of Predefined <code>ERA5Variable</code>s in ERA5Reanalysis.jl</a><a id="List-of-Predefined-ERA5Variables-in-ERA5Reanalysis.jl-1"></a><a class="docs-heading-anchor-permalink" href="#List-of-Predefined-ERA5Variables-in-ERA5Reanalysis.jl" title="Permalink"></a></h1><p>In order to see a list of existing <code>ERA5Variable</code>s, we can use the function <code>tableERA5Variables()</code>.  Alternatively, if we only want to see <code>SingleLevel</code> or <code>PressureLevel</code> variables, we can use <code>tableSingles()</code> or <code>tablePressures()</code></p><div class="admonition is-compat" id="ERA5Reanalysis-v0.3-bf4bfd1a37c14d45"><header class="admonition-header">ERA5Reanalysis ≧ v0.3<a class="admonition-anchor" href="#ERA5Reanalysis-v0.3-bf4bfd1a37c14d45" title="Permalink"></a></header><div class="admonition-body"><p>All Single-Level variables defined in the Climate Data Store are now available in ERA5Reanalysis.jl, but only for versions ≧ v0.3. Otherwise, a small subset of the Single-Level variables are available, but the rest need to be user-defined.</p></div></div><h2 id="List-of-Predefined-Single-Level-Variables"><a class="docs-heading-anchor" href="#List-of-Predefined-Single-Level-Variables">List of Predefined Single-Level Variables</a><a id="List-of-Predefined-Single-Level-Variables-1"></a><a class="docs-heading-anchor-permalink" href="#List-of-Predefined-Single-Level-Variables" title="Permalink"></a></h2><pre><code class="language-julia hljs">using ERA5Reanalysis
+tableSingles()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"> ------------ ---------------- ----------------------- ------- ----------------------------------------------------------------- --------- ----------------
+ <span class="sgr1">     ID     </span> <span class="sgr1"> Variable Type  </span> <span class="sgr1"> Name                  </span> <span class="sgr1"> Units </span> <span class="sgr1"> ERA5 Long-Name                                                  </span> <span class="sgr1"> DKRZ ID </span> <span class="sgr1"> DKRZ Invariant </span>
+ ------------ ---------------- ----------------------- ------- ----------------------------------------------------------------- --------- ----------------
+    alnid      SingleVariable   (0 - 1)                 true    Near IR albedo for diffuse radiation                               true         false
+    alnip      SingleVariable   (0 - 1)                 true    Near IR albedo for direct radiation                                true         false
+    aluvd      SingleVariable   (0 - 1)                 true    UV visible albedo for diffuse radiation                            true         false
+    aluvp      SingleVariable   (0 - 1)                 true    UV visible albedo for direct radiation                             true         false
+     anor      SingleVariable   radians                 true    Angle of sub-gridscale orography                                  missing      missing
+     asn       SingleVariable   (0 - 1)                 true    Snow albedo                                                        true         false
+     bfi       SingleVariable   dimensionless           true    Benjamin-Feir index                                                true         false
+     bld       SingleVariable   J m**-2                 false   Boundary layer dissipation                                         true         false
+     blh       SingleVariable   m                       true    Boundary layer height                                              true         false
+     cape      SingleVariable   J kg**-1                true    Convective available potential energy                              true         false
+     cbh       SingleVariable   m                       false   Cloud base height                                                  true         false
+     cdir      SingleVariable   J m**-2                 false   Clear-sky direct solar radiation at surface                        true         false
+     cdww      SingleVariable   dimensionless           true    Coefficient of drag with waves                                     true         false
+     chnk      SingleVariable   ~                       true    Charnock                                                           true         false
+      ci       SingleVariable   (0 - 1)                 true    Sea ice area fraction                                              true         false
+     cin       SingleVariable   J kg**-1                false   Convective inhibition                                              true         false
+      cl       SingleVariable   (0 - 1)                 true    Lake cover                                                         true          true
+      cp       SingleVariable   m                       false   Convective precipitation                                           true         false
+     crr       SingleVariable   kg m**-2 s**-1          false   Convective rain rate                                               true         false
+     csf       SingleVariable   m of water equivalent   false   Convective snowfall                                                true         false
+     csfr      SingleVariable   kg m**-2 s**-1          false   Convective snowfall rate water equivalent                          true         false
+     cvh       SingleVariable   (0 - 1)                 true    High vegetation cover                                             missing      missing
+     cvl       SingleVariable   (0 - 1)                 true    Low vegetation cover                                              missing      missing
+     d2m       SingleVariable   K                       true    2 metre dewpoint temperature                                       true         false
+     dctb      SingleVariable   m                       false   Duct base height                                                   true         false
+    deg0l      SingleVariable   m                       false   Zero degree level                                                  true         false
+      dl       SingleVariable   m                       true    Lake depth                                                         true          true
+    dndza      SingleVariable   m**-1                   false   Mean vertical gradient of refractivity inside trapping layer       true         false
+    dndzn      SingleVariable   m**-1                   false   Minimum vertical gradient of refractivity inside trapping layer    true         false
+     dwi       SingleVariable   degrees                 true    10 metre wind direction                                            true         false
+     dwps      SingleVariable   Radians                 true    Wave spectral directional width for swell                          true         false
+     dwww      SingleVariable   Radians                 true    Wave spectral directional width for wind waves                     true         false
+      e        SingleVariable   m of water equivalent   false   Evaporation                                                        true         false
+      es       SingleVariable   m of water equivalent   false   Snow evaporation                                                   true         false
+     ewss      SingleVariable   N m**-2 s               false   Eastward turbulent surface stress                                  true         false
+     fal       SingleVariable   (0 - 1)                 true    Forecast albedo                                                    true         false
+     fdir      SingleVariable   J m**-2                 false   Total sky direct solar radiation at surface                        true         false
+     fg10      SingleVariable   m s**-1                 false   10 metre wind gust since previous post-processing                  true         false
+     flsr      SingleVariable   ~                       true    Forecast logarithm of surface roughness for heat                   true         false
+     fsr       SingleVariable   m                       true    Forecast surface roughness                                         true         false
+     gwd       SingleVariable   J m**-2                 false   Gravity wave dissipation                                           true         false
+     hcc       SingleVariable   (0 - 1)                 true    High cloud cover                                                   true         false
+     hmax      SingleVariable   m                       true    Maximum individual wave height                                     true         false
+    i10fg      SingleVariable   m s**-1                 false   Instantaneous 10 metre wind gust                                   true         false
+      ie       SingleVariable   kg m**-2 s**-1          true    Instantaneous moisture flux                                        true         false
+     iews      SingleVariable   N m**-2                 true    Instantaneous eastward turbulent surface stress                    true         false
+    ilspf      SingleVariable   (0 - 1)                 false   Instantaneous large-scale surface precipitation fraction           true         false
+     inss      SingleVariable   N m**-2                 true    Instantaneous northward turbulent surface stress                   true         false
+     ishf      SingleVariable   W m**-2                 true    Instantaneous surface sensible heat flux                           true         false
+     isor      SingleVariable   ~                       true    Anisotropy of sub-gridscale orography                             missing      missing
+    istl1      SingleVariable   K                       true    Ice temperature layer 1                                            true         false
+    istl2      SingleVariable   K                       true    Ice temperature layer 2                                            true         false
+    istl3      SingleVariable   K                       true    Ice temperature layer 3                                            true         false
+    istl4      SingleVariable   K                       true    Ice temperature layer 4                                            true         false
+      kx       SingleVariable   K                       false   K index2                                                           true         false
+    lai_hv     SingleVariable   m**2 m**-2              true    Leaf area index, high vegetation3                                  true         false
+    lai_lv     SingleVariable   m**2 m**-2              true    Leaf area index, low vegetation3                                   true         false
+     lblt      SingleVariable   K                       true    Lake bottom temperature                                            true         false
+     lcc       SingleVariable   (0 - 1)                 true    Low cloud cover                                                    true         false
+     lgws      SingleVariable   N m**-2 s               false   Eastward gravity wave surface stress                               true         false
+     licd      SingleVariable   m                       true    Lake ice depth                                                     true         false
+     lict      SingleVariable   K                       true    Lake ice temperature                                               true         false
+     lmld      SingleVariable   m                       true    Lake mix-layer depth                                               true         false
+     lmlt      SingleVariable   K                       true    Lake mix-layer temperature                                         true         false
+     lsf       SingleVariable   m of water equivalent   false   Large-scale snowfall                                               true         false
+     lshf      SingleVariable   dimensionless           true    Lake shape factor                                                  true         false
+     lsm       SingleVariable   (0 - 1)                 true    Land-sea mask                                                      true          true
+     lsp       SingleVariable   m                       false   Large-scale precipitation                                          true         false
+     lspf      SingleVariable   s                       false   Large-scale precipitation fraction                                 true         false
+     lsrr      SingleVariable   kg m**-2 s**-1          false   Large scale rain rate                                              true         false
+    lssfr      SingleVariable   kg m**-2 s**-1          false   Large scale snowfall rate water equivalent                         true         false
+     ltlt      SingleVariable   K                       true    Lake total layer temperature                                       true         false
+     mbld      SingleVariable   W m**-2                 false   Mean boundary layer dissipation                                    true         false
+     mcc       SingleVariable   (0 - 1)                 true    Medium cloud cover                                                 true         false
+     mcpr      SingleVariable   kg m**-2 s**-1          false   Mean convective precipitation rate                                 true         false
+     mcsr      SingleVariable   kg m**-2 s**-1          false   Mean convective snowfall rate                                      true         false
+     mdts      SingleVariable   degrees                 true    Mean direction of total swell                                      true         false
+     mdww      SingleVariable   degrees                 true    Mean direction of wind waves                                       true         false
+    megwss     SingleVariable   N m**-2                 false   Mean eastward gravity wave surface stress                          true         false
+     mer       SingleVariable   kg m**-2 s**-1          false   Mean evaporation rate                                              true         false
+    metss      SingleVariable   N m**-2                 false   Mean eastward turbulent surface stress                             true         false
+     mgwd      SingleVariable   W m**-2                 false   Mean gravity wave dissipation                                      true         false
+     mgws      SingleVariable   N m**-2 s               false   Northward gravity wave surface stress                              true         false
+    mlspf      SingleVariable   Proportion              false   Mean large-scale precipitation fraction                            true         false
+    mlspr      SingleVariable   kg m**-2 s**-1          false   Mean large-scale precipitation rate                                true         false
+    mlssr      SingleVariable   kg m**-2 s**-1          false   Mean large-scale snowfall rate                                     true         false
+     mn2t      SingleVariable   K                       false   Minimum temperature at 2 metres since previous post-processing     true         false
+    mngwss     SingleVariable   N m**-2                 false   Mean northward gravity wave surface stress                         true         false
+    mntpr      SingleVariable   kg m**-2 s**-1          false   Minimum total precipitation rate since previous post-processing    true         false
+    mntss      SingleVariable   N m**-2                 false   Mean northward turbulent surface stress                            true         false
+     mp1       SingleVariable   s                       true    Mean wave period based on first moment                             true         false
+     mp2       SingleVariable   s                       true    Mean zero-crossing wave period                                     true         false
+     mper      SingleVariable   kg m**-2 s**-1          false   Mean potential evaporation rate                                    true         false
+     mpts      SingleVariable   s                       true    Mean period of total swell                                         true         false
+     mpww      SingleVariable   s                       true    Mean period of wind waves                                          true         false
+     mror      SingleVariable   kg m**-2 s**-1          false   Mean runoff rate                                                   true         false
+   msdrswrf    SingleVariable   W m**-2                 false   Mean surface direct short-wave radiation flux                      true         false
+  msdrswrfcs   SingleVariable   W m**-2                 false   Mean surface direct short-wave radiation flux, clear sky           true         false
+   msdwlwrf    SingleVariable   W m**-2                 false   Mean surface downward long-wave radiation flux                     true         false
+  msdwlwrfcs   SingleVariable   W m**-2                 false   Mean surface downward long-wave radiation flux, clear sky          true         false
+   msdwswrf    SingleVariable   W m**-2                 false   Mean surface downward short-wave radiation flux                    true         false
+  msdwswrfcs   SingleVariable   W m**-2                 false   Mean surface downward short-wave radiation flux, clear sky         true         false
+   msdwuvrf    SingleVariable   W m**-2                 false   Mean surface downward UV radiation flux                            true         false
+     mser      SingleVariable   kg m**-2 s**-1          false   Mean snow evaporation rate                                         true         false
+     msl       SingleVariable   Pa                      true    Mean sea level pressure                                            true         false
+    mslhf      SingleVariable   W m**-2                 false   Mean surface latent heat flux                                      true         false
+     msmr      SingleVariable   kg m**-2 s**-1          false   Mean snowmelt rate                                                 true         false
+   msnlwrf     SingleVariable   W m**-2                 false   Mean surface net long-wave radiation flux                          true         false
+  msnlwrfcs    SingleVariable   W m**-2                 false   Mean surface net long-wave radiation flux, clear sky               true         false
+   msnswrf     SingleVariable   W m**-2                 false   Mean surface net short-wave radiation flux                         true         false
+  msnswrfcs    SingleVariable   W m**-2                 false   Mean surface net short-wave radiation flux, clear sky              true         false
+     msqs      SingleVariable   dimensionless           true    Mean square slope of waves                                         true         false
+     msr       SingleVariable   kg m**-2 s**-1          false   Mean snowfall rate                                                 true         false
+    msror      SingleVariable   kg m**-2 s**-1          false   Mean surface runoff rate                                           true         false
+    msshf      SingleVariable   W m**-2                 false   Mean surface sensible heat flux                                    true         false
+    mssror     SingleVariable   kg m**-2 s**-1          false   Mean sub-surface runoff rate                                       true         false
+   mtdwswrf    SingleVariable   W m**-2                 false   Mean top downward short-wave radiation flux                        true         false
+   mtnlwrf     SingleVariable   W m**-2                 false   Mean top net long-wave radiation flux                              true         false
+  mtnlwrfcs    SingleVariable   W m**-2                 false   Mean top net long-wave radiation flux, clear sky                   true         false
+   mtnswrf     SingleVariable   W m**-2                 false   Mean top net short-wave radiation flux                             true         false
+  mtnswrfcs    SingleVariable   W m**-2                 false   Mean top net short-wave radiation flux, clear sky                  true         false
+     mtpr      SingleVariable   kg m**-2 s**-1          false   Mean total precipitation rate                                      true         false
+    mvimd      SingleVariable   kg m**-2 s**-1          false   Mean vertically integrated moisture divergence                     true         false
+     mwd       SingleVariable   degrees                 true    Mean wave direction                                                true         false
+     mwd1      SingleVariable   degrees                 true    Mean wave direction of first swell partition                       true         false
+     mwd2      SingleVariable   degrees                 true    Mean wave direction of second swell partition                      true         false
+     mwd3      SingleVariable   degrees                 true    Mean wave direction of third swell partition                       true         false
+     mwp       SingleVariable   s                       true    Mean wave period                                                   true         false
+     mwp1      SingleVariable   s                       true    Mean wave period of first swell partition                          true         false
+     mwp2      SingleVariable   s                       true    Mean wave period of second swell partition                         true         false
+     mwp3      SingleVariable   s                       true    Mean wave period of third swell partition                          true         false
+     mx2t      SingleVariable   K                       false   Maximum temperature at 2 metres since previous post-processing     true         false
+    mxtpr      SingleVariable   kg m**-2 s**-1          false   Maximum total precipitation rate since previous post-processing    true         false
+     nsss      SingleVariable   N m**-2 s               false   Northward turbulent surface stress                                 true         false
+     p1ps      SingleVariable   s                       true    Mean wave period based on first moment for swell                   true         false
+     p1ww      SingleVariable   s                       true    Mean wave period based on first moment for wind waves              true         false
+     p2ps      SingleVariable   s                       true    Mean wave period based on second moment for swell                  true         false
+     p2ww      SingleVariable   s                       true    Mean wave period based on second moment for wind waves             true         false
+     pev       SingleVariable   m                       false   Potential evaporation                                              true         false
+    phiaw      SingleVariable   dimensionless           true    Normalized energy flux into waves                                  true         false
+    phioc      SingleVariable   dimensionless           true    Normalized energy flux into ocean                                  true         false
+     pp1d      SingleVariable   s                       true    Peak wave period                                                   true         false
+    ptype      SingleVariable   code table (4.201)      false   Precipitation type                                                 true         false
+    rhoao      SingleVariable   kg m**-3                true    Air density over the oceans                                        true         false
+      ro       SingleVariable   m                       false   Runoff                                                             true         false
+     rsn       SingleVariable   kg m**-3                true    Snow density                                                       true         false
+      sd       SingleVariable   m of water equivalent   true    Snow depth                                                         true         false
+    sdfor      SingleVariable   m                       true    Standard deviation of filtered subgrid orography                  missing      missing
+     sdor      SingleVariable   ~                       true    Standard deviation of sub-gridscale orography                     missing      missing
+      sf       SingleVariable   m of water equivalent   false   Snowfall                                                           true         false
+     shts      SingleVariable   m                       true    Significant height of total swell                                  true         false
+     shww      SingleVariable   m                       true    Significant height of wind waves                                   true         false
+     skt       SingleVariable   K                       true    Skin temperature                                                   true         false
+     slhf      SingleVariable   J m**-2                 false   Surface latent heat flux                                           true         false
+     slor      SingleVariable   ~                       true    Slope of sub-gridscale orography                                  missing      missing
+     slt       SingleVariable   ~                       true    Soil type1                                                        missing      missing
+     smlt      SingleVariable   m of water equivalent   false   Snowmelt                                                           true         false
+      sp       SingleVariable   Pa                      true    Surface pressure                                                   true         false
+     src       SingleVariable   m of water equivalent   true    Skin reservoir content                                             true         false
+     sro       SingleVariable   m                       false   Surface runoff                                                     true         false
+     sshf      SingleVariable   J m**-2                 false   Surface sensible heat flux                                         true         false
+     ssr       SingleVariable   J m**-2                 false   Surface net solar radiation                                        true         false
+     ssrc      SingleVariable   J m**-2                 false   Surface net solar radiation, clear sky                             true         false
+     ssrd      SingleVariable   J m**-2                 false   Surface solar radiation downwards                                  true         false
+    ssrdc      SingleVariable   J m**-2                 false   Surface solar radiation downward clear-sky                         true         false
+     ssro      SingleVariable   m                       false   Sub-surface runoff                                                 true         false
+     sst       SingleVariable   K                       true    Sea surface temperature                                            true         false
+     stl1      SingleVariable   K                       true    Soil temperature level 11                                          true         false
+     stl2      SingleVariable   K                       true    Soil temperature level 21                                          true         false
+     stl3      SingleVariable   K                       true    Soil temperature level 31                                          true         false
+     stl4      SingleVariable   K                       true    Soil temperature level 41                                          true         false
+     str       SingleVariable   J m**-2                 false   Surface net thermal radiation                                      true         false
+     strc      SingleVariable   J m**-2                 false   Surface net thermal radiation, clear sky                           true         false
+     strd      SingleVariable   J m**-2                 false   Surface thermal radiation downwards                                true         false
+    strdc      SingleVariable   J m**-2                 false   Surface thermal radiation downward clear-sky                       true         false
+     swh       SingleVariable   m                       true    Significant height of combined wind waves and swell                true         false
+     swh1      SingleVariable   m                       true    Significant wave height of first swell partition                   true         false
+     swh2      SingleVariable   m                       true    Significant wave height of second swell partition                  true         false
+     swh3      SingleVariable   m                       true    Significant wave height of third swell partition                   true         false
+    swvl1      SingleVariable   m**3 m**-3              true    Volumetric soil water layer 11                                     true         false
+    swvl2      SingleVariable   m**3 m**-3              true    Volumetric soil water layer 21                                     true         false
+    swvl3      SingleVariable   m**3 m**-3              true    Volumetric soil water layer 31                                     true         false
+    swvl4      SingleVariable   m**3 m**-3              true    Volumetric soil water layer 41                                     true         false
+     t2m       SingleVariable   K                       true    2 metre temperature                                                true         false
+    tauoc      SingleVariable   dimensionless           true    Normalized stress into ocean                                       true         false
+     tcc       SingleVariable   (0 - 1)                 true    Total cloud cover                                                  true         false
+     tciw      SingleVariable   kg m**-2                true    Total column cloud ice water                                       true         false
+     tclw      SingleVariable   kg m**-2                true    Total column cloud liquid water                                    true         false
+     tco3      SingleVariable   kg m**-2                true    Total column ozone                                                 true         false
+     tcrw      SingleVariable   kg m**-2                true    Total column rain water                                            true         false
+    tcslw      SingleVariable   kg m**-2                false   Total column supercooled liquid water                              true         false
+     tcsw      SingleVariable   kg m**-2                true    Total column snow water                                            true         false
+     tcw       SingleVariable   kg m**-2                true    Total column water                                                 true         false
+     tcwv      SingleVariable   kg m**-2                true    Total column water vapour                                          true         false
+     tisr      SingleVariable   J m**-2                 false   TOA incident solar radiation                                       true         false
+     tmax      SingleVariable   s                       true    Period corresponding to maximum individual wave height             true         false
+    totalx     SingleVariable   K                       false   Total totals index2                                                true         false
+      tp       SingleVariable   m                       false   Total precipitation                                                true         false
+     tplb      SingleVariable   m                       false   Trapping layer base height                                         true         false
+     tplt      SingleVariable   m                       false   Trapping layer top height                                          true         false
+     tsn       SingleVariable   K                       true    Temperature of snow layer                                          true         false
+     tsr       SingleVariable   J m**-2                 false   Top net solar radiation                                            true         false
+     tsrc      SingleVariable   J m**-2                 false   Top net solar radiation, clear sky                                 true         false
+     ttr       SingleVariable   J m**-2                 false   Top net thermal radiation                                          true         false
+     ttrc      SingleVariable   J m**-2                 false   Top net thermal radiation, clear sky                               true         false
+     tvh       SingleVariable   ~                       true    Type of high vegetation                                           missing      missing
+     tvl       SingleVariable   ~                       true    Type of low vegetation                                            missing      missing
+     u10       SingleVariable   m s**-1                 true    10 metre U wind component                                          true         false
+     u100      SingleVariable   m s**-1                 true    100 metre U wind component                                         true         false
+     u10n      SingleVariable   m s**-1                 true    Neutral wind at 10 m u-component                                   true         false
+     ust       SingleVariable   m s**-1                 true    U-component stokes drift                                           true         false
+     uvb       SingleVariable   J m**-2                 false   Downward UV radiation at the surface                               true         false
+     v10       SingleVariable   m s**-1                 true    10 metre V wind component                                          true         false
+     v100      SingleVariable   m s**-1                 true    100 metre V wind component                                         true         false
+     v10n      SingleVariable   m s**-1                 true    Neutral wind at 10 m v-component                                   true         false
+     viec      SingleVariable   W m**-2                 true    Vertical integral of energy conversion                             true         false
+     vigd      SingleVariable   W m**-2                 true    Vertical integral of divergence of geopotential flux               true         false
+     vige      SingleVariable   W m**-1                 true    Vertical integral of eastward geopotential flux                    true         false
+     vign      SingleVariable   W m**-1                 true    Vertical integral of northward geopotential flux                   true         false
+    viiwd      SingleVariable   kg m**-2 s**-1          true    Vertical integral of divergence of cloud frozen water flux         true         false
+    viiwe      SingleVariable   kg m**-1 s**-1          true    Vertical integral of eastward cloud frozen water flux              true         false
+    viiwn      SingleVariable   kg m**-1 s**-1          true    Vertical integral of northward cloud frozen water flux             true         false
+     vike      SingleVariable   J m**-2                 true    Vertical integral of kinetic energy                                true         false
+    viked      SingleVariable   W m**-2                 true    Vertical integral of divergence of kinetic energy flux             true         false
+    vikee      SingleVariable   W m**-1                 true    Vertical integral of eastward kinetic energy flux                  true         false
+    viken      SingleVariable   W m**-1                 true    Vertical integral of northward kinetic energy flux                 true         false
+    vilwd      SingleVariable   kg m**-2 s**-1          true    Vertical integral of divergence of cloud liquid water flux         true         false
+    vilwe      SingleVariable   kg m**-1 s**-1          true    Vertical integral of eastward cloud liquid water flux              true         false
+    vilwn      SingleVariable   kg m**-1 s**-1          true    Vertical integral of northward cloud liquid water flux             true         false
+     vima      SingleVariable   kg m**-2                true    Vertical integral of mass of atmosphere                            true         false
+    vimad      SingleVariable   kg m**-2 s**-1          true    Vertical integral of divergence of mass flux                       true         false
+    vimae      SingleVariable   kg m**-1 s**-1          true    Vertical integral of eastward mass flux                            true         false
+    viman      SingleVariable   kg m**-1 s**-1          true    Vertical integral of northward mass flux                           true         false
+    vimat      SingleVariable   kg m**-2 s**-1          true    Vertical integral of mass tendency                                missing      missing
+     vimd      SingleVariable   kg m**-2                false   Vertically integrated moisture divergence                          true         false
+    viozd      SingleVariable   kg m**-2 s**-1          true    Vertical integral of divergence of ozone flux                      true         false
+    vioze      SingleVariable   kg m**-1 s**-1          true    Vertical integral of eastward ozone flux                           true         false
+    viozn      SingleVariable   kg m**-1 s**-1          true    Vertical integral of northward ozone flux                          true         false
+    vipie      SingleVariable   J m**-2                 true    Vertical integral of potential+internal energy                     true         false
+    vipile     SingleVariable   J m**-2                 true    Vertical integral of potential+internal+latent energy              true         false
+     vit       SingleVariable   K kg m**-2              true    Vertical integral of temperature                                   true         false
+    vithe      SingleVariable   J m**-2                 true    Vertical integral of thermal energy                                true         false
+    vithed     SingleVariable   W m**-2                 true    Vertical integral of divergence of thermal energy flux             true         false
+    vithee     SingleVariable   W m**-1                 true    Vertical integral of eastward heat flux                            true         false
+    vithen     SingleVariable   W m**-1                 true    Vertical integral of northward heat flux                           true         false
+    vitoe      SingleVariable   J m**-2                 true    Vertical integral of total energy                                  true         false
+    vitoed     SingleVariable   W m**-2                 true    Vertical integral of divergence of total energy flux               true         false
+    vitoee     SingleVariable   W m**-1                 true    Vertical integral of eastward total energy flux                    true         false
+    vitoen     SingleVariable   W m**-1                 true    Vertical integral of northward total energy flux                   true         false
+    viwvd      SingleVariable   kg m**-2 s**-1          true    Vertical integral of divergence of moisture flux                   true         false
+    viwve      SingleVariable   kg m**-1 s**-1          true    Vertical integral of eastward water vapour flux                    true         false
+    viwvn      SingleVariable   kg m**-1 s**-1          true    Vertical integral of northward water vapour flux                   true         false
+     vst       SingleVariable   m s**-1                 true    V-component stokes drift                                           true         false
+     wdw       SingleVariable   Radians                 true    Wave spectral directional width                                    true         false
+     wind      SingleVariable   m s**-1                 true    10 metre wind direction                                            true         false
+     wmb       SingleVariable   m                       true    Model bathymetry                                                   true         false
+     wsk       SingleVariable   dimensionless           true    Wave spectral kurtosis                                             true         false
+     wsp       SingleVariable   dimensionless           true    Wave spectral peakedness                                           true         false
+     wss       SingleVariable   dimensionless           true    Wave Spectral Skewness                                             true         false
+    wstar      SingleVariable   m s**-1                 true    Free convective velocity over the oceans                           true         false
+      z        SingleVariable   m**2 s**-2              true    Geopotential                                                       true          true
+     zust      SingleVariable   m s**-1                 false   Friction velocity                                                  true         false
+ ------------ ---------------- ----------------------- ------- ----------------------------------------------------------------- --------- ----------------</code></pre><h2 id="List-of-Predefined-Pressure-Level-Variables"><a class="docs-heading-anchor" href="#List-of-Predefined-Pressure-Level-Variables">List of Predefined Pressure-Level Variables</a><a id="List-of-Predefined-Pressure-Level-Variables-1"></a><a class="docs-heading-anchor-permalink" href="#List-of-Predefined-Pressure-Level-Variables" title="Permalink"></a></h2><pre><code class="language- hljs">using ERA5Reanalysis
+tablePressures()</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="reset.html">« Resetting ERA5 Variables</a><a class="docs-footer-nextpage" href="../regions/index.html">What is an ERA5Region »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Monday 6 October 2025 17:41">Monday 6 October 2025</span>. Using Julia version 1.11.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
