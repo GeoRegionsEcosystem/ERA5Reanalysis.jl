@@ -11,23 +11,26 @@ struct RegridGrid{FT1<:Real,FT2<:Real} <: RegionGrid
 end
 
 function RegridGrid(
-    geo  :: GeoRegion,
-    elon :: Vector{FT1},
-    elat :: Vector{FT1};
+    geo  :: GeoRegion;
     resolution :: Real,
     rotation   :: Real = 0,
     sigdigits  :: Int = 10,
     FT2 = Float64
-) where FT1 <: Real
+)
 
     isinteger(360/resolution) ? nothing : error("$(modulelog()) - The `resolution` keyword must be able to divide 360")
 
     lon = 0  :  resolution :  360; lon = (lon[1:(end-1)].+lon[2:end])./2
     lat = 90 : -resolution : -90;  lat = (lat[1:(end-1)].+lat[2:end])./2
-    ggrd = RegionGrid(geo,lon,lat)
+    ggrd = RegionGrid(geo,lon,lat,rotation=rotation,sigdigits=sigdigits)
     nlon = length(ggrd.lon)
     nlat = length(ggrd.lat)
-    npnt = length(elon)
+
+    elon,elat = nativelonlat()
+    ngrd = RegionGrid(geo,Point2.(elon,elat))
+    elon = ngrd.lon; FT1 = eltype(elon)
+    elat = ngrd.lat
+    npnt = length(ngrd.ipoint)
 
     x = zeros(nlon,nlat)
     y = zeros(nlon,nlat)
@@ -48,6 +51,7 @@ function RegridGrid(
         ez[ipnt] = sind(elat[ipnt])
     end
 
+    @info "$(modulelog()) - Creating a RegridGrid for the $(geo.name) GeoRegion"
     ind_lon = zeros(Int,npnt)
     ind_lat = zeros(Int,npnt)
     for ipnt = 1 : npnt
@@ -105,4 +109,24 @@ function native2lonlat!(
 
     return
 
+end
+
+function show(io::IO, ggrd::RegridGrid)
+	nlon = length(ggrd.ilon)
+	nlat = length(ggrd.ilat)
+    print(
+		io,
+		"The Regrid Grid type has the following properties:\n",
+		"    Regrid Longitude Indices (ilon) : ", ggrd.ilon, '\n',
+		"    Regrid Latitude Indices  (ilat) : ", ggrd.ilat, '\n',
+		"    Longitude Points          (lon) : ", ggrd.lon,  '\n',
+		"    Latitude Points           (lat) : ", ggrd.lat,  '\n',
+		"    Rotated X Coordinates       (X)", '\n',
+		"    Rotated Y Coordinates       (Y)", '\n',
+		"    Rotation (°)                (θ) : ", ggrd.θ,  '\n',
+		"    RegionGrid Mask          (mask)", '\n',
+		"    RegionGrid Weights    (weights)", '\n',
+		"    RegionGrid Size                 : $(nlon) lon points x $(nlat) lat points\n",
+		"    RegionGrid Validity	   	     : $(sum(isone.(ggrd.mask))) / $(nlon*nlat)\n"
+	)
 end
