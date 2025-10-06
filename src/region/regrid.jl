@@ -10,8 +10,16 @@ struct RegridGrid{FT1<:Real,FT2<:Real} <: RegionGrid
           θ :: FT2
 end
 
+RegridGrid(
+    egeo :: ERA5Region;
+    resolution :: Real,
+    rotation   :: Real = 0,
+    sigdigits  :: Int = 10,
+    FT = Float64
+) = RegridGrid(egeo.geo,resolution=resolution,rotation=rotation,sigdigits=sigdigits,FT2=FT)
+
 function RegridGrid(
-    geo  :: GeoRegion;
+    geo :: GeoRegion;
     resolution :: Real,
     rotation   :: Real = 0,
     sigdigits  :: Int = 10,
