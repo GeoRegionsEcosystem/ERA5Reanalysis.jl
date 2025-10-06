@@ -112,8 +112,8 @@ function native2lonlat!(
 end
 
 function show(io::IO, ggrd::RegridGrid)
-	nlon = length(ggrd.ilon)
-	nlat = length(ggrd.ilat)
+	nlon = length(ggrd.lon)
+	nlat = length(ggrd.lat)
     print(
 		io,
 		"The Regrid Grid type has the following properties:\n",
