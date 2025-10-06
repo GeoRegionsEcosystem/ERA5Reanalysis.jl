@@ -75,7 +75,7 @@ function RegridGrid(
 end
 
 function native2lonlat(
-    data :: Vector{<:Real},
+    data :: AbstractVector{<:Real},
     rgrd :: RegridGrid
 )
 
@@ -95,8 +95,8 @@ function native2lonlat(
 end
 
 function native2lonlat!(
-    ndata :: Matrix{<:Real},
-    odata :: Vector{<:Real},
+    ndata :: AbstractMatrix{<:Real},
+    odata :: AbstractVector{<:Real},
     rgrd  :: RegridGrid
 )
 
