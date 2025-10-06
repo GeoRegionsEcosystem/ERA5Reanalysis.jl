@@ -27,7 +27,7 @@ function RegridGrid(
     ggrd = RegionGrid(geo,lon,lat)
     nlon = length(ggrd.lon)
     nlat = length(ggrd.lat)
-    npnt = length(data)
+    npnt = length(elon)
 
     x = zeros(nlon,nlat)
     y = zeros(nlon,nlat)
