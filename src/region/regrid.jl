@@ -1,12 +1,12 @@
-struct RegridGrid <: RegionGrid
-        lon :: Array{FT1,2}
-        lat :: Array{FT1,2}
+struct RegridGrid{FT1<:Real,FT2<:Real} <: RegionGrid
+        lon :: Vector{FT1}
+        lat :: Vector{FT1}
        ilon :: Vector{Int}
        ilat :: Vector{Int}
-       mask :: Array{FT2,2}
-    weights :: Array{FT2,2}
-          X :: Array{FT2,2}
-          Y :: Array{FT2,2}
+       mask :: Matrix{FT2}
+    weights :: Matrix{FT2}
+          X :: Matrix{FT2}
+          Y :: Matrix{FT2}
           θ :: FT2
 end
 
@@ -14,7 +14,7 @@ function RegridGrid(
     geo  :: GeoRegion,
     elon :: Vector{FT1},
     elat :: Vector{FT1};
-    resolution :: Real;
+    resolution :: Real,
     rotation   :: Real = 0,
     sigdigits  :: Int = 10,
     FT2 = Float64
@@ -75,6 +75,9 @@ function native2lonlat(
     rgrd :: RegridGrid
 )
 
+    nlon = length(rgrd.lon)
+    nlat = length(rgrd.lat)
+
     ndata = zeros(nlon,nlat) * NaN
     for ilat = 1 : nlat, ilon = 1 : nlon
 		ii = (rgrd.ilon.==ilon).&(rgrd.ilat.==ilat)
@@ -93,7 +96,7 @@ function native2lonlat!(
     rgrd  :: RegridGrid
 )
 
-    for ilat = 1 : nlat, ilon = 1 : nlon
+    for ilat = 1 : length(rgrd.lat), ilon = 1 : length(rgrd.lon)
 		ii = (rgrd.ilon.==ilon).&(rgrd.ilat.==ilat)
 		if !isnothing(ii) && !iszero(sum(ii))
         	ndata[ilon,ilat] = mean(@views odata[ii])
