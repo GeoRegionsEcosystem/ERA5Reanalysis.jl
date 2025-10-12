@@ -3,7 +3,8 @@ function tableERA5Variables(;
     predefined :: Bool = true,
     custom     :: Bool = false,
     warn :: Bool = true,
-    crop :: Bool = false
+    crop :: Bool = false,
+    rows :: Int = 15
 )
 
     fmat = []
@@ -43,17 +44,19 @@ function tableERA5Variables(;
         fmat .= "N/A"
     end
 
-    if !crop
+    if !crop || rows < 15
         pretty_table(
-            fmat,header=head,
-            alignment=[:c,:c,:l,:c,:l,:c,:c],
-            crop = :none, tf = tf_compact
+            fmat, column_labels = head, backend = :text,
+            alignment = [:c,:c,:l,:c,:l,:c,:c],
+            display_size = (-1,-1),
+            table_format = TextTableFormat(borders = text_table_borders__compact)
         );
     else
         pretty_table(
-            fmat,header=head,
-            alignment=[:c,:c,:l,:c,:l,:c,:c],
-            crop = :vertical, tf = tf_compact
+            fmat, column_labels = head, backend = :text,
+            alignment = [:c,:c,:l,:c,:l,:c,:c],
+            display_size = (rows,-1), vertical_crop_mode = :middle,
+            table_format = TextTableFormat(borders = text_table_borders__compact)
         );
     end
 
@@ -66,7 +69,8 @@ function tableSingles(;
     predefined :: Bool = true,
     custom     :: Bool = false,
     warn :: Bool = true,
-    crop :: Bool = false
+    crop :: Bool = false,
+    rows :: Int = 15
 )
 
     fmat = []
@@ -104,17 +108,19 @@ function tableSingles(;
         fmat .= "N/A"
     end
 
-    if !crop
+    if !crop || rows < 15
         pretty_table(
-            fmat,header=head,
-            alignment=[:c,:c,:l,:c,:l,:c,:c],
-            crop = :none, tf = tf_compact
+            fmat, column_labels = head, backend = :text,
+            alignment = [:c,:c,:l,:c,:l,:c,:c],
+            display_size = (-1,-1),
+            table_format = TextTableFormat(borders = text_table_borders__compact)
         );
     else
         pretty_table(
-            fmat,header=head,
-            alignment=[:c,:c,:l,:c,:l,:c,:c],
-            crop = :vertical, tf = tf_compact
+            fmat, column_labels = head, backend = :text,
+            alignment = [:c,:c,:l,:c,:l,:c,:c],
+            display_size = (rows,-1), vertical_crop_mode = :middle,
+            table_format = TextTableFormat(borders = text_table_borders__compact)
         );
     end
 
@@ -127,7 +133,8 @@ function tablePressures(;
     predefined :: Bool = true,
     custom     :: Bool = false,
     warn :: Bool = true,
-    crop :: Bool = false
+    crop :: Bool = false,
+    rows :: Int = 15
 )
 
     fmat = []
@@ -163,17 +170,19 @@ function tablePressures(;
         fmat .= "N/A"
     end
 
-    if !crop
+    if !crop || rows < 15
         pretty_table(
-            fmat,header=head,
-            alignment=[:c,:c,:l,:c,:l],
-            crop = :none, tf = tf_compact
+            fmat, column_labels = head, backend = :text,
+            alignment = [:c,:c,:l,:c,:l,:c,:c],
+            display_size = (-1,-1),
+            table_format = TextTableFormat(borders = text_table_borders__compact)
         );
     else
         pretty_table(
-            fmat,header=head,
-            alignment=[:c,:c,:l,:c,:l],
-            crop = :vertical, tf = tf_compact
+            fmat, column_labels = head, backend = :text,
+            alignment = [:c,:c,:l,:c,:l,:c,:c],
+            display_size = (rows,-1), vertical_crop_mode = :middle,
+            table_format = TextTableFormat(borders = text_table_borders__compact)
         );
     end
 
