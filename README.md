@@ -12,10 +12,10 @@
     <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square">
   </a>
 	<img alt="Release Version" src="https://img.shields.io/github/v/release/natgeo-wong/ERA5Reanalysis.jl.svg?style=flat-square">
-  <a href="https://natgeo-wong.github.io/ERA5Reanalysis.jl/stable/">
+  <a href="https://georegionsecosystem.github.io/ERA5Reanalysis.jl/stable/">
     <img alt="Stable Documentation" src="https://img.shields.io/badge/docs-stable-blue.svg?style=flat-square">
   </a>
-  <a href="https://natgeo-wong.github.io/ERA5Reanalysis.jl/dev/">
+  <a href="https://georegionsecosystem.github.io/ERA5Reanalysis.jl/dev/">
     <img alt="Latest Documentation" src="https://img.shields.io/badge/docs-latest-blue.svg?style=flat-square">
   </a>
 </p>
