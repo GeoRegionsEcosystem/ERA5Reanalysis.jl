@@ -58,6 +58,7 @@ function save(
     extractnc :: AbstractString = "",
     smoothlon :: Real = 0,
     smoothlat :: Real = 0,
+    smoothtime :: Int = 0
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) for $(year(dt)) $(Dates.monthname(dt)) ..."
@@ -107,6 +108,7 @@ function save(
     extractnc :: AbstractString = "",
     smoothlon :: Real = 0,
     smoothlat :: Real = 0,
+    smoothtime :: Int = 0
 )
 
     @info "$(modulelog()) - Saving raw $(e5ds.name) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) for $(year(dt)) $(Dates.monthname(dt)) ..."
