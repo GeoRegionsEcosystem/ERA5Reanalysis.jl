@@ -113,7 +113,8 @@ function dkrz(
     egeo :: ERA5Region;
     domodellevel :: Bool = false,
     doforecast   :: Bool = false,
-    doothertype  :: Bool = true
+    doothertype  :: Bool = true,
+    overwrite    :: Bool = false
 )
 
     dtvec = e5ds.start : Month(1) : e5ds.stop; ndt = length(dtvec)
@@ -139,22 +140,27 @@ function dkrz(
         ndt = ndy * 24
 
         @info "$(now()) - S2DExploration - Extracting $(evar.name) data for $yr-$(@sprintf("%02d",mo)) ..."
-        
-        for iday in 1 : ndy
 
-            ibeg = (iday-1) * 24 + 1
-            iend = iday * 24
-            gds = accessdkrz(
-                e5ds,evar,Date(yr,mo,iday),
-                domodellevel=domodellevel,doforecast=doforecast,doothertype=doothertype
-            )
-            tmat .= nomissing(gds[evar.ID][ipnts,:],NaN)
-            vmat[:,ibeg:iend] .= Float32.(tmat)
-            close(gds)
+        if !isfile(e5dfnc(e5ds,evar,egeo,idt)) || overwrite
+        
+            for iday in 1 : ndy
+
+                ibeg = (iday-1) * 24 + 1
+                iend = iday * 24
+                gds = accessdkrz(
+                    e5ds,evar,Date(yr,mo,iday),
+                    domodellevel=domodellevel,doforecast=doforecast,
+                    doothertype=doothertype
+                )
+                tmat .= nomissing(gds[evar.ID][ipnts,:],NaN)
+                vmat[:,ibeg:iend] .= Float32.(tmat)
+                close(gds)
+
+            end
+
+            save(view(vmat,:,1:ndt),idt,e5ds,evar,egeo,ggrd)
 
         end
-
-        save(view(vmat,:,1:ndt),idt,e5ds,evar,egeo,ggrd)
 
     end
 
