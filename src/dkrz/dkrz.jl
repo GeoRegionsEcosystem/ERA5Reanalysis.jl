@@ -120,34 +120,41 @@ function dkrz(
     geo = egeo.geo
     elon,elat = ERA5Reanalysis.nativelonlat()
     ggrd = RegionGrid(geo,Point2.(elon,elat)); npnts = length(ggrd.ipoint)
-    vmat = zeros(npnts,24*ndt)
+    tmat = zeros(npnts,24)
+    vmat = zeros(Float32,npnts,24*ndt)
 
-    if isglb(egeo)
+    if egeo.isglb
         ipnts = minimum(ggrd.ipoint) : maximum(ggrd.ipoint)
     else
         ipnts = ggrd.ipoint
     end
 
+    @info "$(now()) - S2DExploration - Extracting $(uppercase(e5ds.name)) $(evar.name) data in $(egeo.geo.name) (Native T639 Resolution) from $(e5ds.start) to $(e5ds.stop) from the DKRZ Servers"
+
     for idt in dtvec
 
-        yr = year(idt)
-        mo = month(idt)
-        
-        for iday in 1 : daysinmonth(idt)
+        yr  = year(idt)
+        mo  = month(idt)
+        ndy = daysinmonth(idt)
+        ndt = ndy * 24
 
-            @info "$(now()) - S2DExploration - Extraction point data $(evar.name) for ($(lon),$(lat)) from the DKRZ servers for $(dtvec[idt])"
+        @info "$(now()) - S2DExploration - Extracting $(evar.name) data for $yr-$(@sprintf("%02d",mo)) ..."
+        
+        for iday in 1 : ndy
+
             ibeg = (iday-1) * 24 + 1
             iend = iday * 24
             gds = accessdkrz(
                 e5ds,evar,Date(yr,mo,iday),
                 domodellevel=domodellevel,doforecast=doforecast,doothertype=doothertype
             )
-            vmat[:,ibeg:iend] .= nomissing(gds[evar.ID][ipnts,:],NaN)
+            tmat .= nomissing(gds[evar.ID][ipnts,:],NaN)
+            vmat[:,ibeg:iend] .= Float32.(tmat)
             close(gds)
 
         end
 
-        save(view(vmat,:,1:nt),idt,e5ds,evar,egeo,ggrd)
+        save(view(vmat,:,1:ndt),idt,e5ds,evar,egeo,ggrd)
 
     end
 
