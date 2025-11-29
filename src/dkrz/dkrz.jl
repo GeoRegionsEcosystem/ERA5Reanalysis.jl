@@ -139,8 +139,6 @@ function dkrz(
         ndy = daysinmonth(idt)
         ndt = ndy * 24
 
-        @info "$(now()) - S2DExploration - Extracting $(evar.name) data for $yr-$(@sprintf("%02d",mo)) ..."
-
         if !isfile(e5dfnc(e5ds,evar,egeo,idt)) || overwrite
         
             for iday in 1 : ndy
