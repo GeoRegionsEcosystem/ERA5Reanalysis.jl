@@ -44,6 +44,13 @@ makedocs(;
     ],
 )
 
+DocumenterVitepress.deploydocs(
+    repo      = "github.com/GeoRegionsEcosystem/ERA5Reanalysis.jl.git",
+    target    = "build",
+    devbranch = "main",
+    branch    = "gh-pages",
+)
+
 recursive_find(directory, pattern) =
     mapreduce(vcat, walkdir(directory)) do (root, dirs, files)
         joinpath.(root, filter(contains(pattern), files))
@@ -57,10 +64,3 @@ end
 for file in files
     rm(file)
 end
-
-DocumenterVitepress.deploydocs(
-    repo      = "github.com/GeoRegionsEcosystem/ERA5Reanalysis.jl.git",
-    target    = "build",
-    devbranch = "main",
-    branch    = "gh-pages",
-)
