@@ -18,24 +18,26 @@ makedocs(;
         "Home"       => "index.md",
         "The Basics" => "basics.md",
         "Setup"      => "setup.md",
-        "Datasets"   => [
-            "Available Datasets"  => "datasets/intro.md",
-            "Defining Datasets"   => "datasets/define.md",
-            "CDS Datasets"        => "datasets/cds.md",
-            "Custom Datasets"     => "datasets/custom.md",
-            "Dummy Datasets"      => "datasets/dummy.md",
-        ],
-        "Variables"  => [
-            "What is an ERA5Variable"   => "variables/index.md",
-            "Loading Variables"         => "variables/read.md",
-            "Custom Variables"          => "variables/custom.md",
-            "Resetting Variables"       => "variables/reset.md",
-            "Variable List"             => "variables/list.md",
-        ],
-        "Regions"    => [
-            "What is an ERA5Region"     => "regions/index.md",
-            "Region Checks"             => "regions/isin.md",
-            "Extracting Grid Data"      => "regions/gridded.md",
+        "Components" => [
+            "Datasets"   => [
+                "Available Datasets"  => "datasets/intro.md",
+                "Defining Datasets"   => "datasets/define.md",
+                "CDS Datasets"        => "datasets/cds.md",
+                "Custom Datasets"     => "datasets/custom.md",
+                "Dummy Datasets"      => "datasets/dummy.md",
+            ],
+            "Variables"  => [
+                "What is an ERA5Variable"   => "variables/index.md",
+                "Loading Variables"         => "variables/read.md",
+                "Custom Variables"          => "variables/custom.md",
+                "Resetting Variables"       => "variables/reset.md",
+                "Variable List"             => "variables/list.md",
+            ],
+            "Regions"    => [
+                "What is an ERA5Region"     => "regions/index.md",
+                "Region Checks"             => "regions/isin.md",
+                "Extracting Grid Data"      => "regions/gridded.md",
+            ]
         ],
         "Tutorials"  => [
             "Downloading Datasets"      => "using/download.md",
