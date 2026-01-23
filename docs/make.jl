@@ -1,58 +1,66 @@
-using ERA5Reanalysis
 using Documenter
+using DocumenterVitepress
+using ERA5Reanalysis
 
-addCDSAPIkey("199699:c52da207-6f7d-4ae8-bd33-085246faee6e")
-
-DocMeta.setdocmeta!(ERA5Reanalysis, :DocTestSetup, :(using ERA5Reanalysis); recursive=true)
+using CairoMakie
+CairoMakie.activate!(type = "svg")
 
 makedocs(;
-    modules  = [ERA5Reanalysis,GeoRegions],
-    doctest  = false,
-    warnonly = true,
-    format   = Documenter.HTML(;
-        collapselevel = 1,
-        prettyurls    = false
-    ),
+    modules  = [ERA5Reanalysis, GeoRegions],
     authors  = "Nathanael Wong <natgeo.wong@outlook.com>",
     sitename = "ERA5Reanalysis.jl",
+    doctest  = false,
+    warnonly = true,
+    format   = DocumenterVitepress.MarkdownVitepress(
+        repo = "https://github.com/GeoRegionsEcosystem/ERA5Reanalysis.jl",
+    ),
     pages    = [
-        "Home" => "index.md",
-        "Components" => [
-            "Overview" => "components/overview.md",
-            "ERA5Datasets" => [
-                "An Overview of ERA5 Datasets" => "components/datasets/overview.md",
-                "Defining ERA5 Datasets"       => "components/datasets/define.md",
-                "Climate Data Store Datasets"  => "components/datasets/cds.md",
-                "Custom ERA5 Datasets"         => "components/datasets/custom.md",
-                "Dummy ERA5 Datasets"          => "components/datasets/dummy.md",
-            ],
-            "ERA5Variables" => [
-                "What is an ERA5 Variable"           => "components/variables/index.md",
-                "Retrieving Existing ERA5 Variables" => "components/variables/read.md",
-                "Creating Custom ERA5 Variables"     => "components/variables/custom.md",
-                "Resetting ERA5 Variables"           => "components/variables/reset.md",
-                "Predefined ERA5 Variables"          => "components/variables/list.md",
-            ],
-            "ERA5Regions" => [
-                "What is an ERA5Region"             => "components/regions/index.md",
-                "Is it in an ERA5Region"            => "components/regions/isin.md",
-                "Extracting Data for an ERA5Region" => "components/regions/gridded.md",
-            ]
+        "Home"       => "index.md",
+        "The Basics" => "basics.md",
+        "Setup"      => "setup.md",
+        "Datasets"   => [
+            "Available Datasets"  => "datasets/intro.md",
+            "Defining Datasets"   => "datasets/define.md",
+            "CDS Datasets"        => "datasets/cds.md",
+            "Custom Datasets"     => "datasets/custom.md",
+            "Dummy Datasets"      => "datasets/dummy.md",
         ],
-        "Using ERA5Reanalysis.jl" => [
-            "LandSea Datasets in ERA5"      => [
-                "What is a LandSea Dataset"    => "using/landsea/intro.md",
-                "Downloading LandSea Datasets" => "using/landsea/create.md",
-            ],
-            "Downloading and Reading Data"  => "using/download.md",
-        #     "Extraction of subGeoRegions"   => "using/extract.md",
-        #     "Analysis and Basic Statistics" => "using/analysis.md",
-        #     "Spatialtemporal Smoothing"     => "using/smoothing.md",
-        ]
+        "Variables"  => [
+            "What is an ERA5Variable"   => "variables/index.md",
+            "Loading Variables"         => "variables/read.md",
+            "Custom Variables"          => "variables/custom.md",
+            "Resetting Variables"       => "variables/reset.md",
+            "Variable List"             => "variables/list.md",
+        ],
+        "Regions"    => [
+            "What is an ERA5Region"     => "regions/index.md",
+            "Region Checks"             => "regions/isin.md",
+            "Extracting Grid Data"      => "regions/gridded.md",
+        ],
+        "Tutorials"  => [
+            "Downloading Datasets"      => "using/download.md",
+            "LandSea Datasets"          => "using/landsea.md",
+        ],
     ],
 )
 
-deploydocs(
-    repo = "github.com/GeoRegionsEcosystem/ERA5Reanalysis.jl.git",
-    devbranch = "main"
+recursive_find(directory, pattern) =
+    mapreduce(vcat, walkdir(directory)) do (root, dirs, files)
+        joinpath.(root, filter(contains(pattern), files))
+    end
+
+files = []
+for pattern in [r"\.txt", r"\.nc"]
+    global files = vcat(files, recursive_find(@__DIR__, pattern))
+end
+
+for file in files
+    rm(file)
+end
+
+DocumenterVitepress.deploydocs(
+    repo      = "github.com/GeoRegionsEcosystem/ERA5Reanalysis.jl.git",
+    target    = "build",
+    devbranch = "main",
+    branch    = "gh-pages",
 )
