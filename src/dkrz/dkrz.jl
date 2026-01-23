@@ -108,7 +108,7 @@ function accessdkrz(
 end
 
 function dkrz(
-    e5ds :: ERA5CDStore,
+    e5ds :: ERA5Hourly,
     evar :: SingleVariable,
     egeo :: ERA5Region;
     domodellevel :: Bool = false,
@@ -117,12 +117,12 @@ function dkrz(
     overwrite    :: Bool = false
 )
 
-    dtvec = e5ds.start : Month(1) : e5ds.stop; ndt = length(dtvec)
+    dtvec = e5ds.start : Month(1) : e5ds.stop
     geo = egeo.geo
     elon,elat = ERA5Reanalysis.nativelonlat()
     ggrd = RegionGrid(geo,Point2.(elon,elat)); npnts = length(ggrd.ipoint)
     tmat = zeros(npnts,24)
-    vmat = zeros(Float32,npnts,24*ndt)
+    vmat = zeros(Float32,npnts,24*31)
 
     if egeo.isglb
         ipnts = minimum(ggrd.ipoint) : maximum(ggrd.ipoint)
@@ -157,6 +157,66 @@ function dkrz(
             end
 
             save(view(vmat,:,1:ndt),idt,e5ds,evar,egeo,ggrd)
+
+        end
+
+    end
+
+end
+
+function dkrz(
+    e5ds :: ERA5Hourly,
+    evar :: PressureVariable,
+    egeo :: ERA5Region;
+    domodellevel :: Bool = false,
+    doforecast   :: Bool = false,
+    doothertype  :: Bool = true,
+    overwrite    :: Bool = false
+)
+
+    dtvec = e5ds.start : Month(1) : e5ds.stop
+    geo = egeo.geo
+    elon,elat = ERA5Reanalysis.nativelonlat()
+    ggrd = RegionGrid(geo,Point2.(elon,elat)); npnts = length(ggrd.ipoint)
+    pvec = era5Pressures(); npre = length(pvec)
+    tmat = zeros(npnts,npre,24)
+    vmat = zeros(Float32,npnts,npre,24*31)
+
+    if egeo.isglb
+        ipnts = minimum(ggrd.ipoint) : maximum(ggrd.ipoint)
+    else
+        ipnts = ggrd.ipoint
+    end
+
+    @info "$(now()) - S2DExploration - Extracting $(uppercase(e5ds.name)) $(evar.name) data in $(egeo.geo.name) (Native T639 Resolution) from $(e5ds.start) to $(e5ds.stop) from the DKRZ Servers"
+
+    for idt in dtvec
+
+        yr  = year(idt)
+        mo  = month(idt)
+        ndy = daysinmonth(idt)
+        ndt = ndy * 24
+
+        if !isfile(e5dfnc(e5ds,evar,egeo,idt)) || overwrite
+        
+            for iday in 1 : ndy
+
+                ibeg = (iday-1) * 24 + 1
+                iend = iday * 24
+                gds = accessdkrz(
+                    e5ds,evar,Date(yr,mo,iday),
+                    domodellevel=domodellevel,doforecast=doforecast,
+                    doothertype=doothertype
+                )
+                tmat .= nomissing(gds[evar.ID][ipnts,:,:],NaN)
+                vmat[:,:,ibeg:iend] .= Float32.(tmat)
+                close(gds)
+
+            end
+
+            for (i,p) in enumerate(pvec)
+                save(view(vmat,:,i,1:ndt),idt,e5ds,PressureVariable(evar.ID,hPa=p),egeo,ggrd)
+            end
 
         end
 
