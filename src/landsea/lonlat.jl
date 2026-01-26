@@ -66,7 +66,7 @@ function getLandSea(
         if save
             saveLandSea(e5ds,ereg,ggrd.lon,ggrd.lat,rlsm,roro,Int16.(ggrd.mask))
         else
-            return LandSeaTopo{Float64,Float32}(ggrd.lon,ggrd.lat,rlsm,roro/9.80665)
+            return LandSeaTopo(ggrd.lon,ggrd.lat,rlsm,roro/9.80665)
         end
 
     end
@@ -82,7 +82,7 @@ function getLandSea(
 
         @info "$(modulelog()) - Retrieving the regional ERA5 Land-Sea mask for the \"$(ereg.ID)\" ERA5LonLat ..."
 
-        return LandSeaTopo{Float64,Float32}(lon,lat,lsm,oro/9.80665)
+        return LandSeaTopo(lon,lat,lsm,oro/9.80665)
 
     else
 
