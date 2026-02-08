@@ -5,3 +5,6 @@ Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 DocumenterVitepress = "4710194d-e776-4893-9690-8d956a29c365"
 ERA5Reanalysis = "99c076f5-c00e-46eb-a0bd-7ba31777c146"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
+[compat]
+DocumenterVitepress = "0.2"
