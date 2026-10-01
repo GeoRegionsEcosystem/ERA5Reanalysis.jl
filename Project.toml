@@ -1,7 +1,7 @@
 name = "ERA5Reanalysis"
 uuid = "99c076f5-c00e-46eb-a0bd-7ba31777c146"
-authors = ["Nathanael Wong <natgeo.wong@outlook.com>"]
 version = "0.5.3"
+authors = ["Nathanael Wong <natgeo.wong@outlook.com>"]
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
@@ -24,7 +24,7 @@ UnitfulParsableString = "06c00241-927a-4d5b-bb5e-6b5a2ada3567"
 [compat]
 Dates = "1"
 DelimitedFiles = "1"
-GRIBDatasets = "0.4"
+GRIBDatasets = "0.4, 0.5"
 GeoRegions = "^8.0.1"
 HTTP = "1"
 JSON3 = "1"
