@@ -24,11 +24,11 @@ function retrieve(
     response = HTTP.request(
         "POST", ckeys["url"] * "/retrieve/v1/processes/$dset/execute",
         ["PRIVATE-TOKEN" => ckeys["key"]],
-        body = JSON3.write(Dict("inputs" => dkeys)),
+        body = JSON.json(Dict("inputs" => dkeys)),
         verbose = 0,
         retry = true, retries = 19
     )
-    resp_dict = JSON3.read(String(response.body))
+    resp_dict = JSON.parse(String(response.body))
     location  = Dict(response.headers)["location"]
     data = Dict("status" => "queued")
 
@@ -62,7 +62,7 @@ function retrieve(
             "GET", location * "/results",
             ["PRIVATE-TOKEN" => ckeys["key"]]
         )
-        data  = JSON3.read(String(response.body))["asset"]["value"]
+        data  = JSON.parse(String(response.body))["asset"]["value"]
         fsize = data["file:size"]
         url   = data["href"]
 
@@ -128,7 +128,7 @@ function parserequest(
         "GET", ckeys["url"] * "/retrieve/v1/jobs/" * string(resp["jobID"]),
         ["PRIVATE-TOKEN" => ckeys["key"]]
     )
-    data = JSON3.read(String(data.body))
+    data = JSON.parse(String(data.body))
 
     return data
 
