@@ -29,9 +29,9 @@ RegionGrids = {rev = "main", url = "https://github.com/GeoRegionsEcosystem/Regio
 [compat]
 Dates = "1"
 DelimitedFiles = "1"
-GRIBDatasets = "0.4"
+GRIBDatasets = "0.4, 0.5"
 GeoRegions = "^8.0.1"
-HTTP = "1"
+HTTP = "1, 2"
 JSON = "1"
 LandSea = "0.2"
 Logging = "1"

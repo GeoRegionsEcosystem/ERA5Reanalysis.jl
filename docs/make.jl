@@ -5,6 +5,8 @@ using ERA5Reanalysis
 using CairoMakie
 CairoMakie.activate!(type = "svg")
 
+DocMeta.setdocmeta!(ERA5Reanalysis, :DocTestSetup, :(using ERA5Reanalysis); recursive=true)
+
 makedocs(;
     modules  = [ERA5Reanalysis, GeoRegions],
     authors  = "Nathanael Wong <natgeo.wong@outlook.com>",
