@@ -21,11 +21,6 @@ Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 UnitfulParsableString = "06c00241-927a-4d5b-bb5e-6b5a2ada3567"
 
-[sources]
-GeoRegions = {rev = "main", url = "https://github.com/GeoRegionsEcosystem/GeoRegions.jl.git"}
-LandSea = {rev = "main", url = "https://github.com/GeoRegionsEcosystem/LandSea.jl.git"}
-RegionGrids = {rev = "main", url = "https://github.com/GeoRegionsEcosystem/RegionGrids.jl.git"}
-
 [compat]
 Dates = "1"
 DelimitedFiles = "1"

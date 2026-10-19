@@ -17,13 +17,13 @@ function retrieve(
     dkeys :: AbstractDict,
     fnc   :: AbstractString,
     ckeys :: AbstractDict = cdskey();
-    pause :: Real = 120.
+    pause :: Real = 1.
 )
 
     @info "$(now()) - CDSAPI - Sending request to https://cds.climate.copernicus.eu/api/retrieve/v1/processes/$dset/execute ..."
     response = HTTP.request(
         "POST", ckeys["url"] * "/retrieve/v1/processes/$dset/execute",
-        ["PRIVATE-TOKEN" => ckeys["key"]],
+        ["PRIVATE-TOKEN" => ckeys["key"], "Content-Type" => "application/json"],
         body = JSON.json(Dict("inputs" => dkeys)),
         verbose = 0,
         retry = true, retries = 19
@@ -33,21 +33,19 @@ function retrieve(
     data = Dict("status" => "queued")
 
     @info "$(now()) - CDSAPI - Request is queued ..."; flush(stderr)
-    sleep_seconds = 1.
     while data["status"] == "queued"
-        data = parserequest(ckeys,resp_dict)
-        sleep_seconds = min(1.5 * sleep_seconds,5)
-        sleep(sleep_seconds)
+        data = parserequest(ckeys,resp_dict); sleep(min(1.5 * pause,5))
+    end
+
+    @info "$(now()) - CDSAPI - Request is accepted ..."; flush(stderr)
+    while data["status"] == "accepted"
+        data = parserequest(ckeys,resp_dict); sleep(min(1.5 * pause,5))
     end
 
     @info "$(now()) - CDSAPI - Request is running ..."; flush(stderr)
-    sleep_seconds = 1.
     while data["status"] != "successful"
 
-        data = parserequest(ckeys,resp_dict)
-        sleep_seconds = min(1.5 * sleep_seconds,5)
-        sleep(sleep_seconds)
-
+        data = parserequest(ckeys,resp_dict); sleep(min(1.5 * pause,5))
         if data["status"] == "failed"
             @error "$(now()) - CDSAPI - Request failed"
         end
@@ -60,7 +58,7 @@ function retrieve(
 
         response = HTTP.request(
             "GET", location * "/results",
-            ["PRIVATE-TOKEN" => ckeys["key"]]
+            ["PRIVATE-TOKEN" => ckeys["key"], "Content-Type" => "application/json"]
         )
         data  = JSON.parse(String(response.body))["asset"]["value"]
         fsize = data["file:size"]
@@ -126,7 +124,7 @@ function parserequest(
 
     data = HTTP.request(
         "GET", ckeys["url"] * "/retrieve/v1/jobs/" * string(resp["jobID"]),
-        ["PRIVATE-TOKEN" => ckeys["key"]]
+        ["PRIVATE-TOKEN" => ckeys["key"], "Content-Type" => "application/json"]
     )
     data = JSON.parse(String(data.body))
 
