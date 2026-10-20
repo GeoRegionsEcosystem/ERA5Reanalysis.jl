@@ -29,7 +29,7 @@ function retrieve(
         retry = true, retries = 19
     )
     resp_dict = JSON.parse(String(response.body))
-    location  = Dict(response.headers)["location"]
+    location  = Dict(response.headers)["Location"]
     data = Dict("status" => "queued")
 
     @info "$(now()) - CDSAPI - Request is queued ..."; flush(stderr)
@@ -58,7 +58,7 @@ function retrieve(
 
         response = HTTP.request(
             "GET", location * "/results",
-            ["PRIVATE-TOKEN" => ckeys["key"], "Content-Type" => "application/json"]
+            ["PRIVATE-TOKEN" => ckeys["key"]]
         )
         data  = JSON.parse(String(response.body))["asset"]["value"]
         fsize = data["file:size"]
@@ -71,7 +71,7 @@ function retrieve(
         flush(stderr)
 
         dt1 = now()
-        HTTP.download(url,fnc,update_period=Inf)
+        HTTP.download(url,fnc)
         dt2 = now()
         @info "$(now()) - CDSAPI - Downloaded $(@sprintf("%.1f",fsize/1024^2)) MB in $(@sprintf("%.1f",Dates.value(dt2-dt1)/1000)) seconds (Rate: $(@sprintf("%.1f",fsize/1024^2/Dates.value(dt2-dt1)*1000)) MB/s)"
 
@@ -124,7 +124,7 @@ function parserequest(
 
     data = HTTP.request(
         "GET", ckeys["url"] * "/retrieve/v1/jobs/" * string(resp["jobID"]),
-        ["PRIVATE-TOKEN" => ckeys["key"], "Content-Type" => "application/json"]
+        ["PRIVATE-TOKEN" => ckeys["key"]]
     )
     data = JSON.parse(String(data.body))
 

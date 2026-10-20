@@ -40,7 +40,7 @@ function extract(
             smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
         )
         pnc  = basename(path(pds))
-        nt   = pds.dim["time"]
+        nt   = pds.dim["valid_time"]
         tmat = @view pmat[:,:,1:nt]
         NCDatasets.load!(pds[evar.ncID].var,tmat,:,:,1:nt)
         close(pds)
@@ -179,7 +179,7 @@ function extract(
             smoothlon=smoothlon,smoothlat=smoothlat,smoothtime=smoothtime
         )
         pnc  = basename(path(pds))
-        nt   = pds.dim["time"]
+        nt   = pds.dim["valid_time"]
         tmat = @view pmat[:,:,1:nt]
         NCDatasets.load!(pds[evar.ncID].var,tmat,:,:,1:nt)
 
@@ -223,12 +223,13 @@ function extract!(
 
     ds  = read(e5ds,evar,ereg,dt,quiet=true)
     pnc = basename(path(ds))
+    nt  = ds.dim["valid_time"]
     var = nomissing(ds[evar.ncID][:,:,:],NaN)
     close(ds)
 
     extract!(data,var,ggrd)
 
-    save(data,dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
+    save(view(data,:,:,1:nt),dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
 
     flush(stderr)
 
@@ -247,12 +248,13 @@ function extract!(
 
     ds  = read(e5ds,evar,ereg,dt,quiet=true)
     pnc = basename(path(ds))
+    nt  = ds.dim["valid_time"]
     var = nomissing(ds[evar.ncID][:,:,1,:],NaN)
     close(ds)
 
     extract!(data,var,ggrd)
 
-    save(data,dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
+    save(view(data,:,:,1:nt),dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
 
     flush(stderr)
 
@@ -271,12 +273,13 @@ function extractsplit!(
 
     ds  = read(e5ds,evar,ereg,dt,quiet=true)
     pnc = basename(path(ds))
+    nt  = ds.dim["valid_time"]
     var = nomissing(ds[evar.ncID][:,:,:],NaN)
     close(ds)
 
     extract!(data,var,ggrd)
 
-    save(data,dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
+    save(view(data,:,:,1:nt),dt,e5ds,evar,ereg,elsd,extract=true,extractnc=pnc)
 
     flush(stderr)
 
