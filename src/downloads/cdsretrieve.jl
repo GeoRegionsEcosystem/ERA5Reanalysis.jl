@@ -12,7 +12,7 @@ function cdsretrieve(
     elsd = getLandSea(e5ds,ereg); ggrd = RegionGrid(ereg,elsd.lon,elsd.lat)
     nlon = length(elsd.lon)
     nlat = length(elsd.lat)
-    tmpd = zeros(Float32,nlon,nlat,31*24)
+    tmpd = zeros(Float32,nlon,nlat,ntimesteps(e5ds))
 
     @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.name)) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
@@ -77,7 +77,7 @@ function cdsretrieve(
     elsd = getLandSea(e5ds,ereg); ggrd = RegionGrid(ereg,elsd.lon,elsd.lat)
     nlon = length(elsd.lon)
     nlat = length(elsd.lat)
-    tmpd = zeros(Float32,nlon,nlat,31*24)
+    tmpd = zeros(Float32,nlon,nlat,ntimesteps(e5ds))
 
     @info "$(modulelog()) - Using CDSAPI in Julia to download $(uppercase(e5ds.name)) $(evar.name) data in $(ereg.geo.name) (Horizontal Resolution: $(ereg.resolution)) from $(e5ds.start) to $(e5ds.stop)."
 
@@ -176,7 +176,7 @@ function cdsretrieve(
     elsd = getLandSea(e5ds,ereg); ggrd = RegionGrid(ereg,elsd.lon,elsd.lat)
     nlon = length(elsd.lon)
     nlat = length(elsd.lat)
-    tmpd = zeros(Float32,nlon,nlat,31*24)
+    tmpd = zeros(Float32,nlon,nlat,ntimesteps(e5ds))
 
     for dtii in dtvec
 
